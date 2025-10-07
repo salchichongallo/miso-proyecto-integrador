@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "Webnative.webnative",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "EditorConfig.EditorConfig"
+  ]
+}

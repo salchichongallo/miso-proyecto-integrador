@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+www/
+.angular/
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated files
+*.log
+*.tmp
+*.temp
+
+# Capacitor
+ios/
+android/
+
+# Other
+*.min.js
+*.min.css

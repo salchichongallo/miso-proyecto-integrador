@@ -11,7 +11,13 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,scss,css,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,js,json}\"",
+    "format:all": "prettier --write \"./**/*.{ts,html,scss,css,js,json}\" --ignore-path .gitignore",
+    "code:check": "npm run format:check && npm run lint",
+    "code:fix": "npm run format && npm run lint:fix"
   },
   "private": true,
   "dependencies": {
@@ -57,6 +63,9 @@
     "eslint-plugin-prefer-arrow": "1.2.2",
     "jest": "^29.5.0",
     "jest-preset-angular": "^14.0.0",
+    "prettier": "^3.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "typescript": "~5.8.0"
   },
   "description": "An Ionic project"
