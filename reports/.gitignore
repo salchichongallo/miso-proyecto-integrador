@@ -76,9 +76,8 @@ reports/venv/
 ehthumbs.db
 Thumbs.db
 
-# Burndown chart outputs
-burndown_chart_*.pdf
-burndown_chart_*.png
+# Report outputs
+*.pdf
 
 # Logs
 *.log
