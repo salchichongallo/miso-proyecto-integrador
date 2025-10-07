@@ -162,45 +162,41 @@ jobs:
         echo "📁 Generated files:"
         ls -la *.pdf 2>/dev/null || echo "No PDF files found"
         
-    - name: Upload Burndown Chart
-      if: steps.burndown.outputs.burndown_success == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: burndown-chart
-        path: reports/${{ steps.burndown.outputs.burndown_file }}
-        retention-days: 120
+    - name: Create Reports ZIP Archive
+      if: always()
+      run: |
+        cd reports
+        echo "📦 Creating ZIP archive with all generated reports..."
         
-    - name: Upload Velocity Chart
-      if: steps.velocity.outputs.velocity_success == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: velocity-chart
-        path: reports/${{ steps.velocity.outputs.velocity_file }}
-        retention-days: 120
+        # Create timestamp for unique filename
+        TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+        ZIP_NAME="jira_reports_${TIMESTAMP}.zip"
         
-    - name: Upload Business Value Chart
-      if: steps.business_value.outputs.business_value_success == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: business-value-chart
-        path: reports/${{ steps.business_value.outputs.business_value_file }}
-        retention-days: 120
+        # Count available PDFs
+        PDF_COUNT=$(ls -1 *.pdf 2>/dev/null | wc -l)
         
-    - name: Upload Release Burndown Chart
-      if: steps.release_burndown.outputs.release_burndown_success == 'true'
-      uses: actions/upload-artifact@v4
-      with:
-        name: release-burndown-chart
-        path: reports/${{ steps.release_burndown.outputs.release_burndown_file }}
-        retention-days: 120
+        if [ "$PDF_COUNT" -gt 0 ]; then
+          # Create ZIP with all PDFs
+          zip -r "$ZIP_NAME" *.pdf
+          echo "✅ ZIP archive created: $ZIP_NAME"
+          echo "📊 Reports included: $PDF_COUNT PDFs"
+          ls -la "$ZIP_NAME"
+          
+          # Set output for next step
+          echo "zip_file=$ZIP_NAME" >> $GITHUB_OUTPUT
+          echo "zip_success=true" >> $GITHUB_OUTPUT
+        else
+          echo "❌ No PDF files found to archive"
+          echo "zip_success=false" >> $GITHUB_OUTPUT
+        fi
         
-    - name: Upload All Reports (Combined)
+    - name: Upload Reports ZIP Archive
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: all-jira-reports
-        path: reports/*.pdf
-        retention-days: 120
+        name: jira-reports-archive
+        path: reports/*.zip
+        retention-days: 90
         
     - name: Generate Summary Report
       if: always()
