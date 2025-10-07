@@ -164,7 +164,7 @@ jobs:
         
     - name: Upload Burndown Chart
       if: steps.burndown.outputs.burndown_success == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: burndown-chart
         path: reports/${{ steps.burndown.outputs.burndown_file }}
@@ -172,7 +172,7 @@ jobs:
         
     - name: Upload Velocity Chart
       if: steps.velocity.outputs.velocity_success == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: velocity-chart
         path: reports/${{ steps.velocity.outputs.velocity_file }}
@@ -180,7 +180,7 @@ jobs:
         
     - name: Upload Business Value Chart
       if: steps.business_value.outputs.business_value_success == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: business-value-chart
         path: reports/${{ steps.business_value.outputs.business_value_file }}
@@ -188,7 +188,7 @@ jobs:
         
     - name: Upload Release Burndown Chart
       if: steps.release_burndown.outputs.release_burndown_success == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: release-burndown-chart
         path: reports/${{ steps.release_burndown.outputs.release_burndown_file }}
@@ -196,7 +196,7 @@ jobs:
         
     - name: Upload All Reports (Combined)
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: all-jira-reports
         path: reports/*.pdf
