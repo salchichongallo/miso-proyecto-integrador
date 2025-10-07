@@ -23,6 +23,16 @@ Conjunto de scripts en Python para generar reportes automáticamente desde Jira.
   - Línea de tendencia para velocidad real
   - Labels con valores en cada barra
 
+### 3. 💰 Business Value Chart
+- **Propósito**: Mostrar el valor de negocio entregado por la organización
+- **Eje X**: Semanas consecutivas (Semana 1, 2, 3... hasta 8)
+- **Eje Y**: Valor de negocio ganado (acumulativo)
+- **Características**:
+  - Líneas comparativas: Valor Planeado vs Entregado
+  - Valores acumulativos (suma total = 100)
+  - Línea de referencia del objetivo (100%)
+  - Labels con valores en cada punto
+
 ## 🚀 Instalación y Configuración
 
 ### 1. Configurar entorno virtual (recomendado)
@@ -83,6 +93,10 @@ Selecciona el tipo de reporte a generar:
    - Velocidad del equipo por semanas (hasta 8)
    - Compara puntos planeados vs completados
 
+3. 💰 Business Value Chart
+   - Valor de negocio acumulado por semanas (hasta 8)
+   - Compara valor planeado vs entregado
+
 0. ❌ Salir
 ```
 
@@ -93,6 +107,9 @@ python burndown_chart.py
 
 # Para velocity chart  
 python velocity_chart.py
+
+# Para business value chart
+python business_value_chart.py
 ```
 
 ## 📁 Estructura de Archivos
@@ -105,6 +122,7 @@ reports/
 ├── generate_reports.py      # Script principal con menú
 ├── burndown_chart.py       # Generador de burndown chart
 ├── velocity_chart.py       # Generador de velocity chart
+├── business_value_chart.py # Generador de business value chart
 └── README.md               # Esta documentación
 ```
 
@@ -114,6 +132,7 @@ Todos los reportes se generan como archivos PDF de alta calidad:
 
 - **burndown_chart_[sprint]_[timestamp].pdf**: Gráfico de burndown
 - **velocity_chart_[timestamp].pdf**: Gráfico de velocidad
+- **business_value_chart_[timestamp].pdf**: Gráfico de valor de negocio
 
 ## 🛠 Configuración Avanzada
 

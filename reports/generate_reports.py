@@ -30,6 +30,10 @@ def show_menu():
     print("   - Velocidad del equipo por semanas (hasta 8)")
     print("   - Compara puntos planeados vs completados")
     print()
+    print("3. 💰 Business Value Chart")
+    print("   - Valor de negocio acumulado por semanas (hasta 8)")
+    print("   - Compara valor planeado vs entregado")
+    print()
     print("0. ❌ Salir")
     print()
 
@@ -63,7 +67,7 @@ def main():
         show_menu()
         
         try:
-            choice = input("👉 Ingresa tu opción (0-2): ").strip()
+            choice = input("👉 Ingresa tu opción (0-3): ").strip()
             
             if choice == '0':
                 print("\n👋 ¡Hasta luego!")
@@ -75,8 +79,11 @@ def main():
             elif choice == '2':
                 return run_script('velocity_chart.py')
             
+            elif choice == '3':
+                return run_script('business_value_chart.py')
+            
             else:
-                print("❌ Opción inválida. Por favor selecciona 0, 1 o 2.")
+                print("❌ Opción inválida. Por favor selecciona 0, 1, 2 o 3.")
                 input("\n📱 Presiona Enter para continuar...")
                 print("\n" * 2)  # Limpiar pantalla
                 
