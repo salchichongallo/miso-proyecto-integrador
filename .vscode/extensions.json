@@ -3,6 +3,7 @@
     "Webnative.webnative",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "EditorConfig.EditorConfig"
+    "EditorConfig.EditorConfig",
+    "Angular.ng-template",
   ]
 }
