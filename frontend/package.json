@@ -11,6 +11,8 @@
     "serve:web": "ng serve --configuration web",
     "serve:mobile": "ng serve --configuration mobile",
     "test": "jest",
+    "test:web": "jest web",
+    "test:mobile": "jest mobile",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "ng lint",
