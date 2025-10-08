@@ -12,8 +12,8 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({
-      mode: 'ios', // iOS style for mobile (can be 'md' for Android)
-      rippleEffect: false,
+      mode: 'md', // Material Design for mobile
+      rippleEffect: true,
     }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
   ],

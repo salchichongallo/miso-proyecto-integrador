@@ -4,9 +4,6 @@
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
     "build:web": "ng build --configuration web && node scripts/post-build.js web",
     "build:mobile": "ng build --configuration mobile && node scripts/post-build.js mobile",
     "build:all": "npm run build:web && npm run build:mobile",
