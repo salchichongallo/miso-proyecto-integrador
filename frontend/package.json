@@ -7,7 +7,7 @@
     "build:web": "ng build --configuration=web-production && node scripts/post-build.js web",
     "build:mobile": "ng build --configuration=mobile-production && node scripts/post-build.js mobile && npm run build:android",
     "build:all": "npm run build:web && npm run build:mobile",
-    "build:android": "cap sync android && cd android && ./gradlew assembleDebug && cd ..",
+    "build:android": "cap sync android --inline && cd android && ./gradlew assembleDebug && cd ..",
     "serve:web": "ng serve --configuration=web-development",
     "serve:mobile": "ng serve --configuration=mobile-development",
     "test": "jest",
