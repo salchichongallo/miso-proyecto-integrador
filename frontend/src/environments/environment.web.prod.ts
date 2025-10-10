@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   platform: 'web',
   apiUrl: 'http://localhost:3000',
   features: {

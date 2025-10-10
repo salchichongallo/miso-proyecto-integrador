@@ -1,19 +1,19 @@
 export const environment = {
-  production: false,
-  platform: 'web',
+  production: true,
+  platform: 'development',
   apiUrl: 'http://localhost:3000',
   features: {
     pushNotifications: false,
     biometricAuth: false,
     camera: true,
     geolocation: true,
-    fileSystem: false,
-    nativeStorage: false,
+    fileSystem: true,
+    nativeStorage: true,
   },
   capacitorPlugins: {
-    statusBar: false,
-    splashScreen: false,
-    haptics: false,
-    keyboard: false,
+    statusBar: true,
+    splashScreen: true,
+    haptics: true,
+    keyboard: true,
   },
 };
