@@ -42,11 +42,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
-  /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npm run serve:web',
-    url: process.env['PLAYWRIGHT_BASE_URL'] || 'http://localhost:4200',
-    reuseExistingServer: !process.env['CI'],
-  },
 });
