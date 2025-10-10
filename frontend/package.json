@@ -21,7 +21,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,js,json}\"",
     "format:all": "prettier --write \"./**/*.{ts,html,scss,css,js,json}\" --ignore-path .gitignore",
     "code:check": "npm run format:check && npm run lint",
-    "code:fix": "npm run format && npm run lint:fix"
+    "code:fix": "npm run format && npm run lint:fix",
+    "e2e:web": "npx playwright test"
   },
   "private": true,
   "dependencies": {
