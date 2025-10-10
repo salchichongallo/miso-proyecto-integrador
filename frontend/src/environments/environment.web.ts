@@ -1,7 +1,7 @@
 export const environment = {
-  production: true,
+  production: false,
   platform: 'web',
-  apiUrl: 'https://api.miso-medisupply.com',
+  apiUrl: 'http://localhost:3000',
   features: {
     pushNotifications: false,
     biometricAuth: false,

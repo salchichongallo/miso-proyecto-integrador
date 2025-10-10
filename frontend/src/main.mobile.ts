@@ -4,7 +4,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 
 import { routes } from './mobile/app.routes';
 import { AppComponent } from './mobile/app.component';
-import { environment } from './environments/environment';
+import { environment } from './environments/environment.mobile';
 
 console.log('📱 Starting Mobile Application');
 

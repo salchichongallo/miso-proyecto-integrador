@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
   appName: 'MISO - MediSupply',
-  webDir: 'www'
+  webDir: 'www/mobile',
 };
 
 export default config;

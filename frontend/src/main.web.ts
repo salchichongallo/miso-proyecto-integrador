@@ -4,7 +4,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 
 import { routes } from './web/app.routes';
 import { AppComponent } from './web/app.component';
-import { environment } from './environments/environment';
+import { environment } from './environments/environment.web';
 
 console.log('🌐 Starting Web Application');
 
