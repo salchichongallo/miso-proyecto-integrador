@@ -45,10 +45,10 @@ jobs:
         run: npm run test:mobile -- --ci --bail --run-in-band --coverage --color
 
       - name: Set up JDK
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: 'gradle'
 
       - name: Setup Android SDK
