@@ -80,3 +80,10 @@ jobs:
           name: medisupply-android
           path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: mobile-coverage-report
+          path: frontend/coverage
