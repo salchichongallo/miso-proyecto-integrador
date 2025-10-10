@@ -5,11 +5,18 @@ module.exports = {
   preset: 'jest-preset-angular',
   clearMocks: true,
   verbose: true,
+  coverageThreshold: {
+    global: {
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70,
+    }
+  },
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   collectCoverage: true,
   coverageReporters: ['html', 'text-summary', 'lcov'],
-  coverageDirectory: 'coverage/app',
   coveragePathIgnorePatterns: ['/node_modules/', '/coverage/'],
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   transform: {
