@@ -85,6 +85,7 @@ jobs:
     needs: deploy-dev
     if: github.ref == 'refs/heads/develop'
     timeout-minutes: 60
+    environment: dev
     runs-on: ubuntu-latest
     defaults:
       run:
