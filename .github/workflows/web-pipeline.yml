@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/web-pipeline.yml'
   workflow_dispatch:
   push:
     branches:
@@ -42,13 +45,14 @@ jobs:
         run: npm ci --ignore-scripts --no-audit
 
       - name: Unit Tests
-        run: npm run test -- web --ci --bail --run-in-band --coverage --color
+        run: npm run test:web -- --ci --bail --run-in-band --coverage --color
 
       - name: Build
         run: npm run build:web
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
           name: web-build
           path: frontend/www/web
