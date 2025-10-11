@@ -1,10 +1,12 @@
-import './shared/auth/configure-auth';
+import { inject, provideAppInitializer } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
+import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
+
 import { routes } from './web/app.routes';
 import { AppComponent } from './web/app.component';
 import { environment } from './environments/environment.web';
+import { AuthService } from './shared/auth/auth.service';
 
 console.log('🌐 Starting Web Application');
 
@@ -16,6 +18,7 @@ bootstrapApplication(AppComponent, {
       rippleEffect: true,
     }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
+    provideAppInitializer(() => inject(AuthService).init()),
   ],
 }).catch((err) => console.error('Error starting web app:', err));
 
