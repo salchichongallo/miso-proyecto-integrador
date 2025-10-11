@@ -1,0 +1,175 @@
+<!--
+  EJEMPLO DE USO DE ESTILOS - MediSupply
+  Este archivo muestra ejemplos de cómo usar los colores y tipografías configurados.
+  NO es un componente funcional, solo una referencia visual.
+-->
+
+<ion-content>
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>MediSupply - Ejemplo de Estilos</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Sección de Botones -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Botones</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-button color="primary">Botón Primario</ion-button>
+      <ion-button color="secondary">Botón Secundario</ion-button>
+      <ion-button color="danger">Eliminar</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-button color="primary" fill="outline">Outline Primario</ion-button>
+      <ion-button color="danger" fill="outline">Outline Danger</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-button color="primary" fill="clear">Clear Primario</ion-button>
+      <ion-button color="secondary" fill="clear">Clear Secundario</ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Cards -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Card por Defecto</ion-card-title>
+      <ion-card-subtitle>Subtítulo de la card</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Contenido de la card con estilos por defecto. La tipografía Poppins se aplica
+      automáticamente.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card color="primary">
+    <ion-card-header>
+      <ion-card-title>Card Primaria</ion-card-title>
+      <ion-card-subtitle>Con color primario (#4E99EA)</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      Esta card usa el color primario como fondo.
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Sección de Inputs -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Formularios</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" color="primary"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" color="primary"></ion-input>
+    </ion-item>
+
+    <!-- Mensaje de error -->
+    <ion-item lines="none">
+      <ion-text color="danger">
+        <p class="ion-padding-start">* Este campo es requerido</p>
+      </ion-text>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Chips y Badges -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Chips y Badges</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-chip color="primary">
+        <ion-label>Chip Primario</ion-label>
+      </ion-chip>
+      <ion-chip color="secondary">
+        <ion-label>Chip Secundario</ion-label>
+      </ion-chip>
+      <ion-chip color="danger">
+        <ion-label>Chip Danger</ion-label>
+      </ion-chip>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Notificaciones</ion-label>
+      <ion-badge color="danger" slot="end">5</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Mensajes</ion-label>
+      <ion-badge color="primary" slot="end">12</ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Texto -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Tipografía y Colores de Texto</ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none">
+      <ion-text>
+        <h1>Título H1 - Poppins Bold</h1>
+        <h2>Título H2 - Poppins SemiBold</h2>
+        <h3>Título H3 - Poppins Medium</h3>
+        <p>Párrafo normal - Poppins Regular 400</p>
+        <p style="font-weight: 300">Texto ligero - Poppins Light 300</p>
+      </ion-text>
+    </ion-item>
+
+    <ion-item lines="none">
+      <div>
+        <p class="text-primary">Texto con color primario (#4E99EA)</p>
+        <p class="text-secondary">Texto con color secundario (#20C997)</p>
+        <p class="text-danger">Texto con color de error (#DC3545)</p>
+        <p class="text-neutral">Texto neutral (#6C757D)</p>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Alerts (ejemplo de código) -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Ejemplos de Código</ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none">
+      <ion-text>
+        <p>Para mostrar un alert con color de error:</p>
+        <pre><code>
+const alert = await this.alertController.create({
+  header: 'Error',
+  message: 'Ha ocurrido un error',
+  buttons: ['OK']
+});
+await alert.present();
+        </code></pre>
+      </ion-text>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Fondos -->
+  <div style="padding: 16px">
+    <h3>Fondos de Color</h3>
+    <div class="bg-primary" style="padding: 16px; margin-bottom: 8px; color: white">
+      Fondo Primario (#4E99EA)
+    </div>
+    <div class="bg-secondary" style="padding: 16px; margin-bottom: 8px">
+      Fondo Secundario (#20C997)
+    </div>
+    <div class="bg-danger" style="padding: 16px; margin-bottom: 8px; color: white">
+      Fondo Danger (#DC3545)
+    </div>
+    <div class="bg-neutral" style="padding: 16px; color: white">
+      Fondo Neutral (#6C757D)
+    </div>
+  </div>
+</ion-content>
