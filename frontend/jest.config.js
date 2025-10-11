@@ -16,7 +16,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   collectCoverage: true,
-  coverageReporters: ['html', 'text-summary', 'lcov'],
+  coverageReporters: ['html', 'text', 'lcov'],
   coveragePathIgnorePatterns: ['/node_modules/', '/coverage/'],
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
   transform: {
