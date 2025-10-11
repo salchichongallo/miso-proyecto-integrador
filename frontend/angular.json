@@ -185,7 +185,7 @@
               "buildTarget": "app:build:mobile-development"
             }
           },
-          "defaultConfiguration": "web-development"
+          "defaultConfiguration": "mobile-development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
