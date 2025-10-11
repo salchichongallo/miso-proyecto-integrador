@@ -1,0 +1,12 @@
+<amplify-authenticator [hideSignUp]="true">
+  <ng-template amplifySlot="authenticated" let-user="user" let-signOut="signOut">
+    <h1>Welcome {{ user.username }}!</h1>
+
+    <pre>{{ user | json }}</pre>
+    <button (click)="signOut()">Sign Out</button>
+
+    <hr />
+    <button (click)="fetchProfile()">Fetch Profile</button>
+    <pre>{{ userAttributes | json }}</pre>
+  </ng-template>
+</amplify-authenticator>
