@@ -36,3 +36,11 @@ FLASK_APP=src/main.py flask run -h 0.0.0.0 -p 3000
 ```
 
 💡 Cambia el puerto (-p) según el microservicio para evitar conflictos.
+
+
+## Ejecutar Test Backend
+
+Desde la carpeta backend/, vamos a ejecutar:
+```
+pytest --cov=user_microservice/src --cov-report=html --cov-fail-under=70
+```

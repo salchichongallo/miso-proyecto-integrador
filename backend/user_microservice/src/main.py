@@ -2,22 +2,20 @@ import os
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 
-loaded = load_dotenv('.env.development')
+loaded = load_dotenv('.env')
 
 from .blueprints.users import users_blueprint
 from .errors.errors import ApiError
-# from .models.db import init_db
 
 
-app = Flask(__name__)
+app = Flask("user_microservice")
 app.register_blueprint(users_blueprint)
 
-# init_db(app)
 
 @app.errorhandler(ApiError)
 def handle_exception(err):
     response = {
       'mssg': err.description,
-      'version': os.environ['VERSION']
+      'version': os.getenv("VERSION", "1.0.0")
     }
     return jsonify(response), err.code
