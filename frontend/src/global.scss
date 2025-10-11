@@ -48,6 +48,10 @@ ion-app {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
 }
 
+ion-card {
+  border-radius: 12px;
+}
+
 /* Typography utilities */
 .text-primary {
   color: var(--ion-color-primary);
