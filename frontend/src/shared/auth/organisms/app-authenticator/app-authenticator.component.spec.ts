@@ -5,17 +5,27 @@ import { AppAuthenticatorComponent } from './app-authenticator.component';
 jest.mock('aws-amplify/auth');
 jest.mock('@aws-amplify/ui-angular');
 
-let component: AppAuthenticatorComponent;
+describe('AppAuthenticatorComponent', () => {
+  let component: AppAuthenticatorComponent;
 
-beforeEach(() => {
-  TestBed.configureTestingModule({
-    providers: [AppAuthenticatorComponent],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [AppAuthenticatorComponent],
+    });
+    component = TestBed.inject(AppAuthenticatorComponent);
   });
-  component = TestBed.inject(AppAuthenticatorComponent);
-});
 
-it('should fetch user attributes', async () => {
-  (fetchUserAttributes as jest.Mock) = jest.fn().mockResolvedValue({ foo: 'bar' });
-  await component.fetchProfile();
-  expect(component.userAttributes).toEqual({ foo: 'bar' });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should fetch user attributes', async () => {
+    const mockAttributes = { email: 'test@example.com', name: 'Test User' };
+    (fetchUserAttributes as jest.Mock).mockResolvedValue(mockAttributes);
+
+    await component.fetchProfile();
+
+    expect(component.userAttributes).toEqual(mockAttributes);
+    expect(fetchUserAttributes).toHaveBeenCalled();
+  });
 });
