@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
   <ion-grid class="full-height">
     <ion-row class="ion-justify-content-center ion-align-items-center full-height">
-      <ion-col size="12" size-md="8" size-lg="6" size-xl="4">
+      <ion-col size="12" size-md="10" size-lg="8" size-xl="6">
         <ion-card>
           <ion-card-header>
             <ion-card-title>Registrar vendedor</ion-card-title>
@@ -48,6 +48,47 @@
                   }
                 </div>
               }
+
+              <section class="institutions-section">
+                <div class="institutions-header">
+                  <span class="institutions-title">Instituciones seleccionadas</span>
+                  <div class="institutions-actions">
+                    <span class="institutions-count">{{ institutions.length }}/30</span>
+                    <ion-button
+                      onkeypres
+                      size="small"
+                      color="secondary"
+                      (click)="openAddInstitutionModal()"
+                      [disabled]="institutions.length >= 30"
+                    >
+                      <ion-icon slot="start" name="add"></ion-icon>
+                      Agregar institución
+                    </ion-button>
+                  </div>
+                </div>
+
+                @if (institutions.length === 0) {
+                  <div class="empty-state">
+                    <small>No hay instituciones agregadas</small>
+                  </div>
+                } @else {
+                  <div class="institutions-list">
+                    @for (institution of institutions; track institution.id) {
+                      <div class="institution-item">
+                        <span class="institution-name">{{ institution.name }}</span>
+                        <ion-button
+                          fill="clear"
+                          color="danger"
+                          size="small"
+                          (click)="removeInstitution(institution.id)"
+                        >
+                          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                        </ion-button>
+                      </div>
+                    }
+                  </div>
+                }
+              </section>
 
               <ion-grid class="button-group">
                 <ion-row>
