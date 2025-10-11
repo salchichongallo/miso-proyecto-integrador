@@ -1,10 +1,13 @@
+import { IonContent, IonImg } from '@ionic/angular/standalone';
+
 import { Component } from '@angular/core';
-import { IonText, IonContent } from '@ionic/angular/standalone';
-import { ExploreContainerComponent } from '../../../shared/components/explore-container/explore-container.component';
+
+import { AppAuthenticatorComponent } from '@shared/auth/organisms/app-authenticator/app-authenticator.component';
 
 @Component({
-  selector: 'web-app-login',
+  selector: 'app-login',
   templateUrl: 'login.page.html',
-  imports: [IonContent, IonText, ExploreContainerComponent],
+  styleUrls: ['login.page.scss'],
+  imports: [IonImg, IonContent, AppAuthenticatorComponent],
 })
 export class LoginPage {}

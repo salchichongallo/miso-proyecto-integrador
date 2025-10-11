@@ -28,9 +28,15 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|@ionic|@stencil|@capacitor|ionicons)'],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|@ionic|@stencil|@capacitor|ionicons|nanoid|@aws-amplify/ui-angular)'],
   moduleFileExtensions: ['ts', 'html', 'js', 'json', 'mjs'],
   moduleNameMapper: {
     '^ionicons/(.*)$': '<rootDir>/node_modules/ionicons/$1',
+    '^@web/(.*)$': '<rootDir>/src/web/$1',
+    '^@mobile/(.*)$': '<rootDir>/src/mobile/$1',
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+    '^@env/(.*)$': '<rootDir>/src/environments/$1',
+    '^@assets/(.*)$': '<rootDir>/src/assets/$1',
+    '^@theme/(.*)$': '<rootDir>/src/theme/$1',
   },
 };
