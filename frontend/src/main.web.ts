@@ -2,9 +2,9 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 
-import { routes } from './web/app.routes';
-import { AppComponent } from './web/app.component';
-import { environment } from './environments/environment.web';
+import { routes } from '@web/app.routes';
+import { AppComponent } from '@web/app.component';
+import { environment } from '@env/environment.web';
 
 console.log('🌐 Starting Web Application');
 
