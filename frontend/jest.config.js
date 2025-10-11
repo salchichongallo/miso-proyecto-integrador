@@ -28,7 +28,7 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|@ionic|@stencil|@capacitor|ionicons|nanoid|@aws-amplify/ui-angular)'],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|@ionic|@stencil|@capacitor|ionicons|nanoid)'],
   moduleFileExtensions: ['ts', 'html', 'js', 'json', 'mjs'],
   moduleNameMapper: {
     '^ionicons/(.*)$': '<rootDir>/node_modules/ionicons/$1',
