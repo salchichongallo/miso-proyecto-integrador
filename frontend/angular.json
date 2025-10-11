@@ -37,7 +37,8 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss"
+              "src/theme/variables.scss",
+              "node_modules/@aws-amplify/ui-angular/theme.css"
             ],
             "scripts": [],
             "browser": "src/main.web.ts"
