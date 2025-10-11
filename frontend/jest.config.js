@@ -32,5 +32,11 @@ module.exports = {
   moduleFileExtensions: ['ts', 'html', 'js', 'json', 'mjs'],
   moduleNameMapper: {
     '^ionicons/(.*)$': '<rootDir>/node_modules/ionicons/$1',
+    '^@web/(.*)$': '<rootDir>/src/web/$1',
+    '^@mobile/(.*)$': '<rootDir>/src/mobile/$1',
+    '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+    '^@env/(.*)$': '<rootDir>/src/environments/$1',
+    '^@assets/(.*)$': '<rootDir>/src/assets/$1',
+    '^@theme/(.*)$': '<rootDir>/src/theme/$1',
   },
 };
