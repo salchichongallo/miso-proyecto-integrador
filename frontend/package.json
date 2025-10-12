@@ -11,8 +11,8 @@
     "serve:web": "ng serve --configuration=web-development",
     "serve:mobile": "ng serve --configuration=mobile-development",
     "test": "jest",
-    "test:web": "jest web",
-    "test:mobile": "jest mobile",
+    "test:web": "jest web shared",
+    "test:mobile": "jest mobile shared",
     "lint": "ng lint --fix",
     "format": "prettier --write \"./**/*.{ts,html,scss,css,js,json}\" --ignore-path .gitignore",
     "e2e:web": "npx playwright test"
