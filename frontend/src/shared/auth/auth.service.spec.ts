@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { AuthService, User } from './auth.service';
 
 // Mock AWS Amplify modules
@@ -7,6 +7,7 @@ jest.mock('aws-amplify/auth', () => ({
   signIn: jest.fn(),
   signOut: jest.fn(),
   fetchAuthSession: jest.fn(),
+  confirmSignIn: jest.fn(),
 }));
 
 jest.mock('aws-amplify/utils', () => ({
@@ -19,7 +20,7 @@ jest.mock('./configure-amplify-auth', () => ({
   configureAmplifyAuth: jest.fn(),
 }));
 
-import { signIn, signOut, fetchAuthSession } from 'aws-amplify/auth';
+import { signIn, signOut, fetchAuthSession, confirmSignIn } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
 import { configureAmplifyAuth } from './configure-amplify-auth';
 
@@ -28,6 +29,7 @@ const mockSignOut = signOut as jest.MockedFunction<typeof signOut>;
 const mockFetchAuthSession = fetchAuthSession as jest.MockedFunction<typeof fetchAuthSession>;
 const mockHubListen = Hub.listen as jest.MockedFunction<typeof Hub.listen>;
 const mockConfigureAmplifyAuth = configureAmplifyAuth as jest.MockedFunction<typeof configureAmplifyAuth>;
+const mockConfirmSignIn = confirmSignIn as jest.MockedFunction<typeof confirmSignIn>;
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -130,7 +132,7 @@ describe('AuthService', () => {
 
     it('should throw error when sign-in step is not DONE', async () => {
       const mockSignInResult = {
-        nextStep: { signInStep: 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED' },
+        nextStep: { signInStep: 'UNKNOWN_STEP' },
       };
 
       mockSignIn.mockResolvedValue(mockSignInResult as any);
@@ -147,14 +149,7 @@ describe('AuthService', () => {
       const loginError = new Error('Invalid credentials');
       mockSignIn.mockRejectedValue(loginError);
 
-      // Spy on console.error to verify it's called
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
-
       await expect(service.login('wrong@email.com', 'wrongpassword')).rejects.toThrow('Invalid credentials');
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Error during login:', loginError);
-
-      consoleErrorSpy.mockRestore();
     });
 
     it('should update user state after successful login', async () => {
@@ -193,6 +188,17 @@ describe('AuthService', () => {
       });
       expect(isAuthenticated).toBe(true);
       expect(service.accessToken()).toBe('mock-access-token');
+    });
+
+    it('should confirm sign-in when new password is required', async () => {
+      const mockSignInResult = {
+        nextStep: { signInStep: 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED' },
+      };
+      mockSignIn.mockResolvedValue(mockSignInResult as any);
+
+      await service.login('test@example.com', 'password123');
+
+      expect(mockConfirmSignIn).toHaveBeenCalledWith({ challengeResponse: 'password123' });
     });
   });
 

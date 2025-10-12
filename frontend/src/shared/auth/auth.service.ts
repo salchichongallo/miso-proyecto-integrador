@@ -1,7 +1,7 @@
 import { Hub } from 'aws-amplify/utils';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
-import { signIn, signOut, fetchAuthSession } from 'aws-amplify/auth';
+import { signIn, signOut, fetchAuthSession, confirmSignIn } from 'aws-amplify/auth';
 
 import { configureAmplifyAuth } from './configure-amplify-auth';
 
@@ -26,7 +26,7 @@ export class AuthService {
   private async checkAuthState() {
     try {
       const session = await fetchAuthSession();
-      this.accessTokenSubject.next(session.tokens?.accessToken?.toString() || null);
+      this.accessTokenSubject.next(session.tokens!.accessToken!.toString());
 
       const payload = JSON.parse(atob(session.tokens!.idToken!.toString().split('.')[1]));
       const user: User = {
@@ -57,16 +57,13 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    try {
-      const { nextStep } = await signIn({ username: email, password });
-      if (nextStep.signInStep !== 'DONE') {
-        throw new Error('Sign-in not completed.');
-      }
-      await this.checkAuthState();
-    } catch (error) {
-      console.error('Error during login:', error);
-      throw error;
+    const { nextStep } = await signIn({ username: email, password });
+    if (nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
+      await confirmSignIn({ challengeResponse: password });
+    } else if (nextStep.signInStep !== 'DONE') {
+      throw new Error('Sign-in not completed.');
     }
+    await this.checkAuthState();
   }
 
   async logout() {
