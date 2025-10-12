@@ -1,0 +1,25 @@
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+
+    ion-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+
+    ion-button {
+      --color: var(--ion-color-primary-contrast);
+      font-weight: 500;
+      text-transform: none;
+
+      &:hover {
+        --background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+ion-content {
+  --background: var(--ion-color-light);
+}

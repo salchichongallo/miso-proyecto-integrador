@@ -80,6 +80,17 @@ jobs:
           name: web-build
           path: frontend/www/web
 
+      - name: Replace environment variables
+        uses: cschleiden/replace-tokens@v1.3
+        with:
+          files: '["frontend/www/**/*.js"]'
+        env:
+          APP_API_URL: ${{ vars.APP_API_URL }}
+          APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
+          APP_COGNITO_USER_POOL_CLIENT_ID: ${{ vars.APP_COGNITO_USER_POOL_CLIENT_ID }}
+          APP_COGNITO_DOMAIN: ${{ vars.APP_COGNITO_DOMAIN }}
+          APP_COGNITO_REDIRECT_URLS: ${{ vars.APP_COGNITO_REDIRECT_URLS }}
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0
         with:
@@ -161,6 +172,17 @@ jobs:
         with:
           name: web-build
           path: frontend/www/web
+
+      - name: Replace environment variables
+        uses: cschleiden/replace-tokens@v1.3
+        with:
+          files: '["frontend/www/**/*.js"]'
+        env:
+          APP_API_URL: ${{ vars.APP_API_URL }}
+          APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
+          APP_COGNITO_USER_POOL_CLIENT_ID: ${{ vars.APP_COGNITO_USER_POOL_CLIENT_ID }}
+          APP_COGNITO_DOMAIN: ${{ vars.APP_COGNITO_DOMAIN }}
+          APP_COGNITO_REDIRECT_URLS: ${{ vars.APP_COGNITO_REDIRECT_URLS }}
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0
