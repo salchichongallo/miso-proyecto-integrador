@@ -11,7 +11,7 @@ export const configureAmplifyAuth = () =>
         loginWith: {
           oauth: {
             domain: environment.cognito.domain,
-            scopes: ['email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
+            scopes: ['email', 'profile', 'openid'],
             redirectSignIn: environment.cognito.redirectUrls.split(','),
             redirectSignOut: environment.cognito.redirectUrls.split(','),
             responseType: 'code',
