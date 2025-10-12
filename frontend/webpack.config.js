@@ -3,8 +3,7 @@ const Dotenv = require('dotenv-webpack');
 module.exports = (config) => {
   config.plugins.push(
     new Dotenv({
-      safe: true,
-      expand: true,
+      safe: !process.env['CI'],
       silent: false,
       systemvars: true,
     }),
