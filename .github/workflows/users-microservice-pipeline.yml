@@ -1,7 +1,7 @@
 name: Users Microservice Pipeline
 
 env:
-  ECR_REPOSITORY: medisupply/usuarios
+  ECR_REPOSITORY: ${{ vars.ECR_NAMESPACE }}/usuarios
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ on:
       - '.github/workflows/users-microservice-pipeline.yml'
 
 jobs:
-  upload-to-ecr:
+  upload-image-ecr-dev:
     name: Deploy DEV
     runs-on: ubuntu-latest
     environment: dev
