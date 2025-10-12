@@ -11,7 +11,7 @@ on:
       - develop
     paths:
       - 'backend/user_microservice/**'
-      - '.github/workflows/back-users.yml'
+      - '.github/workflows/users-microservice-pipeline.yml'
   push:
     branches:
       - main
@@ -19,7 +19,7 @@ on:
       - feature/backend-deploy
     paths:
       - 'backend/user_microservice/**'
-      - '.github/workflows/back-users.yml'
+      - '.github/workflows/users-microservice-pipeline.yml'
 
 jobs:
   upload-to-ecr:
