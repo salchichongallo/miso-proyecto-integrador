@@ -12,6 +12,11 @@ app = Flask("user_microservice")
 app.register_blueprint(users_blueprint)
 
 
+@app.get("/health")
+def health():
+    return { "status": "up", "app": app.name }
+
+
 @app.errorhandler(ApiError)
 def handle_exception(err):
     response = {
