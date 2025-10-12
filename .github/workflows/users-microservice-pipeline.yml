@@ -70,7 +70,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: backend/user_microservice
-          file: Dockerfile
+          file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
