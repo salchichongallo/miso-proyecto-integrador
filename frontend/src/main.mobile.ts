@@ -5,7 +5,6 @@ import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } 
 
 import { routes } from '@mobile/app.routes';
 import { AppComponent } from '@mobile/app.component';
-import { environment } from '@env/environment.mobile';
 import { AuthService } from '@shared/auth/auth.service';
 
 console.log('📱 Starting Mobile Application');
@@ -21,9 +20,3 @@ bootstrapApplication(AppComponent, {
     provideAppInitializer(() => inject(AuthService).init()),
   ],
 }).catch((err) => console.error('Error starting mobile app:', err));
-
-// Mobile-specific initialization
-if (environment.platform === 'mobile' && environment.capacitorPlugins.statusBar) {
-  // Mobile-specific configurations will go here
-  console.log('Mobile platform detected');
-}

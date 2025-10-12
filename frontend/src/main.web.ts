@@ -5,7 +5,6 @@ import { PreloadAllModules, provideRouter, RouteReuseStrategy, withPreloading } 
 
 import { routes } from '@web/app.routes';
 import { AppComponent } from '@web/app.component';
-import { environment } from '@env/environment.web';
 import { AuthService } from '@shared/auth/auth.service';
 
 console.log('🌐 Starting Web Application');
@@ -21,9 +20,3 @@ bootstrapApplication(AppComponent, {
     provideAppInitializer(() => inject(AuthService).init()),
   ],
 }).catch((err) => console.error('Error starting web app:', err));
-
-// Web-specific initialization
-if (environment.platform === 'web') {
-  // Web-specific configurations
-  console.log('Web platform detected');
-}

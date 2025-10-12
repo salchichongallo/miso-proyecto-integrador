@@ -25,6 +25,7 @@ Los absolute paths están configurados en `tsconfig.json` bajo la propiedad `com
 ## Path Aliases Disponibles
 
 ### `@web/*`
+
 Apunta a: `src/web/*`
 
 Usado para importar archivos específicos de la plataforma web.
@@ -42,6 +43,7 @@ import { routes } from '@web/app.routes';
 ```
 
 ### `@mobile/*`
+
 Apunta a: `src/mobile/*`
 
 Usado para importar archivos específicos de la plataforma mobile.
@@ -57,6 +59,7 @@ import { TabsPage } from '@mobile/tabs/tabs.page';
 ```
 
 ### `@shared/*`
+
 Apunta a: `src/shared/*`
 
 Usado para importar componentes, servicios y utilidades compartidas entre web y mobile.
@@ -74,21 +77,21 @@ import { formatDate } from '@shared/utils/date.utils';
 ```
 
 ### `@env/*`
+
 Apunta a: `src/environments/*`
 
 Usado para importar configuraciones de entorno.
 
 ```typescript
 // ❌ Ruta relativa
-import { environment } from '../../../environments/environment.web';
-import { environment } from '../../environments/environment.mobile';
+import { environment } from '../../../environments/environment';
 
 // ✅ Absolute path
-import { environment } from '@env/environment.web';
-import { environment } from '@env/environment.mobile';
+import { environment } from '@env/environment';
 ```
 
 ### `@assets/*`
+
 Apunta a: `src/assets/*`
 
 Usado para referenciar assets estáticos en TypeScript (imágenes, JSON, etc.).
@@ -104,6 +107,7 @@ import * as configData from '@assets/data/config.json';
 **Nota**: En HTML y SCSS, los assets se referencian normalmente con `assets/...` sin el alias.
 
 ### `@theme/*`
+
 Apunta a: `src/theme/*`
 
 Usado para importar archivos de tema y estilos globales (si es necesario en TypeScript).
@@ -129,7 +133,7 @@ import { ExploreContainerComponent } from '@shared/components/explore-container/
 import { AuthService } from '@shared/services/auth.service';
 
 // Environment
-import { environment } from '@env/environment.web';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-login',
@@ -153,7 +157,7 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 // Usando absolute paths
 import { routes } from '@web/app.routes';
 import { AppComponent } from '@web/app.component';
-import { environment } from '@env/environment.web';
+import { environment } from '@env/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -197,6 +201,7 @@ export class Tab1Page {
 ### ⚠️ Puedes usar rutas relativas para:
 
 1. **Archivos en la misma carpeta** (opcional, aunque absolute paths también funciona)
+
    ```typescript
    // Ambos son aceptables
    import { LoginService } from './login.service';
@@ -253,6 +258,7 @@ No se requiere configuración adicional.
 ### Error: "Cannot find module '@web/...'"
 
 **Solución**: Verifica que:
+
 1. `tsconfig.json` tenga la configuración de `paths`
 2. Tu IDE haya recargado la configuración de TypeScript
 3. Reinicia el servidor de desarrollo si está corriendo
@@ -260,6 +266,7 @@ No se requiere configuración adicional.
 ### Los imports no se autocompletar en el IDE
 
 **Solución**:
+
 1. Recarga la ventana del IDE (VSCode: `Ctrl+Shift+P` > "Reload Window")
 2. Verifica que el archivo `tsconfig.json` no tenga errores de sintaxis
 

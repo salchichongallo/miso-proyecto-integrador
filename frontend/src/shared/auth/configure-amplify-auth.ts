@@ -1,19 +1,19 @@
 import { Amplify } from 'aws-amplify';
+import { environment } from '@env/environment';
 
-// TODO: use env variables
 export const configureAmplifyAuth = () =>
   Amplify.configure({
     Auth: {
       Cognito: {
-        userPoolId: 'us-east-1_5qbB9vEPR',
-        userPoolClientId: '5q1jki11ejiegqhmi0c6rl53lp',
+        userPoolId: environment.cognito.userPoolId,
+        userPoolClientId: environment.cognito.userPoolClientId,
         signUpVerificationMethod: 'code',
         loginWith: {
           oauth: {
-            domain: 'https://us-east-15qbb9vepr.auth.us-east-1.amazoncognito.com',
-            scopes: ['email', 'profile', 'openid', 'aws.cognito.signin.user.admin', 'custom:role'],
-            redirectSignIn: ['http://localhost:4200/'],
-            redirectSignOut: ['http://localhost:4200/'],
+            domain: environment.cognito.domain,
+            scopes: ['email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
+            redirectSignIn: environment.cognito.redirectUrls.split(','),
+            redirectSignOut: environment.cognito.redirectUrls.split(','),
             responseType: 'code',
           },
         },

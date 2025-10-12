@@ -76,3 +76,8 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Env files
+.env.*
+.env
+!.env.example

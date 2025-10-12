@@ -26,12 +26,11 @@ The application has a unique architecture that supports both web and mobile plat
 
 Environments are platform-specific and configured via file replacements in `angular.json`:
 
-- `environment.web.ts`: Web production settings (Capacitor plugins disabled, limited native features)
-- `environment.mobile.ts`: Mobile production settings (full Capacitor plugin support, native features enabled)
 - `environment.ts`: Development environment
 - `environment.prod.ts`: Generic production environment
 
 Key environment properties:
+
 - `platform`: 'web' | 'mobile' | 'development'
 - `features`: Feature flags for pushNotifications, biometricAuth, camera, geolocation, fileSystem, nativeStorage
 - `capacitorPlugins`: Enable/disable statusBar, splashScreen, haptics, keyboard per platform
@@ -39,6 +38,7 @@ Key environment properties:
 ### Build Output
 
 Builds output to separate directories:
+
 - Web: `www/web/`
 - Mobile: `www/mobile/`
 
@@ -147,6 +147,7 @@ Place reusable components in `src/shared/components/` to share between web and m
 ## TypeScript Configuration
 
 The project uses strict TypeScript settings:
+
 - Strict mode enabled
 - No implicit returns
 - No fallthrough cases in switch
@@ -170,15 +171,16 @@ The project uses strict TypeScript settings:
 // ❌ DON'T use relative imports
 import { LoginPage } from '../../pages/login/login.page';
 import { ExploreContainerComponent } from '../../../shared/components/explore-container/explore-container.component';
-import { environment } from '../../../environments/environment.web';
+import { environment } from '../../../environments/environment';
 
 // ✅ DO use absolute imports
 import { LoginPage } from '@web/pages/login/login.page';
 import { ExploreContainerComponent } from '@shared/components/explore-container/explore-container.component';
-import { environment } from '@env/environment.web';
+import { environment } from '@env/environment';
 ```
 
 **Benefits:**
+
 - Easier refactoring and moving files
 - Cleaner, more readable imports
 - No confusion with relative path depth (`../../` vs `../../../`)
@@ -187,6 +189,7 @@ import { environment } from '@env/environment.web';
 ## Capacitor
 
 Capacitor configuration is in `capacitor.config.ts`:
+
 - App ID: `io.ionic.starter`
 - App Name: `MISO - MediSupply`
 - Web directory: `www/mobile`
@@ -212,12 +215,13 @@ The application uses Ionic's theming system with custom colors and Poppins font 
 ### Using Colors in Components
 
 Use the `color` attribute on Ionic components:
+
 ```html
-<ion-button color="primary">Primary Button</ion-button>
-<ion-button color="danger">Delete</ion-button>
+<ion-button color="primary">Primary Button</ion-button> <ion-button color="danger">Delete</ion-button>
 ```
 
 Or use CSS variables directly:
+
 ```scss
 .element {
   background-color: var(--ion-color-primary);
