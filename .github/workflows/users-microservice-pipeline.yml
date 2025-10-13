@@ -1,4 +1,4 @@
-name: Users Microservice Pipeline
+name: Backend - Users Microservice
 
 env:
   ECR_REPOSITORY: ${{ vars.ECR_NAMESPACE }}/usuarios
