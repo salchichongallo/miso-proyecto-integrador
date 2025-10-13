@@ -73,6 +73,7 @@ jobs:
   upload-image-ecr-prod:
     runs-on: ubuntu-latest
     environment: prod
+    if: github.ref == 'refs/heads/main'
 
     permissions:
       id-token: write
@@ -112,7 +113,7 @@ jobs:
           context: backend/user_microservice
           file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
-          push: ${{ github.ref == 'refs/heads/main' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
