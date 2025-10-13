@@ -64,7 +64,7 @@ jobs:
           context: backend/user_microservice
           file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
-          push: ${{ github.ref == 'refs/heads/develop' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
