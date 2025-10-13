@@ -22,8 +22,7 @@ on:
       - '.github/workflows/users-microservice-pipeline.yml'
 
 jobs:
-  upload-image-ecr-dev:
-    name: Deploy DEV
+  build-and-upload:
     runs-on: ubuntu-latest
     environment: dev
 
@@ -65,17 +64,15 @@ jobs:
           context: backend/user_microservice
           file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
-          push: true
+          push: ${{ github.ref == 'refs/heads/develop' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
           cache-to: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache,mode=max
 
   upload-image-ecr-prod:
-    name: Deploy PROD
     runs-on: ubuntu-latest
     environment: prod
-    if: github.ref == 'refs/heads/main'
 
     permissions:
       id-token: write
@@ -115,7 +112,7 @@ jobs:
           context: backend/user_microservice
           file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
