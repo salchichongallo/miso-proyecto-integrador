@@ -6,14 +6,6 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apk add --no-cache \
-    build-base \
-    libffi-dev \
-    openssl-dev \
-    python3-dev \
-    curl \
-    py3-pip
-
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
