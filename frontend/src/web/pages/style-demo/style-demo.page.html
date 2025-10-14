@@ -1,0 +1,199 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>MediSupply - Demostración de Estilos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Sección de Botones -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label><h2>Botones</h2></ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <ion-button color="primary">Botón Primario</ion-button>
+        <ion-button color="secondary">Botón Secundario</ion-button>
+        <ion-button color="danger">Eliminar</ion-button>
+      </div>
+    </ion-item>
+
+    <ion-item lines="none">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <ion-button color="primary" fill="outline">Outline Primario</ion-button>
+        <ion-button color="danger" fill="outline">Outline Danger</ion-button>
+      </div>
+    </ion-item>
+
+    <ion-item lines="none">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <ion-button color="primary" fill="clear">Clear Primario</ion-button>
+        <ion-button color="secondary" fill="clear">Clear Secundario</ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Cards -->
+  <div style="margin-top: 20px;">
+    <h2 class="ion-padding-start">Cards</h2>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Card por Defecto</ion-card-title>
+        <ion-card-subtitle>Subtítulo de la card</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Contenido de la card con estilos por defecto. La tipografía Poppins se aplica
+        automáticamente a todo el texto.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card color="primary">
+      <ion-card-header>
+        <ion-card-title>Card Primaria</ion-card-title>
+        <ion-card-subtitle>Con color primario (#4E99EA)</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Esta card usa el color primario como fondo. Perfecto para destacar información importante.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card color="secondary">
+      <ion-card-header>
+        <ion-card-title>Card Secundaria</ion-card-title>
+        <ion-card-subtitle>Con color secundario (#20C997)</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Esta card usa el color secundario. Ideal para secciones especiales.
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Sección de Inputs -->
+  <ion-list style="margin-top: 20px;">
+    <ion-list-header>
+      <ion-label><h2>Formularios</h2></ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" color="primary" placeholder="ejemplo@correo.com"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" color="primary" placeholder="Tu contraseña"></ion-input>
+    </ion-item>
+
+    <!-- Mensaje de error -->
+    <ion-item lines="none">
+      <ion-text color="danger">
+        <p class="ion-padding-start"><small>* Este campo es requerido</small></p>
+      </ion-text>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Chips y Badges -->
+  <ion-list style="margin-top: 20px;">
+    <ion-list-header>
+      <ion-label><h2>Chips y Badges</h2></ion-label>
+    </ion-list-header>
+
+    <ion-item lines="none">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <ion-chip color="primary">
+          <ion-label>Chip Primario</ion-label>
+        </ion-chip>
+        <ion-chip color="secondary">
+          <ion-label>Chip Secundario</ion-label>
+        </ion-chip>
+        <ion-chip color="danger">
+          <ion-label>Chip Danger</ion-label>
+        </ion-chip>
+        <ion-chip color="medium">
+          <ion-label>Chip Neutral</ion-label>
+        </ion-chip>
+      </div>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Notificaciones</ion-label>
+      <ion-badge color="danger" slot="end">5</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Mensajes</ion-label>
+      <ion-badge color="primary" slot="end">12</ion-badge>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Pendientes</ion-label>
+      <ion-badge color="secondary" slot="end">3</ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Texto -->
+  <div style="margin-top: 20px;" class="ion-padding">
+    <h2>Tipografía - Poppins</h2>
+
+    <h1>Título H1 - Poppins Bold</h1>
+    <h2>Título H2 - Poppins SemiBold</h2>
+    <h3>Título H3 - Poppins Medium</h3>
+    <h4>Título H4 - Poppins Regular</h4>
+    <p>Párrafo normal - Poppins Regular 400. Esta es la fuente que se usa por defecto en toda la aplicación.</p>
+    <p style="font-weight: 300;">Texto ligero - Poppins Light 300. Para textos secundarios o subtítulos.</p>
+    <p style="font-weight: 600;">Texto semi-bold - Poppins SemiBold 600. Para enfatizar información.</p>
+  </div>
+
+  <!-- Sección de Colores de Texto -->
+  <div style="margin-top: 20px;" class="ion-padding">
+    <h2>Colores de Texto (Clases Utilitarias)</h2>
+
+    <p class="text-primary">✓ Texto con color primario (#4E99EA)</p>
+    <p class="text-secondary">✓ Texto con color secundario (#20C997)</p>
+    <p class="text-danger">✗ Texto con color de error (#DC3545)</p>
+    <p class="text-neutral">• Texto neutral (#6C757D)</p>
+  </div>
+
+  <!-- Sección de Fondos -->
+  <div style="margin-top: 20px;" class="ion-padding">
+    <h2>Fondos de Color (Clases Utilitarias)</h2>
+
+    <div class="bg-primary" style="padding: 16px; margin-bottom: 8px; color: white; border-radius: 8px;">
+      Fondo Primario (#4E99EA)
+    </div>
+    <div class="bg-secondary" style="padding: 16px; margin-bottom: 8px; border-radius: 8px;">
+      Fondo Secundario (#20C997)
+    </div>
+    <div class="bg-danger" style="padding: 16px; margin-bottom: 8px; color: white; border-radius: 8px;">
+      Fondo Danger (#DC3545)
+    </div>
+    <div class="bg-neutral" style="padding: 16px; margin-bottom: 8px; color: white; border-radius: 8px;">
+      Fondo Neutral (#6C757D)
+    </div>
+  </div>
+
+  <!-- Nota Final -->
+  <ion-card color="light" style="margin-top: 20px;">
+    <ion-card-header>
+      <ion-card-title>📚 Nota Importante</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        Esta es una página de demostración de estilos. Todos los colores y tipografías
+        están configurados en <code>src/theme/variables.scss</code> y
+        <code>src/global.scss</code>.
+      </p>
+      <p style="margin-top: 8px;">
+        Para más información, consulta el archivo <strong>STYLING_GUIDE.md</strong>
+        en la raíz del proyecto.
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <div style="height: 40px;"></div>
+</ion-content>

@@ -1,0 +1,16 @@
+@if (service.isAuthenticated() | async) {
+  <br />
+  Is Authenticated: true
+  <ion-button (click)="logout()">Logout</ion-button>
+  <br />
+  userData:
+  <pre>{{ service.user() | async | json }}</pre>
+} @else {
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <ion-input formControlName="email" label="Email" type="text" id="email" name="email" />
+    <br />
+    <ion-input formControlName="password" label="Password" type="password" id="password" name="password" />
+    <ion-button type="submit">Login</ion-button>
+  </form>
+  <hr />
+}

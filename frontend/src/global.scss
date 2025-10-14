@@ -24,3 +24,62 @@
 @import '@ionic/angular/css/text-alignment.css';
 @import '@ionic/angular/css/text-transformation.css';
 @import '@ionic/angular/css/flex-utils.css';
+
+/**
+ * Custom Global Styles
+ * ----------------------------------------------------------------------------
+ */
+
+/* Apply Poppins font globally */
+* {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+}
+
+/* Ensure body and html use Poppins */
+html,
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+}
+
+/* Override Ionic's default font */
+ion-app {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+}
+
+ion-card {
+  border-radius: 12px;
+}
+
+/* Typography utilities */
+.text-primary {
+  color: var(--ion-color-primary);
+}
+
+.text-secondary {
+  color: var(--ion-color-secondary);
+}
+
+.text-danger {
+  color: var(--ion-color-danger);
+}
+
+.text-neutral {
+  color: var(--ion-color-medium);
+}
+
+/* Background utilities */
+.bg-primary {
+  background-color: var(--ion-color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--ion-color-secondary);
+}
+
+.bg-danger {
+  background-color: var(--ion-color-danger);
+}
+
+.bg-neutral {
+  background-color: var(--ion-color-medium);
+}

@@ -1,5 +1,5 @@
 {
-  "[typescript][html][json][markdown]": {
+  "[typescript][html][json][markdown][javascript]": {
     "editor.codeActionsOnSave": {
           "source.fixAll": "always",
     },

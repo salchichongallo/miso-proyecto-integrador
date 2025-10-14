@@ -16,17 +16,17 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
-            "outputPath": {
-              "base": "www",
-              "browser": ""
+            "customWebpackConfig": {
+              "path": "./webpack.config.js"
             },
+            "outputPath": "wwww",
             "index": "src/index.html",
             "polyfills": [
               "src/polyfills.ts"
             ],
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "tsconfig.web.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
@@ -40,20 +40,18 @@
               "src/theme/variables.scss"
             ],
             "scripts": [],
-            "browser": "src/main.web.ts"
+            "main": "src/main.web.ts"
           },
           "configurations": {
             "web-production": {
-              "outputPath": {
-                "base": "www/web",
-                "browser": ""
-              },
+              "outputPath": "www/web",
               "index": "src/index.web.html",
-              "browser": "src/main.web.ts",
+              "main": "src/main.web.ts",
+              "tsConfig": "tsconfig.web.json",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.web.prod.ts"
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "assets": [
@@ -86,18 +84,11 @@
               "sourceMap": false
             },
             "web-development": {
-              "outputPath": {
-                "base": "www/web",
-                "browser": ""
-              },
+              "outputPath": "www/web",
               "index": "src/index.web.html",
-              "browser": "src/main.web.ts",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.web.ts"
-                }
-              ],
+              "main": "src/main.web.ts",
+              "tsConfig": "tsconfig.web.json",
+              "fileReplacements": [],
               "assets": [
                 {
                   "glob": "**/*",
@@ -116,16 +107,14 @@
               "extractLicenses": false
             },
             "mobile-production": {
-              "outputPath": {
-                "base": "www/mobile",
-                "browser": ""
-              },
+              "outputPath": "www/mobile",
               "index": "src/index.mobile.html",
-              "browser": "src/main.mobile.ts",
+              "main": "src/main.mobile.ts",
+              "tsConfig": "tsconfig.mobile.json",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.mobile.prod.ts"
+                  "with": "src/environments/environment.prod.ts"
                 }
               ],
               "budgets": [
@@ -146,18 +135,11 @@
               "sourceMap": false
             },
             "mobile-development": {
-              "outputPath": {
-                "base": "www/mobile",
-                "browser": ""
-              },
+              "outputPath": "www/mobile",
               "index": "src/index.mobile.html",
-              "browser": "src/main.mobile.ts",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.mobile.ts"
-                }
-              ],
+              "main": "src/main.mobile.ts",
+              "tsConfig": "tsconfig.mobile.json",
+              "fileReplacements": [],
               "optimization": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -170,7 +152,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "web-production": {
               "buildTarget": "app:build:web-production"
@@ -185,10 +167,10 @@
               "buildTarget": "app:build:mobile-development"
             }
           },
-          "defaultConfiguration": "web-development"
+          "defaultConfiguration": "mobile-development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular-builders/custom-webpack:extract-i18n",
           "options": {
             "buildTarget": "app:build"
           }
@@ -214,7 +196,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": false
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
