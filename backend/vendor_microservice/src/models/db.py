@@ -1,6 +1,6 @@
-import os
 import boto3
 from botocore.exceptions import ClientError
+import os
 
 REGION = os.getenv("REGION", "us-east-1")
 TABLE_NAME = "Vendors"
@@ -15,14 +15,14 @@ def init_db():
             return
 
         print(f"🚀 Creando tabla {TABLE_NAME} en {REGION}...")
+
         dynamodb.create_table(
             TableName=TABLE_NAME,
             AttributeDefinitions=[
-                {"AttributeName": "vendor_id", "AttributeType": "S"},
-                {"AttributeName": "email", "AttributeType": "S"},
+                {"AttributeName": "email", "AttributeType": "S"}
             ],
             KeySchema=[
-                {"AttributeName": "vendor_id", "KeyType": "HASH"},
+                {"AttributeName": "email", "KeyType": "HASH"}
             ],
             ProvisionedThroughput={
                 "ReadCapacityUnits": 5,
