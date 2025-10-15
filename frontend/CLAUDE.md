@@ -124,6 +124,112 @@ npm run code:fix
 - **Component Suffixes**: Components must end with `Component` or `Page` (e.g., `LoginPage`, `HeaderComponent`)
 - **Standalone Components**: All components use Angular standalone API (no NgModules)
 
+### TypeScript Best Practices
+
+**CRITICAL: No `any` Types Allowed**
+
+This project enforces strict TypeScript typing. Using `any` is **strictly prohibited** in all circumstances.
+
+#### Rules:
+
+1. **Never use `any` type** - This includes:
+   - Variable declarations
+   - Function parameters
+   - Return types
+   - Type assertions (`as any`)
+   - Generic constraints
+
+2. **In Test Files**: Use proper type utilities instead of `as any`:
+
+```typescript
+// ❌ DON'T use 'as any'
+const mockService = {
+  method: jest.fn(),
+} as any;
+
+// ✅ DO use Pick<> or Partial<>
+const mockService: jest.Mocked<Pick<MyService, 'method'>> = {
+  method: jest.fn(),
+};
+
+// ✅ Or use Partial<> for more complex mocks
+const mockService: Partial<jest.Mocked<MyService>> = {
+  method: jest.fn(),
+};
+```
+
+3. **For Unknown Types**: Use `unknown` and narrow the type:
+
+```typescript
+// ❌ DON'T
+function process(data: any) { ... }
+
+// ✅ DO
+function process(data: unknown) {
+  if (typeof data === 'string') {
+    // TypeScript knows data is string here
+  }
+}
+```
+
+4. **For External Libraries**: Create proper type definitions or use generics:
+
+```typescript
+// ❌ DON'T
+const result: any = externalLibrary.method();
+
+// ✅ DO
+interface ExternalResult {
+  id: string;
+  value: number;
+}
+const result: ExternalResult = externalLibrary.method();
+```
+
+### Guards and Route Protection
+
+Guards should be placed in `src/shared/guards/` organized by functionality:
+
+```
+src/shared/guards/
+├── auth/
+│   ├── auth.guard.ts
+│   └── auth.guard.spec.ts
+└── login/
+    ├── login.guard.ts
+    └── login.guard.spec.ts
+```
+
+**Guard Best Practices:**
+
+1. **Use Functional Guards** (Angular 14+):
+
+```typescript
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
+
+export const authGuard = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  return authService.isAuthenticated().pipe(
+    map((isAuthenticated) => {
+      if (!isAuthenticated) {
+        return router.createUrlTree(['/login']);
+      }
+      return true;
+    })
+  );
+};
+```
+
+2. **Return Types**: Guards should return `Observable<boolean | UrlTree>` or `boolean | UrlTree`
+
+3. **Testing Guards**: Test both authorization paths (allowed and redirected)
+
+4. **Organize by Feature**: Place related guards in subdirectories (e.g., `auth/`, `role/`, `permission/`)
+
 ## Platform-Specific Development
 
 ### Adding Features

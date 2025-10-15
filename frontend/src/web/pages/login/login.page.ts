@@ -1,6 +1,7 @@
+import { Router } from '@angular/router';
 import { IonContent, IonImg } from '@ionic/angular/standalone';
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { AppAuthenticatorComponent } from '@shared/auth/organisms/app-authenticator/app-authenticator.component';
 
@@ -10,4 +11,10 @@ import { AppAuthenticatorComponent } from '@shared/auth/organisms/app-authentica
   styleUrls: ['login.page.scss'],
   imports: [IonImg, IonContent, AppAuthenticatorComponent],
 })
-export class LoginPage {}
+export class LoginPage {
+  private readonly router = inject(Router);
+
+  public redirectToDashboard() {
+    return this.router.navigate(['/']);
+  }
+}
