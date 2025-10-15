@@ -1,12 +1,12 @@
 from flask import jsonify, Blueprint
 from flask_cognito import cognito_auth_required, current_cognito_jwt, cognito_group_permissions
-from ..commands.ping import Ping
+from ..commands.ping import PingCommand
 
 users_blueprint = Blueprint("users", __name__)
 
 @users_blueprint.get("/ping")
 def ping():
-    return jsonify(Ping().execute())
+    return jsonify(PingCommand().execute())
 
 @users_blueprint.get("/me")
 @cognito_auth_required

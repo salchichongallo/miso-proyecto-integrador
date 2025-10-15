@@ -3,9 +3,9 @@ class ApiError(Exception):
     description = "Default message"
 
 
-class DuplicatedUserError(ApiError):
-    code = 412
-    description = "User already exists"
+# class DuplicatedUserError(ApiError):
+#     code = 412
+#     description = "User already exists"
 
 
 class ParamError(ApiError):
@@ -20,31 +20,31 @@ class ParamError(ApiError):
         return ParamError(f"{field}: {validations[0]}")
 
 
-class UserNotFoundError(ApiError):
-    code = 404
-    description = 'User not found.'
+# class UserNotFoundError(ApiError):
+#     code = 404
+#     description = 'User not found.'
 
 
-class InvalidCredentialsErrors(ApiError):
-    code = 404
-    description = 'Invalid credentials.'
+# class InvalidCredentialsErrors(ApiError):
+#     code = 404
+#     description = 'Invalid credentials.'
 
 
-class MissingAuthParams(ApiError):
-    code = 400
-    description = 'Missing auth params.'
+# class MissingAuthParams(ApiError):
+#     code = 400
+#     description = 'Missing auth params.'
 
 
-class TokenNotProvidedError(ApiError):
-    code = 403
-    description = 'Token not provided.'
+# class TokenNotProvidedError(ApiError):
+#     code = 403
+#     description = 'Token not provided.'
 
 
-class InvalidTokenError(ApiError):
-    code = 401
-    description = 'Invalid token.'
+# class InvalidTokenError(ApiError):
+#     code = 401
+#     description = 'Invalid token.'
 
 
-class UnverifiedUserError(ApiError):
-    code = 401
-    description = 'User is not verified.'
+# class UnverifiedUserError(ApiError):
+#     code = 401
+#     description = 'User is not verified.'
