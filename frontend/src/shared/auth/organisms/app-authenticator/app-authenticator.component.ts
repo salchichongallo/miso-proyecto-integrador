@@ -1,24 +1,25 @@
 import { Component, inject, output } from '@angular/core';
-import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonButton, IonInput } from '@ionic/angular/standalone';
+import { IonButton, IonInput, IonList, IonItem, IonCard, IonCardContent } from '@ionic/angular/standalone';
 
 import { AuthService } from '@shared/auth/auth.service';
 
 @Component({
   selector: 'app-authenticator',
   templateUrl: './app-authenticator.component.html',
-  imports: [ReactiveFormsModule, JsonPipe, AsyncPipe, IonButton, IonInput],
+  styleUrl: './app-authenticator.component.scss',
+  imports: [IonCard, IonItem, IonList, ReactiveFormsModule, IonButton, IonInput, IonCardContent],
 })
 export class AppAuthenticatorComponent {
-  service = inject(AuthService);
-  loginSuccessfully = output<void>();
+  private readonly service = inject(AuthService);
 
-  fb = inject(FormBuilder);
+  readonly loginSuccessfully = output<void>();
 
-  form = this.fb.group({
+  private fb = inject(FormBuilder);
+
+  protected readonly form = this.fb.group({
     email: this.fb.control('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    password: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
+    password: this.fb.control('', { nonNullable: true, validators: [Validators.required, Validators.minLength(6)] }),
   });
 
   async login() {
@@ -35,9 +36,5 @@ export class AppAuthenticatorComponent {
         this.form.controls.password.reset();
       }
     }
-  }
-
-  logout() {
-    this.service.logout();
   }
 }

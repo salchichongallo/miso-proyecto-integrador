@@ -28,16 +28,11 @@ class MockAppAuthenticatorComponent {
       this.form.reset();
     }
   }
-
-  logout() {
-    this.service.logout();
-  }
 }
 
 // Mock AuthService
 const mockAuthService = {
   login: jest.fn(),
-  logout: jest.fn(),
   isAuthenticated: jest.fn(),
   user: jest.fn(),
   accessToken: jest.fn(),
@@ -60,7 +55,6 @@ describe('AppAuthenticatorComponent', () => {
     authService.isAuthenticated.mockReturnValue(of(false));
     authService.user.mockReturnValue(of(null));
     authService.login.mockResolvedValue(undefined);
-    authService.logout.mockResolvedValue(undefined);
     authService.accessToken.mockReturnValue('mock-token');
   });
 
@@ -181,20 +175,6 @@ describe('AppAuthenticatorComponent', () => {
       authService.login.mockRejectedValue(loginError);
 
       await expect(component.login()).rejects.toThrow('Invalid credentials');
-    });
-  });
-
-  describe('logout()', () => {
-    it('should call AuthService.logout', () => {
-      component.logout();
-
-      expect(authService.logout).toHaveBeenCalledTimes(1);
-    });
-
-    it('should handle logout without parameters', () => {
-      component.logout();
-
-      expect(authService.logout).toHaveBeenCalledWith();
     });
   });
 
