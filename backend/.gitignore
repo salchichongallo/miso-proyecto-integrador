@@ -148,3 +148,6 @@ cython_debug/
 .env.*
 .env
 !.env.template
+
+# Docker data
+data/

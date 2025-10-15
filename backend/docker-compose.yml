@@ -14,6 +14,31 @@ services:
     networks:
       - net-medisupply
 
+  dynamodb-local:
+    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
+    image: amazon/dynamodb-local:2.6.1
+    container_name: dynamodb-local
+    networks:
+      - net-medisupply
+    ports:
+      - '8000:8000'
+    volumes:
+      - './data/dynamodb:/home/dynamodblocal/data'
+    working_dir: /home/dynamodblocal
+
+  dynamo-admin:
+    image: aaronshaf/dynamodb-admin:4.6.1
+    container_name: dynamodb-admin
+    depends_on:
+      - dynamodb-local
+    networks:
+      - net-medisupply
+    ports:
+      - '8001:8001'
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
+      - AWS_REGION=ap-east-1
+
 networks:
   net-medisupply:
     driver: bridge
