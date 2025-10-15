@@ -8,6 +8,8 @@ import {
   IonCard,
   IonCardContent,
   IonInputPasswordToggle,
+  LoadingController,
+  ToastController,
 } from '@ionic/angular/standalone';
 
 import { AuthService } from '@shared/auth/auth.service';
@@ -39,19 +41,38 @@ export class AppAuthenticatorComponent {
     password: this.fb.control('', { nonNullable: true, validators: [Validators.required, Validators.minLength(6)] }),
   });
 
+  private readonly loader = inject(LoadingController);
+
+  private toast = inject(ToastController);
+
   async login() {
     if (this.form.valid) {
       const email = this.form.controls.email.value;
       const password = this.form.controls.password.value;
 
+      const loading = await this.showLoader();
       try {
         await this.service.login(email, password);
         this.form.reset();
+        await loading.dismiss();
         this.loginSuccessfully.emit();
       } catch (error) {
-        console.error('Login failed', error);
         this.form.controls.password.reset();
+        await loading.dismiss();
+        await this.toast
+          .create({ message: `Error al iniciar sesión. ${error}`, duration: 7000, color: 'danger' })
+          .then((toast) => toast.present());
       }
     }
+  }
+
+  private async showLoader() {
+    const loading = await this.loader.create({
+      message: 'Cargando...',
+      keyboardClose: false,
+      backdropDismiss: false,
+    });
+    await loading.present();
+    return loading;
   }
 }
