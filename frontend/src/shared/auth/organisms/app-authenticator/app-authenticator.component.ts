@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { IonButton, IonInput } from '@ionic/angular/standalone';
 
-import { AuthService } from '../../auth.service';
+import { AuthService } from '@shared/auth/auth.service';
 
 @Component({
   selector: 'app-authenticator',
@@ -12,6 +12,7 @@ import { AuthService } from '../../auth.service';
 })
 export class AppAuthenticatorComponent {
   service = inject(AuthService);
+  loginSuccessfully = output<boolean>()
 
   fb = inject(FormBuilder);
 
@@ -24,8 +25,16 @@ export class AppAuthenticatorComponent {
     if (this.form.valid) {
       const email = this.form.controls.email.value;
       const password = this.form.controls.password.value;
-      await this.service.login(email, password);
-      this.form.reset();
+
+      try {
+        await this.service.login(email, password);
+        this.loginSuccessfully.emit(true);
+      } catch (error) {
+        console.error('Login failed', error);
+        this.loginSuccessfully.emit(false);
+      } finally {
+        this.form.reset();
+      }
     }
   }
 

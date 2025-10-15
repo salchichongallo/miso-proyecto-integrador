@@ -4,5 +4,5 @@
     alt="MedySupply Logo"
     class="ion-logo"
   ></ion-img>
-  <app-authenticator />
+  <app-authenticator (loginSuccessfully)="redirectToDashboard($event)" />
 </ion-content>

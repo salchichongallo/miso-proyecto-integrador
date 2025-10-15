@@ -15,6 +15,8 @@ import { addIcons } from 'ionicons';
 import { arrowBackOutline, logOutOutline } from 'ionicons/icons';
 import { filter } from 'rxjs/operators';
 
+import { AuthService } from '@shared/auth/auth.service';
+
 @Component({
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
@@ -41,7 +43,8 @@ export class MainLayoutComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly location: Location
+    private readonly location: Location,
+    private readonly authService: AuthService
   ) {
     addIcons({ arrowBackOutline, logOutOutline });
   }
@@ -62,8 +65,8 @@ export class MainLayoutComponent implements OnInit {
     this.location.back();
   }
 
-  public onLogout(): void {
-    // TODO: Implement logout logic
+  public async onLogout(): Promise<void> {
+    await this.authService.logout();
     this.router.navigate(['/login']);
   }
 
