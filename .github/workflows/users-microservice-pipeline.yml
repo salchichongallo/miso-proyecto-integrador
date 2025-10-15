@@ -52,7 +52,7 @@ jobs:
 
       - name: Run Unit Tests
         working-directory: backend/user_microservice
-        run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=html --cov-fail-under=70
+        run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes
 
       - name: Upload Unit Test Coverage Report
         uses: actions/upload-artifact@v4
@@ -63,7 +63,7 @@ jobs:
 
       - name: Run Integration Tests
         working-directory: backend/user_microservice
-        run: pytest tests/integration -v
+        run: pytest tests/integration -v --color=yes
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0
