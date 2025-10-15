@@ -49,6 +49,9 @@ jobs:
       - name: Run unit tests
         working-directory: backend/user_microservice
         run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=html --cov-fail-under=70
+        env:
+          APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
+          AWS_REGION: ${{ vars.AWS_REGION }}
 
       - name: Upload Unit Test Coverage Report
         uses: actions/upload-artifact@v4
