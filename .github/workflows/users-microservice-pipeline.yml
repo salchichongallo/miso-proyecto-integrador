@@ -25,6 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
 
+    env:
+      APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+
     permissions:
       id-token: write
       contents: read
@@ -34,6 +38,32 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'backend/user_microservice/requirements.txt'
+
+      - name: Install dependencies
+        working-directory: backend/user_microservice
+        run: pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Run Unit Tests
+        working-directory: backend/user_microservice
+        run: pytest tests/unit -v --cov=src --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes
+
+      - name: Upload Unit Test Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: users-unit-coverage-report
+          path: backend/user_microservice/htmlcov
+
+      - name: Run Integration Tests
+        working-directory: backend/user_microservice
+        run: pytest tests/integration -v --color=yes
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0

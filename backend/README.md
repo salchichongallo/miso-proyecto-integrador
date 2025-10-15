@@ -41,6 +41,12 @@ FLASK_APP=src/main.py flask run -h 0.0.0.0 -p 3000
 
 Desde la carpeta del microservicio, vamos a ejecutar:
 
+Pruebas unitarias
 ```
-pytest --cov=src --cov-report=html --cov-fail-under=70
+pytest tests/unit -v --cov=src --cov-report=html --cov-fail-under=70
+```
+
+Pruebas de integracion
+```
+pytest tests/integration -v --cov=src --cov-report=html --cov-fail-under=70
 ```
