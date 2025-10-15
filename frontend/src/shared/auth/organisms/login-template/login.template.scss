@@ -4,16 +4,41 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1.5rem;
+  width: 100%;
+  transition: all 0.3s ease-in-out;
+  padding: 1rem;
+
+  &.keyboard-visible {
+    justify-content: flex-start;
+    padding-top: 2rem;
+
+    .logo {
+      --size: 8rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-top: -0.5rem;
+    }
+  }
 }
 
 .logo {
   --size: 15rem;
   pointer-events: none;
+  transition: all 0.3s ease-in-out;
 }
 
 h1 {
   text-align: center;
   margin: 0;
   margin-top: -2rem;
+  transition: all 0.3s ease-in-out;
 }

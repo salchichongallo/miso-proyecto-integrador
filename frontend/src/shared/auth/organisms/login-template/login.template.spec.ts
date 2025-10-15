@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 
 import { LoginTemplate } from './login.template';
 
+jest.mock('@capacitor/keyboard');
+
 describe('LoginTemplate', () => {
   let page: LoginTemplate;
   let router: Router;

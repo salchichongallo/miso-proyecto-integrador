@@ -1,6 +1,14 @@
 import { Component, inject, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonButton, IonInput, IonList, IonItem, IonCard, IonCardContent } from '@ionic/angular/standalone';
+import {
+  IonButton,
+  IonInput,
+  IonList,
+  IonItem,
+  IonCard,
+  IonCardContent,
+  IonInputPasswordToggle,
+} from '@ionic/angular/standalone';
 
 import { AuthService } from '@shared/auth/auth.service';
 
@@ -8,7 +16,16 @@ import { AuthService } from '@shared/auth/auth.service';
   selector: 'app-authenticator',
   templateUrl: './app-authenticator.component.html',
   styleUrl: './app-authenticator.component.scss',
-  imports: [IonCard, IonItem, IonList, ReactiveFormsModule, IonButton, IonInput, IonCardContent],
+  imports: [
+    IonCard,
+    IonItem,
+    IonList,
+    ReactiveFormsModule,
+    IonButton,
+    IonInput,
+    IonCardContent,
+    IonInputPasswordToggle,
+  ],
 })
 export class AppAuthenticatorComponent {
   private readonly service = inject(AuthService);

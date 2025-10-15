@@ -1,17 +1,24 @@
 <ion-card>
   <ion-card-content>
     <form [formGroup]="form" (ngSubmit)="login()">
-      <ion-list>
+      <ion-list lines="none">
         <ion-item>
           <ion-input
             formControlName="email"
+            size=""
             label="Correo electrónico"
             type="email"
             id="email"
             name="email"
             placeholder="Por favor ingresa tu correo"
-            labelPlacement="floating"
-            [errorText]="form.controls.email.errors?.['email'] ? 'Email no válido' : ''"
+            labelPlacement="stacked"
+            [errorText]="
+              form.controls.email.errors?.['required']
+                ? 'El correo es obligatorio'
+                : form.controls.email.errors?.['email']
+                  ? 'Correo no válido'
+                  : ''
+            "
           />
         </ion-item>
 
@@ -23,11 +30,17 @@
             id="password"
             name="password"
             placeholder="Por favor ingresa tu contraseña"
-            labelPlacement="floating"
+            labelPlacement="stacked"
             [errorText]="
-              form.controls.password.errors?.['minlength'] ? 'La contraseña debe tener al menos 6 caracteres' : ''
+              form.controls.password.errors?.['required']
+                ? 'La contraseña es obligatoria'
+                : form.controls.password.errors?.['minlength']
+                  ? 'La contraseña debe tener al menos 6 caracteres'
+                  : ''
             "
-          />
+          >
+            <ion-input-password-toggle slot="end" />
+          </ion-input>
         </ion-item>
       </ion-list>
 
