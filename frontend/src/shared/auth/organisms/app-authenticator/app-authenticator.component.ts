@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { AsyncPipe, JsonPipe } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonButton, IonInput } from '@ionic/angular/standalone';
 
 import { AuthService } from '@shared/auth/auth.service';
@@ -12,13 +12,13 @@ import { AuthService } from '@shared/auth/auth.service';
 })
 export class AppAuthenticatorComponent {
   service = inject(AuthService);
-  loginSuccessfully = output<boolean>()
+  loginSuccessfully = output<void>();
 
   fb = inject(FormBuilder);
 
   form = this.fb.group({
-    email: this.fb.control('', { nonNullable: true }),
-    password: this.fb.control('', { nonNullable: true }),
+    email: this.fb.control('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    password: this.fb.control('', { nonNullable: true, validators: [Validators.required] }),
   });
 
   async login() {
@@ -28,12 +28,11 @@ export class AppAuthenticatorComponent {
 
       try {
         await this.service.login(email, password);
-        this.loginSuccessfully.emit(true);
+        this.form.reset();
+        this.loginSuccessfully.emit();
       } catch (error) {
         console.error('Login failed', error);
-        this.loginSuccessfully.emit(false);
-      } finally {
-        this.form.reset();
+        this.form.controls.password.reset();
       }
     }
   }

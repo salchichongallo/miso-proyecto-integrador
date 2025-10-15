@@ -14,9 +14,7 @@ import { AppAuthenticatorComponent } from '@shared/auth/organisms/app-authentica
 export class LoginPage {
   private readonly router = inject(Router);
 
-  public redirectToDashboard(loginSuccessfully: boolean) {
-    if (!loginSuccessfully) return;
-
-    this.router.navigate(['/']);
-  };
+  public redirectToDashboard() {
+    return this.router.navigate(['/']);
+  }
 }
