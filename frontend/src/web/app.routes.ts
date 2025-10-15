@@ -27,7 +27,7 @@ export const routes: Routes = [
         path: '**',
         redirectTo: 'seller-registration',
         pathMatch: 'full',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
