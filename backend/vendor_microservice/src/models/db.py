@@ -4,9 +4,20 @@ import os
 
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("VENDORS_TABLE_NAME", "Vendors")
+DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 def init_db():
-    dynamodb = boto3.client("dynamodb", region_name=REGION)
+    # 🧩 Usa endpoint local si está definido
+    if DYNAMODB_ENDPOINT:
+        dynamodb = boto3.client(
+            "dynamodb",
+            region_name=REGION,
+            endpoint_url=DYNAMODB_ENDPOINT,
+            aws_access_key_id="dummy",
+            aws_secret_access_key="dummy"
+        )
+    else:
+        dynamodb = boto3.client("dynamodb", region_name=REGION)
 
     try:
         existing_tables = dynamodb.list_tables()["TableNames"]

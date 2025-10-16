@@ -6,13 +6,24 @@ from ..errors.errors import ApiError
 
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("VENDORS_TABLE_NAME", "Vendors")
+DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class GetAllVendors(BaseCommannd):
 
     def __init__(self):
-        # Inicializar conexión DynamoDB
-        self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+        # 💡 Inicializar conexión DynamoDB (modo local o AWS real)
+        if DYNAMODB_ENDPOINT:
+            self.dynamodb = boto3.resource(
+                "dynamodb",
+                region_name=REGION,
+                endpoint_url=DYNAMODB_ENDPOINT,
+                aws_access_key_id="dummy",
+                aws_secret_access_key="dummy"
+            )
+        else:
+            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+
         self.table = self.dynamodb.Table(TABLE_NAME)
 
     def execute(self):
@@ -30,7 +41,7 @@ class GetAllVendors(BaseCommannd):
             # 🧾 Ordenar por nombre o email, opcional
             items.sort(key=lambda v: v.get("name", "").lower())
 
-            return {"vendors": items}
+            return items
 
         except ClientError as e:
             raise ApiError(f"Error al obtener la lista de vendedores: {e.response['Error']['Message']}")

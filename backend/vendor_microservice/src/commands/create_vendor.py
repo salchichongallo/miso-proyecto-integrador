@@ -7,6 +7,7 @@ from ..errors.errors import ParamError, ApiError
 
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("VENDORS_TABLE_NAME", "Vendors")
+DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class CreateVendor(BaseCommannd):
@@ -17,8 +18,18 @@ class CreateVendor(BaseCommannd):
         self.institutions = institutions or []
         self.vendor_id = None
 
-        # Inicializar conexión DynamoDB
-        self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+        # 🧩 Inicializar conexión DynamoDB (local o real)
+        if DYNAMODB_ENDPOINT:
+            self.dynamodb = boto3.resource(
+                "dynamodb",
+                region_name=REGION,
+                endpoint_url=DYNAMODB_ENDPOINT,
+                aws_access_key_id="dummy",
+                aws_secret_access_key="dummy"
+            )
+        else:
+            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+
         self.table = self.dynamodb.Table(TABLE_NAME)
 
     def execute(self):

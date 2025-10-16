@@ -19,12 +19,12 @@ COPY . .
 
 # Variables de entorno para Flask
 ENV FLASK_APP=./src/main.py
-ENV FLASK_RUN_PORT=3000
+ENV FLASK_RUN_PORT=3002
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV VERSION='1.0'
 
 # Expone el puerto de Flask
-EXPOSE 3000
+EXPOSE 3002
 
 # Comando de ejecución
 CMD ["flask", "run"]

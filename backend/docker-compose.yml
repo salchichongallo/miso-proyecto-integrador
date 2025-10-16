@@ -1,16 +1,57 @@
 services:
-  users:
+  # users:
+  #   build:
+  #     context: ./user_microservice
+  #     dockerfile: Dockerfile
+  #   container_name: users
+  #   hostname: users
+  #   environment:
+  #     - GUNICORN_CMD_ARGS=--log-level info --reload
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./user_microservice:/app
+  #   networks:
+  #     - net-medisupply
+
+  # clients:
+  #   build:
+  #     context: ./client_microservice
+  #     dockerfile: Dockerfile
+  #   container_name: clients
+  #   hostname: clients
+  #   environment:
+  #     - AWS_REGION=us-east-1
+  #     - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+  #     - CLIENTS_TABLE_NAME=Clients
+  #     - FLASK_ENV=development
+  #   ports:
+  #     - "3001:3001"
+  #   volumes:
+  #     - ./client_microservice:/app
+  #   depends_on:
+  #     - dynamodb-local
+  #   networks:
+  #     - net-medisupply
+
+  vendors:
     build:
-      context: ./user_microservice
+      context: ./vendor_microservice
       dockerfile: Dockerfile
-    container_name: users
-    hostname: users
+    container_name: vendors
+    hostname: vendors
     environment:
-      - GUNICORN_CMD_ARGS=--log-level info --reload
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - VENDORS_TABLE_NAME=Vendors
+      - FLASK_ENV=development
+      - APP_COGNITO_USER_POOL_ID=dummy-local-pool
     ports:
-      - "3000:3000"
+      - "3002:3002"
     volumes:
-      - ./user_microservice:/app
+      - ./vendor_microservice:/app
+    depends_on:
+      - dynamodb-local
     networks:
       - net-medisupply
 
