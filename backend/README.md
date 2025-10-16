@@ -50,3 +50,8 @@ Pruebas de integracion
 ```
 pytest tests/integration -v --cov=src --cov-report=html --cov-fail-under=70
 ```
+
+Todos los TEST juntos
+```
+pytest tests -v --cov=src --cov-report=html --cov-fail-under=70
+```
