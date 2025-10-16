@@ -7,9 +7,10 @@ from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 
+# 🔧 Configuración general
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("CLIENTS_TABLE_NAME", "Clients")
-
+DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 class CreateClient(BaseCommannd):
     """
@@ -28,17 +29,28 @@ class CreateClient(BaseCommannd):
         self.tax_id_encrypted = None
 
         # Inicializar conexión DynamoDB
-        self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+        if DYNAMODB_ENDPOINT:
+            print(f"🔗 Conectando a DynamoDB local en {DYNAMODB_ENDPOINT}")
+            self.dynamodb = boto3.resource(
+                "dynamodb",
+                region_name=REGION,
+                endpoint_url=DYNAMODB_ENDPOINT,
+                aws_access_key_id="dummy",
+                aws_secret_access_key="dummy"
+            )
+        else:
+            print(f"🌍 Conectando a DynamoDB real en AWS región {REGION}")
+            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+
         self.table = self.dynamodb.Table(TABLE_NAME)
 
-
     def execute(self):
+        """Ejecuta la validación, creación y guardado del cliente."""
         self.validate()
         self.client_id = str(uuid.uuid4())
         self.encrypt_tax_id()
         self.save()
         return self.response()
-
 
     def validate(self):
         """Valida campos requeridos y existencia del cliente."""
@@ -49,11 +61,10 @@ class CreateClient(BaseCommannd):
         if self.country == "CO":  # 🇨🇴 Colombia: 9-10 dígitos
             if not re.match(r"^\d{9,10}$", self.tax_id):
                 raise ParamError("NIT inválido: debe tener entre 9 y 10 dígitos.")
-        elif self.country == "MX":  # 🇲🇽 México: RFC (mínimo 10, máximo 13 caracteres alfanuméricos)
+        elif self.country == "MX":  # 🇲🇽 México: RFC (10-13 caracteres)
             if not re.match(r"^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$", self.tax_id, re.IGNORECASE):
                 raise ParamError("RFC inválido: formato incorrecto.")
         else:
-            # Simulación para otros países
             if len(self.tax_id) < 5:
                 raise ParamError("Identificador tributario inválido.")
 
@@ -65,17 +76,14 @@ class CreateClient(BaseCommannd):
         except ClientError as e:
             raise ApiError(f"Error al verificar duplicado: {e.response['Error']['Message']}")
 
-
-
     def encrypt_tax_id(self):
         """Simula el cifrado del identificador tributario usando SHA-256."""
         self.tax_id_encrypted = hashlib.sha256(self.tax_id.encode()).hexdigest()
 
-
     def save(self):
         """Guarda el nuevo cliente en DynamoDB."""
         item = {
-            "tax_id": self.tax_id,  # valor original como clave
+            "tax_id": self.tax_id,
             "tax_id_encrypted": self.tax_id_encrypted,
             "client_id": self.client_id,
             "name": self.name,
@@ -87,11 +95,12 @@ class CreateClient(BaseCommannd):
 
         try:
             self.table.put_item(Item=item)
+            print(f"✅ Cliente {self.name} ({self.tax_id}) registrado correctamente.")
         except ClientError as e:
             raise ApiError(f"Error al registrar cliente: {e.response['Error']['Message']}")
 
-
     def response(self):
+        """Construye la respuesta final del comando."""
         return {
             "client_id": self.client_id,
             "tax_id": self.tax_id,

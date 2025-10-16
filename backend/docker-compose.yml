@@ -14,25 +14,26 @@ services:
   #   networks:
   #     - net-medisupply
 
-  # clients:
-  #   build:
-  #     context: ./client_microservice
-  #     dockerfile: Dockerfile
-  #   container_name: clients
-  #   hostname: clients
-  #   environment:
-  #     - AWS_REGION=us-east-1
-  #     - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
-  #     - CLIENTS_TABLE_NAME=Clients
-  #     - FLASK_ENV=development
-  #   ports:
-  #     - "3001:3001"
-  #   volumes:
-  #     - ./client_microservice:/app
-  #   depends_on:
-  #     - dynamodb-local
-  #   networks:
-  #     - net-medisupply
+  clients:
+    build:
+      context: ./client_microservice
+      dockerfile: Dockerfile
+    container_name: clients
+    hostname: clients
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - CLIENTS_TABLE_NAME=Clients
+      - FLASK_ENV=development
+      - APP_COGNITO_USER_POOL_ID=dummy-local-pool
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./client_microservice:/usr/src/app
+    depends_on:
+      - dynamodb-local
+    networks:
+      - net-medisupply
 
   vendors:
     build:

@@ -4,16 +4,27 @@ from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
 
+# 🌍 Variables de entorno
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("CLIENTS_TABLE_NAME", "Clients")
-
+DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 class GetAllClients(BaseCommannd):
     """Comando para obtener todos los clientes institucionales registrados."""
 
     def __init__(self):
-        # Inicializar conexión DynamoDB
-        self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+        # 🧩 Conexión a DynamoDB (local o real según entorno)
+        if DYNAMODB_ENDPOINT:
+            self.dynamodb = boto3.resource(
+                "dynamodb",
+                region_name=REGION,
+                endpoint_url=DYNAMODB_ENDPOINT,
+                aws_access_key_id="dummy",
+                aws_secret_access_key="dummy"
+            )
+        else:
+            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
+
         self.table = self.dynamodb.Table(TABLE_NAME)
 
     def execute(self):
@@ -26,12 +37,12 @@ class GetAllClients(BaseCommannd):
             response = self.table.scan()
             items = response.get("Items", [])
 
-            # 🔁 Manejar paginación si hay más de 1 MB de resultados
+            # 🔁 Paginación en caso de más de 1MB de datos
             while "LastEvaluatedKey" in response:
                 response = self.table.scan(ExclusiveStartKey=response["LastEvaluatedKey"])
                 items.extend(response.get("Items", []))
 
-            # 🧾 Ordenar por nombre del cliente
+            # 🧾 Ordenar resultados por nombre
             items.sort(key=lambda c: c.get("name", "").lower())
 
             return items

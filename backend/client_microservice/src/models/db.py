@@ -4,11 +4,12 @@ import os
 
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("CLIENTS_TABLE_NAME", "Clients")
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT") 
+DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 def init_db():
     # 💡 Si se define un endpoint local, usamos credenciales dummy
     if DYNAMODB_ENDPOINT:
+        print(f"🔗 Conectando a DynamoDB local en {DYNAMODB_ENDPOINT}")
         dynamodb = boto3.client(
             "dynamodb",
             region_name=REGION,
@@ -17,6 +18,7 @@ def init_db():
             aws_secret_access_key="dummy"
         )
     else:
+        print(f"🌍 Conectando a DynamoDB real en AWS región {REGION}")
         dynamodb = boto3.client("dynamodb", region_name=REGION)
 
     try:
@@ -26,7 +28,6 @@ def init_db():
             return
 
         print(f"🚀 Creando tabla {TABLE_NAME} en {REGION}...")
-
         dynamodb.create_table(
             TableName=TABLE_NAME,
             AttributeDefinitions=[
