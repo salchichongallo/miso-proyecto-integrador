@@ -2,8 +2,8 @@ import boto3
 from botocore.exceptions import ClientError
 import os
 
-REGION = os.getenv("REGION", "us-east-1")
-TABLE_NAME = "Vendors"
+REGION = os.getenv("AWS_REGION", "us-east-1")
+TABLE_NAME = os.getenv("VENDORS_TABLE_NAME", "Vendors")
 
 def init_db():
     dynamodb = boto3.client("dynamodb", region_name=REGION)
