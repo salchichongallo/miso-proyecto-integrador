@@ -1,12 +1,17 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from '@shared/guards/auth/auth.guard';
+import { loginGuard } from '@shared/guards/login/login.guard';
+
 export const routes: Routes = [
   {
     path: 'login',
+    canActivate: [loginGuard],
     loadComponent: () => import('./pages/login/login.page').then((m) => m.LoginPage),
   },
   {
     path: '',
+    canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       {
@@ -19,10 +24,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
       {
-        path: '',
+        path: '**',
         redirectTo: 'seller-registration',
         pathMatch: 'full',
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];

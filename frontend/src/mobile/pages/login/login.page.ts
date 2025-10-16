@@ -4,7 +4,7 @@ import { IonContent } from '@ionic/angular/standalone';
 import { LoginTemplate } from '@shared/auth';
 
 @Component({
-  selector: 'app-web-login',
+  selector: 'app-mobile-login',
   templateUrl: 'login.page.html',
   imports: [IonContent, LoginTemplate],
   styleUrl: 'login.page.scss',

@@ -1,16 +1,50 @@
-@if (service.isAuthenticated() | async) {
-  <br />
-  Is Authenticated: true
-  <ion-button (click)="logout()">Logout</ion-button>
-  <br />
-  userData:
-  <pre>{{ service.user() | async | json }}</pre>
-} @else {
-  <form [formGroup]="form" (ngSubmit)="login()">
-    <ion-input formControlName="email" label="Email" type="text" id="email" name="email" />
-    <br />
-    <ion-input formControlName="password" label="Password" type="password" id="password" name="password" />
-    <ion-button type="submit">Login</ion-button>
-  </form>
-  <hr />
-}
+<ion-card>
+  <ion-card-content>
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <ion-list lines="none">
+        <ion-item>
+          <ion-input
+            formControlName="email"
+            size=""
+            label="Correo electrónico"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Por favor ingresa tu correo"
+            labelPlacement="stacked"
+            [errorText]="
+              form.controls.email.errors?.['required']
+                ? 'El correo es obligatorio'
+                : form.controls.email.errors?.['email']
+                  ? 'Correo no válido'
+                  : ''
+            "
+          />
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            formControlName="password"
+            label="Contraseña"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Por favor ingresa tu contraseña"
+            labelPlacement="stacked"
+            [errorText]="
+              form.controls.password.errors?.['required']
+                ? 'La contraseña es obligatoria'
+                : form.controls.password.errors?.['minlength']
+                  ? 'La contraseña debe tener al menos 6 caracteres'
+                  : ''
+            "
+          >
+            <ion-input-password-toggle slot="end" />
+          </ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-button type="submit" expand="full" class="submit-button">Ingresar</ion-button>
+    </form>
+  </ion-card-content>
+</ion-card>

@@ -1,6 +1,6 @@
 from .base_command import BaseCommannd
 
 
-class Ping(BaseCommannd):
+class PingCommand(BaseCommannd):
     def execute(self):
         return 'pong'
