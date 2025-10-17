@@ -16,12 +16,17 @@ import {
   IonIcon,
   ModalController,
 } from '@ionic/angular/standalone';
+import { LoadingController } from '@ionic/angular';
+
+import { finalize } from 'rxjs';
 
 import { addIcons } from 'ionicons';
 import { add, trashOutline } from 'ionicons/icons';
 
 import { AddInstitutionModalComponent } from './components/add-institution-modal/add-institution-modal.component';
 import { Institution } from './interfaces/institution.interface';
+import { SellerService } from './services/seller/seller.service';
+import { RegisterSellerRequest } from './interfaces/register-seller-request.interface';
 
 @Component({
   selector: 'app-seller-registration',
@@ -50,12 +55,14 @@ export class SellerRegistrationPage {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly modalController: ModalController
+    private readonly modalController: ModalController,
+    private readonly sellerService: SellerService,
+    private readonly loadingController: LoadingController,
   ) {
     addIcons({ add, trashOutline });
     this.sellerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
+      name: ['Leiner', [Validators.required, Validators.minLength(3)]],
+      email: ['leiner@gmail.com', [Validators.required, Validators.email]],
     });
   }
 
@@ -73,11 +80,12 @@ export class SellerRegistrationPage {
   }
 
   public onSubmit(): void {
-    if (this.sellerForm.valid) {
-      // TODO: Implement seller registration logic
-      this.sellerForm.reset();
-      this.institutions = [];
+    if (!this.sellerForm.valid) {
+      this.sellerForm.markAllAsTouched();
+      return;
     }
+
+    this.registerSeller();
   }
 
   public async openAddInstitutionModal(): Promise<void> {
@@ -108,5 +116,34 @@ export class SellerRegistrationPage {
 
   private generateId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private async registerSeller(): Promise<void> {
+    const loading = await this.loadingController.create({
+      message: 'Registrando vendedor...',
+    });
+
+    loading.present();
+
+    const formValue = this.sellerForm.value;
+    const name = formValue.name;
+    const email = formValue.email;
+
+    const sellerData: RegisterSellerRequest = {
+      name,
+      email,
+      institutions: this.institutions.map((institution) => institution.id),
+    };
+
+    this.sellerService
+      .registerSeller(sellerData)
+      .pipe(finalize(() => this.loadingController.dismiss()))
+      .subscribe({
+        next: (response) => {
+          alert(response.mssg);
+          this.sellerForm.reset();
+          this.institutions = [];
+        },
+      });
   }
 }
