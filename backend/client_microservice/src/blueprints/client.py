@@ -14,7 +14,7 @@ clients_blueprint = Blueprint("client", __name__)
 def ping():
     return jsonify(PingCommand().execute())
 
-@clients_blueprint.post("/create")
+@clients_blueprint.post("/")
 # @cognito_auth_required
 # @cognito_group_permissions(["admins"])
 def create_client():
@@ -42,7 +42,7 @@ def create_client():
         return jsonify({"error": str(e)}), 500
 
 
-@clients_blueprint.get("/all")
+@clients_blueprint.get("/")
 # @cognito_auth_required
 # @cognito_group_permissions(["admins", "vendors"])
 def list_clients():

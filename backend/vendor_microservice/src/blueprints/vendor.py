@@ -14,7 +14,7 @@ vendors_blueprint = Blueprint("vendor", __name__)
 def ping():
     return jsonify(PingCommand().execute())
 
-@vendors_blueprint.post("/create")
+@vendors_blueprint.post("/")
 # @cognito_auth_required
 # @cognito_group_permissions(["admins"])
 def create_vendor():
@@ -39,7 +39,7 @@ def create_vendor():
         return jsonify({"error": str(e)}), 500
 
 
-@vendors_blueprint.get("/all")
+@vendors_blueprint.get("/")
 # @cognito_auth_required
 # @cognito_group_permissions(["admins", "vendors"])
 def list_vendors():

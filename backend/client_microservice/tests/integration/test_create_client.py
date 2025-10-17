@@ -29,7 +29,7 @@ class TestClientEndpoints:
             "location": "Bogotá"
         }
 
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code == 201
         data = response.get_json()
         assert "Client created successfully" in data["mssg"]
@@ -43,7 +43,7 @@ class TestClientEndpoints:
     def test_create_client_schema_falla(self, mock_schema, client):
         """❌ Falla de validación en el schema JSON"""
         payload = {"name": "Clinica X"}  # faltan campos
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code == 500  # o 400 si lo manejás así
         data = response.get_json()
         assert "Falta campo obligatorio" in str(data)
@@ -55,7 +55,7 @@ class TestClientEndpoints:
         """❌ Error de validación: campos faltantes"""
         mock_validate.side_effect = Exception("Todos los campos son obligatorios para registrar un cliente institucional.")
         payload = {"name": "Hospital"}  # incompleto
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "obligatorios" in str(data)
@@ -74,7 +74,7 @@ class TestClientEndpoints:
             "specialty": "Pediatría",
             "location": "Bogotá"
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "NIT inválido" in str(response.get_json())
 
@@ -92,7 +92,7 @@ class TestClientEndpoints:
             "specialty": "Oncología",
             "location": "CDMX"
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "RFC inválido" in str(response.get_json())
 
@@ -110,7 +110,7 @@ class TestClientEndpoints:
             "specialty": "Dermatología",
             "location": "Miami"
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "tributario inválido" in str(response.get_json())
 
@@ -128,7 +128,7 @@ class TestClientEndpoints:
             "specialty": "Cardiología",
             "location": "Bogotá"
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "ya está registrado" in str(response.get_json())
 
@@ -146,7 +146,7 @@ class TestClientEndpoints:
             "specialty": "Pediatría",
             "location": "Medellín"
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "DynamoDB" in str(response.get_json())
 
@@ -164,6 +164,6 @@ class TestClientEndpoints:
             "specialty": "Neurología",
             "location": "Bogotá"
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "Error al verificar duplicado" in str(response.get_json())
