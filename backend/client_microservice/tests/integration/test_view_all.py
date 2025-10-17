@@ -13,7 +13,7 @@ class TestGetAllClientsEndpoint:
             {"name": "Clinica Norte", "country": "MX"},
         ]
 
-        response = client.get("/all")
+        response = client.get("/")
         assert response.status_code == 200
         data = response.get_json()
 
@@ -27,7 +27,7 @@ class TestGetAllClientsEndpoint:
     @patch("src.blueprints.client.GetAllClients.execute", return_value=[])
     def test_get_all_clients_vacio(self, mock_execute, client):
         """⚠️ Caso sin clientes: lista vacía"""
-        response = client.get("/all")
+        response = client.get("/")
 
         assert response.status_code == 200
         data = response.get_json()
@@ -39,7 +39,7 @@ class TestGetAllClientsEndpoint:
     @patch("src.blueprints.client.GetAllClients.execute", side_effect=ApiError("Error al obtener clientes"))
     def test_get_all_clients_error_api(self, mock_execute, client):
         """❌ Falla controlada (ApiError)"""
-        response = client.get("/all")
+        response = client.get("/")
 
         # En tu implementación actual, este error no se captura directamente,
         # así que Flask devolverá 500
@@ -51,7 +51,7 @@ class TestGetAllClientsEndpoint:
     @patch("src.blueprints.client.GetAllClients.execute", side_effect=Exception("Error inesperado en base de datos"))
     def test_get_all_clients_exception_generica(self, mock_execute, client):
         """❌ Falla inesperada"""
-        response = client.get("/all")
+        response = client.get("/")
         assert response.status_code in (500,)
         data = response.get_json()
         assert "Error" in str(data) or "inesperado" in str(data)
