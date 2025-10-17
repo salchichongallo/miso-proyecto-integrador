@@ -1,6 +1,7 @@
 import os
 import logging
 from flask import Flask, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from .models.db import init_db
 from flask_cognito import CognitoAuth
@@ -12,6 +13,10 @@ load_dotenv()
 
 # Inicialización de Flask
 app = Flask("client_microservice")
+
+# Configurar CORS antes de registrar blueprints
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 app.config.update({
     "COGNITO_REGION": os.getenv("AWS_REGION", "us-east-1"),
     "COGNITO_USERPOOL_ID": os.getenv("APP_COGNITO_USER_POOL_ID", ""),
