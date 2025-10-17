@@ -4,7 +4,6 @@ import logging
 from botocore.exceptions import ClientError
 
 # 🧩 Configuración del logger
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 REGION = os.getenv("AWS_REGION", "us-east-1")

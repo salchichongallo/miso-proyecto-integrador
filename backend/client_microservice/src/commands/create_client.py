@@ -9,7 +9,6 @@ from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 
 # 🧩 Configuración de logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 # 🔧 Configuración general
