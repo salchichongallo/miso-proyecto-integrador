@@ -6,7 +6,7 @@ from ..errors.errors import ApiError
 
 # 🌍 Variables de entorno
 REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = os.getenv("CLIENTS_TABLE_NAME", "Clients")
+TABLE_NAME = "Clients"
 DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 class GetAllClients(BaseCommannd):

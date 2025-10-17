@@ -3,14 +3,20 @@ import uuid
 import os
 import re
 import hashlib
+import logging
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 
+# 🧩 Configuración de logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
+
 # 🔧 Configuración general
 REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = os.getenv("CLIENTS_TABLE_NAME", "Clients")
+TABLE_NAME = "Clients"
 DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
+
 
 class CreateClient(BaseCommannd):
     """
@@ -30,7 +36,7 @@ class CreateClient(BaseCommannd):
 
         # Inicializar conexión DynamoDB
         if DYNAMODB_ENDPOINT:
-            print(f"🔗 Conectando a DynamoDB local en {DYNAMODB_ENDPOINT}")
+            logger.info(f"🔗 Conectando a DynamoDB local en {DYNAMODB_ENDPOINT}")
             self.dynamodb = boto3.resource(
                 "dynamodb",
                 region_name=REGION,
@@ -39,13 +45,14 @@ class CreateClient(BaseCommannd):
                 aws_secret_access_key="dummy"
             )
         else:
-            print(f"🌍 Conectando a DynamoDB real en AWS región {REGION}")
+            logger.info(f"🌍 Conectando a DynamoDB real en AWS región {REGION}")
             self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
 
         self.table = self.dynamodb.Table(TABLE_NAME)
 
     def execute(self):
         """Ejecuta la validación, creación y guardado del cliente."""
+        logger.info(f"🧾 Iniciando creación del cliente: {self.name}")
         self.validate()
         self.client_id = str(uuid.uuid4())
         self.encrypt_tax_id()
@@ -54,6 +61,8 @@ class CreateClient(BaseCommannd):
 
     def validate(self):
         """Valida campos requeridos y existencia del cliente."""
+        logger.debug("🔍 Validando información del cliente...")
+
         if not all([self.name, self.tax_id, self.country, self.level, self.specialty, self.location]):
             raise ParamError("Todos los campos son obligatorios para registrar un cliente institucional.")
 
@@ -74,11 +83,13 @@ class CreateClient(BaseCommannd):
             if "Item" in existing:
                 raise ParamError("El cliente institucional ya está registrado.")
         except ClientError as e:
+            logger.error(f"❌ Error al verificar duplicado: {e}")
             raise ApiError(f"Error al verificar duplicado: {e.response['Error']['Message']}")
 
     def encrypt_tax_id(self):
         """Simula el cifrado del identificador tributario usando SHA-256."""
         self.tax_id_encrypted = hashlib.sha256(self.tax_id.encode()).hexdigest()
+        logger.debug(f"🔒 Identificador tributario cifrado para {self.tax_id}")
 
     def save(self):
         """Guarda el nuevo cliente en DynamoDB."""
@@ -95,12 +106,14 @@ class CreateClient(BaseCommannd):
 
         try:
             self.table.put_item(Item=item)
-            print(f"✅ Cliente {self.name} ({self.tax_id}) registrado correctamente.")
+            logger.info(f"✅ Cliente {self.name} ({self.tax_id}) registrado correctamente.")
         except ClientError as e:
+            logger.error(f"❌ Error al registrar cliente: {e}")
             raise ApiError(f"Error al registrar cliente: {e.response['Error']['Message']}")
 
     def response(self):
         """Construye la respuesta final del comando."""
+        logger.info(f"📦 Cliente creado exitosamente: {self.client_id}")
         return {
             "client_id": self.client_id,
             "tax_id": self.tax_id,

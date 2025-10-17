@@ -1,24 +1,26 @@
-# Usa la imagen base de Python
-FROM python:3.11-slim
+# 🐍 Imagen base ligera
+FROM public.ecr.aws/docker/library/python:3.12-alpine
 
-# Crea y define el directorio de trabajo
+# 📁 Directorio de trabajo
 WORKDIR /app
 
-# Copia dependencias y las instala
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+# ⚙️ Configuraciones para evitar archivos .pyc y habilitar logs inmediatos
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Copia el resto del código
-COPY . /app
+# 📦 Instala dependencias
+COPY requirements.txt ./
+RUN pip install --no-cache-dir --disable-pip-version-check -r requirements.txt
 
-# Define variables de entorno
+# 📂 Copia el código fuente
+COPY . .
+
+# 🔧 Variables de entorno Flask (aunque Gunicorn las usa indirectamente)
 ENV FLASK_APP=src/main.py
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=3001
 ENV FLASK_ENV=development
 
-# Expone el puerto del microservicio
+# 🌐 Expone el puerto de tu microservicio (cliente)
 EXPOSE 3001
 
-# Comando de ejecución (el mismo que usas tú)
-CMD ["flask", "run"]
+# 🚀 Comando de ejecución con Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:3001", "src.main:app"]

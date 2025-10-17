@@ -1,18 +1,18 @@
 services:
-  # users:
-  #   build:
-  #     context: ./user_microservice
-  #     dockerfile: Dockerfile
-  #   container_name: users
-  #   hostname: users
-  #   environment:
-  #     - GUNICORN_CMD_ARGS=--log-level info --reload
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./user_microservice:/app
-  #   networks:
-  #     - net-medisupply
+  users:
+    build:
+      context: ./user_microservice
+      dockerfile: Dockerfile
+    container_name: users
+    hostname: users
+    environment:
+      - GUNICORN_CMD_ARGS=--log-level info --reload
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./user_microservice:/app
+    networks:
+      - net-medisupply
 
   clients:
     build:
@@ -23,9 +23,9 @@ services:
     environment:
       - AWS_REGION=us-east-1
       - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
-      - CLIENTS_TABLE_NAME=Clients
       - FLASK_ENV=development
       - APP_COGNITO_USER_POOL_ID=dummy-local-pool
+      - GUNICORN_CMD_ARGS=--log-level info --reload
     ports:
       - "3001:3001"
     volumes:
@@ -44,9 +44,9 @@ services:
     environment:
       - AWS_REGION=us-east-1
       - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
-      - VENDORS_TABLE_NAME=Vendors
       - FLASK_ENV=development
       - APP_COGNITO_USER_POOL_ID=dummy-local-pool
+      - GUNICORN_CMD_ARGS=--log-level info --reload
     ports:
       - "3002:3002"
     volumes:

@@ -9,7 +9,6 @@ instance/*
 ### Flask.Python Stack ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
-.env
 *.py[cod]
 *$py.class
 

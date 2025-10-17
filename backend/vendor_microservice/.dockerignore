@@ -1,5 +1,7 @@
 **
 *.pyc
 
-!requirements.txt
+!Pipfile
+!Pipfile.lock
 !src/
+!requirements.txt

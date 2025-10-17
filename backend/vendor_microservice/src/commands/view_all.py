@@ -5,7 +5,7 @@ from .base_command import BaseCommannd
 from ..errors.errors import ApiError
 
 REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = os.getenv("VENDORS_TABLE_NAME", "Vendors")
+TABLE_NAME = "Vendors"
 DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 

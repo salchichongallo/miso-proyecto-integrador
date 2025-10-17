@@ -1,30 +1,28 @@
-# Usa una imagen base ligera de Python
-FROM python:3.10-alpine
+# 🐍 Imagen base ligera y moderna
+FROM public.ecr.aws/docker/library/python:3.12-alpine
 
-# Establece el directorio de trabajo dentro del contenedor
-WORKDIR /usr/src/app
+# 📁 Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Evita generar archivos .pyc y habilita logs en tiempo real
+# ⚙️ Configuración para evitar archivos .pyc y mostrar logs en tiempo real
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Copia el archivo requirements.txt primero (para aprovechar la caché de Docker)
+# 📦 Copia e instala dependencias primero (mejor uso del cache de Docker)
 COPY requirements.txt ./
+RUN pip install --no-cache-dir --disable-pip-version-check -r requirements.txt
 
-# Instala las dependencias del proyecto
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia el resto del código fuente
+# 📂 Copia el resto del código fuente
 COPY . .
 
-# Variables de entorno para Flask
-ENV FLASK_APP=./src/main.py
-ENV FLASK_RUN_PORT=3002
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV VERSION='1.0'
+# 🔧 Variables de entorno
+ENV FLASK_APP=src/main.py
+ENV FLASK_ENV=development
+ENV APP_VERSION="1.0"
+ENV APP_PORT=3002
 
-# Expone el puerto de Flask
-EXPOSE 3002
+# 🌐 Expone el puerto del microservicio
+EXPOSE ${APP_PORT}
 
-# Comando de ejecución
-CMD ["flask", "run"]
+# 🚀 Comando de ejecución con Gunicorn
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${APP_PORT} src.main:app"]

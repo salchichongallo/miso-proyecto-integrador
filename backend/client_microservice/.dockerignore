@@ -1,5 +1,7 @@
-__pycache__
+**
 *.pyc
-htmlcov
-.env
-.DS_Store
+
+!Pipfile
+!Pipfile.lock
+!src/
+!requirements.txt
