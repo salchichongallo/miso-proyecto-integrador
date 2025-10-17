@@ -24,7 +24,7 @@ class TestVendorEndpoints:
             "institutions": ["Clinica Norte", "Hospital Central"]
         }
 
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code == 201
         data = response.get_json()
         assert "Vendor created successfully" in data["mssg"]
@@ -37,7 +37,7 @@ class TestVendorEndpoints:
     def test_create_vendor_schema_falla(self, mock_schema, client):
         """❌ Falla en validación del JSON schema"""
         payload = {"name": "Vendor X"}  # falta email e institutions
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "Falta campo obligatorio" in str(data)
@@ -50,7 +50,7 @@ class TestVendorEndpoints:
         """❌ Falla cuando faltan campos obligatorios"""
         mock_validate.side_effect = Exception("El nombre y el correo son obligatorios.")
         payload = {"name": "", "email": "", "institutions": []}
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "obligatorios" in str(data)
@@ -67,7 +67,7 @@ class TestVendorEndpoints:
             "email": "vendedor@example.com",
             "institutions": [f"Inst_{i}" for i in range(31)]
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "instituciones" in str(data)
@@ -84,7 +84,7 @@ class TestVendorEndpoints:
             "email": "duplicado@example.com",
             "institutions": ["Clinica Norte"]
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "ya está registrado" in str(data)
@@ -101,7 +101,7 @@ class TestVendorEndpoints:
             "email": "vendor@example.com",
             "institutions": ["Inst1", "Inst2"]
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "DynamoDB" in str(data)
@@ -118,7 +118,7 @@ class TestVendorEndpoints:
             "email": "error@example.com",
             "institutions": ["Clinica X"]
         }
-        response = client.post("/create", json=payload)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         data = response.get_json()
         assert "verificar duplicado" in str(data)
