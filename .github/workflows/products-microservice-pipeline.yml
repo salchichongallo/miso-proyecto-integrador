@@ -1,0 +1,165 @@
+name: Backend - Products Microservice
+
+env:
+  ECR_REPOSITORY: ${{ vars.ECR_NAMESPACE }}/products
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'backend/product_microservice/**'
+      - '.github/workflows/products-microservice-pipeline.yml'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'backend/product_microservice/**'
+      - '.github/workflows/products-microservice-pipeline.yml'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    env:
+      APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'backend/product_microservice/requirements.txt'
+
+      - name: Install dependencies
+        working-directory: backend/product_microservice
+        run: pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Run Unit Tests
+        working-directory: backend/product_microservice
+        run: pytest tests/unit -v --cov --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --cov-config unit.coveragerc --exitfirst
+
+      - name: Upload Unit Test Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: products-unit-coverage-report
+          path: backend/product_microservice/htmlcov
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5.0.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: ${{ vars.AWS_ROLE_SESSION_NAME }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push Docker image to Amazon ECR
+        uses: docker/build-push-action@v6
+        with:
+          context: backend/product_microservice
+          file: backend/product_microservice/Dockerfile
+          platforms: linux/amd64
+          push: ${{ github.ref == 'refs/heads/develop' }}
+          tags: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+          cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
+          cache-to: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache,mode=max
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    environment: dev
+    needs: build-and-upload
+    if: github.ref == 'refs/heads/develop'
+
+    env:
+      APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'backend/product_microservice/requirements.txt'
+
+      - name: Install dependencies
+        working-directory: backend/product_microservice
+        run: pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Run Integration Tests
+        working-directory: backend/product_microservice
+        run: pytest tests/integration -v --cov --cov-config integration.coveragerc --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --exitfirst
+
+      - name: Upload Integration Test Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: products-integration-coverage-report
+          path: backend/product_microservice/htmlcov
+
+  upload-image-ecr-prod:
+    runs-on: ubuntu-latest
+    environment: prod
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5.0.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: ${{ vars.AWS_ROLE_SESSION_NAME }}
+
+      - name: Login to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push Docker image to Amazon ECR
+        uses: docker/build-push-action@v6
+        with:
+          context: backend/product_microservice
+          file: backend/product_microservice/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
+          cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
+          cache-to: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache,mode=max

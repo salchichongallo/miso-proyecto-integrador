@@ -39,17 +39,24 @@
 html,
 body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
-  height: 100%;
-  overflow: hidden;
+  background-color: var(--ion-background-color);
 }
 
-/* Override Ionic's default font */
+/* Override Ionic's default font and background */
 ion-app {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+  background-color: var(--ion-background-color);
+}
+
+/* Apply background to ion-content */
+ion-content {
+  --background: var(--ion-content-background) !important;
 }
 
 ion-card {
   border-radius: 12px;
+  background: #ffffff;
+  --background: #ffffff;
 }
 
 /* Typography utilities */
