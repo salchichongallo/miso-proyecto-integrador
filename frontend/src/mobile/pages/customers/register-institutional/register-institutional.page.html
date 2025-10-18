@@ -1,0 +1,94 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/customers"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrar cliente institucional</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-content>
+      <form [formGroup]="institutionalClientForm" (ngSubmit)="submit()" class="form">
+        <ion-input
+          label="Identificador tributario"
+          labelPlacement="stacked"
+          type="text"
+          formControlName="taxId"
+          placeholder="Ingrese el identificador tributario"
+          maxlength="20"
+          errorText="El identificador tributario es requerido"
+        ></ion-input>
+
+        <ion-input
+          label="Razón social"
+          labelPlacement="stacked"
+          type="text"
+          formControlName="companyName"
+          placeholder="Ingrese la razón social"
+          maxlength="100"
+          errorText="La razón social es requerida"
+        ></ion-input>
+
+        <ion-select
+          label="País"
+          labelPlacement="stacked"
+          formControlName="country"
+          placeholder="Seleccione un país"
+          interface="action-sheet"
+          cancelText="Cancelar"
+        >
+          @for (country of countries; track country.code) {
+            <ion-select-option [value]="country.code">{{ country.name }}</ion-select-option>
+          }
+        </ion-select>
+
+        <ion-select
+          label="Nivel de atención"
+          labelPlacement="stacked"
+          formControlName="careLevel"
+          placeholder="Seleccione el nivel"
+          interface="action-sheet"
+          cancelText="Cancelar"
+        >
+          @for (level of careLevels; track level.value) {
+            <ion-select-option [value]="level.value">Nivel {{ level.value }}</ion-select-option>
+          }
+        </ion-select>
+
+        <ion-select
+          label="Especialidad"
+          labelPlacement="stacked"
+          formControlName="specialty"
+          placeholder="Seleccione una especialidad"
+          interface="action-sheet"
+          cancelText="Cancelar"
+        >
+          @for (specialty of specialties; track specialty) {
+            <ion-select-option [value]="specialty">{{ specialty }}</ion-select-option>
+          }
+        </ion-select>
+
+        <ion-textarea
+          label="Ubicación"
+          labelPlacement="stacked"
+          formControlName="location"
+          placeholder="Ingrese la dirección completa"
+          rows="3"
+          maxlength="200"
+          counter="true"
+        ></ion-textarea>
+
+        <section class="button-container">
+          <ion-button expand="block" fill="outline" color="primary" type="button" (click)="cancelRegister()" onkeypress>
+            Cancelar
+          </ion-button>
+          <ion-button expand="block" color="primary" type="submit" [disabled]="!institutionalClientForm.valid">
+            Guardar
+          </ion-button>
+        </section>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
