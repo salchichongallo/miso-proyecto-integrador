@@ -1,0 +1,17 @@
+export const MEDICAL_SPECIALTIES: string[] = [
+  'Oncología',
+  'Cardiología',
+  'Neurología',
+  'Pediatría',
+  'Ginecología y Obstetricia',
+  'Traumatología',
+  'Oftalmología',
+  'Dermatología',
+  'Psiquiatría',
+  'Medicina Interna',
+  'Cirugía General',
+  'Urología',
+  'Endocrinología',
+  'Neumología',
+  'Gastroenterología',
+];
