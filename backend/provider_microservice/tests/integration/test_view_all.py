@@ -1,57 +1,62 @@
 import pytest
-from unittest.mock import patch
-from src.errors.errors import ApiError
+from unittest.mock import patch, MagicMock
+from botocore.exceptions import ClientError
 
-class TestGetAllClientsEndpoint:
 
+class TestGetAllProvidersEndpoint:
+
+    # ✅ Caso exitoso: retorna lista de proveedores
     @pytest.mark.usefixtures("client")
-    @patch("src.blueprints.client.GetAllClients.execute")
-    def test_get_all_clients_endpoint(self, mock_execute, client):
-        """✅ Caso exitoso: retorna lista de clientes"""
+    @patch("src.blueprints.provider.GetAllProviders.execute")
+    def test_get_all_providers_exitoso(self, mock_execute, client):
+        """✅ Retorna lista de proveedores exitosamente"""
         mock_execute.return_value = [
-            {"name": "Hospital Central", "country": "CO"},
-            {"name": "Clinica Norte", "country": "MX"},
+            {"name": "Proveedor A", "nit": "1234567890"},
+            {"name": "Proveedor B", "nit": "9876543210"},
         ]
 
         response = client.get("/")
-        assert response.status_code == 200
         data = response.get_json()
 
+        assert response.status_code == 200
         assert isinstance(data, list)
         assert len(data) == 2
-        assert data[0]["name"] == "Hospital Central"
-        assert data[1]["country"] == "MX"
+        assert data[0]["name"] == "Proveedor A"
         mock_execute.assert_called_once()
 
+    # ⚙️ Caso: lista vacía
     @pytest.mark.usefixtures("client")
-    @patch("src.blueprints.client.GetAllClients.execute", return_value=[])
-    def test_get_all_clients_vacio(self, mock_execute, client):
-        """⚠️ Caso sin clientes: lista vacía"""
+    @patch("src.blueprints.provider.GetAllProviders.execute")
+    def test_get_all_providers_lista_vacia(self, mock_execute, client):
+        """⚙️ Retorna lista vacía sin errores"""
+        mock_execute.return_value = []
         response = client.get("/")
+        data = response.get_json()
 
         assert response.status_code == 200
-        data = response.get_json()
-        assert isinstance(data, list)
-        assert len(data) == 0
+        assert data == []
         mock_execute.assert_called_once()
 
+    # ⚠️ Caso: error en DynamoDB (ApiError)
     @pytest.mark.usefixtures("client")
-    @patch("src.blueprints.client.GetAllClients.execute", side_effect=ApiError("Error al obtener clientes"))
-    def test_get_all_clients_error_api(self, mock_execute, client):
-        """❌ Falla controlada (ApiError)"""
+    @patch("src.blueprints.provider.GetAllProviders.execute", side_effect=Exception("Error al obtener la lista de proveedores"))
+    def test_get_all_providers_error_api(self, mock_execute, client):
+        """⚠️ Error manejado desde DynamoDB"""
         response = client.get("/")
-
-        # En tu implementación actual, este error no se captura directamente,
-        # así que Flask devolverá 500
-        assert response.status_code in (500,)
         data = response.get_json()
-        assert "Error" in str(data) or "clientes" in str(data)
 
+        assert response.status_code == 500
+        assert "Error al obtener la lista" in str(data)
+        mock_execute.assert_called_once()
+
+    # 💥 Caso: error inesperado general
     @pytest.mark.usefixtures("client")
-    @patch("src.blueprints.client.GetAllClients.execute", side_effect=Exception("Error inesperado en base de datos"))
-    def test_get_all_clients_exception_generica(self, mock_execute, client):
-        """❌ Falla inesperada"""
+    @patch("src.blueprints.provider.GetAllProviders.execute", side_effect=Exception("Error inesperado general"))
+    def test_get_all_providers_error_inesperado(self, mock_execute, client):
+        """💥 Error inesperado en ejecución"""
         response = client.get("/")
-        assert response.status_code in (500,)
         data = response.get_json()
-        assert "Error" in str(data) or "inesperado" in str(data)
+
+        assert response.status_code == 500
+        assert "Error inesperado" in str(data)
+        mock_execute.assert_called_once()

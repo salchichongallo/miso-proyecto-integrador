@@ -1,46 +1,46 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from botocore.exceptions import ClientError
-from src.commands.view_all import GetAllClients
+from src.commands.view_all import GetAllProviders
 from src.errors.errors import ApiError
 
 
-class TestGetAllClientsCommand:
+class TestGetAllProvidersCommand:
 
-    # ✅ Test: ejecución exitosa con lista de clientes
+    # ✅ Test: ejecución exitosa con lista de proveedores
     @patch("boto3.resource")
-    def test_execute_retorna_lista_de_clientes(self, mock_dynamodb):
-        # Mock tabla
+    def test_execute_retorna_lista_de_proveedores(self, mock_dynamodb):
+        # Mock tabla DynamoDB
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
 
-        # Simular respuesta de DynamoDB
+        # Simular respuesta del escaneo
         mock_table.scan.return_value = {
             "Items": [
-                {"name": "Clinica Norte"},
-                {"name": "Hospital Central"},
+                {"name": "Proveedor Z"},
+                {"name": "Proveedor A"},
             ]
         }
 
-        command = GetAllClients()
+        command = GetAllProviders()
         result = command.execute()
 
-        # Debe retornar lista ordenada alfabéticamente
+        # ✅ Validaciones
         assert isinstance(result, list)
         assert len(result) == 2
-        assert result[0]["name"] == "Clinica Norte"
+        assert result[0]["name"] == "Proveedor A"  # ordenado alfabéticamente
         mock_table.scan.assert_called_once()
 
-    # ✅ Test: maneja paginación correctamente
+    # ✅ Test: manejo de paginación
     @patch("boto3.resource")
     def test_fetch_all_con_paginacion(self, mock_dynamodb):
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
 
-        # Primera página con "LastEvaluatedKey"
+        # Simular dos páginas
         mock_table.scan.side_effect = [
             {
-                "Items": [{"name": "A"}, {"name": "B"}],
+                "Items": [{"name": "B"}, {"name": "A"}],
                 "LastEvaluatedKey": {"id": "next"},
             },
             {
@@ -48,37 +48,40 @@ class TestGetAllClientsCommand:
             },
         ]
 
-        command = GetAllClients()
+        command = GetAllProviders()
         result = command.fetch_all()
 
+        # ✅ Validaciones
         assert len(result) == 3
         assert result == sorted(result, key=lambda c: c["name"].lower())
-        assert mock_table.scan.call_count == 2  # se llamó dos veces
+        assert mock_table.scan.call_count == 2
 
-    # ⚙️ Test: tabla vacía sin errores
+    # ⚙️ Test: sin items en la tabla
     @patch("boto3.resource")
     def test_fetch_all_sin_items_retorna_lista_vacia(self, mock_dynamodb):
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
-
         mock_table.scan.return_value = {}  # sin Items
 
-        command = GetAllClients()
+        command = GetAllProviders()
         result = command.fetch_all()
 
+        # ✅ Validación
         assert result == []
+        mock_table.scan.assert_called_once()
 
-    # ⚡ Test: ClientError levanta ApiError
+    # ⚡ Test: ClientError -> ApiError
     @patch("boto3.resource")
     def test_fetch_all_lanza_apierror_en_falla(self, mock_dynamodb):
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
 
+        # Simular error en DynamoDB
         mock_table.scan.side_effect = ClientError(
             {"Error": {"Message": "Acceso denegado"}}, "Scan"
         )
 
-        command = GetAllClients()
+        command = GetAllProviders()
 
-        with pytest.raises(ApiError, match="Error al obtener la lista de clientes"):
+        with pytest.raises(ApiError, match="Error al obtener la lista de proveedores"):
             command.fetch_all()
