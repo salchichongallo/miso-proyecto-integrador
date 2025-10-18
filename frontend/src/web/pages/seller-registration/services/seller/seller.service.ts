@@ -4,7 +4,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { RegisterSellerRequest } from '@web/pages/seller-registration/interfaces/register-seller-request.interface';
-import { RegisterSellerResponse } from '@web/pages/seller-registration/interfaces/reguster-seller-response.interface';
+import { RegisterSellerResponse } from '@web/pages/seller-registration/interfaces/register-seller-response.interface';
 
 import { environment } from '@env/environment';
 

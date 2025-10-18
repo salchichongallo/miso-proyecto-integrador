@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import {
   IonContent,
   IonCard,
@@ -15,8 +17,9 @@ import {
   IonCol,
   IonIcon,
   ModalController,
+  LoadingController,
+  ToastController,
 } from '@ionic/angular/standalone';
-import { LoadingController } from '@ionic/angular';
 
 import { finalize } from 'rxjs';
 
@@ -27,6 +30,7 @@ import { AddInstitutionModalComponent } from './components/add-institution-modal
 import { Institution } from './interfaces/institution.interface';
 import { SellerService } from './services/seller/seller.service';
 import { RegisterSellerRequest } from './interfaces/register-seller-request.interface';
+import { SellerFormValue } from './interfaces/seller-form-value.interface';
 
 @Component({
   selector: 'app-seller-registration',
@@ -58,11 +62,12 @@ export class SellerRegistrationPage {
     private readonly modalController: ModalController,
     private readonly sellerService: SellerService,
     private readonly loadingController: LoadingController,
+    private readonly toastController: ToastController,
   ) {
     addIcons({ add, trashOutline });
     this.sellerForm = this.fb.group({
-      name: ['Leiner', [Validators.required, Validators.minLength(3)]],
-      email: ['leiner@gmail.com', [Validators.required, Validators.email]],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -125,9 +130,7 @@ export class SellerRegistrationPage {
 
     loading.present();
 
-    const formValue = this.sellerForm.value;
-    const name = formValue.name;
-    const email = formValue.email;
+    const { name, email } = this.sellerForm.value as SellerFormValue;
 
     const sellerData: RegisterSellerRequest = {
       name,
@@ -139,11 +142,40 @@ export class SellerRegistrationPage {
       .registerSeller(sellerData)
       .pipe(finalize(() => this.loadingController.dismiss()))
       .subscribe({
-        next: (response) => {
-          alert(response.mssg);
+        next: () => {
           this.sellerForm.reset();
           this.institutions = [];
+          this.showSuccessMessage('Vendedor registrado exitosamente.');
+        },
+        error: (httpError: HttpErrorResponse) => {
+          const message =
+            httpError.error?.error ??
+            httpError.error?.message ??
+            httpError.message ??
+            'Error al registrar el vendedor.';
+          this.showErrorMessage(message);
         },
       });
+  }
+
+  private async showSuccessMessage(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+    });
+
+    await toast.present();
+  }
+
+  private async showErrorMessage(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
   }
 }
