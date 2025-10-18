@@ -1,57 +1,46 @@
-# import pytest
-# from unittest.mock import patch
-# from src.errors.errors import ApiError
+import logging
+import random
+import pytest
 
-# class TestGetAllClientsEndpoint:
 
-#     @pytest.mark.usefixtures("client")
-#     @patch("src.blueprints.client.GetAllClients.execute")
-#     def test_get_all_clients_endpoint(self, mock_execute, client):
-#         """✅ Caso exitoso: retorna lista de clientes"""
-#         mock_execute.return_value = [
-#             {"name": "Hospital Central", "country": "CO"},
-#             {"name": "Clinica Norte", "country": "MX"},
-#         ]
+class TestGetAllClientsEndpoint:
+    @pytest.mark.usefixtures("client")
+    def test_get_all_clients_endpoint(self, client):
+        """✅ Caso exitoso: retorna lista de clientes"""
+        self.create_client(client, {"name": "Hospital Central", "country": "CO"})
+        self.create_client(client, {"name": "Clinica Norte", "country": "MX"})
 
-#         response = client.get("/")
-#         assert response.status_code == 200
-#         data = response.get_json()
+        response = client.get("/")
+        assert response.status_code == 200
+        data = response.get_json()
+        logging.info("Response data: %s", data)
 
-#         assert isinstance(data, list)
-#         assert len(data) == 2
-#         assert data[0]["name"] == "Hospital Central"
-#         assert data[1]["country"] == "MX"
-#         mock_execute.assert_called_once()
+        assert isinstance(data, list)
+        assert len(data) == 2
+        assert data[0]["name"] == "Clinica Norte"
+        assert data[0]["country"] == "MX"
 
-#     @pytest.mark.usefixtures("client")
-#     @patch("src.blueprints.client.GetAllClients.execute", return_value=[])
-#     def test_get_all_clients_vacio(self, mock_execute, client):
-#         """⚠️ Caso sin clientes: lista vacía"""
-#         response = client.get("/")
+    def create_client(self, client, partial_payload):
+        """✅ Caso exitoso de creación"""
+        base_payload = {
+            "name": "Hospital Central",
+            "country": "CO",
+            "level": "I",
+            "specialty": "Cardiología",
+            "location": "Bogotá"
+        }
+        base_payload.update(partial_payload)
+        if "tax_id" not in partial_payload:
+            base_payload["tax_id"] = str(random.randint(10000, 9999999999))
 
-#         assert response.status_code == 200
-#         data = response.get_json()
-#         assert isinstance(data, list)
-#         assert len(data) == 0
-#         mock_execute.assert_called_once()
+        return client.post("/", json=base_payload)
 
-#     @pytest.mark.usefixtures("client")
-#     @patch("src.blueprints.client.GetAllClients.execute", side_effect=ApiError("Error al obtener clientes"))
-#     def test_get_all_clients_error_api(self, mock_execute, client):
-#         """❌ Falla controlada (ApiError)"""
-#         response = client.get("/")
+    @pytest.mark.usefixtures("client")
+    def test_get_all_clients_vacio(self, client):
+        """⚠️ Caso sin clientes: lista vacía"""
+        response = client.get("/")
 
-#         # En tu implementación actual, este error no se captura directamente,
-#         # así que Flask devolverá 500
-#         assert response.status_code in (500,)
-#         data = response.get_json()
-#         assert "Error" in str(data) or "clientes" in str(data)
-
-#     @pytest.mark.usefixtures("client")
-#     @patch("src.blueprints.client.GetAllClients.execute", side_effect=Exception("Error inesperado en base de datos"))
-#     def test_get_all_clients_exception_generica(self, mock_execute, client):
-#         """❌ Falla inesperada"""
-#         response = client.get("/")
-#         assert response.status_code in (500,)
-#         data = response.get_json()
-#         assert "Error" in str(data) or "inesperado" in str(data)
+        assert response.status_code == 200
+        data = response.get_json()
+        assert isinstance(data, list)
+        assert len(data) == 0
