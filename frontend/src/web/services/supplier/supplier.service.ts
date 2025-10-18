@@ -18,4 +18,10 @@ export class SupplierService {
   public createSupplier(body: RegisterSupplierRequest): Observable<RegisterSupplierResponse> {
     return this.http.post<RegisterSupplierResponse>(this.baseUrl, body);
   }
+
+  public createBulkSupplier(file: File): Observable<Object> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.baseUrl}/bulk-upload`, formData);
+  }
 }
