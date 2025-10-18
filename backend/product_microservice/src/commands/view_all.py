@@ -2,14 +2,14 @@ import boto3
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
-from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
+from ..models.db import DYNAMODB_ENDPOINT, REGION, TABLE_NAME
 
 
-class GetAllClients(BaseCommannd):
-    """Comando para obtener todos los clientes institucionales registrados."""
+class GetAllProducts(BaseCommannd):
+    """Comando para obtener todos los productos registrados."""
 
     def __init__(self):
-        # 🧩 Conexión a DynamoDB (local o real según entorno)
+        # 🔗 Conexión a DynamoDB
         if DYNAMODB_ENDPOINT:
             self.dynamodb = boto3.resource(
                 "dynamodb",
@@ -24,24 +24,24 @@ class GetAllClients(BaseCommannd):
         self.table = self.dynamodb.Table(TABLE_NAME)
 
     def execute(self):
-        """Ejecuta la obtención completa de clientes."""
+        """Ejecuta la consulta para obtener todos los productos."""
         return self.fetch_all()
 
     def fetch_all(self):
-        """Obtiene todos los clientes de la tabla (con paginación)."""
+        """Obtiene todos los productos con manejo de paginación."""
         try:
             response = self.table.scan()
             items = response.get("Items", [])
 
-            # 🔁 Paginación en caso de más de 1MB de datos
+            # 🔁 Si hay más de 1 MB, continuar escaneando
             while "LastEvaluatedKey" in response:
                 response = self.table.scan(ExclusiveStartKey=response["LastEvaluatedKey"])
                 items.extend(response.get("Items", []))
 
-            # 🧾 Ordenar resultados por nombre
-            items.sort(key=lambda c: c.get("name", "").lower())
+            # 🧾 Ordenar por nombre
+            items.sort(key=lambda p: p.get("name", "").lower())
 
             return items
 
         except ClientError as e:
-            raise ApiError(f"Error al obtener la lista de clientes: {e.response['Error']['Message']}")
+            raise ApiError(f"Error al obtener la lista de productos: {e.response['Error']['Message']}")

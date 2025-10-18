@@ -1,4 +1,22 @@
 services:
+  init-dynamodb:
+    build:
+      context: .
+      dockerfile: Dockerfile.init
+    container_name: init-dynamodb
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - CLIENTS_TABLE=Clients
+      - VENDORS_TABLE=Vendors
+      - PROVIDERS_TABLE=Providers
+      - PRODUCTS_TABLE=Products
+    depends_on:
+      - dynamodb-local
+    networks:
+      - net-medisupply
+    restart: "no"  # Execute only once
+
   users:
     build:
       context: ./user_microservice
@@ -31,7 +49,10 @@ services:
     volumes:
       - ./client_microservice:/usr/src/app
     depends_on:
-      - dynamodb-local
+      dynamodb-local:
+          condition: service_started
+      init-dynamodb:
+          condition: service_completed_successfully
     networks:
       - net-medisupply
 
@@ -52,7 +73,10 @@ services:
     volumes:
       - ./vendor_microservice:/app
     depends_on:
-      - dynamodb-local
+      dynamodb-local:
+        condition: service_started
+      init-dynamodb:
+        condition: service_completed_successfully
     networks:
       - net-medisupply
 
@@ -73,7 +97,10 @@ services:
     volumes:
       - ./provider_microservice:/usr/src/app
     depends_on:
-      - dynamodb-local
+      dynamodb-local:
+        condition: service_started
+      init-dynamodb:
+        condition: service_completed_successfully
     networks:
       - net-medisupply
 
@@ -94,11 +121,15 @@ services:
     volumes:
       - ./product_microservice:/usr/src/app
     depends_on:
-      - dynamodb-local
+      dynamodb-local:
+        condition: service_started
+      init-dynamodb:
+        condition: service_completed_successfully
     networks:
       - net-medisupply
 
   dynamodb-local:
+    hostname: dynamodb-local
     command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
     image: amazon/dynamodb-local:2.6.1
     container_name: dynamodb-local
@@ -122,6 +153,7 @@ services:
     environment:
       - DYNAMO_ENDPOINT=http://dynamodb-local:8000
       - AWS_REGION=ap-east-1
+    stop_grace_period: 5s
 
 networks:
   net-medisupply:

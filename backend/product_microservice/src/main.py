@@ -3,7 +3,7 @@ import logging
 from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
-# from .models.db import init_db
+from .models.db import init_db
 from flask_cognito import CognitoAuth
 from .blueprints.products import products_blueprint
 from .errors.errors import ApiError
@@ -29,7 +29,7 @@ app.register_blueprint(products_blueprint)
 # Inicializar CognitoAuth
 cognito = CognitoAuth(app)
 
-# init_db()
+init_db()
 
 @app.get("/health")
 def health():
