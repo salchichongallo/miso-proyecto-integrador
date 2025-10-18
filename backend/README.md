@@ -35,6 +35,7 @@ backend/
 ├── vendor_microservice/
 ├── user_microservice/
 ├── provider_microservice/
+├── product_microservice/
 ├── docker-compose.yml
 └── README.md
 ```
@@ -60,6 +61,7 @@ FLASK_APP=src/main.py flask run -h 0.0.0.0 -p 3000
 | client_microservice   | 3001   |
 | vendor_microservice   | 3002   |
 | provider_microservice | 3003   |
+| product_microservice  | 3004   |
 
 ---
 
@@ -115,7 +117,8 @@ docker compose up
 | `user_microservice`     | 3000         | Gestión de usuarios                     |
 | `client_microservice`   | 3001         | Gestión de clientes institucionales     |
 | `vendor_microservice`   | 3002         | Gestión de vendedores                   |
-| `provider_microservice` | 3003       | Gestión de proveedores                  |
+| `provider_microservice` | 3003         | Gestión de proveedores                  |
+| `product_microservice`  | 3004         | Gestión de Productos                    |
 | `dynamodb-local`        | 8000         | Base de datos local simulada            |
 | `dynamodb-admin`        | 8001         | Interfaz web para visualizar las tablas |
 
