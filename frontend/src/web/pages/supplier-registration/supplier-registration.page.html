@@ -75,20 +75,16 @@
               <!-- Country Field -->
               <ion-item [class.ion-invalid]="countryControl?.invalid && countryControl?.touched">
                 <ion-label position="stacked">País</ion-label>
-                <ion-input
-                  type="text"
-                  formControlName="country"
-                  placeholder="Colombia"
-                  [clearInput]="true"
-                ></ion-input>
+                <ion-select formControlName="country" placeholder="Seleccione el país">
+                  @for (country of countries; track country.code) {
+                    <ion-select-option [value]="country.code">{{ country.name }}</ion-select-option>
+                  }
+                </ion-select>
               </ion-item>
               @if (countryControl?.invalid && countryControl?.touched) {
                 <div class="error-message">
                   @if (countryControl?.errors?.['required']) {
                     <small>El país es requerido</small>
-                  }
-                  @if (countryControl?.errors?.['minlength']) {
-                    <small>El país debe tener al menos 2 caracteres</small>
                   }
                 </div>
               }
