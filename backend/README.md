@@ -34,6 +34,8 @@ backend/
 ├── client_microservice/
 ├── vendor_microservice/
 ├── user_microservice/
+├── provider_microservice/
+├── product_microservice/
 ├── docker-compose.yml
 └── README.md
 ```
@@ -53,11 +55,13 @@ FLASK_APP=src/main.py flask run -h 0.0.0.0 -p 3000
 
 💡 Cambia el puerto (`-p`) según el microservicio:
 
-| Microservicio | Puerto |
-|----------------|--------|
-| user_microservice | 3000 |
-| client_microservice | 3001 |
-| vendor_microservice | 3002 |
+| Microservicio         | Puerto |
+| --------------------- | ------ |
+| user_microservice     | 3000   |
+| client_microservice   | 3001   |
+| vendor_microservice   | 3002   |
+| provider_microservice | 3003   |
+| product_microservice  | 3004   |
 
 ---
 
@@ -66,16 +70,19 @@ FLASK_APP=src/main.py flask run -h 0.0.0.0 -p 3000
 Desde la carpeta del microservicio:
 
 ### ✅ Pruebas unitarias
+
 ```bash
-pytest tests/unit -v --cov=src --cov-report=html --cov-fail-under=70
+pytest tests/unit -v --cov --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --cov-config unit.coveragerc
 ```
 
 ### 🔄 Pruebas de integración
+
 ```bash
-pytest tests/integration -v --cov=src --cov-report=html --cov-fail-under=70
+pytest tests/integration -v --cov --cov-config integration.coveragerc --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes
 ```
 
 ### 🧩 Todos los tests juntos
+
 ```bash
 pytest tests -v --cov=src --cov-report=html --cov-fail-under=70
 ```
@@ -94,6 +101,7 @@ docker compose up --build
 ```
 
 ### 🧹 Si deseas limpiar la caché y reconstruir todo
+
 ```bash
 docker compose down -v --remove-orphans
 docker compose build --no-cache
@@ -104,13 +112,15 @@ docker compose up
 
 ## 🔎 Servicios Disponibles
 
-| Servicio | Puerto Local | Descripción |
-|-----------|---------------|-------------|
-| `user_microservice` | 3000 | Gestión de usuarios |
-| `client_microservice` | 3001 | Gestión de clientes institucionales |
-| `vendor_microservice` | 3002 | Gestión de vendedores |
-| `dynamodb-local` | 8000 | Base de datos local simulada |
-| `dynamodb-admin` | 8001 | Interfaz web para visualizar las tablas |
+| Servicio                | Puerto Local | Descripción                             |
+| ----------------------- | ------------ | --------------------------------------- |
+| `user_microservice`     | 3000         | Gestión de usuarios                     |
+| `client_microservice`   | 3001         | Gestión de clientes institucionales     |
+| `vendor_microservice`   | 3002         | Gestión de vendedores                   |
+| `provider_microservice` | 3003         | Gestión de proveedores                  |
+| `product_microservice`  | 3004         | Gestión de Productos                    |
+| `dynamodb-local`        | 8000         | Base de datos local simulada            |
+| `dynamodb-admin`        | 8001         | Interfaz web para visualizar las tablas |
 
 ---
 
