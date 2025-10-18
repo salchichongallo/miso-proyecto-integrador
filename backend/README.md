@@ -37,6 +37,8 @@ backend/
 ├── provider_microservice/
 ├── product_microservice/
 ├── docker-compose.yml
+├── Dockerfile.init
+├── init_dynamodb.py
 └── README.md
 ```
 
@@ -97,15 +99,14 @@ Para levantar **todos los microservicios y DynamoDB Local**, desde la carpeta ra
 
 ```bash
 cd backend
-docker compose up --build
+docker compose up
 ```
 
 ### 🧹 Si deseas limpiar la caché y reconstruir todo
 
 ```bash
 docker compose down -v --remove-orphans
-docker compose build --no-cache
-docker compose up
+docker compose up --no-build
 ```
 
 ---
@@ -121,6 +122,7 @@ docker compose up
 | `product_microservice`  | 3004         | Gestión de Productos                    |
 | `dynamodb-local`        | 8000         | Base de datos local simulada            |
 | `dynamodb-admin`        | 8001         | Interfaz web para visualizar las tablas |
+| `init-dynamodb`         | N/A          | Script para crear las tablas            |
 
 ---
 
