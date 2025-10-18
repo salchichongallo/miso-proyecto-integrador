@@ -19,6 +19,7 @@ def client():
         from src.main import app
         with app.test_client() as client:
             app.testing = True
+            clear_db()
             yield client
             clear_db()
 
