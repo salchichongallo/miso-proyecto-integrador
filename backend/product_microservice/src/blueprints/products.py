@@ -1,3 +1,5 @@
+import traceback
+from datetime import date
 from flask import jsonify, Blueprint, request
 from ..commands.ping import PingCommand
 from ..models.product import NewProductJsonSchema
@@ -6,7 +8,7 @@ from ..commands.create_product import CreateProduct
 from ..commands.view_all import GetAllProducts
 from ..commands.create_products_bulk import CreateProductsBulk
 
-from flask_cognito import cognito_auth_required, cognito_group_permissions
+from flask_cognito import cognito_auth_required
 
 products_blueprint = Blueprint("product", __name__)
 
@@ -23,6 +25,7 @@ def create_product():
         json_data = request.get_json()
         NewProductJsonSchema.check(json_data)
 
+        json_data["expiration_date"] = date.fromisoformat(json_data["expiration_date"])
         create_product = CreateProduct(**json_data).execute()
         return jsonify(create_product), 201
 
@@ -31,6 +34,7 @@ def create_product():
     except ApiError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
+        traceback.print_exc()
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 
