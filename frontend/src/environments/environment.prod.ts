@@ -4,6 +4,7 @@ export const environment = {
   clientMicroserviceUrl: '#{APP_CLIENT_MICROSERVICE_URL}#',
   vendorMicroserviceUrl: '#{APP_VENDOR_MICROSERVICE_URL}#',
   providerMicroserviceUrl: '#{APP_PROVIDER_MICROSERVICE_URL}#',
+  productMicroserviceUrl: '#{APP_PRODUCT_MICROSERVICE_URL}#',
   cognito: {
     userPoolId: '#{APP_COGNITO_USER_POOL_ID}#',
     userPoolClientId: '#{APP_COGNITO_USER_POOL_CLIENT_ID}#',

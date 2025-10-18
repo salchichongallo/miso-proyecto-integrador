@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import {
   IonContent,
   IonCard,
@@ -7,10 +9,16 @@ import {
   IonCardContent,
   IonButton,
   IonIcon,
+  LoadingController,
+  ToastController,
 } from '@ionic/angular/standalone';
+
+import { finalize } from 'rxjs';
 
 import { addIcons } from 'ionicons';
 import { cloudUploadOutline } from 'ionicons/icons';
+
+import { ProductService } from '@web/services/product/product.service';
 
 @Component({
   selector: 'app-product-bulk-upload',
@@ -19,6 +27,10 @@ import { cloudUploadOutline } from 'ionicons/icons';
   imports: [IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon],
 })
 export class ProductBulkUploadPage {
+  private readonly productService = inject(ProductService);
+  private readonly loadingController = inject(LoadingController);
+  private readonly toastController = inject(ToastController);
+
   selectedFile: File | null = null;
   fileName = '';
 
@@ -39,10 +51,52 @@ export class ProductBulkUploadPage {
     fileInput?.click();
   }
 
-  public onProcessFile(): void {
-    if (this.selectedFile) {
-      console.log('Processing file:', this.selectedFile.name);
-      // TODO: Implement file processing logic
+  public async onProcessFile(): Promise<void> {
+    if (!this.selectedFile) {
+      return;
     }
+
+    const loading = await this.loadingController.create({
+      message: 'Procesando archivo de productos...',
+    });
+
+    await loading.present();
+
+    this.productService
+      .createBulkProduct(this.selectedFile)
+      .pipe(finalize(() => this.loadingController.dismiss()))
+      .subscribe({
+        next: () => {
+          this.selectedFile = null;
+          this.fileName = '';
+          this.showSuccessMessage('Productos cargados exitosamente.');
+        },
+        error: (httpError: HttpErrorResponse) => {
+          const message =
+            httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al cargar los productos.';
+          this.showErrorMessage(message);
+        },
+      });
+  }
+
+  private async showSuccessMessage(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+    });
+
+    await toast.present();
+  }
+
+  private async showErrorMessage(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
   }
 }
