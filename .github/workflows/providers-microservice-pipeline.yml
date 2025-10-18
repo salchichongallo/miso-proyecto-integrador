@@ -1,7 +1,7 @@
-name: Backend - Clients Microservice
+name: Backend - Providers Microservice
 
 env:
-  ECR_REPOSITORY: ${{ vars.ECR_NAMESPACE }}/clientes
+  ECR_REPOSITORY: ${{ vars.ECR_NAMESPACE }}/providers
 
 on:
   workflow_dispatch:
@@ -10,15 +10,15 @@ on:
       - main
       - develop
     paths:
-      - 'backend/client_microservice/**'
-      - '.github/workflows/clients-microservice-pipeline.yml'
+      - 'backend/provider_microservice/**'
+      - '.github/workflows/providers-microservice-pipeline.yml'
   push:
     branches:
       - main
       - develop
     paths:
-      - 'backend/client_microservice/**'
-      - '.github/workflows/clients-microservice-pipeline.yml'
+      - 'backend/provider_microservice/**'
+      - '.github/workflows/providers-microservice-pipeline.yml'
 
 jobs:
   build-and-upload:
@@ -44,22 +44,22 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: 'backend/client_microservice/requirements.txt'
+          cache-dependency-path: 'backend/provider_microservice/requirements.txt'
 
       - name: Install dependencies
-        working-directory: backend/client_microservice
+        working-directory: backend/provider_microservice
         run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Run Unit Tests
-        working-directory: backend/client_microservice
+        working-directory: backend/provider_microservice
         run: pytest tests/unit -v --cov --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --cov-config unit.coveragerc --exitfirst
 
       - name: Upload Unit Test Coverage Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: clients-unit-coverage-report
-          path: backend/client_microservice/htmlcov
+          name: providers-unit-coverage-report
+          path: backend/provider_microservice/htmlcov
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0
@@ -78,8 +78,8 @@ jobs:
       - name: Build & Push Docker image to Amazon ECR
         uses: docker/build-push-action@v6
         with:
-          context: backend/client_microservice
-          file: backend/client_microservice/Dockerfile
+          context: backend/provider_microservice
+          file: backend/provider_microservice/Dockerfile
           platforms: linux/amd64
           push: ${{ github.ref == 'refs/heads/develop' }}
           tags: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
@@ -107,22 +107,22 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: 'backend/client_microservice/requirements.txt'
+          cache-dependency-path: 'backend/provider_microservice/requirements.txt'
 
       - name: Install dependencies
-        working-directory: backend/client_microservice
+        working-directory: backend/provider_microservice
         run: pip install --disable-pip-version-check -r requirements.txt
 
       - name: Run Integration Tests
-        working-directory: backend/client_microservice
+        working-directory: backend/provider_microservice
         run: pytest tests/integration -v --cov --cov-config integration.coveragerc --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --exitfirst
 
       - name: Upload Integration Test Coverage Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: clients-integration-coverage-report
-          path: backend/client_microservice/htmlcov
+          name: providers-integration-coverage-report
+          path: backend/provider_microservice/htmlcov
 
   upload-image-ecr-prod:
     runs-on: ubuntu-latest
@@ -156,8 +156,8 @@ jobs:
       - name: Build & Push Docker image to Amazon ECR
         uses: docker/build-push-action@v6
         with:
-          context: backend/client_microservice
-          file: backend/client_microservice/Dockerfile
+          context: backend/provider_microservice
+          file: backend/provider_microservice/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
