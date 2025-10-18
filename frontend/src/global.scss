@@ -35,10 +35,12 @@
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
 }
 
-/* Ensure body and html use Poppins */
+/* Ensure body and html use Poppins and prevent double scroll */
 html,
 body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* Override Ionic's default font */

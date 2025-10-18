@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100%;
   padding: 2rem;
 }
 
@@ -40,7 +40,7 @@
 
   &:hover {
     border-color: var(--ion-color-primary);
-    background-color: var(--ion-color-primary-tint);
+    background-color: var(--ion-color-light-shade);
   }
 
   &:active {
