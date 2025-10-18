@@ -1,12 +1,8 @@
 import boto3
-import os
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
-
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Products"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
+from ..models.db import DYNAMODB_ENDPOINT, REGION, TABLE_NAME
 
 
 class GetAllProducts(BaseCommannd):

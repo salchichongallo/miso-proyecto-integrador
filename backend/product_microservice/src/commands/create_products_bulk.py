@@ -1,5 +1,4 @@
 import boto3
-import os
 import io
 import uuid
 import logging
@@ -10,12 +9,10 @@ from decimal import Decimal
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
+from ..models.db import DYNAMODB_ENDPOINT, REGION, TABLE_NAME
+
 
 logger = logging.getLogger(__name__)
-
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Products"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class CreateProductsBulk(BaseCommannd):
