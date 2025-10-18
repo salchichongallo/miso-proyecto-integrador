@@ -1,13 +1,9 @@
 import boto3
-import os
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
+from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
 
-# 🌍 Variables de entorno
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Clients"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 class GetAllClients(BaseCommannd):
     """Comando para obtener todos los clientes institucionales registrados."""
