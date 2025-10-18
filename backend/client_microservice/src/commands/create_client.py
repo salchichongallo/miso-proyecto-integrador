@@ -8,20 +8,14 @@ from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 
-# 🧩 Configuración de logging
 logger = logging.getLogger(__name__)
 
-# 🔧 Configuración general
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = "Clients"
 DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class CreateClient(BaseCommannd):
-    """
-    Comando para registrar un cliente institucional (hospital, clínica, laboratorio)
-    con validación simulada del identificador tributario (tax_id) y cifrado básico.
-    """
 
     def __init__(self, name: str, tax_id: str, country: str, level: str, specialty: str, location: str):
         self.name = name.strip() if name else None
@@ -49,6 +43,7 @@ class CreateClient(BaseCommannd):
 
         self.table = self.dynamodb.Table(TABLE_NAME)
 
+    # ----------------------------------------------------------
     def execute(self):
         """Ejecuta la validación, creación y guardado del cliente."""
         logger.info(f"🧾 Iniciando creación del cliente: {self.name}")
@@ -58,25 +53,20 @@ class CreateClient(BaseCommannd):
         self.save()
         return self.response()
 
+    # ----------------------------------------------------------
     def validate(self):
         """Valida campos requeridos y existencia del cliente."""
         logger.debug("🔍 Validando información del cliente...")
 
+        # Validar campos obligatorios
         if not all([self.name, self.tax_id, self.country, self.level, self.specialty, self.location]):
             raise ParamError("Todos los campos son obligatorios para registrar un cliente institucional.")
 
-        # Validar formato del NIT/RUC según país (simulado)
-        if self.country == "CO":  # 🇨🇴 Colombia: 9-10 dígitos
-            if not re.match(r"^\d{9,10}$", self.tax_id):
-                raise ParamError("NIT inválido: debe tener entre 9 y 10 dígitos.")
-        elif self.country == "MX":  # 🇲🇽 México: RFC (10-13 caracteres)
-            if not re.match(r"^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$", self.tax_id, re.IGNORECASE):
-                raise ParamError("RFC inválido: formato incorrecto.")
-        else:
-            if len(self.tax_id) < 5:
-                raise ParamError("Identificador tributario inválido.")
+        # ✅ Validar que el tax_id tenga exactamente 10 dígitos numéricos
+        if not re.match(r"^\d{10}$", self.tax_id):
+            raise ParamError("El NIT debe contener exactamente 10 dígitos numéricos.")
 
-        # Verificar si ya existe el tax_id
+        # Validar que no exista el tax_id en la base
         try:
             existing = self.table.get_item(Key={"tax_id": self.tax_id})
             if "Item" in existing:
@@ -85,11 +75,13 @@ class CreateClient(BaseCommannd):
             logger.error(f"❌ Error al verificar duplicado: {e}")
             raise ApiError(f"Error al verificar duplicado: {e.response['Error']['Message']}")
 
+    # ----------------------------------------------------------
     def encrypt_tax_id(self):
         """Simula el cifrado del identificador tributario usando SHA-256."""
         self.tax_id_encrypted = hashlib.sha256(self.tax_id.encode()).hexdigest()
         logger.debug(f"🔒 Identificador tributario cifrado para {self.tax_id}")
 
+    # ----------------------------------------------------------
     def save(self):
         """Guarda el nuevo cliente en DynamoDB."""
         item = {
@@ -110,6 +102,7 @@ class CreateClient(BaseCommannd):
             logger.error(f"❌ Error al registrar cliente: {e}")
             raise ApiError(f"Error al registrar cliente: {e.response['Error']['Message']}")
 
+    # ----------------------------------------------------------
     def response(self):
         """Construye la respuesta final del comando."""
         logger.info(f"📦 Cliente creado exitosamente: {self.client_id}")

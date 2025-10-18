@@ -22,7 +22,7 @@ class TestClientEndpoints:
 
         payload = {
             "name": "Hospital Central",
-            "tax_id": "123456789",
+            "tax_id": "1234567890",
             "country": "CO",
             "level": "1",
             "specialty": "Cardiología",
@@ -44,7 +44,7 @@ class TestClientEndpoints:
         """❌ Falla de validación en el schema JSON"""
         payload = {"name": "Clinica X"}  # faltan campos
         response = client.post("/", json=payload)
-        assert response.status_code == 500  # o 400 si lo manejás así
+        assert response.status_code in (400, 500)
         data = response.get_json()
         assert "Falta campo obligatorio" in str(data)
 
@@ -53,7 +53,7 @@ class TestClientEndpoints:
     @patch("src.blueprints.client.CreateClient.validate")
     def test_create_client_campos_faltantes(self, mock_validate, mock_schema, client):
         """❌ Error de validación: campos faltantes"""
-        mock_validate.side_effect = Exception("Todos los campos son obligatorios para registrar un cliente institucional.")
+        mock_validate.side_effect = Exception("Todos los campos obligatorios para registrar un cliente institucional.")
         payload = {"name": "Hospital"}  # incompleto
         response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
@@ -63,12 +63,12 @@ class TestClientEndpoints:
     @pytest.mark.usefixtures("client")
     @patch("src.blueprints.client.NewClientJsonSchema.check", return_value=True)
     @patch("src.blueprints.client.CreateClient.validate")
-    def test_create_client_tax_id_invalido_colombia(self, mock_validate, mock_schema, client):
-        """❌ NIT inválido (Colombia)"""
-        mock_validate.side_effect = Exception("NIT inválido: debe tener entre 9 y 10 dígitos.")
+    def test_create_client_tax_id_invalido(self, mock_validate, mock_schema, client):
+        """❌ NIT inválido (menos o más de 10 dígitos)"""
+        mock_validate.side_effect = Exception("El NIT debe contener exactamente 10 dígitos numéricos.")
         payload = {
-            "name": "Hospital",
-            "tax_id": "123",
+            "name": "Hospital Norte",
+            "tax_id": "12345",  # ❌ menos de 10 dígitos
             "country": "CO",
             "level": "1",
             "specialty": "Pediatría",
@@ -76,43 +76,7 @@ class TestClientEndpoints:
         }
         response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
-        assert "NIT inválido" in str(response.get_json())
-
-    @pytest.mark.usefixtures("client")
-    @patch("src.blueprints.client.NewClientJsonSchema.check", return_value=True)
-    @patch("src.blueprints.client.CreateClient.validate")
-    def test_create_client_rfc_invalido_mexico(self, mock_validate, mock_schema, client):
-        """❌ RFC inválido (México)"""
-        mock_validate.side_effect = Exception("RFC inválido: formato incorrecto.")
-        payload = {
-            "name": "Clinica Norte",
-            "tax_id": "1234",
-            "country": "MX",
-            "level": "2",
-            "specialty": "Oncología",
-            "location": "CDMX"
-        }
-        response = client.post("/", json=payload)
-        assert response.status_code in (400, 500)
-        assert "RFC inválido" in str(response.get_json())
-
-    @pytest.mark.usefixtures("client")
-    @patch("src.blueprints.client.NewClientJsonSchema.check", return_value=True)
-    @patch("src.blueprints.client.CreateClient.validate")
-    def test_create_client_tax_id_corto_otro_pais(self, mock_validate, mock_schema, client):
-        """❌ tax_id corto en otro país"""
-        mock_validate.side_effect = Exception("Identificador tributario inválido.")
-        payload = {
-            "name": "Clinica Sur",
-            "tax_id": "123",
-            "country": "US",
-            "level": "2",
-            "specialty": "Dermatología",
-            "location": "Miami"
-        }
-        response = client.post("/", json=payload)
-        assert response.status_code in (400, 500)
-        assert "tributario inválido" in str(response.get_json())
+        assert "10 dígitos" in str(response.get_json())
 
     @pytest.mark.usefixtures("client")
     @patch("src.blueprints.client.NewClientJsonSchema.check", return_value=True)
@@ -122,7 +86,7 @@ class TestClientEndpoints:
         mock_validate.side_effect = Exception("El cliente institucional ya está registrado.")
         payload = {
             "name": "Hospital Central",
-            "tax_id": "123456789",
+            "tax_id": "1234567890",  # ✅ formato válido
             "country": "CO",
             "level": "1",
             "specialty": "Cardiología",
@@ -140,7 +104,7 @@ class TestClientEndpoints:
         mock_save.side_effect = Exception("Error al registrar cliente: fallo en DynamoDB")
         payload = {
             "name": "Clinica Norte",
-            "tax_id": "123456789",
+            "tax_id": "1234567890",
             "country": "CO",
             "level": "1",
             "specialty": "Pediatría",
@@ -158,7 +122,7 @@ class TestClientEndpoints:
         mock_validate.side_effect = Exception("Error al verificar duplicado: AccessDenied")
         payload = {
             "name": "Hospital Andes",
-            "tax_id": "123456789",
+            "tax_id": "1234567890",
             "country": "CO",
             "level": "1",
             "specialty": "Neurología",
