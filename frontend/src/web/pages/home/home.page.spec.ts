@@ -31,4 +31,9 @@ describe('HomePage', () => {
     component.navigateToSellerRegistration();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/seller-registration']);
   });
+
+  it('should navigate to vendor bulk upload', () => {
+    component.navigateToVendorBulkUpload();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/vendor-bulk-upload']);
+  });
 });

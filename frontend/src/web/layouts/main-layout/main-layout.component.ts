@@ -43,6 +43,7 @@ export class MainLayoutComponent implements OnInit {
   private readonly pageTitles: { [key: string]: string } = {
     '/home': 'MISO - MediSupply',
     '/seller-registration': 'Registrar vendedor',
+    '/vendor-bulk-upload': 'Registro masivo de proveedores',
     '/style-demo': 'Demostración de estilos',
   };
 
