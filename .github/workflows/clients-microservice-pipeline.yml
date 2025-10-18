@@ -92,9 +92,14 @@ jobs:
     needs: build-and-upload
     if: github.ref == 'refs/heads/develop'
 
+    permissions:
+      id-token: write
+      contents: read
+
     env:
       APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
+      DYNAMODB_TABLE: ${{ vars.DYNAMODB_CLIENTS_TABLE }}
 
     steps:
       - name: Checkout code
@@ -112,6 +117,13 @@ jobs:
       - name: Install dependencies
         working-directory: backend/client_microservice
         run: pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v5.0.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: ${{ vars.AWS_ROLE_SESSION_NAME }}
 
       - name: Run Integration Tests
         working-directory: backend/client_microservice
