@@ -1,0 +1,171 @@
+<ion-content class="ion-padding">
+  <ion-grid class="full-height">
+    <ion-row class="ion-justify-content-center ion-align-items-center full-height">
+      <ion-col size="12" size-md="10" size-lg="8" size-xl="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Registrar proveedor</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+              <!-- Name Field -->
+              <ion-item [class.ion-invalid]="nameControl?.invalid && nameControl?.touched">
+                <ion-label position="stacked">Nombre del proveedor</ion-label>
+                <ion-input
+                  type="text"
+                  formControlName="name"
+                  placeholder="Ingrese el nombre del proveedor"
+                  [clearInput]="true"
+                ></ion-input>
+              </ion-item>
+              @if (nameControl?.invalid && nameControl?.touched) {
+                <div class="error-message">
+                  @if (nameControl?.errors?.['required']) {
+                    <small>El nombre es requerido</small>
+                  }
+                  @if (nameControl?.errors?.['minlength']) {
+                    <small>El nombre debe tener al menos 3 caracteres</small>
+                  }
+                </div>
+              }
+
+              <!-- Email Field -->
+              <ion-item [class.ion-invalid]="emailControl?.invalid && emailControl?.touched">
+                <ion-label position="stacked">Correo electrónico</ion-label>
+                <ion-input
+                  type="email"
+                  formControlName="email"
+                  placeholder="proveedor@empresa.com"
+                  [clearInput]="true"
+                ></ion-input>
+              </ion-item>
+              @if (emailControl?.invalid && emailControl?.touched) {
+                <div class="error-message">
+                  @if (emailControl?.errors?.['required']) {
+                    <small>El correo electrónico es requerido</small>
+                  }
+                  @if (emailControl?.errors?.['email']) {
+                    <small>Ingrese un correo válido</small>
+                  }
+                </div>
+              }
+
+              <!-- Phone Field -->
+              <ion-item [class.ion-invalid]="phoneControl?.invalid && phoneControl?.touched">
+                <ion-label position="stacked">Teléfono</ion-label>
+                <ion-input
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="+57 300 123 4567"
+                  [clearInput]="true"
+                ></ion-input>
+              </ion-item>
+              @if (phoneControl?.invalid && phoneControl?.touched) {
+                <div class="error-message">
+                  @if (phoneControl?.errors?.['required']) {
+                    <small>El teléfono es requerido</small>
+                  }
+                  @if (phoneControl?.errors?.['pattern']) {
+                    <small>Ingrese un teléfono válido</small>
+                  }
+                </div>
+              }
+
+              <!-- Country Field -->
+              <ion-item [class.ion-invalid]="countryControl?.invalid && countryControl?.touched">
+                <ion-label position="stacked">País</ion-label>
+                <ion-input
+                  type="text"
+                  formControlName="country"
+                  placeholder="Colombia"
+                  [clearInput]="true"
+                ></ion-input>
+              </ion-item>
+              @if (countryControl?.invalid && countryControl?.touched) {
+                <div class="error-message">
+                  @if (countryControl?.errors?.['required']) {
+                    <small>El país es requerido</small>
+                  }
+                  @if (countryControl?.errors?.['minlength']) {
+                    <small>El país debe tener al menos 2 caracteres</small>
+                  }
+                </div>
+              }
+
+              <!-- NIT Field -->
+              <ion-item [class.ion-invalid]="nitControl?.invalid && nitControl?.touched">
+                <ion-label position="stacked">NIT</ion-label>
+                <ion-input
+                  type="text"
+                  formControlName="nit"
+                  placeholder="900123456-7"
+                  [clearInput]="true"
+                ></ion-input>
+              </ion-item>
+              @if (nitControl?.invalid && nitControl?.touched) {
+                <div class="error-message">
+                  @if (nitControl?.errors?.['required']) {
+                    <small>El NIT es requerido</small>
+                  }
+                  @if (nitControl?.errors?.['pattern']) {
+                    <small>El NIT debe contener solo números y guiones</small>
+                  }
+                </div>
+              }
+
+              <!-- Address Field -->
+              <ion-item [class.ion-invalid]="addressControl?.invalid && addressControl?.touched">
+                <ion-label position="stacked">Dirección</ion-label>
+                <ion-input
+                  type="text"
+                  formControlName="address"
+                  placeholder="Calle 123 #45-67"
+                  [clearInput]="true"
+                ></ion-input>
+              </ion-item>
+              @if (addressControl?.invalid && addressControl?.touched) {
+                <div class="error-message">
+                  @if (addressControl?.errors?.['required']) {
+                    <small>La dirección es requerida</small>
+                  }
+                  @if (addressControl?.errors?.['minlength']) {
+                    <small>La dirección debe tener al menos 5 caracteres</small>
+                  }
+                </div>
+              }
+
+              <!-- Action Buttons -->
+              <ion-grid class="button-group">
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-button
+                      onkeypress
+                      expand="block"
+                      fill="outline"
+                      color="primary"
+                      type="button"
+                      (click)="onCancel()"
+                    >
+                      Volver
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-button
+                      expand="block"
+                      color="primary"
+                      type="submit"
+                      [disabled]="supplierForm.invalid"
+                    >
+                      Guardar
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
