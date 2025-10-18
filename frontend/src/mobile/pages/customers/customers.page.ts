@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { addIcons } from 'ionicons';
 import { arrowForwardOutline, add } from 'ionicons/icons';
@@ -18,7 +19,7 @@ import {
   selector: 'app-customers-page',
   templateUrl: 'customers.page.html',
   styleUrls: ['customers.page.scss'],
-  imports: [IonIcon, IonLabel, IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent],
+  imports: [RouterLink, IonIcon, IonLabel, IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent],
 })
 export class CustomersPage {
   constructor() {
