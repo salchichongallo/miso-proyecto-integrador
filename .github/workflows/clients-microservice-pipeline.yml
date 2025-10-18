@@ -92,6 +92,10 @@ jobs:
     needs: build-and-upload
     if: github.ref == 'refs/heads/develop'
 
+    permissions:
+      id-token: write
+      contents: read
+
     env:
       APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
