@@ -90,7 +90,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     needs: build-and-upload
-    if: github.ref == 'refs/heads/develop'
 
     env:
       APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}

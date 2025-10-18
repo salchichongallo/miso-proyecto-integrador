@@ -1,5 +1,4 @@
 import boto3
-import os
 import io
 import uuid
 import re
@@ -9,12 +8,9 @@ import time
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
+from ..models.db import REGION, DYNAMODB_ENDPOINT, TABLE_NAME
 
 logger = logging.getLogger(__name__)
-
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Providers"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class CreateProvidersBulk(BaseCommannd):

@@ -5,7 +5,7 @@ from ..commands.view_all import GetAllProviders
 from ..commands.create_providers_bulk import CreateProvidersBulk
 from ..models.provider import NewProviderJsonSchema
 from ..errors.errors import ParamError, ApiError
-from flask_cognito import cognito_auth_required, cognito_group_permissions
+from flask_cognito import cognito_auth_required
 
 providers_blueprint = Blueprint("provider", __name__)
 
