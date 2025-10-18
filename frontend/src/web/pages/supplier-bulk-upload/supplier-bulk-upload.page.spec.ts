@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VendorBulkUploadPage } from './vendor-bulk-upload.page';
+import { SupplierBulkUploadPage } from './supplier-bulk-upload.page';
 
-describe('VendorBulkUploadPage', () => {
-  let component: VendorBulkUploadPage;
-  let fixture: ComponentFixture<VendorBulkUploadPage>;
+describe('SupplierBulkUploadPage', () => {
+  let component: SupplierBulkUploadPage;
+  let fixture: ComponentFixture<SupplierBulkUploadPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VendorBulkUploadPage],
+      imports: [SupplierBulkUploadPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VendorBulkUploadPage);
+    fixture = TestBed.createComponent(SupplierBulkUploadPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

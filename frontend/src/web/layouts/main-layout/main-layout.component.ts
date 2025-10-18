@@ -24,17 +24,7 @@ import { AuthService } from '@shared/auth/auth.service';
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
-  imports: [
-    RouterOutlet,
-    IonApp,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButtons,
-    IonButton,
-    IonIcon,
-  ],
+  imports: [RouterOutlet, IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon],
 })
 export class MainLayoutComponent implements OnInit {
   pageTitle = 'MISO - MediSupply';
@@ -43,14 +33,14 @@ export class MainLayoutComponent implements OnInit {
   private readonly pageTitles: { [key: string]: string } = {
     '/home': 'MISO - MediSupply',
     '/seller-registration': 'Registrar vendedor',
-    '/vendor-bulk-upload': 'Registro masivo de proveedores',
+    '/supplier-bulk-upload': 'Registro masivo de proveedores',
     '/style-demo': 'Demostración de estilos',
   };
 
   constructor(
     private readonly router: Router,
     private readonly location: Location,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {
     addIcons({ arrowBackOutline, logOutOutline });
   }
@@ -58,13 +48,11 @@ export class MainLayoutComponent implements OnInit {
   public ngOnInit(): void {
     this.updatePageTitle(this.router.url);
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          this.updatePageTitle(event.urlAfterRedirects);
-        }
-      });
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.updatePageTitle(event.urlAfterRedirects);
+      }
+    });
   }
 
   public goBack(): void {

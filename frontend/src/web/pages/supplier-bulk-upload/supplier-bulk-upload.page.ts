@@ -1,16 +1,24 @@
 import { Component } from '@angular/core';
-import { IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonButton,
+  IonIcon,
+} from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
 import { cloudUploadOutline } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-vendor-bulk-upload',
-  templateUrl: './vendor-bulk-upload.page.html',
-  styleUrls: ['./vendor-bulk-upload.page.scss'],
+  selector: 'app-supplier-bulk-upload',
+  templateUrl: './supplier-bulk-upload.page.html',
+  styleUrls: ['./supplier-bulk-upload.page.scss'],
   imports: [IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon],
 })
-export class VendorBulkUploadPage {
+export class SupplierBulkUploadPage {
   selectedFile: File | null = null;
   fileName = '';
 

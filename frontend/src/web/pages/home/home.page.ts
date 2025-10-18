@@ -21,7 +21,7 @@ export class HomePage {
     this.router.navigate(['/seller-registration']);
   }
 
-  public navigateToVendorBulkUpload(): void {
-    this.router.navigate(['/vendor-bulk-upload']);
+  public navigateToSupplierBulkUpload(): void {
+    this.router.navigate(['/supplier-bulk-upload']);
   }
 }

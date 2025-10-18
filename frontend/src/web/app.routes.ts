@@ -24,9 +24,9 @@ export const routes: Routes = [
           import('./pages/seller-registration/seller-registration.page').then((m) => m.SellerRegistrationPage),
       },
       {
-        path: 'vendor-bulk-upload',
+        path: 'supplier-bulk-upload',
         loadComponent: () =>
-          import('./pages/vendor-bulk-upload/vendor-bulk-upload.page').then((m) => m.VendorBulkUploadPage),
+          import('./pages/supplier-bulk-upload/supplier-bulk-upload.page').then((m) => m.SupplierBulkUploadPage),
       },
       {
         path: 'style-demo',
