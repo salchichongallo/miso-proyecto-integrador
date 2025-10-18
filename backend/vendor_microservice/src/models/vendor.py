@@ -10,6 +10,7 @@ class NewVendorJsonSchema(Schema):
     email = fields.Email(
         required=True,
         validate=validate.Length(max=255),
+        error_messages={"required": "El campo email es obligatorio."}
     )
 
     institutions = fields.List(
