@@ -15,6 +15,10 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       {
+        path: 'home',
+        loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
+      },
+      {
         path: 'seller-registration',
         loadComponent: () =>
           import('./pages/seller-registration/seller-registration.page').then((m) => m.SellerRegistrationPage),
@@ -24,8 +28,13 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
         path: '**',
-        redirectTo: 'seller-registration',
+        redirectTo: 'home',
         pathMatch: 'full',
       },
     ],

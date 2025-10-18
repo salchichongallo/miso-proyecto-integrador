@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+
 import {
   IonApp,
   IonHeader,
@@ -11,8 +12,10 @@ import {
   IonButton,
   IonIcon,
 } from '@ionic/angular/standalone';
+
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, logOutOutline } from 'ionicons/icons';
+
 import { filter } from 'rxjs/operators';
 
 import { AuthService } from '@shared/auth/auth.service';
@@ -35,8 +38,10 @@ import { AuthService } from '@shared/auth/auth.service';
 })
 export class MainLayoutComponent implements OnInit {
   pageTitle = 'MISO - MediSupply';
+  showBackButton = false;
 
   private readonly pageTitles: { [key: string]: string } = {
+    '/home': 'MISO - MediSupply',
     '/seller-registration': 'Registrar vendedor',
     '/style-demo': 'Demostración de estilos',
   };
@@ -72,5 +77,6 @@ export class MainLayoutComponent implements OnInit {
 
   private updatePageTitle(url: string): void {
     this.pageTitle = this.pageTitles[url] ?? 'MISO - MediSupply';
+    this.showBackButton = url !== '/home';
   }
 }

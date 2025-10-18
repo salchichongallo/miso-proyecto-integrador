@@ -1,0 +1,26 @@
+<ion-content [fullscreen]="true">
+  <ion-grid class="home-container">
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <!-- Logo Column -->
+      <ion-col size="12" size-md="6" class="logo-column">
+        <div class="logo-wrapper">
+          <img src="assets/logos/logo-MedySupply.png" alt="MediSupply Logo" class="logo" />
+        </div>
+      </ion-col>
+
+      <!-- Menu Column -->
+      <ion-col size="12" size-md="6" class="menu-column">
+        <ion-list class="menu-list">
+          <ion-item button (click)="navigateToSellerRegistration()" detail="false" class="menu-item" onkeypress>
+            <ion-icon slot="start" name="person-add"></ion-icon>
+            <ion-label>
+              <h2>Registrar vendedor</h2>
+              <p>Registra un nuevo vendedor en el sistema</p>
+            </ion-label>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
