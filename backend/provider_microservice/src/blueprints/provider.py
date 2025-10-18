@@ -61,7 +61,7 @@ def get_all_providers():
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 
-@providers_blueprint.post("/bulk-upload")
+@providers_blueprint.post("/bulk")
 @cognito_auth_required
 def bulk_upload_providers():
     try:
