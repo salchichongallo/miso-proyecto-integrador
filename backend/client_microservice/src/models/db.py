@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 REGION = os.getenv("AWS_REGION", "us-east-1")
 TABLE_NAME = os.getenv("DYNAMODB_TABLE", "Clients")
+PK_NAME = "tax_id"
 DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 

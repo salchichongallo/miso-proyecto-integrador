@@ -2,7 +2,7 @@ import os
 import boto3
 import pytest
 from unittest.mock import patch
-from src.commands.create_client import TABLE_NAME, PK_NAME
+from src.models.db import TABLE_NAME, PK_NAME
 
 
 # --- Fixture de cliente Flask ---
@@ -19,6 +19,7 @@ def client():
         from src.main import app
         with app.test_client() as client:
             app.testing = True
+            clear_db()
             yield client
             clear_db()
 

@@ -1,19 +1,14 @@
 import boto3
 import uuid
-import os
 import re
 import hashlib
 import logging
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
+from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
 
 logger = logging.getLogger(__name__)
-
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Clients"
-PK_NAME = "tax_id"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class CreateClient(BaseCommannd):
