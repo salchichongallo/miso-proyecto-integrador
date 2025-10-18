@@ -34,6 +34,16 @@ export const routes: Routes = [
           import('./pages/supplier-bulk-upload/supplier-bulk-upload.page').then((m) => m.SupplierBulkUploadPage),
       },
       {
+        path: 'product-registration',
+        loadComponent: () =>
+          import('./pages/product-registration/product-registration.page').then((m) => m.ProductRegistrationPage),
+      },
+      {
+        path: 'product-bulk-upload',
+        loadComponent: () =>
+          import('./pages/product-bulk-upload/product-bulk-upload.page').then((m) => m.ProductBulkUploadPage),
+      },
+      {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },

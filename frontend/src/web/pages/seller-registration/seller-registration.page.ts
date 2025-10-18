@@ -26,9 +26,10 @@ import { finalize } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { add, trashOutline } from 'ionicons/icons';
 
+import { SellerService } from '@web/services/seller/seller.service';
+
 import { AddInstitutionModalComponent } from './components/add-institution-modal/add-institution-modal.component';
 import { Institution } from './interfaces/institution.interface';
-import { SellerService } from './services/seller/seller.service';
 import { RegisterSellerRequest } from './interfaces/register-seller-request.interface';
 import { SellerFormValue } from './interfaces/seller-form-value.interface';
 
