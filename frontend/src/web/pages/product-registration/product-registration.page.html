@@ -34,6 +34,27 @@
                       </div>
                     }
 
+                    <!-- Provider NIT Field -->
+                    <ion-item [class.ion-invalid]="providerNitControl?.invalid && providerNitControl?.touched">
+                      <ion-label position="stacked">NIT del proveedor</ion-label>
+                      <ion-input
+                        type="text"
+                        formControlName="providerNit"
+                        placeholder="900123456-7"
+                        [clearInput]="true"
+                      ></ion-input>
+                    </ion-item>
+                    @if (providerNitControl?.invalid && providerNitControl?.touched) {
+                      <div class="error-message">
+                        @if (providerNitControl?.errors?.['required']) {
+                          <small>El NIT del proveedor es requerido</small>
+                        }
+                        @if (providerNitControl?.errors?.['pattern']) {
+                          <small>El NIT debe contener solo números y guiones</small>
+                        }
+                      </div>
+                    }
+
                     <!-- Product Type Field -->
                     <ion-item [class.ion-invalid]="productTypeControl?.invalid && productTypeControl?.touched">
                       <ion-label position="stacked">Tipo de producto</ion-label>

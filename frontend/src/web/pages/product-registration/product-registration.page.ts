@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import {
@@ -18,7 +19,15 @@ import {
   IonSelect,
   IonSelectOption,
   IonTextarea,
+  LoadingController,
+  ToastController,
 } from '@ionic/angular/standalone';
+
+import { finalize } from 'rxjs';
+
+import { ProductService } from '@web/services/product/product.service';
+import { RegisterProductRequest } from './interfaces/register-product-request.interface';
+import { ProductFormValue } from './interfaces/product-form-value.interface';
 
 // Custom validator for future dates
 function futureDateValidator(control: AbstractControl): ValidationErrors | null {
@@ -73,25 +82,32 @@ function positiveIntegerValidator(control: AbstractControl): ValidationErrors | 
 })
 export class ProductRegistrationPage {
   private readonly router = inject(Router);
+  private readonly productService = inject(ProductService);
+  private readonly loadingController = inject(LoadingController);
+  private readonly toastController = inject(ToastController);
 
   public readonly productTypes = [
     { value: 'medication', label: 'Medicamento' },
-    { value: 'equipment', label: 'Equipo médico' },
+    { value: 'equipment', label: 'Equipo' },
     { value: 'supply', label: 'Insumo' },
     { value: 'device', label: 'Dispositivo' },
   ];
 
   public readonly productStates = [
-    { value: 'available', label: 'Disponible' },
-    { value: 'reserved', label: 'Reservado' },
-    { value: 'out_of_stock', label: 'Agotado' },
-    { value: 'discontinued', label: 'Descontinuado' },
+    { value: 'Disponible', label: 'Disponible' },
+    { value: 'Agotado', label: 'Agotado' },
+    { value: 'Vencido', label: 'Vencido' },
+    { value: 'Pendiente', label: 'Pendiente' },
   ];
 
   public readonly productForm = new FormGroup({
     name: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(3)],
+    }),
+    providerNit: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern(/^[0-9\-]+$/)],
     }),
     productType: new FormControl('', {
       nonNullable: true,
@@ -128,6 +144,10 @@ export class ProductRegistrationPage {
     return this.productForm.get('name') as FormControl<string> | null;
   }
 
+  get providerNitControl(): FormControl<string> | null {
+    return this.productForm.get('providerNit') as FormControl<string> | null;
+  }
+
   get productTypeControl(): FormControl<string> | null {
     return this.productForm.get('productType') as FormControl<string> | null;
   }
@@ -161,15 +181,75 @@ export class ProductRegistrationPage {
   }
 
   public onSubmit(): void {
-    if (this.productForm.valid) {
-      console.log('Product registration data:', this.productForm.value);
-      // TODO: Implement product registration logic
-      this.productForm.reset();
-      this.router.navigate(['/home']);
+    if (!this.productForm.valid) {
+      this.productForm.markAllAsTouched();
+      return;
     }
+
+    this.registerProduct();
   }
 
   public onCancel(): void {
+    this.productForm.reset();
     this.router.navigate(['/home']);
+  }
+
+  private async registerProduct(): Promise<void> {
+    const loading = await this.loadingController.create({
+      message: 'Registrando producto...',
+    });
+
+    await loading.present();
+
+    const formValue = this.productForm.value as ProductFormValue;
+
+    const productData: RegisterProductRequest = {
+      name: formValue.name,
+      provider_nit: formValue.providerNit,
+      product_type: formValue.productType,
+      stock: formValue.stock!,
+      expiration_date: formValue.expirationDate,
+      temperature_required: formValue.requiredTemperature!,
+      batch: formValue.lot,
+      status: formValue.state,
+      unit_value: formValue.unitValue!,
+      storage_conditions: formValue.storageConditions,
+    };
+
+    this.productService
+      .createProduct(productData)
+      .pipe(finalize(() => this.loadingController.dismiss()))
+      .subscribe({
+        next: () => {
+          this.productForm.reset();
+          this.showSuccessMessage('Producto registrado exitosamente');
+        },
+        error: (httpError: HttpErrorResponse) => {
+          const message =
+            httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al registrar el producto.';
+          this.showErrorMessage(message);
+        },
+      });
+  }
+
+  private async showSuccessMessage(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+    });
+
+    await toast.present();
+  }
+
+  private async showErrorMessage(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      color: 'danger',
+    });
+
+    await toast.present();
   }
 }
