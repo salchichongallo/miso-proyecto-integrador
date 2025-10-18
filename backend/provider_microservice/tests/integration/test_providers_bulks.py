@@ -31,7 +31,7 @@ Proveedor D,CO,1234567890,Calle 4,d@mail.com,3011112222
         file_data = io.BytesIO(csv_data.encode("utf-8"))
         data = {"file": (file_data, "proveedores.csv")}
 
-        response = client.post("/bulk-upload", data=data, content_type="multipart/form-data")
+        response = client.post("/bulk", data=data, content_type="multipart/form-data")
         result = response.get_json()
 
         # ✅ Validaciones de respuesta
@@ -53,7 +53,7 @@ Proveedor X,CO,Calle 1,x@mail.com,3001234567
         file_data = io.BytesIO(csv_data.encode("utf-8"))
         data = {"file": (file_data, "proveedores.csv")}
 
-        response = client.post("/bulk-upload", data=data, content_type="multipart/form-data")
+        response = client.post("/bulk", data=data, content_type="multipart/form-data")
         result = response.get_json()
 
         assert response.status_code == 400
@@ -67,7 +67,7 @@ Proveedor X,CO,Calle 1,x@mail.com,3001234567
         file_data = io.BytesIO(b"dummy data")
         data = {"file": (file_data, "proveedores.txt")}
 
-        response = client.post("/bulk-upload", data=data, content_type="multipart/form-data")
+        response = client.post("/bulk", data=data, content_type="multipart/form-data")
         result = response.get_json()
 
         assert response.status_code == 400
@@ -90,7 +90,7 @@ Proveedor X,CO,1234567890,Dir1,x@mail.com,3001234567
         file_data = io.BytesIO(csv_data.encode("utf-8"))
         data = {"file": (file_data, "proveedores.csv")}
 
-        response = client.post("/bulk-upload", data=data, content_type="multipart/form-data")
+        response = client.post("/bulk", data=data, content_type="multipart/form-data")
         result = response.get_json()
 
         assert response.status_code == 400
