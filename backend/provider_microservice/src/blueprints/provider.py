@@ -16,8 +16,7 @@ def ping():
 
 # ----------------------------------------------------------
 @providers_blueprint.post("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def create_provider():
     try:
         json_data = request.get_json()
@@ -51,8 +50,7 @@ def create_provider():
 
 
 @providers_blueprint.get("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def get_all_providers():
     try:
         providers = GetAllProviders().execute()
@@ -64,8 +62,7 @@ def get_all_providers():
 
 
 @providers_blueprint.post("/bulk-upload")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def bulk_upload_providers():
     try:
         if "file" not in request.files:

@@ -15,8 +15,7 @@ def ping():
     return jsonify(PingCommand().execute())
 
 @vendors_blueprint.post("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def create_vendor():
     try:
         json = request.get_json()
@@ -40,8 +39,7 @@ def create_vendor():
 
 
 @vendors_blueprint.get("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins", "vendors"])
+@cognito_auth_required
 def list_vendors():
     try:
         result = GetAllVendors().execute()

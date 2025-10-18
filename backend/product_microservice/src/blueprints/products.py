@@ -17,8 +17,7 @@ def ping():
 
 
 @products_blueprint.post("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def create_product():
     try:
         json_data = request.get_json()
@@ -37,8 +36,7 @@ def create_product():
 
 
 @products_blueprint.get("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def get_all_products():
     try:
         products = GetAllProducts().execute()
@@ -51,8 +49,7 @@ def get_all_products():
 
 
 @products_blueprint.post("/bulk")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def bulk_upload_products():
     try:
         if "file" not in request.files:
