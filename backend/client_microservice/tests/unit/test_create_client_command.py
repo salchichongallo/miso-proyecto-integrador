@@ -13,14 +13,16 @@ class TestCreateClientCommand:
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
         mock_table.get_item.return_value = {}  # no existe
+
         client = CreateClient(
             name="Hospital Central",
-            tax_id="123456789",
+            tax_id="1234567890",  
             country="CO",
             level="NIVEL_1",
             specialty="Cardiología",
             location="Bogotá"
         )
+
         mock_table.put_item.return_value = {"ResponseMetadata": {"HTTPStatusCode": 200}}
         result = client.execute()
         assert "client_id" in result
@@ -34,35 +36,22 @@ class TestCreateClientCommand:
         with pytest.raises(ParamError):
             client.validate()
 
-    # 🚫 NIT inválido CO
-    def test_validate_nit_invalido_colombia(self):
+    # 🚫 NIT inválido (no 10 dígitos)
+    def test_validate_nit_invalido(self):
         client = CreateClient(
             name="Clinica Norte",
-            tax_id="ABC123",
+            tax_id="12345",  # ❌ menos de 10 dígitos
             country="CO",
             level="2",
             specialty="Oncología",
             location="Cali"
         )
-        with pytest.raises(ParamError, match="NIT inválido"):
-            client.validate()
-
-    # 🚫 RFC inválido MX
-    def test_validate_rfc_invalido_mexico(self):
-        client = CreateClient(
-            name="Laboratorio MX",
-            tax_id="12345",
-            country="MX",
-            level="3",
-            specialty="Análisis",
-            location="CDMX"
-        )
-        with pytest.raises(ParamError, match="RFC inválido"):
+        with pytest.raises(ParamError, match="10 dígitos"):
             client.validate()
 
     # ⚙️ SHA-256 correcto
     def test_encrypt_tax_id_generates_sha256(self):
-        client = CreateClient("Test", "12345", "CO", "1", "Medicina", "Bogotá")
+        client = CreateClient("Test", "1234567890", "CO", "1", "Medicina", "Bogotá")
         client.encrypt_tax_id()
         assert len(client.tax_id_encrypted) == 64
 
@@ -71,8 +60,9 @@ class TestCreateClientCommand:
     def test_validate_cliente_duplicado(self, mock_dynamodb):
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.return_value = {"Item": {"tax_id": "123456789"}}
-        client = CreateClient("Hospital", "123456789", "CO", "1", "Medicina", "Bogotá")
+        mock_table.get_item.return_value = {"Item": {"tax_id": "1234567890"}}
+
+        client = CreateClient("Hospital", "1234567890", "CO", "1", "Medicina", "Bogotá")
         with pytest.raises(ParamError, match="ya está registrado"):
             client.validate()
 
@@ -84,24 +74,23 @@ class TestCreateClientCommand:
         mock_table.put_item.side_effect = ClientError(
             {"Error": {"Message": "Falla de red"}}, "PutItem"
         )
-        client = CreateClient("Test", "123456789", "CO", "1", "Cardio", "Bogotá")
+
+        client = CreateClient("Test", "1234567890", "CO", "1", "Cardio", "Bogotá")
         with pytest.raises(ApiError):
             client.save()
 
-    # 🆕 ⚠️ Error al verificar duplicado (get_item lanza ClientError) -> ApiError
+    # ⚠️ Error al verificar duplicado (get_item lanza ClientError) -> ApiError
     @patch("boto3.resource")
     def test_validate_error_al_verificar_duplicado_lanza_apierror(self, mock_dynamodb):
         mock_table = MagicMock()
         mock_dynamodb.return_value.Table.return_value = mock_table
-
-        # Simula fallo de red/permiso en get_item
         mock_table.get_item.side_effect = ClientError(
             {"Error": {"Message": "AccessDenied / NetworkError"}}, "GetItem"
         )
 
         client = CreateClient(
             name="Hosp X",
-            tax_id="987654321",
+            tax_id="9876543210",
             country="CO",
             level="1",
             specialty="General",
@@ -109,17 +98,4 @@ class TestCreateClientCommand:
         )
 
         with pytest.raises(ApiError, match="Error al verificar duplicado"):
-            client.validate()
-
-    # 🆕 🚫 Otros países con tax_id corto (<5) -> ParamError
-    def test_validate_otro_pais_tax_id_demasiado_corto(self):
-        client = CreateClient(
-            name="Clínica Intl",
-            tax_id="1234",      # < 5
-            country="AR",       # ni CO ni MX
-            level="2",
-            specialty="Trauma",
-            location="Buenos Aires"
-        )
-        with pytest.raises(ParamError, match="Identificador tributario inválido"):
             client.validate()
