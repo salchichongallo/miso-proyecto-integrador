@@ -91,6 +91,10 @@ jobs:
     environment: dev
     needs: build-and-upload
 
+    permissions:
+      id-token: write
+      contents: read
+
     env:
       APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
