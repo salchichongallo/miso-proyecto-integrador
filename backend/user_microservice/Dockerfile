@@ -2,8 +2,6 @@ FROM public.ecr.aws/docker/library/python:3.12-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache curl
-
 # Evita generar archivos .pyc y habilita logs en tiempo real
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
