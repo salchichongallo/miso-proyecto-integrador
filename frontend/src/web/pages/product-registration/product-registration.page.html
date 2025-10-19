@@ -1,0 +1,255 @@
+<ion-content class="ion-padding">
+  <ion-grid class="full-height">
+    <ion-row class="ion-justify-content-center ion-align-items-center full-height">
+      <ion-col size="12" size-md="10" size-lg="8" size-xl="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Registrar producto</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+              <ion-grid class="form-grid">
+                <ion-row>
+                  <!-- Left Column -->
+                  <ion-col size="12" size-md="6">
+                    <!-- Name Field -->
+                    <ion-item [class.ion-invalid]="nameControl?.invalid && nameControl?.touched">
+                      <ion-label position="stacked">Nombre del producto</ion-label>
+                      <ion-input
+                        type="text"
+                        formControlName="name"
+                        placeholder="Ingrese el nombre del producto"
+                        [clearInput]="true"
+                      ></ion-input>
+                    </ion-item>
+                    @if (nameControl?.invalid && nameControl?.touched) {
+                      <div class="error-message">
+                        @if (nameControl?.errors?.['required']) {
+                          <small>El nombre es requerido</small>
+                        }
+                        @if (nameControl?.errors?.['minlength']) {
+                          <small>El nombre debe tener al menos 3 caracteres</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Provider NIT Field -->
+                    <ion-item [class.ion-invalid]="providerNitControl?.invalid && providerNitControl?.touched">
+                      <ion-label position="stacked">NIT del proveedor</ion-label>
+                      <ion-input
+                        type="text"
+                        formControlName="providerNit"
+                        placeholder="900123456-7"
+                        [clearInput]="true"
+                      ></ion-input>
+                    </ion-item>
+                    @if (providerNitControl?.invalid && providerNitControl?.touched) {
+                      <div class="error-message">
+                        @if (providerNitControl?.errors?.['required']) {
+                          <small>El NIT del proveedor es requerido</small>
+                        }
+                        @if (providerNitControl?.errors?.['pattern']) {
+                          <small>El NIT debe contener solo números y guiones</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Product Type Field -->
+                    <ion-item [class.ion-invalid]="productTypeControl?.invalid && productTypeControl?.touched">
+                      <ion-label position="stacked">Tipo de producto</ion-label>
+                      <ion-select formControlName="productType" placeholder="Seleccione el tipo">
+                        @for (type of productTypes; track type.value) {
+                          <ion-select-option [value]="type.value">{{ type.label }}</ion-select-option>
+                        }
+                      </ion-select>
+                    </ion-item>
+                    @if (productTypeControl?.invalid && productTypeControl?.touched) {
+                      <div class="error-message">
+                        @if (productTypeControl?.errors?.['required']) {
+                          <small>El tipo de producto es requerido</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Stock Field -->
+                    <ion-item [class.ion-invalid]="stockControl?.invalid && stockControl?.touched">
+                      <ion-label position="stacked">Stock</ion-label>
+                      <ion-input
+                        type="number"
+                        formControlName="stock"
+                        placeholder="1"
+                        [clearInput]="true"
+                        min="1"
+                      ></ion-input>
+                    </ion-item>
+                    @if (stockControl?.invalid && stockControl?.touched) {
+                      <div class="error-message">
+                        @if (stockControl?.errors?.['required']) {
+                          <small>El stock es requerido</small>
+                        }
+                        @if (stockControl?.errors?.['positiveInteger']) {
+                          <small>El stock debe ser un número entero mayor a 0</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Lot Field -->
+                    <ion-item [class.ion-invalid]="lotControl?.invalid && lotControl?.touched">
+                      <ion-label position="stacked">Lote</ion-label>
+                      <ion-input
+                        type="text"
+                        formControlName="lot"
+                        placeholder="Ingrese el número de lote"
+                        [clearInput]="true"
+                      ></ion-input>
+                    </ion-item>
+                    @if (lotControl?.invalid && lotControl?.touched) {
+                      <div class="error-message">
+                        @if (lotControl?.errors?.['required']) {
+                          <small>El lote es requerido</small>
+                        }
+                        @if (lotControl?.errors?.['minlength']) {
+                          <small>El lote debe tener al menos 3 caracteres</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- State Field -->
+                    <ion-item [class.ion-invalid]="stateControl?.invalid && stateControl?.touched">
+                      <ion-label position="stacked">Estado</ion-label>
+                      <ion-select formControlName="state" placeholder="Seleccione el estado">
+                        @for (state of productStates; track state.value) {
+                          <ion-select-option [value]="state.value">{{ state.label }}</ion-select-option>
+                        }
+                      </ion-select>
+                    </ion-item>
+                    @if (stateControl?.invalid && stateControl?.touched) {
+                      <div class="error-message">
+                        @if (stateControl?.errors?.['required']) {
+                          <small>El estado es requerido</small>
+                        }
+                      </div>
+                    }
+                  </ion-col>
+
+                  <!-- Right Column -->
+                  <ion-col size="12" size-md="6">
+                    <!-- Expiration Date Field -->
+                    <ion-item [class.ion-invalid]="expirationDateControl?.invalid && expirationDateControl?.touched">
+                      <ion-label position="stacked">Fecha de vencimiento</ion-label>
+                      <ion-input
+                        type="date"
+                        formControlName="expirationDate"
+                      ></ion-input>
+                    </ion-item>
+                    @if (expirationDateControl?.invalid && expirationDateControl?.touched) {
+                      <div class="error-message">
+                        @if (expirationDateControl?.errors?.['required']) {
+                          <small>La fecha de vencimiento es requerida</small>
+                        }
+                        @if (expirationDateControl?.errors?.['futureDate']) {
+                          <small>La fecha de vencimiento debe ser mayor a la fecha actual</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Required Temperature Field -->
+                    <ion-item [class.ion-invalid]="requiredTemperatureControl?.invalid && requiredTemperatureControl?.touched">
+                      <ion-label position="stacked">Temperatura requerida (°C)</ion-label>
+                      <ion-input
+                        type="number"
+                        formControlName="requiredTemperature"
+                        placeholder="2-8"
+                        [clearInput]="true"
+                      ></ion-input>
+                    </ion-item>
+                    @if (requiredTemperatureControl?.invalid && requiredTemperatureControl?.touched) {
+                      <div class="error-message">
+                        @if (requiredTemperatureControl?.errors?.['required']) {
+                          <small>La temperatura requerida es obligatoria</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Unit Value Field -->
+                    <ion-item [class.ion-invalid]="unitValueControl?.invalid && unitValueControl?.touched">
+                      <ion-label position="stacked">Valor unitario ($)</ion-label>
+                      <ion-input
+                        type="number"
+                        formControlName="unitValue"
+                        placeholder="0.00"
+                        [clearInput]="true"
+                        min="0"
+                        step="0.01"
+                      ></ion-input>
+                    </ion-item>
+                    @if (unitValueControl?.invalid && unitValueControl?.touched) {
+                      <div class="error-message">
+                        @if (unitValueControl?.errors?.['required']) {
+                          <small>El valor unitario es requerido</small>
+                        }
+                        @if (unitValueControl?.errors?.['min']) {
+                          <small>El valor unitario debe ser mayor o igual a 0</small>
+                        }
+                      </div>
+                    }
+
+                    <!-- Storage Conditions Field -->
+                    <ion-item [class.ion-invalid]="storageConditionsControl?.invalid && storageConditionsControl?.touched">
+                      <ion-label position="stacked">Condiciones de almacenamiento</ion-label>
+                      <ion-textarea
+                        formControlName="storageConditions"
+                        placeholder="Describa las condiciones de almacenamiento requeridas"
+                        rows="3"
+                        [autoGrow]="true"
+                      ></ion-textarea>
+                    </ion-item>
+                    @if (storageConditionsControl?.invalid && storageConditionsControl?.touched) {
+                      <div class="error-message">
+                        @if (storageConditionsControl?.errors?.['required']) {
+                          <small>Las condiciones de almacenamiento son obligatorias</small>
+                        }
+                        @if (storageConditionsControl?.errors?.['minlength']) {
+                          <small>Describa con más detalle (mínimo 10 caracteres)</small>
+                        }
+                      </div>
+                    }
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
+              <!-- Action Buttons -->
+              <ion-grid class="button-group">
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-button
+                      onkeypress
+                      expand="block"
+                      fill="outline"
+                      color="primary"
+                      type="button"
+                      (click)="onCancel()"
+                    >
+                      Volver
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="6">
+                    <ion-button
+                      expand="block"
+                      color="primary"
+                      type="submit"
+                      [disabled]="productForm.invalid"
+                    >
+                      Guardar
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -2,7 +2,7 @@ from flask import jsonify, Blueprint, request
 from ..commands.ping import PingCommand
 from ..commands.create_vendor import CreateVendor
 from ..commands.view_all import GetAllVendors
-from flask_cognito import cognito_auth_required, current_cognito_jwt, cognito_group_permissions
+from flask_cognito import cognito_auth_required
 from ..models.vendor import NewVendorJsonSchema
 from ..errors.errors import ParamError, ApiError
 
@@ -15,8 +15,7 @@ def ping():
     return jsonify(PingCommand().execute())
 
 @vendors_blueprint.post("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins"])
+@cognito_auth_required
 def create_vendor():
     try:
         json = request.get_json()
@@ -40,8 +39,7 @@ def create_vendor():
 
 
 @vendors_blueprint.get("/")
-# @cognito_auth_required
-# @cognito_group_permissions(["admins", "vendors"])
+@cognito_auth_required
 def list_vendors():
     try:
         result = GetAllVendors().execute()

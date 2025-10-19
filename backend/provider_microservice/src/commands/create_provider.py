@@ -1,19 +1,16 @@
 import boto3
 import uuid
-import os
 import re
 import hashlib
 import logging
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
+from ..models.db import REGION, DYNAMODB_ENDPOINT, TABLE_NAME
+
 
 # 🧩 Configuración del logger
 logger = logging.getLogger(__name__)
-
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Providers"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
 
 
 class CreateProvider(BaseCommannd):

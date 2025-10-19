@@ -1,13 +1,9 @@
 import boto3
 import uuid
-import os
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
-
-REGION = os.getenv("AWS_REGION", "us-east-1")
-TABLE_NAME = "Vendors"
-DYNAMODB_ENDPOINT = os.getenv("DYNAMODB_ENDPOINT")
+from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
 
 
 class CreateVendor(BaseCommannd):

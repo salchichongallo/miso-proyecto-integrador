@@ -15,17 +15,46 @@ export const routes: Routes = [
     loadComponent: () => import('./layouts/main-layout/main-layout.component').then((m) => m.MainLayoutComponent),
     children: [
       {
+        path: 'home',
+        loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
+      },
+      {
         path: 'seller-registration',
         loadComponent: () =>
           import('./pages/seller-registration/seller-registration.page').then((m) => m.SellerRegistrationPage),
+      },
+      {
+        path: 'supplier-registration',
+        loadComponent: () =>
+          import('./pages/supplier-registration/supplier-registration.page').then((m) => m.SupplierRegistrationPage),
+      },
+      {
+        path: 'supplier-bulk-upload',
+        loadComponent: () =>
+          import('./pages/supplier-bulk-upload/supplier-bulk-upload.page').then((m) => m.SupplierBulkUploadPage),
+      },
+      {
+        path: 'product-registration',
+        loadComponent: () =>
+          import('./pages/product-registration/product-registration.page').then((m) => m.ProductRegistrationPage),
+      },
+      {
+        path: 'product-bulk-upload',
+        loadComponent: () =>
+          import('./pages/product-bulk-upload/product-bulk-upload.page').then((m) => m.ProductBulkUploadPage),
       },
       {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
         path: '**',
-        redirectTo: 'seller-registration',
+        redirectTo: 'home',
         pathMatch: 'full',
       },
     ],
