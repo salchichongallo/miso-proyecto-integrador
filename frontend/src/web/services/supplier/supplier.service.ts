@@ -22,6 +22,6 @@ export class SupplierService {
   public createBulkSupplier(file: File): Observable<Object> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.baseUrl}/bulk-upload`, formData);
+    return this.http.post(`${this.baseUrl}/bulk`, formData);
   }
 }

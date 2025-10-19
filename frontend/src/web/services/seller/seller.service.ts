@@ -16,6 +16,6 @@ export class SellerService {
   private readonly http = inject(HttpClient);
 
   public registerSeller(sellerData: RegisterSellerRequest): Observable<RegisterSellerResponse> {
-    return this.http.post<RegisterSellerResponse>(this.baseUrl, sellerData);
+    return this.http.post<RegisterSellerResponse>(this.baseUrl + '/', sellerData);
   }
 }
