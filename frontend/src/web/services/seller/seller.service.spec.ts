@@ -16,7 +16,7 @@ jest.mock('@env/environment', () => ({
 describe('SellerService', () => {
   let service: SellerService;
   let httpMock: HttpTestingController;
-  const mockVendorUrl = 'http://test-vendor-api.com';
+  const mockVendorUrl = 'http://test-vendor-api.com/';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

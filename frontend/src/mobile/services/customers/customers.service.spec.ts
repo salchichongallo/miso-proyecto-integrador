@@ -18,7 +18,7 @@ jest.mock('@env/environment', () => ({
 describe('CustomersService', () => {
   let service: CustomersService;
   let httpMock: HttpTestingController;
-  const baseUrl = 'http://localhost:3000/api/clients';
+  const baseUrl = 'http://localhost:3000/api/clients/';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
