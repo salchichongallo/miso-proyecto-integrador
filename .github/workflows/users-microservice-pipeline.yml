@@ -88,10 +88,10 @@ jobs:
           context: backend/user_microservice
           file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
-          push: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/deploy' }}
-          tags: public.ecr.aws/x3v1j3l4/${{ env.ECR_REPOSITORY }}:latest
-          cache-from: type=registry,ref=public.ecr.aws/x3v1j3l4/${{ env.ECR_REPOSITORY }}:buildcache
-          cache-to: type=registry,ref=public.ecr.aws/x3v1j3l4/${{ env.ECR_REPOSITORY }}:buildcache,mode=max
+          push: ${{ github.ref == 'refs/heads/develop' }}
+          tags: public.ecr.aws/${{ env.ECR_REPOSITORY }}:latest
+          cache-from: type=registry,ref=public.ecr.aws/${{ env.ECR_REPOSITORY }}:buildcache
+          cache-to: type=registry,ref=public.ecr.aws/${{ env.ECR_REPOSITORY }}:buildcache,mode=max
 
   upload-image-ecr-prod:
     runs-on: ubuntu-latest
