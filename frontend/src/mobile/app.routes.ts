@@ -32,13 +32,13 @@ export const routes: Routes = [
         path: 'customers/register-institutional',
         loadComponent: () =>
           import('./pages/customers/register-institutional/register-institutional.page').then(
-            (m) => m.RegisterInstitutionalPage
+            (m) => m.RegisterInstitutionalPage,
           ),
       },
       {
         path: '',
-        redirectTo: '/tabs/customers',
         pathMatch: 'full',
+        redirectTo: '/tabs/customers',
       },
     ],
   },
