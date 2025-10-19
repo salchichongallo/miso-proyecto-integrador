@@ -5,7 +5,7 @@ import { LoadingController, ModalController, ToastController } from '@ionic/angu
 import { of, throwError } from 'rxjs';
 
 import { SellerRegistrationPage } from './seller-registration.page';
-import { SellerService } from './services/seller/seller.service';
+import { SellerService } from '../../services/seller/seller.service';
 import { AddInstitutionModalComponent } from './components/add-institution-modal/add-institution-modal.component';
 import { RegisterSellerResponse } from './interfaces/register-seller-response.interface';
 

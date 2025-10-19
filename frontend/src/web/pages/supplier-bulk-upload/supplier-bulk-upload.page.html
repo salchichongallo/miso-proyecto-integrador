@@ -1,0 +1,40 @@
+<ion-content [fullscreen]="true">
+  <div class="page-container">
+    <ion-card class="upload-card">
+      <ion-card-header>
+        <ion-card-title>Archivo de proveedores</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="upload-area" (click)="onUploadClick()" onkeypress>
+          <input
+            type="file"
+            id="fileInput"
+            accept=".csv,.xlsx,.xls"
+            (change)="onFileSelected($event)"
+            style="display: none"
+          />
+
+          <div class="upload-content">
+            <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+            <p class="upload-text">
+              {{ fileName || 'Haz clic para seleccionar un archivo' }}
+            </p>
+            <p class="upload-hint">Formatos permitidos: CSV, XLSX, XLS</p>
+          </div>
+        </div>
+
+        <ion-button
+          onkeypress
+          expand="block"
+          color="primary"
+          class="process-button"
+          [disabled]="!selectedFile"
+          (click)="onProcessFile()"
+        >
+          Cargar y procesar
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
