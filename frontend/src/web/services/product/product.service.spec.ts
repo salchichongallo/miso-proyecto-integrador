@@ -16,7 +16,7 @@ jest.mock('@env/environment', () => ({
 describe('ProductService', () => {
   let service: ProductService;
   let httpMock: HttpTestingController;
-  const mockProductUrl = 'http://test-product-api.com';
+  const mockProductUrl = 'http://test-product-api.com/';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -105,7 +105,7 @@ describe('ProductService', () => {
         expect(response).toEqual(mockResponse);
       });
 
-      const req = httpMock.expectOne(`${mockProductUrl}/bulk`);
+      const req = httpMock.expectOne(`${mockProductUrl}bulk`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body instanceof FormData).toBe(true);
       expect(req.request.body.get('file')).toBe(mockFile);
@@ -127,7 +127,7 @@ describe('ProductService', () => {
         },
       });
 
-      const req = httpMock.expectOne(`${mockProductUrl}/bulk`);
+      const req = httpMock.expectOne(`${mockProductUrl}bulk`);
       req.flush(mockError, { status: 400, statusText: 'Bad Request' });
     });
   });

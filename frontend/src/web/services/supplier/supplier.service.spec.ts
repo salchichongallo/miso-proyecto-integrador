@@ -16,7 +16,7 @@ jest.mock('@env/environment', () => ({
 describe('SupplierService', () => {
   let service: SupplierService;
   let httpMock: HttpTestingController;
-  const mockProviderUrl = 'http://test-provider-api.com';
+  const mockProviderUrl = 'http://test-provider-api.com/';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

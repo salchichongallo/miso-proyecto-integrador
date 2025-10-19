@@ -16,7 +16,7 @@ export class SupplierService {
   private readonly http = inject(HttpClient);
 
   public createSupplier(body: RegisterSupplierRequest): Observable<RegisterSupplierResponse> {
-    return this.http.post<RegisterSupplierResponse>(this.baseUrl, body);
+    return this.http.post<RegisterSupplierResponse>(this.baseUrl + '/', body);
   }
 
   public createBulkSupplier(file: File): Observable<Object> {
