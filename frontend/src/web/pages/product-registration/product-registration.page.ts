@@ -37,10 +37,12 @@ function futureDateValidator(control: AbstractControl): ValidationErrors | null 
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const selectedDate = new Date(control.value);
+
+  const [year, month, day] = control.value.split('-').map(Number);
+  const selectedDate = new Date(year, month - 1, day);
   selectedDate.setHours(0, 0, 0, 0);
 
-  return selectedDate > today ? null : { futureDate: true };
+  return selectedDate <= today ? { futureDate: true } : null;
 }
 
 // Custom validator for positive integers

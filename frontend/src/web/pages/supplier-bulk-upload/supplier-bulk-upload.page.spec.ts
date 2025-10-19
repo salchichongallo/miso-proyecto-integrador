@@ -102,7 +102,7 @@ describe('SupplierBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(mockLoadingController.create).toHaveBeenCalledWith({
         message: 'Procesando archivo de proveedores...',
@@ -119,7 +119,7 @@ describe('SupplierBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(mockSupplierService.createBulkSupplier).toHaveBeenCalledWith(file);
     });
@@ -132,7 +132,7 @@ describe('SupplierBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
         message: 'Proveedores cargados exitosamente.',
@@ -156,7 +156,7 @@ describe('SupplierBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
         message: 'Upload failed',
@@ -177,7 +177,7 @@ describe('SupplierBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await fixture.whenStable();
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
         message: 'Http failure',
@@ -185,6 +185,7 @@ describe('SupplierBulkUploadPage', () => {
         position: 'top',
         color: 'danger',
       });
+      expect(mockToast.present).toHaveBeenCalled();
     });
   });
 });
