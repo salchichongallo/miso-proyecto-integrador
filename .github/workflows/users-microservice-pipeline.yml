@@ -16,7 +16,6 @@ on:
     branches:
       - main
       - develop
-      - 'feature/deploy'
     paths:
       - 'backend/user_microservice/**'
       - '.github/workflows/users-microservice-pipeline.yml'
@@ -86,7 +85,7 @@ jobs:
           context: backend/user_microservice
           file: backend/user_microservice/Dockerfile
           platforms: linux/amd64
-          push: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/deploy' }}
+          push: ${{ github.ref == 'refs/heads/develop' }}
           tags: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
           cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
           cache-to: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache,mode=max
