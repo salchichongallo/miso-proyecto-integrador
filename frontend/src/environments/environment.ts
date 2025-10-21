@@ -5,6 +5,7 @@ export const environment = {
   vendorMicroserviceUrl: process.env['APP_VENDOR_MICROSERVICE_URL']!,
   providerMicroserviceUrl: process.env['APP_PROVIDER_MICROSERVICE_URL']!,
   productMicroserviceUrl: process.env['APP_PRODUCT_MICROSERVICE_URL']!,
+  salesMicroserviceUrl: process.env['APP_SALES_MICROSERVICE_URL']!,
   cognito: {
     userPoolId: process.env['APP_COGNITO_USER_POOL_ID']!,
     userPoolClientId: process.env['APP_COGNITO_USER_POOL_CLIENT_ID']!,

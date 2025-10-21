@@ -18,7 +18,7 @@ on:
       - '.github/workflows/mobile-pipeline.yml'
 
 jobs:
-  build-android-dev:
+  build-android:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     environment: dev
@@ -89,92 +89,7 @@ jobs:
           APP_VENDOR_MICROSERVICE_URL: ${{ vars.APP_VENDOR_MICROSERVICE_URL }}
           APP_PROVIDER_MICROSERVICE_URL: ${{ vars.APP_PROVIDER_MICROSERVICE_URL }}
           APP_PRODUCT_MICROSERVICE_URL: ${{ vars.APP_PRODUCT_MICROSERVICE_URL }}
-
-      - name: Build Android App
-        run: npm run build:android
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: medisupply-android
-          path: frontend/android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: mobile-coverage-report
-          path: frontend/coverage
-
-  build-android-prod:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    environment: prod
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
-
-      - name: Cache npm dependencies
-        uses: actions/cache@v4
-        with:
-          path: frontend/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version-file: ./frontend/.nvmrc
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts --no-audit
-
-      - name: Unit Tests
-        run: npm run test:mobile -- --ci --bail --run-in-band --coverage --color
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'gradle'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x android/gradlew
-
-      - name: Build web assets
-        run: npm run build:mobile
-
-      - name: Replace environment variables
-        uses: cschleiden/replace-tokens@v1.3
-        with:
-          files: '["frontend/www/**/*.js"]'
-        env:
-          APP_API_URL: ${{ vars.APP_API_URL }}
-          APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
-          APP_COGNITO_USER_POOL_CLIENT_ID: ${{ vars.APP_COGNITO_USER_POOL_CLIENT_ID }}
-          APP_COGNITO_DOMAIN: ${{ vars.APP_COGNITO_DOMAIN }}
-          APP_COGNITO_REDIRECT_URLS: ${{ vars.APP_COGNITO_REDIRECT_URLS }}
+          APP_SALES_MICROSERVICE_URL: ${{ vars.APP_SALES_MICROSERVICE_URL }}
 
       - name: Build Android App
         run: npm run build:android
