@@ -1,15 +1,12 @@
-import boto3
 import io
 import uuid
 import logging
 import pandas as pd
 import time
 from datetime import datetime
-from decimal import Decimal
-from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
-from ..models.db import DYNAMODB_ENDPOINT, REGION, TABLE_NAME
+from ..models.product import ProductModel
 
 
 logger = logging.getLogger(__name__)
@@ -19,22 +16,6 @@ class CreateProductsBulk(BaseCommannd):
     def __init__(self, file_bytes, filename):
         self.file_bytes = file_bytes
         self.filename = filename
-
-        # 🔗 Conexión a DynamoDB
-        if DYNAMODB_ENDPOINT:
-            logger.info(f"🔗 Conectando a DynamoDB local en {DYNAMODB_ENDPOINT}")
-            self.dynamodb = boto3.resource(
-                "dynamodb",
-                region_name=REGION,
-                endpoint_url=DYNAMODB_ENDPOINT,
-                aws_access_key_id="dummy",
-                aws_secret_access_key="dummy"
-            )
-        else:
-            logger.info(f"🌍 Conectando a DynamoDB real en AWS región {REGION}")
-            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-        self.table = self.dynamodb.Table(TABLE_NAME)
 
     # ----------------------------------------------------------
     def execute(self):
@@ -118,46 +99,43 @@ class CreateProductsBulk(BaseCommannd):
 
             # 🔍 Validar duplicados
             try:
-                response = self.table.scan(
-                    FilterExpression="#n = :n AND #nm = :nm AND #b = :b",
-                    ExpressionAttributeNames={
-                        "#n": "provider_nit",
-                        "#nm": "name",
-                        "#b": "batch"
-                    },
-                    ExpressionAttributeValues={
-                        ":n": provider_nit,
-                        ":nm": name,
-                        ":b": batch
-                    }
-                )
-                if response.get("Items"):
+                existing_product = ProductModel.find_existing_product(provider_nit, name, batch)
+                if existing_product:
                     invalid.append({**row.to_dict(), "error": "Duplicado en base de datos"})
                     continue
-            except ClientError as e:
-                invalid.append({**row.to_dict(), "error": f"Error DynamoDB: {e}"})
+            except Exception as e:
+                invalid.append({**row.to_dict(), "error": f"Error al verificar duplicados: {e}"})
                 continue
 
-            valid.append({
+            # Crear instancia del modelo ProductModel
+            product_data = {
                 "sku": uuid.uuid4().hex,
                 "provider_nit": provider_nit,
                 "name": name,
                 "product_type": product_type,
                 "stock": stock,
                 "expiration_date": expiration_date.isoformat(),
-                "temperature_required": Decimal(str(temperature_required)),
+                "temperature_required": temperature_required,
                 "batch": batch,
                 "status": status,
-                "unit_value": Decimal(str(unit_value)),
+                "unit_value": unit_value,
                 "storage_conditions": storage_conditions,
-                "created_at": datetime.utcnow().isoformat()
-            })
+                "created_at": datetime.utcnow()
+            }
+            valid.append(product_data)
 
-        # 💾 Guardar válidos
+        # 💾 Guardar válidos usando ProductModel
         if valid:
-            with self.table.batch_writer() as batch:
-                for item in valid:
-                    batch.put_item(Item=item)
+            for product_data in valid:
+                try:
+                    # Crear y guardar cada producto usando el modelo
+                    product = ProductModel(**product_data)
+                    product.save()
+                except Exception as e:
+                    logger.error(f"❌ Error al guardar producto {product_data.get('name', 'unknown')}: {e}")
+                    # Si falla el guardado, mover de valid a invalid
+                    invalid.append({**product_data, "error": f"Error al guardar: {e}"})
+                    valid.remove(product_data)
 
         total = len(df)
         success = len(valid)

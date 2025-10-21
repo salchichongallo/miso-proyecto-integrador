@@ -1,12 +1,9 @@
-import boto3
 import uuid
 import logging
 from datetime import datetime
-from decimal import Decimal
-from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
-from ..models.db import DYNAMODB_ENDPOINT, REGION, TABLE_NAME
+from ..models.product import ProductModel
 
 logger = logging.getLogger(__name__)
 
@@ -30,20 +27,6 @@ class CreateProduct(BaseCommannd):
         self.unit_value = float(unit_value)
         self.storage_conditions = storage_conditions.strip()
         self.sku = uuid.uuid4().hex
-
-        # 🔗 Conexión DynamoDB
-        if DYNAMODB_ENDPOINT:
-            self.dynamodb = boto3.resource(
-                "dynamodb",
-                region_name=REGION,
-                endpoint_url=DYNAMODB_ENDPOINT,
-                aws_access_key_id="dummy",
-                aws_secret_access_key="dummy"
-            )
-        else:
-            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-        self.table = self.dynamodb.Table(TABLE_NAME)
 
     # ----------------------------------------------------------
     def execute(self):
@@ -79,70 +62,48 @@ class CreateProduct(BaseCommannd):
         """Guarda o actualiza un producto existente (sumando stock si ya existe)."""
         try:
             # Buscar si ya existe (provider_nit + name + batch)
-            existing = self.table.scan(
-                FilterExpression="#n = :n AND #nm = :nm AND #b = :b",
-                ExpressionAttributeNames={
-                    "#n": "provider_nit",
-                    "#nm": "name",
-                    "#b": "batch"
-                },
-                ExpressionAttributeValues={
-                    ":n": self.provider_nit,
-                    ":nm": self.name,
-                    ":b": self.batch
-                }
+            existing_product = ProductModel.find_existing_product(
+                self.provider_nit, self.name, self.batch
             )
 
             # 🔁 Si ya existe → actualiza stock
-            if existing["Items"]:
-                item = existing["Items"][0]
-                sku_value = str(item.get("sku", "")).strip()
-                if not sku_value:
-                    raise ApiError("Producto existente sin SKU válido en base de datos.")
-
-                new_stock = int(item.get("stock", 0)) + self.stock
-
+            if existing_product:
+                new_stock = existing_product.stock + self.stock
                 logger.info(f"🔁 Actualizando stock de {self.name} a {new_stock}")
 
-                self.table.update_item(
-                    Key={"sku": sku_value},
-                    UpdateExpression="SET stock = :s, updated_at = :u",
-                    ExpressionAttributeValues={
-                        ":s": int(new_stock),
-                        ":u": datetime.utcnow().isoformat()
-                    }
-                )
+                existing_product.update_stock(self.stock)
                 return {"message": f"Stock actualizado a {new_stock} unidades para {self.name}."}
 
             # 🆕 Crear nuevo producto
             if not self.sku or not isinstance(self.sku, str):
                 raise ApiError("Error interno: SKU no generado correctamente.")
 
-            item = {
-                "sku": self.sku,
-                "provider_nit": self.provider_nit,
-                "name": self.name,
-                "product_type": self.product_type,
-                "stock": int(self.stock),
-                "expiration_date": self.expiration_date.isoformat(),
-                "temperature_required": Decimal(str(self.temperature_required)),
-                "batch": self.batch,
-                "status": self.status,
-                "unit_value": Decimal(str(self.unit_value)),
-                "storage_conditions": self.storage_conditions,
-                "created_at": datetime.utcnow().isoformat()
-            }
+            # Convertir fecha a string ISO si es necesario
+            expiration_str = self.expiration_date.isoformat() if hasattr(self.expiration_date, 'isoformat') else str(self.expiration_date)
 
-            logger.info(f"🧾 Guardando producto en DynamoDB: {item}")
+            # Crear nueva instancia del modelo
+            product = ProductModel(
+                sku=self.sku,
+                provider_nit=self.provider_nit,
+                name=self.name,
+                product_type=self.product_type,
+                stock=self.stock,
+                expiration_date=expiration_str,
+                temperature_required=self.temperature_required,
+                batch=self.batch,
+                status=self.status,
+                unit_value=self.unit_value,
+                storage_conditions=self.storage_conditions,
+                created_at=datetime.utcnow()
+            )
 
-            if not isinstance(self.sku, str) or not self.sku.strip():
-                raise ApiError("SKU inválido o vacío antes de guardar producto.")
+            logger.info(f"🧾 Guardando producto en DynamoDB: {self.name}")
 
-            self.table.put_item(Item=item)
+            product.save()
 
             logger.info(f"✅ Producto creado correctamente: {self.name}")
             return {"message": "Producto registrado exitosamente", "sku": self.sku}
 
-        except ClientError as e:
+        except Exception as e:
             logger.error(f"❌ Error al crear producto: {e}")
-            raise ApiError(f"Error al crear producto: {e.response['Error']['Message']}")
+            raise ApiError(f"Error al crear producto: {str(e)}")

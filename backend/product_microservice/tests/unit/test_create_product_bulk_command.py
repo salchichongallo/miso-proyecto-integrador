@@ -1,7 +1,6 @@
 import pytest
 import pandas as pd
 from unittest.mock import MagicMock, patch
-from botocore.exceptions import ClientError
 from src.commands.create_products_bulk import CreateProductsBulk
 from src.errors.errors import ApiError
 
@@ -9,13 +8,15 @@ from src.errors.errors import ApiError
 class TestCreateProductsBulkCommand:
 
     # ✅ Caso exitoso con archivo CSV válido
-    @patch("boto3.resource")
-    def test_execute_carga_masiva_exitosa(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_execute_carga_masiva_exitosa(self, mock_product_model):
         """✅ Carga masiva exitosa con productos válidos"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_batch = MagicMock()
-        mock_table.batch_writer.return_value.__enter__.return_value = mock_batch
+        # Mock del método find_existing_product para simular que no hay duplicados
+        mock_product_model.find_existing_product.return_value = None
+
+        # Mock de las instancias de ProductModel para save()
+        mock_product_instance = MagicMock()
+        mock_product_model.return_value = mock_product_instance
 
         # DataFrame con productos válidos
         df = pd.DataFrame([
@@ -47,13 +48,20 @@ class TestCreateProductsBulkCommand:
 
         with patch.object(CreateProductsBulk, "_read_file", return_value=df):
             cmd = CreateProductsBulk(b"fake_bytes", "productos.csv")
-            cmd.table = mock_table
-            mock_table.scan.return_value = {"Items": []}  # 🔧 <--- Agrega esto
             result = cmd.execute()
 
         assert result["exitosos"] == 2
         assert result["rechazados"] == 0
         assert "Carga completada" in result["mensaje"]
+
+        # Verificar que se llamó find_existing_product para cada producto
+        assert mock_product_model.find_existing_product.call_count == 2
+
+        # Verificar que se crearon 2 instancias del modelo
+        assert mock_product_model.call_count == 2
+
+        # Verificar que se llamó save() en cada instancia
+        assert mock_product_instance.save.call_count == 2
 
     # ⚙️ Test: formato no soportado
     def test_read_file_formato_no_soportado(self):
@@ -72,11 +80,10 @@ class TestCreateProductsBulkCommand:
                 cmd._read_file()
 
     # 🚫 Test: stock negativo
-    @patch("boto3.resource")
-    def test_process_stock_negativo(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_stock_negativo(self, mock_product_model):
         """🚫 No debe aceptar stock negativo"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # No necesitamos mock de tabla para esta validación
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Producto", "product_type": "Tipo",
@@ -85,18 +92,16 @@ class TestCreateProductsBulkCommand:
         }])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
         result = cmd._process(df)
 
         assert result["rechazados"] == 1
         assert "Stock debe ser positivo" in result["rechazados_detalle"][0]["error"]
 
     # 🚫 Test: valor unitario inválido
-    @patch("boto3.resource")
-    def test_process_unit_value_invalido(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_unit_value_invalido(self, mock_product_model):
         """🚫 Valor unitario debe ser mayor que 0"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # No necesitamos mock para esta validación de lógica de negocio
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -105,18 +110,16 @@ class TestCreateProductsBulkCommand:
         }])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
         result = cmd._process(df)
 
         assert result["rechazados"] == 1
         assert "Valor unitario debe ser mayor que 0" in result["rechazados_detalle"][0]["error"]
 
     # 🚫 Test: fecha inválida
-    @patch("boto3.resource")
-    def test_process_fecha_invalida(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_fecha_invalida(self, mock_product_model):
         """🚫 Fecha con formato incorrecto"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # No necesitamos mock para esta validación
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -125,18 +128,16 @@ class TestCreateProductsBulkCommand:
         }])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
         result = cmd._process(df)
 
         assert result["rechazados"] == 1
         assert "Formato de fecha inválido" in result["rechazados_detalle"][0]["error"]
 
     # 🚫 Test: fecha vencida
-    @patch("boto3.resource")
-    def test_process_fecha_vencida(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_fecha_vencida(self, mock_product_model):
         """🚫 No debe aceptar fecha de vencimiento anterior"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # No necesitamos mock para esta validación
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -145,19 +146,18 @@ class TestCreateProductsBulkCommand:
         }])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
         result = cmd._process(df)
 
         assert result["rechazados"] == 1
         assert "Fecha de vencimiento inválida" in result["rechazados_detalle"][0]["error"]
 
     # ⚠️ Test: duplicado existente en DynamoDB
-    @patch("boto3.resource")
-    def test_process_duplicado_existente(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_duplicado_existente(self, mock_product_model):
         """⚠️ Detecta duplicado existente en la base de datos"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.scan.return_value = {"Items": [{"name": "Prod"}]}
+        # Mock para simular que existe un producto duplicado
+        mock_existing_product = MagicMock()
+        mock_product_model.find_existing_product.return_value = mock_existing_product
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -166,19 +166,20 @@ class TestCreateProductsBulkCommand:
         }])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
         result = cmd._process(df)
 
         assert result["rechazados"] == 1
         assert "Duplicado" in result["rechazados_detalle"][0]["error"]
 
-    # ⚡ Test: error DynamoDB
-    @patch("boto3.resource")
-    def test_process_error_dynamodb(self, mock_dynamodb):
-        """⚡ Maneja error de DynamoDB correctamente"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.scan.side_effect = ClientError({"Error": {"Message": "Falla de red"}}, "Scan")
+        # Verificar que se llamó find_existing_product
+        mock_product_model.find_existing_product.assert_called_once_with("123", "Prod", "B001")
+
+    # ⚡ Test: error ProductModel
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_error_modelo(self, mock_product_model):
+        """⚡ Maneja error del modelo correctamente"""
+        # Mock para simular error al buscar duplicados
+        mock_product_model.find_existing_product.side_effect = Exception("Falla de red")
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -187,18 +188,17 @@ class TestCreateProductsBulkCommand:
         }])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
         result = cmd._process(df)
 
         assert result["rechazados"] == 1
-        assert "Error DynamoDB" in result["rechazados_detalle"][0]["error"]
+        assert "Error al verificar duplicados" in result["rechazados_detalle"][0]["error"]
 
     # ✅ Test: carga parcial (<100%)
-    @patch("boto3.resource")
-    def test_process_carga_parcial(self, mock_dynamodb):
+    @patch("src.commands.create_products_bulk.ProductModel")
+    def test_process_carga_parcial(self, mock_product_model):
         """✅ Carga parcial con 1 producto válido y 1 rechazado"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # Mock para simular que no hay duplicados
+        mock_product_model.find_existing_product.return_value = None
 
         df = pd.DataFrame([
             {
@@ -214,8 +214,6 @@ class TestCreateProductsBulkCommand:
         ])
 
         cmd = CreateProductsBulk(b"", "productos.csv")
-        cmd.table = mock_table
-        mock_table.scan.return_value = {"Items": []}
         result = cmd._process(df)
 
         assert "Carga parcial" in result["mensaje"]
