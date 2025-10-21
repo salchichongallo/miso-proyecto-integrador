@@ -1,0 +1,7 @@
+[run]
+source =
+  src/commands
+  src/errors
+
+omit =
+  __init__.py
