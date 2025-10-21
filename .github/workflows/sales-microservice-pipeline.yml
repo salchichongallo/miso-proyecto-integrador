@@ -16,7 +16,6 @@ on:
     branches:
       - main
       - develop
-      - 'feature/sale-micro'
     paths:
       - 'backend/sales_microservice/**'
       - '.github/workflows/sales-microservice-pipeline.yml'
