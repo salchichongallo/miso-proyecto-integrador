@@ -1,5 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -103,6 +110,15 @@ export class ProductRegistrationPage {
   ];
 
   public readonly productForm = new FormGroup({
+    warehouse: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    sku: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)],
+    }),
+
     name: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(3)],
@@ -182,6 +198,14 @@ export class ProductRegistrationPage {
     return this.productForm.get('storageConditions') as FormControl<string> | null;
   }
 
+  get warehouseControl(): FormControl<string> | null {
+    return this.productForm.get('warehouse') as FormControl<string> | null;
+  }
+
+  get skuControl(): FormControl<string> | null {
+    return this.productForm.get('sku') as FormControl<string> | null;
+  }
+
   public onSubmit(): void {
     if (!this.productForm.valid) {
       this.productForm.markAllAsTouched();
@@ -206,6 +230,8 @@ export class ProductRegistrationPage {
     const formValue = this.productForm.value as ProductFormValue;
 
     const productData: RegisterProductRequest = {
+      warehouse: formValue.warehouse,
+      sku: formValue.sku,
       name: formValue.name,
       provider_nit: formValue.providerNit,
       product_type: formValue.productType,
@@ -228,7 +254,10 @@ export class ProductRegistrationPage {
         },
         error: (httpError: HttpErrorResponse) => {
           const message =
-            httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al registrar el producto.';
+            httpError.error?.error ??
+            httpError.error?.message ??
+            httpError.message ??
+            'Error al registrar el producto.';
           this.showErrorMessage(message);
         },
       });

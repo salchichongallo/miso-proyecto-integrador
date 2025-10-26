@@ -12,6 +12,7 @@ services:
       - PROVIDERS_TABLE=Providers
       - PRODUCTS_TABLE=Products
       - SALES_TABLE=Sales
+      - WAREHOUSES_TABLE=Warehouses
     depends_on:
       - dynamodb-local
     networks:
