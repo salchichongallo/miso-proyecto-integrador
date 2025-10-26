@@ -82,6 +82,8 @@ describe('ProductRegistrationPage', () => {
 
     it('should have valid form when all fields are filled correctly', () => {
       component.productForm.patchValue({
+        warehouse: 'WH-001',
+        sku: 'SKU-12345',
         name: 'Paracetamol 500mg',
         providerNit: '123456789-1',
         productType: 'medication',
@@ -90,7 +92,7 @@ describe('ProductRegistrationPage', () => {
         state: 'Disponible',
         expirationDate: getTomorrowDate(),
         requiredTemperature: 25,
-        unitValue: 5.50,
+        unitValue: 5.5,
         storageConditions: 'Mantener en lugar fresco y seco',
       });
       expect(component.productForm.valid).toBe(true);
@@ -210,6 +212,14 @@ describe('ProductRegistrationPage', () => {
     it('should have storageConditionsControl', () => {
       expect(component.storageConditionsControl).toBeTruthy();
     });
+
+    it('should have warehouseControl', () => {
+      expect(component.warehouseControl).toBeTruthy();
+    });
+
+    it('should have skuControl', () => {
+      expect(component.skuControl).toBeTruthy();
+    });
   });
 
   describe('Product Types', () => {
@@ -248,6 +258,8 @@ describe('ProductRegistrationPage', () => {
 
     it('should submit when form is valid and handle success', async () => {
       const validData = {
+        warehouse: 'WH-001',
+        sku: 'SKU-12345',
         name: 'Paracetamol 500mg',
         providerNit: '123456789-1',
         productType: 'medication',
@@ -256,7 +268,7 @@ describe('ProductRegistrationPage', () => {
         state: 'Disponible',
         expirationDate: getTomorrowDate(),
         requiredTemperature: 25,
-        unitValue: 5.50,
+        unitValue: 5.5,
         storageConditions: 'Mantener en lugar fresco y seco',
       };
 
@@ -270,9 +282,11 @@ describe('ProductRegistrationPage', () => {
 
       component.onSubmit();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockProductService.createProduct).toHaveBeenCalledWith({
+        warehouse: validData.warehouse,
+        sku: validData.sku,
         name: validData.name,
         provider_nit: validData.providerNit,
         product_type: validData.productType,
@@ -289,6 +303,8 @@ describe('ProductRegistrationPage', () => {
 
     it('should handle submission error', async () => {
       const validData = {
+        warehouse: 'WH-001',
+        sku: 'SKU-12345',
         name: 'Paracetamol 500mg',
         providerNit: '123456789-1',
         productType: 'medication',
@@ -297,7 +313,7 @@ describe('ProductRegistrationPage', () => {
         state: 'Disponible',
         expirationDate: getTomorrowDate(),
         requiredTemperature: 25,
-        unitValue: 5.50,
+        unitValue: 5.5,
         storageConditions: 'Mantener en lugar fresco y seco',
       };
 
@@ -311,7 +327,7 @@ describe('ProductRegistrationPage', () => {
 
       component.onSubmit();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockProductService.createProduct).toHaveBeenCalled();
       expect(mockLoadingController.create).toHaveBeenCalled();

@@ -37,6 +37,8 @@ describe('ProductService', () => {
   describe('createProduct', () => {
     it('should send POST request to product microservice URL', () => {
       const mockRequest: RegisterProductRequest = {
+        warehouse: 'WH-001',
+        sku: 'SKU-1',
         name: 'Ibuprofeno 400mg',
         provider_nit: '9001234567',
         product_type: 'Medicamento',
@@ -66,6 +68,8 @@ describe('ProductService', () => {
 
     it('should handle error response', () => {
       const mockRequest: RegisterProductRequest = {
+        warehouse: 'WH-001',
+        sku: 'SKU-1',
         name: 'Ibuprofeno 400mg',
         provider_nit: '9001234567',
         product_type: 'Medicamento',
