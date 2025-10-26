@@ -1,6 +1,5 @@
-import uuid
 import logging
-from datetime import datetime
+import datetime
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 from ..models.product import ProductModel
@@ -15,7 +14,7 @@ class CreateProduct(BaseCommannd):
     """
 
     def __init__(self, provider_nit, name, product_type, stock, expiration_date,
-                 temperature_required, batch, status, unit_value, storage_conditions):
+                 temperature_required, batch, status, unit_value, storage_conditions, warehouse, sku):
         self.provider_nit = provider_nit.strip()
         self.name = name.strip()
         self.product_type = product_type.strip()
@@ -26,7 +25,8 @@ class CreateProduct(BaseCommannd):
         self.status = status.strip()
         self.unit_value = float(unit_value)
         self.storage_conditions = storage_conditions.strip()
-        self.sku = uuid.uuid4().hex
+        self.sku = sku.strip()
+        self.warehouse = warehouse.strip()
 
     # ----------------------------------------------------------
     def execute(self):
@@ -46,11 +46,11 @@ class CreateProduct(BaseCommannd):
         # Fecha
         if isinstance(self.expiration_date, str):
             try:
-                self.expiration_date = datetime.strptime(self.expiration_date, "%Y-%m-%d").date()
+                self.expiration_date = datetime.datetime.strptime(self.expiration_date, "%Y-%m-%d").date()
             except ValueError:
                 raise ParamError("La fecha de vencimiento debe tener formato YYYY-MM-DD.")
 
-        if self.expiration_date <= datetime.now().date():
+        if self.expiration_date <= datetime.datetime.now().date():
             raise ParamError("La fecha de vencimiento debe ser posterior a la actual.")
 
         # Stock
@@ -62,9 +62,7 @@ class CreateProduct(BaseCommannd):
         """Guarda o actualiza un producto existente (sumando stock si ya existe)."""
         try:
             # Buscar si ya existe (provider_nit + name + batch)
-            existing_product = ProductModel.find_existing_product(
-                self.provider_nit, self.name, self.batch
-            )
+            existing_product = ProductModel.find_existing_product(self.warehouse, self.sku)
 
             # 🔁 Si ya existe → actualiza stock
             if existing_product:
@@ -83,6 +81,7 @@ class CreateProduct(BaseCommannd):
 
             # Crear nueva instancia del modelo
             product = ProductModel(
+                warehouse=self.warehouse,
                 sku=self.sku,
                 provider_nit=self.provider_nit,
                 name=self.name,
@@ -94,7 +93,7 @@ class CreateProduct(BaseCommannd):
                 status=self.status,
                 unit_value=self.unit_value,
                 storage_conditions=self.storage_conditions,
-                created_at=datetime.utcnow()
+                created_at=datetime.datetime.now(datetime.timezone.utc),
             )
 
             logger.info(f"🧾 Guardando producto en DynamoDB: {self.name}")

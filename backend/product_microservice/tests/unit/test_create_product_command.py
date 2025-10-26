@@ -28,7 +28,9 @@ class TestCreateProductCommand:
             batch="L001",
             status="Disponible",
             unit_value=2.5,
-            storage_conditions="Lugar fresco y seco"
+            storage_conditions="Lugar fresco y seco",
+            warehouse="WH123",
+            sku="SKU12345"
         )
 
         result = producto.execute()
@@ -63,7 +65,9 @@ class TestCreateProductCommand:
             batch="L001",
             status="Disponible",
             unit_value=3.0,
-            storage_conditions="Seco"
+            storage_conditions="Seco",
+            warehouse="WH123",
+            sku="SKU12345"
         )
 
         result = producto.execute()
@@ -88,7 +92,9 @@ class TestCreateProductCommand:
             batch="L002",
             status="Disponible",
             unit_value=1.5,
-            storage_conditions="Seco"
+            storage_conditions="Seco",
+            warehouse="WH123",
+            sku="SKU12346"
         )
 
         with pytest.raises(ParamError, match="posterior a la actual"):
@@ -107,7 +113,9 @@ class TestCreateProductCommand:
             batch="L003",
             status="Disponible",
             unit_value=2.0,
-            storage_conditions="Lugar seco"
+            storage_conditions="Lugar seco",
+            warehouse="WH123",
+            sku="SKU12347"
         )
 
         with pytest.raises(ParamError, match="mayor o igual a 1"):
@@ -126,7 +134,9 @@ class TestCreateProductCommand:
             batch="",
             status="",
             unit_value=1.0,
-            storage_conditions=""
+            storage_conditions="",
+            warehouse="WH123",
+            sku="SKU12347"
         )
         with pytest.raises(ParamError, match="obligatorios"):
             producto.validate()
@@ -153,7 +163,9 @@ class TestCreateProductCommand:
             batch="L004",
             status="Disponible",
             unit_value=2.0,
-            storage_conditions="Seco"
+            storage_conditions="Seco",
+            warehouse="WH123",
+            sku="SKU12347"
         )
 
         with pytest.raises(ApiError, match="Error al crear producto"):

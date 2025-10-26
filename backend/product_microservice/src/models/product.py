@@ -1,12 +1,23 @@
-from marshmallow import Schema, fields, validate, ValidationError
-from datetime import datetime
-from pynamodb.models import Model
-from pynamodb.attributes import UnicodeAttribute, NumberAttribute, UTCDateTimeAttribute
 import os
+import datetime
+from pynamodb.models import Model
+from marshmallow import Schema, fields, validate, ValidationError
+from pynamodb.attributes import UnicodeAttribute, NumberAttribute, UTCDateTimeAttribute
+
 from ..errors.errors import ParamError
 
 
 class NewProductJsonSchema(Schema):
+    warehouse = fields.String(
+        required=True,
+        error_messages={"required": "El ID de la bodega es obligatorio."},
+    )
+
+    sku = fields.String(
+        required=True,
+        error_messages={"required": "El SKU es obligatorio."},
+    )
+
     provider_nit = fields.String(
         required=True,
         validate=validate.Regexp(r"^\d{10}$", error="El NIT del proveedor debe tener exactamente 10 dígitos."),
@@ -70,7 +81,7 @@ class NewProductJsonSchema(Schema):
         """Valida el cuerpo del request y lanza ParamError si hay errores."""
         try:
             data = NewProductJsonSchema().load(json)
-            if data["expiration_date"] <= datetime.now().date():
+            if data["expiration_date"] <= datetime.datetime.now().date():
                 raise ParamError("La fecha de vencimiento debe ser posterior a la fecha actual.")
         except ValidationError as exception:
             raise ParamError.first_from(exception.messages)
@@ -88,7 +99,8 @@ class ProductModel(Model):
         aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
 
     # Primary Key
-    sku = UnicodeAttribute(hash_key=True)
+    warehouse = UnicodeAttribute(hash_key=True)
+    sku = UnicodeAttribute(range_key=True)
 
     # Atributos del producto
     provider_nit = UnicodeAttribute()
@@ -107,34 +119,21 @@ class ProductModel(Model):
     updated_at = UTCDateTimeAttribute(null=True)
 
     @classmethod
-    def find_existing_product(cls, provider_nit, name, batch):
-        """
-        Busca un producto existente por provider_nit, name y batch.
-        Retorna el primer producto que coincida o None si no existe.
-        """
+    def find_existing_product(cls, warehouse: str, sku: str):
         try:
-            for product in cls.scan():
-                if (product.provider_nit == provider_nit and
-                    product.name == name and
-                    product.batch == batch):
-                    return product
-            return None
-        except Exception:
+            product = cls.get(hash_key=warehouse, range_key=sku)
+            return product
+        except cls.DoesNotExist:
             return None
 
     def update_stock(self, additional_stock):
-        """
-        Actualiza el stock sumando la cantidad adicional.
-        """
         self.stock = int(self.stock) + int(additional_stock)
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.datetime.now(datetime.timezone.utc)
         self.save()
 
     def to_dict(self):
-        """
-        Convierte el modelo a diccionario para respuestas JSON.
-        """
         return {
+            "warehouse": self.warehouse,
             "sku": self.sku,
             "provider_nit": self.provider_nit,
             "name": self.name,
