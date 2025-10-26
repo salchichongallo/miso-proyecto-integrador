@@ -1,12 +1,14 @@
 import os
 import logging
+import traceback
 from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from .models.db import init_db
 from flask_cognito import CognitoAuth
 from .blueprints.products import products_blueprint
-from .errors.errors import ApiError
+from .blueprints.warehouses import warehouses_blueprint
+from .errors.errors import ApiError, ParamError
 
 # Cargar variables de entorno
 load_dotenv()
@@ -25,23 +27,39 @@ app.config.update({
     "COGNITO_JWT_HEADER_PREFIX": "Bearer",
 })
 app.register_blueprint(products_blueprint)
+app.register_blueprint(warehouses_blueprint)
 
 # Inicializar CognitoAuth
 cognito = CognitoAuth(app)
 
 init_db()
 
+
 @app.get("/health")
 def health():
     return {"status": "up", "app": app.name}
 
+
+@app.errorhandler(ParamError)
+def handle_validation_errors(error: ParamError):
+    return jsonify({"error": str(error)}), error.code
+
+
 @app.errorhandler(ApiError)
-def handle_exception(err):
+def handle_api_errors(err):
     response = {
       'mssg': err.description,
       'version': os.getenv("VERSION", "1.0.0")
     }
     return jsonify(response), err.code
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_errors(error):
+    logging.exception("An unexpected error occurred: %s", str(error))
+    traceback.print_exc()
+    return jsonify({"error": f"Error inesperado: {str(error)}"}), 500
+
 
 # Configuración de logs (para producción con Gunicorn)
 if __name__ != "__main__":

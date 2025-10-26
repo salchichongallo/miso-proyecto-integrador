@@ -2,6 +2,7 @@ import os
 import boto3
 import pytest
 from unittest.mock import patch
+from src.models.warehouse import WarehouseModel
 from src.models.db import TABLE_NAME, PK_NAME
 
 
@@ -25,7 +26,10 @@ def client():
 
 
 def clear_db():
-    table_names = [(TABLE_NAME, PK_NAME)]
+    table_names = [
+        (TABLE_NAME, PK_NAME),
+        (WarehouseModel.Meta.table_name, WarehouseModel.id.attr_name),
+    ]
 
     if os.getenv("DYNAMODB_ENDPOINT"):
         dynamodb = boto3.resource(
