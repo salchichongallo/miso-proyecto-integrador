@@ -68,10 +68,12 @@ TABLES_CONFIG = {
     },
     PRODUCTS_TABLE: {
         "AttributeDefinitions": [
+            {"AttributeName": "warehouse", "AttributeType": "S"},
             {"AttributeName": "sku", "AttributeType": "S"}
         ],
         "KeySchema": [
-            {"AttributeName": "sku", "KeyType": "HASH"}
+            {"AttributeName": "warehouse", "KeyType": "HASH"},
+            {"AttributeName": "sku", "KeyType": "RANGE"}
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 5,
