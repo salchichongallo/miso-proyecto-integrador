@@ -16,7 +16,7 @@ jest.mock('@env/environment', () => ({
 describe('ProductService', () => {
   let service: ProductService;
   let httpMock: HttpTestingController;
-  const mockProductUrl = 'http://test-product-api.com';
+  const mockProductUrl = 'http://test-product-api.com/';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,6 +37,8 @@ describe('ProductService', () => {
   describe('createProduct', () => {
     it('should send POST request to product microservice URL', () => {
       const mockRequest: RegisterProductRequest = {
+        warehouse: 'WH-001',
+        sku: 'SKU-1',
         name: 'Ibuprofeno 400mg',
         provider_nit: '9001234567',
         product_type: 'Medicamento',
@@ -66,6 +68,8 @@ describe('ProductService', () => {
 
     it('should handle error response', () => {
       const mockRequest: RegisterProductRequest = {
+        warehouse: 'WH-001',
+        sku: 'SKU-1',
         name: 'Ibuprofeno 400mg',
         provider_nit: '9001234567',
         product_type: 'Medicamento',
@@ -105,7 +109,7 @@ describe('ProductService', () => {
         expect(response).toEqual(mockResponse);
       });
 
-      const req = httpMock.expectOne(`${mockProductUrl}/bulk`);
+      const req = httpMock.expectOne(`${mockProductUrl}bulk`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body instanceof FormData).toBe(true);
       expect(req.request.body.get('file')).toBe(mockFile);
@@ -127,7 +131,7 @@ describe('ProductService', () => {
         },
       });
 
-      const req = httpMock.expectOne(`${mockProductUrl}/bulk`);
+      const req = httpMock.expectOne(`${mockProductUrl}bulk`);
       req.flush(mockError, { status: 400, statusText: 'Bad Request' });
     });
   });

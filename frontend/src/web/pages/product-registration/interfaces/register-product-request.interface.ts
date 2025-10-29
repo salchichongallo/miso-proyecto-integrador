@@ -1,4 +1,6 @@
 export interface RegisterProductRequest {
+  warehouse: string;
+  sku: string;
   name: string;
   provider_nit: string;
   product_type: string;

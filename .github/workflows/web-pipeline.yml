@@ -65,7 +65,7 @@ jobs:
           name: web-coverage-report
           path: frontend/coverage
 
-  deploy-dev:
+  deploy:
     needs: build
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
@@ -90,6 +90,11 @@ jobs:
           APP_COGNITO_USER_POOL_CLIENT_ID: ${{ vars.APP_COGNITO_USER_POOL_CLIENT_ID }}
           APP_COGNITO_DOMAIN: ${{ vars.APP_COGNITO_DOMAIN }}
           APP_COGNITO_REDIRECT_URLS: ${{ vars.APP_COGNITO_REDIRECT_URLS }}
+          APP_CLIENT_MICROSERVICE_URL: ${{ vars.APP_CLIENT_MICROSERVICE_URL }}
+          APP_VENDOR_MICROSERVICE_URL: ${{ vars.APP_VENDOR_MICROSERVICE_URL }}
+          APP_PROVIDER_MICROSERVICE_URL: ${{ vars.APP_PROVIDER_MICROSERVICE_URL }}
+          APP_PRODUCT_MICROSERVICE_URL: ${{ vars.APP_PRODUCT_MICROSERVICE_URL }}
+          APP_SALES_MICROSERVICE_URL: ${{ vars.APP_SALES_MICROSERVICE_URL }}
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0
@@ -104,8 +109,8 @@ jobs:
       - name: Invalidate CloudFront (dev)
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 
-  e2e-dev:
-    needs: deploy-dev
+  e2e:
+    needs: deploy
     if: github.ref == 'refs/heads/develop'
     timeout-minutes: 60
     environment: dev
@@ -157,42 +162,3 @@ jobs:
           name: web-e2e-report
           path: frontend/playwright-report/
           retention-days: 30
-
-  deploy-prod:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: prod
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v5
-        with:
-          name: web-build
-          path: frontend/www/web
-
-      - name: Replace environment variables
-        uses: cschleiden/replace-tokens@v1.3
-        with:
-          files: '["frontend/www/**/*.js"]'
-        env:
-          APP_API_URL: ${{ vars.APP_API_URL }}
-          APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
-          APP_COGNITO_USER_POOL_CLIENT_ID: ${{ vars.APP_COGNITO_USER_POOL_CLIENT_ID }}
-          APP_COGNITO_DOMAIN: ${{ vars.APP_COGNITO_DOMAIN }}
-          APP_COGNITO_REDIRECT_URLS: ${{ vars.APP_COGNITO_REDIRECT_URLS }}
-
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v5.0.0
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
-          role-session-name: ${{ vars.AWS_ROLE_SESSION_NAME }}
-
-      - name: Sync to S3 (prod)
-        run: aws s3 sync frontend/www/web/ s3://${{ secrets.S3_WEB_BUCKET }} --delete
-
-      - name: Invalidate CloudFront (prod)
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

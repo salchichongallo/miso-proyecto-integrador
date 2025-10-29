@@ -16,12 +16,12 @@ export class SupplierService {
   private readonly http = inject(HttpClient);
 
   public createSupplier(body: RegisterSupplierRequest): Observable<RegisterSupplierResponse> {
-    return this.http.post<RegisterSupplierResponse>(this.baseUrl, body);
+    return this.http.post<RegisterSupplierResponse>(this.baseUrl + '/', body);
   }
 
   public createBulkSupplier(file: File): Observable<Object> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.baseUrl}/bulk-upload`, formData);
+    return this.http.post(`${this.baseUrl}/bulk`, formData);
   }
 }

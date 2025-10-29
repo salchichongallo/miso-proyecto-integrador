@@ -1,11 +1,12 @@
 import pytest
 import logging
 
+@pytest.mark.usefixtures('client')
 class TestCreateProduct:
-    @pytest.mark.usefixtures("client")
-    def test_create_product_endpoint(self, client):
-        """✅ Caso exitoso de creación"""
+    def test_successful_product_creation(self, client):
         payload = {
+            'warehouse': '1',
+            'sku': 'sku2',
             "provider_nit": "1234567890",
             "name": "Acetaminofén",
             "product_type": "Medicamento",

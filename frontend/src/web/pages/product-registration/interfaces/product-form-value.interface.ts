@@ -1,4 +1,6 @@
 export interface ProductFormValue {
+  warehouse: string;
+  sku: string;
   name: string;
   providerNit: string;
   productType: string;

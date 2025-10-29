@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from botocore.exceptions import ClientError
 from src.commands.view_all import GetAllProducts
 from src.errors.errors import ApiError
 
@@ -8,18 +7,18 @@ from src.errors.errors import ApiError
 class TestGetAllProductsCommand:
 
     # ✅ Caso exitoso básico
-    @patch("boto3.resource")
-    def test_fetch_all_exitoso(self, mock_dynamodb):
+    @patch("src.commands.view_all.ProductModel")
+    def test_fetch_all_exitoso(self, mock_product_model):
         """✅ Retorna lista de productos exitosamente"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # Mock de productos
+        mock_product1 = MagicMock()
+        mock_product1.to_dict.return_value = {"name": "Paracetamol", "stock": 100}
 
-        mock_table.scan.return_value = {
-            "Items": [
-                {"name": "Paracetamol", "stock": 100},
-                {"name": "Aspirina", "stock": 50},
-            ]
-        }
+        mock_product2 = MagicMock()
+        mock_product2.to_dict.return_value = {"name": "Aspirina", "stock": 50}
+
+        # Mock del scan que retorna los productos
+        mock_product_model.scan.return_value = [mock_product1, mock_product2]
 
         command = GetAllProducts()
         result = command.fetch_all()
@@ -28,37 +27,41 @@ class TestGetAllProductsCommand:
         assert len(result) == 2
         assert result[0]["name"] == "Aspirina"  # Verifica orden alfabético
         assert result[1]["stock"] == 100
-        mock_table.scan.assert_called_once()
 
-    # 🔁 Paginación (más de 1 página de resultados)
-    @patch("boto3.resource")
-    def test_fetch_all_con_paginacion(self, mock_dynamodb):
-        """🔁 Maneja correctamente la paginación"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
+        # Verificar que se llamó scan() del modelo
+        mock_product_model.scan.assert_called_once()
 
-        # Simula 2 páginas
-        mock_table.scan.side_effect = [
-            {"Items": [{"name": "Producto 1"}], "LastEvaluatedKey": "next"},
-            {"Items": [{"name": "Producto 2"}]},
-        ]
+        # Verificar que se llamó to_dict() en cada producto
+        mock_product1.to_dict.assert_called_once()
+        mock_product2.to_dict.assert_called_once()
+
+    # 🔁 Múltiples productos (PynamoDB maneja paginación automáticamente)
+    @patch("src.commands.view_all.ProductModel")
+    def test_fetch_all_multiples_productos(self, mock_product_model):
+        """🔁 Retorna múltiples productos correctamente"""
+        # Mock de múltiples productos
+        mock_products = []
+        for i in range(1, 6):  # 5 productos
+            mock_product = MagicMock()
+            mock_product.to_dict.return_value = {"name": f"Producto {i}", "stock": i * 10}
+            mock_products.append(mock_product)
+
+        mock_product_model.scan.return_value = mock_products
 
         command = GetAllProducts()
         result = command.fetch_all()
 
         assert isinstance(result, list)
-        assert len(result) == 2
-        assert {"name": "Producto 1"} in result
-        assert {"name": "Producto 2"} in result
-        assert mock_table.scan.call_count == 2
+        assert len(result) == 5
+
+        # Verificar que se llamó scan() una vez (PynamoDB maneja paginación internamente)
+        mock_product_model.scan.assert_called_once()
 
     # ⚠️ Sin productos
-    @patch("boto3.resource")
-    def test_fetch_all_sin_productos(self, mock_dynamodb):
+    @patch("src.commands.view_all.ProductModel")
+    def test_fetch_all_sin_productos(self, mock_product_model):
         """⚠️ Retorna lista vacía cuando no hay productos"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.scan.return_value = {"Items": []}
+        mock_product_model.scan.return_value = []
 
         command = GetAllProducts()
         result = command.fetch_all()
@@ -66,15 +69,11 @@ class TestGetAllProductsCommand:
         assert isinstance(result, list)
         assert result == []
 
-    # ❌ Error en DynamoDB
-    @patch("boto3.resource")
-    def test_fetch_all_error_dynamodb(self, mock_dynamodb):
-        """❌ Lanza ApiError si DynamoDB falla"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.scan.side_effect = ClientError(
-            {"Error": {"Message": "AccessDenied"}}, "Scan"
-        )
+    # ❌ Error en ProductModel
+    @patch("src.commands.view_all.ProductModel")
+    def test_fetch_all_error_modelo(self, mock_product_model):
+        """❌ Lanza ApiError si ProductModel falla"""
+        mock_product_model.scan.side_effect = Exception("AccessDenied")
 
         command = GetAllProducts()
 
@@ -82,12 +81,12 @@ class TestGetAllProductsCommand:
             command.fetch_all()
 
     # 🧱 Verifica que execute() llama a fetch_all()
-    @patch("boto3.resource")
-    def test_execute_invoca_fetch_all(self, mock_dynamodb):
+    @patch("src.commands.view_all.ProductModel")
+    def test_execute_invoca_fetch_all(self, mock_product_model):
         """🧱 execute() debe llamar internamente a fetch_all"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.scan.return_value = {"Items": [{"name": "Ibuprofeno"}]}
+        mock_product = MagicMock()
+        mock_product.to_dict.return_value = {"name": "Ibuprofeno"}
+        mock_product_model.scan.return_value = [mock_product]
 
         command = GetAllProducts()
         result = command.execute()
@@ -97,18 +96,20 @@ class TestGetAllProductsCommand:
         assert result[0]["name"] == "Ibuprofeno"
 
     # 🧩 Verifica que se ordena correctamente alfabéticamente
-    @patch("boto3.resource")
-    def test_fetch_all_orden_alfabetico(self, mock_dynamodb):
+    @patch("src.commands.view_all.ProductModel")
+    def test_fetch_all_orden_alfabetico(self, mock_product_model):
         """🧩 Los productos deben ordenarse alfabéticamente por nombre"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.scan.return_value = {
-            "Items": [
-                {"name": "Carlos"},
-                {"name": "Ana"},
-                {"name": "Beatriz"},
-            ]
-        }
+        # Mock de productos en orden desordenado
+        mock_product1 = MagicMock()
+        mock_product1.to_dict.return_value = {"name": "Carlos"}
+
+        mock_product2 = MagicMock()
+        mock_product2.to_dict.return_value = {"name": "Ana"}
+
+        mock_product3 = MagicMock()
+        mock_product3.to_dict.return_value = {"name": "Beatriz"}
+
+        mock_product_model.scan.return_value = [mock_product1, mock_product2, mock_product3]
 
         command = GetAllProducts()
         result = command.fetch_all()

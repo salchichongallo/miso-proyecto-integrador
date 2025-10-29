@@ -17,6 +17,6 @@ export class CustomersService {
   public createInstitutionalClient(
     data: CreateInstitutionalClientRequest,
   ): Observable<CreateInstitutionalClientResponse> {
-    return this.http.post<CreateInstitutionalClientResponse>(`${this.baseUrl}`, data);
+    return this.http.post<CreateInstitutionalClientResponse>(`${this.baseUrl}/`, data);
   }
 }

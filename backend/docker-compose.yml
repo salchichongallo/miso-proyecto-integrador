@@ -11,6 +11,8 @@ services:
       - VENDORS_TABLE=Vendors
       - PROVIDERS_TABLE=Providers
       - PRODUCTS_TABLE=Products
+      - SALES_TABLE=Sales
+      - WAREHOUSES_TABLE=Warehouses
     depends_on:
       - dynamodb-local
     networks:
@@ -47,7 +49,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ./client_microservice:/usr/src/app
+      - ./client_microservice:/app
     depends_on:
       dynamodb-local:
           condition: service_started
@@ -95,7 +97,7 @@ services:
     ports:
       - "3003:3003"
     volumes:
-      - ./provider_microservice:/usr/src/app
+      - ./provider_microservice:/app
     depends_on:
       dynamodb-local:
         condition: service_started
@@ -119,7 +121,31 @@ services:
     ports:
       - "3004:3004"
     volumes:
-      - ./product_microservice:/usr/src/app
+      - ./product_microservice:/app
+    depends_on:
+      dynamodb-local:
+        condition: service_started
+      init-dynamodb:
+        condition: service_completed_successfully
+    networks:
+      - net-medisupply
+
+  sales:
+    build:
+      context: ./sales_microservice
+      dockerfile: Dockerfile
+    container_name: sales
+    hostname: sales
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - FLASK_ENV=development
+      - APP_COGNITO_USER_POOL_ID=dummy-local-pool
+      - GUNICORN_CMD_ARGS=--log-level info --reload
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./sales_microservice:/app
     depends_on:
       dynamodb-local:
         condition: service_started

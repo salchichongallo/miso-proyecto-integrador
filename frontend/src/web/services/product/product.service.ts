@@ -16,7 +16,7 @@ export class ProductService {
   private readonly http = inject(HttpClient);
 
   public createProduct(body: RegisterProductRequest): Observable<RegisterProductResponse> {
-    return this.http.post<RegisterProductResponse>(this.baseUrl, body);
+    return this.http.post<RegisterProductResponse>(this.baseUrl + '/', body);
   }
 
   public createBulkProduct(file: File): Observable<object> {
