@@ -40,6 +40,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'orders/create-order-with-products',
+        loadComponent: () =>
+          import('./pages/orders/create-order-with-products/create-order-with-products.page').then(
+            (m) => m.CreateOrderWithProductsPage,
+          ),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: '/tabs/customers',
