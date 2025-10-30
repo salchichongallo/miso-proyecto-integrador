@@ -5,34 +5,34 @@
     </ion-buttons>
     <ion-title>Crear pedido</ion-title>
   </ion-toolbar>
-
-  <ion-content [fullscreen]="true" class="ion-padding">
-    <br />
-    <ion-input
-      label="Buscar productos"
-      labelPlacement="stacked"
-      type="text"
-      placeholder="Ingrese el nombre del producto"
-      clearInput
-      fill="outline"
-    ></ion-input>
-
-    <section class="products-list">
-      @for (product of products(); track $index) {
-        <ion-item [button]="true" detail="false" class="product-item">
-          <div class="unread-indicator-wrapper" slot="start">
-            <img src="/assets/icon/icons8-pills-48.png" alt="Producto">
-          </div>
-          <ion-label>
-            <strong>{{ product.name }}</strong> <br>
-            <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
-          </ion-label>
-          <div class="metadata-end-wrapper" slot="end">
-            <ion-note color="medium">Disponibilidad</ion-note> <br>
-            <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
-          </div>
-        </ion-item>
-      }
-    </section>
-  </ion-content>
 </ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <br />
+  <ion-input
+    label="Buscar productos"
+    labelPlacement="stacked"
+    type="text"
+    placeholder="Ingrese el nombre del producto"
+    clearInput
+    fill="outline"
+  ></ion-input>
+
+  <section class="products-list">
+    @for (product of products(); track $index) {
+      <ion-item [button]="true" detail="false" class="product-item" (click)="viewProductDetail(product)">
+        <div class="unread-indicator-wrapper" slot="start">
+          <img src="/assets/icon/icons8-pills-48.png" alt="Producto" />
+        </div>
+        <ion-label>
+          <strong>{{ product.name }}</strong> <br />
+          <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
+        </ion-label>
+        <div class="metadata-end-wrapper" slot="end">
+          <ion-note color="medium">Disponibilidad</ion-note> <br />
+          <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
+        </div>
+      </ion-item>
+    }
+  </section>
+</ion-content>

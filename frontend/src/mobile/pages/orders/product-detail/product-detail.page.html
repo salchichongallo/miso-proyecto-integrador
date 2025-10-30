@@ -1,0 +1,96 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/orders/create-order-with-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+  <div class="product-image-container">
+    <img src="/assets/icon/icons8-pills-48.png" alt="Producto" class="product-image" />
+  </div>
+
+  <div class="product-info-card ion-padding">
+    <ion-text color="medium" class="product-brand">
+      <small>MEDYSUPPLY</small>
+    </ion-text>
+
+    <div class="product-header">
+      <div>
+        <h2 class="product-name">{{ product?.name }}</h2>
+        <ion-text color="medium" class="product-type">
+          <p>{{ product?.product_type }}</p>
+        </ion-text>
+      </div>
+      <div class="product-price">
+        <ion-text color="danger">
+          <h2>${{ product?.unit_value }}</h2>
+        </ion-text>
+        <ion-text color="medium">
+          <small>$49.00 | -40%</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <section class="availability-section">
+      <h3>Disponibilidad en tiempo real</h3>
+
+      <div class="location-card">
+        <div class="location-header">
+          <ion-icon slot="start" name="location"></ion-icon>
+          <span class="location-name">Bogotá, Colombia</span>
+        </div>
+        <div class="location-badges">
+          <ion-badge color="success">Lote: {{ product?.batch }}</ion-badge>
+          <ion-badge color="primary">Prioridad: Alta</ion-badge>
+        </div>
+        <ion-text class="location-stock">
+          <p>{{ product?.stock }} unidades</p>
+        </ion-text>
+      </div>
+
+      <div class="location-card">
+        <div class="location-header">
+          <ion-icon slot="start" name="location"></ion-icon>
+          <span class="location-name">Medellín, Colombia</span>
+        </div>
+        <div class="location-badges">
+          <ion-badge color="success">Lote: LOT002</ion-badge>
+          <ion-badge color="primary">Prioridad: Media</ion-badge>
+        </div>
+        <ion-text class="location-stock">
+          <p>150 unidades</p>
+        </ion-text>
+      </div>
+    </section>
+
+    <ion-select
+      label="Cantidad a pedir"
+      label-placement="floating"
+      fill="outline"
+      [(ngModel)]="quantity"
+      placeholder="Seleccione cantidad"
+      color="primary"
+    >
+      <ion-select-option value="1">1</ion-select-option>
+      <ion-select-option value="2">2</ion-select-option>
+      <ion-select-option value="3">3</ion-select-option>
+      <ion-select-option value="4">4</ion-select-option>
+      <ion-select-option value="5">5</ion-select-option>
+      <ion-select-option value="10">10</ion-select-option>
+      <ion-select-option value="25">25</ion-select-option>
+      <ion-select-option value="50">50</ion-select-option>
+    </ion-select>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <footer class="footer">
+    <ion-button expand="block" (click)="addToCart()">
+      <ion-icon slot="start" name="cart-outline"></ion-icon>
+      Agregar al carrito
+    </ion-button>
+  </footer>
+</ion-footer>

@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 import {
   IonTitle,
@@ -38,6 +39,7 @@ import { Product } from '@mobile/models/product.model';
 export class CreateOrderWithProductsPage implements OnInit {
   public readonly products = signal<Product[]>([]);
   private readonly productsService = inject(ProductService);
+  private readonly router = inject(Router);
 
   public ngOnInit(): void {
     this.loadProducts();
@@ -47,6 +49,12 @@ export class CreateOrderWithProductsPage implements OnInit {
     this.productsService.getProducts().subscribe((products) => {
       console.log(products);
       this.products.set(products);
+    });
+  }
+
+  public viewProductDetail(product: Product): void {
+    this.router.navigate(['/orders/product-detail'], {
+      state: { product }
     });
   }
 }
