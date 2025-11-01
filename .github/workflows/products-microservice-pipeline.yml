@@ -100,6 +100,7 @@ jobs:
       AWS_REGION: ${{ vars.AWS_REGION }}
       DYNAMODB_TABLE: ${{ vars.DYNAMODB_PRODUCTS_TABLE }}
       DYNAMODB_WAREHOUSE_TABLE: ${{ vars.DYNAMODB_WAREHOUSE_TABLE }}
+      PRODUCTS_MIRROR_TABLE: ${{ vars.DYNAMODB_PRODUCTS_MIRROR_TABLE }}
 
     steps:
       - name: Checkout code
