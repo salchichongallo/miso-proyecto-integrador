@@ -1,0 +1,3 @@
+warehouse,sku,provider_nit,name,product_type,stock,expiration_date,temperature_required,batch,status,unit_value,storage_conditions
+1,1,1234567800,Producto 1,Medicamento,1,2026-10-18,25.0,L001,Disponible,1.5,Conservar en lugar fresco y seco
+1,2,1234567801,Producto 2,Suplemento,2,2026-10-19,5.0,L002,Disponible,1.6,Conservar en lugar fresco y seco

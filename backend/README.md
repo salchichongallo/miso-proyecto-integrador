@@ -37,6 +37,7 @@ backend/
 ├── provider_microservice/
 ├── product_microservice/
 ├── sales_microservice/
+├── order_microservice/
 ├── docker-compose.yml
 ├── Dockerfile.init
 ├── init_dynamodb.py
@@ -66,6 +67,7 @@ FLASK_APP=src/main.py flask run -h 0.0.0.0 -p 3000
 | provider_microservice | 3003   |
 | product_microservice  | 3004   |
 | sales_microservice    | 3005   |
+| order_microservice    | 3006   |
 
 ---
 
@@ -123,6 +125,7 @@ docker compose up --no-build
 | `provider_microservice` | 3003         | Gestión de proveedores                  |
 | `product_microservice`  | 3004         | Gestión de Productos                    |
 | `sales_microservice`    | 3005         | Gestión de Ventas                       |
+| `order_microservice`    | 3006         | Gestión de Pedidos                      |
 | `dynamodb-local`        | 8000         | Base de datos local simulada            |
 | `dynamodb-admin`        | 8001         | Interfaz web para visualizar las tablas |
 | `init-dynamodb`         | N/A          | Script para crear las tablas            |
@@ -146,5 +149,4 @@ Podrás ver las tablas creadas (`Clients`, `Vendors`, etc.) desde DynamoDB Local
 
 ---
 
-✍️ **Autor:** Jhorman Andrés Galindo Polanía
 🎓 _Universidad de los Andes — Maestría en Ingeniería de Software_
