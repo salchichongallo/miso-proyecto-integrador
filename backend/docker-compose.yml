@@ -82,6 +82,30 @@ services:
     networks:
       - net-medisupply
 
+  orders:
+    build:
+      context: ./order_microservice
+      dockerfile: Dockerfile
+    container_name: orders
+    hostname: orders
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - FLASK_ENV=development
+      - APP_COGNITO_USER_POOL_ID=dummy-local-pool
+      - GUNICORN_CMD_ARGS=--log-level info --reload
+    ports:
+      - "3006:3006"
+    volumes:
+      - ./order_microservice:/app
+    depends_on:
+      dynamodb-local:
+        condition: service_started
+      init-dynamodb:
+        condition: service_completed_successfully
+    networks:
+      - net-medisupply
+
   providers:
     build:
       context: ./provider_microservice
