@@ -40,6 +40,11 @@ class ProductSchema(Schema):
         error_messages={"required": "Cada producto debe tener un campo 'amount'."}
     )
 
+    id_warehouse = fields.String(
+        required=True,
+        error_messages={"required": "Cada producto debe tener un campo 'id_warehouse'."}
+    )
+
 
 
 class NewOrderJsonSchema(Schema):
