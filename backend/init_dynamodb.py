@@ -27,6 +27,7 @@ PROVIDERS_TABLE = os.getenv("PROVIDERS_TABLE", "Providers")
 PRODUCTS_TABLE = os.getenv("PRODUCTS_TABLE", "Products")
 WAREHOUSES_TABLE = os.getenv("WAREHOUSES_TABLE", "Warehouses")
 SALES_TABLE = os.getenv("SALES_TABLE", "Sales")
+ORDERS_TABLE = os.getenv("ORDERS_TABLE", "Orders")
 
 # Definición de tablas
 TABLES_CONFIG = {
@@ -98,6 +99,19 @@ TABLES_CONFIG = {
         ],
         "KeySchema": [
             {"AttributeName": "PK", "KeyType": "HASH"}
+        ],
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        }
+    }
+
+    , ORDERS_TABLE: {
+        "AttributeDefinitions": [
+            {"AttributeName": "id", "AttributeType": "S"}
+        ],
+        "KeySchema": [
+            {"AttributeName": "id", "KeyType": "HASH"}
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 5,
