@@ -126,6 +126,11 @@ jobs:
           role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
           role-session-name: ${{ vars.AWS_ROLE_SESSION_NAME }}
 
+      - name: Print some env variables
+        run: |
+          echo "DYNAMODB_ENDPOINT: ${{ env.DYNAMODB_ENDPOINT }}"
+          echo "AWS_ACCESS_KEY_ID (from env): ${{ env.AWS_ACCESS_KEY_ID }}"
+
       - name: Run Integration Tests
         working-directory: backend/product_microservice
         run: pytest tests/integration -v --cov --cov-config integration.coveragerc --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --exitfirst
