@@ -9,6 +9,7 @@ from ..errors.errors import ParamError
 
 
 class NewWarehouseSchema(Schema):
+    name = fields.String(required=True, validate=validate.Length(min=2, max=100))
     address = fields.String(required=True, validate=validate.Length(min=2, max=100))
     country = fields.String(required=True, validate=validate.Length(min=2, max=100))
     city = fields.String(required=True, validate=validate.Length(min=2, max=100))
@@ -37,6 +38,7 @@ class WarehouseModel(Model):
     id = UnicodeAttribute(hash_key=True)
 
     # Attributes
+    name = UnicodeAttribute()
     address = UnicodeAttribute()
     country = UnicodeAttribute()
     city = UnicodeAttribute()
@@ -61,6 +63,7 @@ class WarehouseModel(Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "name": self.name,
             "address": self.address,
             "country": self.country,
             "city": self.city,
