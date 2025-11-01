@@ -148,3 +148,13 @@ class ProductModel(Model):
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
+
+print(f"""
+    📋 ProductModel Meta
+
+    Table name: {ProductModel.Meta.table_name}
+    Region: {ProductModel.Meta.region}
+    Host: {ProductModel.Meta.host}
+    AWS Access Key ID: {ProductModel.Meta.aws_access_key_id == 'dummy'}
+    Env Key ID: {os.getenv("AWS_ACCESS_KEY_ID", "dummy")}
+      """)

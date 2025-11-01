@@ -130,7 +130,7 @@ jobs:
         working-directory: backend/product_microservice
         run: |
           echo "AWS_ACCESS_KEY_ID (from env): ${{ env.AWS_ACCESS_KEY_ID }}"
-          pytest tests/integration -v --cov --cov-config integration.coveragerc --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --exitfirst
+          pytest tests/integration -v --cov --cov-config integration.coveragerc --cov-report=term-missing --cov-report=html --cov-fail-under=70 --color=yes --exitfirst -s
 
       - name: Upload Integration Test Coverage Report
         uses: actions/upload-artifact@v4
