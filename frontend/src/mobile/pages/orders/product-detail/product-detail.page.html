@@ -1,0 +1,141 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/orders/create-order-with-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Crear pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false">
+  <div class="product-image-container">
+    <img src="/assets/icon/icons8-pills-48.png" alt="Producto" class="product-image" />
+  </div>
+
+  <div class="product-info-card ion-padding">
+    <div class="product-header">
+      <div>
+        <h2 class="product-name">{{ product?.name }}</h2>
+        <ion-text color="medium" class="product-type">
+          <p>{{ product?.product_type }}</p>
+        </ion-text>
+      </div>
+      <div class="product-price">
+        <ion-text color="primary">
+          <h2>${{ product?.unit_value }}</h2>
+        </ion-text>
+        <ion-text color="medium">
+          <small>Precio unitario</small>
+        </ion-text>
+      </div>
+    </div>
+
+    <section class="availability-section">
+      <h3>Información del Producto</h3>
+
+      <div class="info-grid">
+        @if (product?.batch) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Lote</small>
+            </ion-text>
+            <ion-badge color="success">{{ product?.batch }}</ion-badge>
+          </div>
+        }
+
+        @if (product?.stock !== undefined) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Stock Disponible</small>
+            </ion-text>
+            <ion-text color="primary">
+              <strong>{{ product?.stock }} unidades</strong>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.status) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Estado</small>
+            </ion-text>
+            <ion-badge [color]="product?.status === 'Disponible' ? 'success' : 'warning'">
+              {{ product?.status }}
+            </ion-badge>
+          </div>
+        }
+
+        @if (product?.expiration_date) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Fecha de Vencimiento</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.expiration_date }}</p>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.storage_conditions) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Condiciones de Almacenamiento</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.storage_conditions }}</p>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.temperature_required !== undefined) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Temperatura Requerida</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.temperature_required }}°C</p>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.provider_nit) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>NIT Proveedor</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.provider_nit }}</p>
+            </ion-text>
+          </div>
+        }
+      </div>
+    </section>
+
+    <ion-select
+      label="Cantidad a pedir"
+      label-placement="floating"
+      fill="outline"
+      [(ngModel)]="quantity"
+      placeholder="Seleccione cantidad"
+      color="primary"
+    >
+      <ion-select-option value="1">1</ion-select-option>
+      <ion-select-option value="2">2</ion-select-option>
+      <ion-select-option value="3">3</ion-select-option>
+      <ion-select-option value="4">4</ion-select-option>
+      <ion-select-option value="5">5</ion-select-option>
+      <ion-select-option value="10">10</ion-select-option>
+      <ion-select-option value="25">25</ion-select-option>
+      <ion-select-option value="50">50</ion-select-option>
+    </ion-select>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <footer class="footer">
+    <ion-button expand="block" (click)="addToCart()">
+      <ion-icon slot="start" name="cart-outline"></ion-icon>
+      Agregar al carrito
+    </ion-button>
+  </footer>
+</ion-footer>

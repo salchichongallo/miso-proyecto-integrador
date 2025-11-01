@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Pedidos </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 2</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item button="true" [routerLink]="['/orders/create-order-with-products']">
+      <ion-icon slot="start" name="storefront"></ion-icon>
+      <ion-label>Crear pedido con productos</ion-label>
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-item>
+  </ion-list>
+</ion-content>
