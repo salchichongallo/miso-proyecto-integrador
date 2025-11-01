@@ -54,6 +54,17 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'cart',
+        loadComponent: () => import('./pages/cart/cart.page').then((m) => m.CartPage),
+      },
+      {
+        path: 'order-confirmation',
+        loadComponent: () =>
+          import('./pages/order-confirmation/order-confirmation.page').then(
+            (m) => m.OrderConfirmationPage,
+          ),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: '/tabs/customers',

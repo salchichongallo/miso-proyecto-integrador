@@ -1,0 +1,166 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Confirmación de Pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="confirmation-container ion-padding">
+    <!-- Success Icon -->
+    <div class="success-header">
+      <ion-icon name="checkmark-circle-outline" class="success-icon"></ion-icon>
+      <h1>¡Pedido Creado Exitosamente!</h1>
+      <p>Tu pedido ha sido registrado y está siendo procesado</p>
+    </div>
+
+    @if (order) {
+      <!-- Order Details -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Detalles del Pedido</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item>
+              <ion-label>
+                <h3>ID del Pedido</h3>
+                <p>{{ order.id }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h3>Estado</h3>
+              </ion-label>
+              <ion-badge [color]="getStatusColor(order.order_status)" slot="end">
+                {{ getStatusLabel(order.order_status) }}
+              </ion-badge>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h3>Prioridad</h3>
+              </ion-label>
+              <ion-badge [color]="getPriorityColor(order.priority)" slot="end">
+                {{ getPriorityLabel(order.priority) }}
+              </ion-badge>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h3>Fecha Estimada de Entrega</h3>
+                <p>{{ order.date_estimated }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Delivery Address -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Dirección de Entrega</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item>
+              <ion-label>
+                <h3>País</h3>
+                <p>{{ order.country }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h3>Ciudad</h3>
+                <p>{{ order.city }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label>
+                <h3>Dirección</h3>
+                <p>{{ order.address }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Products -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Productos ({{ order.products.length }})</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            @for (product of order.products; track product.id) {
+              <ion-item>
+                <ion-label>
+                  <h3>{{ product.name }}</h3>
+                  <p>ID: {{ product.id }}</p>
+                </ion-label>
+                <ion-text slot="end" color="primary">
+                  <strong>x{{ product.amount }}</strong>
+                </ion-text>
+              </ion-item>
+            }
+          </ion-list>
+
+          <div class="total-items">
+            <ion-text color="medium">
+              <strong>Total de unidades:</strong>
+            </ion-text>
+            <ion-text color="primary">
+              <strong>{{ getTotalAmount() }}</strong>
+            </ion-text>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Order Info -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información Adicional</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            <ion-item>
+              <ion-label>
+                <h3>ID Cliente</h3>
+                <p>{{ order.id_client }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <h3>ID Vendedor</h3>
+                <p>{{ order.id_vendor }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label>
+                <h3>Fecha de Creación</h3>
+                <p>{{ order.created_at }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    }
+
+    <!-- Actions -->
+    <div class="actions">
+      <ion-button expand="block" (click)="goToOrders()">
+        <ion-icon slot="start" name="receipt-outline"></ion-icon>
+        Ver Mis Pedidos
+      </ion-button>
+
+      <ion-button expand="block" fill="outline" (click)="createNewOrder()">
+        <ion-icon slot="start" name="home-outline"></ion-icon>
+        Crear Nuevo Pedido
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

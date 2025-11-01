@@ -1,0 +1,185 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/orders/create-order-with-products"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Carrito ({{ cartItemCount() }})</ion-title>
+    @if (cartItems().length > 0) {
+      <ion-buttons slot="end">
+        <ion-button (click)="clearCart()" color="danger">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (cartItems().length === 0) {
+    <div class="empty-cart">
+      <ion-icon name="cart-outline" class="empty-icon"></ion-icon>
+      <h2>Tu carrito está vacío</h2>
+      <p>Agrega productos para comenzar tu pedido</p>
+      <ion-button routerLink="/orders/create-order-with-products">
+        Ver productos
+      </ion-button>
+    </div>
+  } @else {
+    <div class="cart-content ion-padding">
+      <!-- Cart Items -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Productos</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+            @for (item of cartItems(); track item.product.sku) {
+              <ion-item lines="full">
+                <div class="item-content">
+                  <div class="item-info">
+                    <ion-label>
+                      <h3>{{ item.product.name }}</h3>
+                      <p>{{ item.product.product_type }}</p>
+                      <p class="price">${{ item.product.unit_value }} c/u</p>
+                    </ion-label>
+                  </div>
+
+                  <div class="item-actions">
+                    <div class="quantity-controls">
+                      <ion-button
+                        fill="clear"
+                        size="small"
+                        (click)="updateQuantity(item.product.sku, -1)"
+                      >
+                        <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+                      </ion-button>
+
+                      <span class="quantity">{{ item.quantity }}</span>
+
+                      <ion-button
+                        fill="clear"
+                        size="small"
+                        (click)="updateQuantity(item.product.sku, 1)"
+                      >
+                        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                      </ion-button>
+                    </div>
+
+                    <div class="subtotal">
+                      <ion-text color="primary">
+                        <strong>${{ item.subtotal.toFixed(2) }}</strong>
+                      </ion-text>
+                    </div>
+
+                    <ion-button
+                      fill="clear"
+                      color="danger"
+                      size="small"
+                      (click)="removeItem(item.product.sku)"
+                    >
+                      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+              </ion-item>
+            }
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Checkout Form -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Información de entrega</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <form [formGroup]="checkoutForm">
+            <ion-input
+              label="País"
+              labelPlacement="stacked"
+              formControlName="country"
+              placeholder="Ingrese el país"
+              fill="outline"
+              class="ion-margin-bottom"
+            ></ion-input>
+
+            <ion-input
+              label="Ciudad"
+              labelPlacement="stacked"
+              formControlName="city"
+              placeholder="Ingrese la ciudad"
+              fill="outline"
+              class="ion-margin-bottom"
+            ></ion-input>
+
+            <ion-input
+              label="Dirección"
+              labelPlacement="stacked"
+              formControlName="address"
+              placeholder="Ingrese la dirección completa"
+              fill="outline"
+              class="ion-margin-bottom"
+            ></ion-input>
+
+            <ion-select
+              label="Prioridad"
+              labelPlacement="stacked"
+              formControlName="priority"
+              fill="outline"
+              class="ion-margin-bottom"
+            >
+              <ion-select-option value="HIGH">Alta</ion-select-option>
+              <ion-select-option value="MEDIUM">Media</ion-select-option>
+              <ion-select-option value="LOW">Baja</ion-select-option>
+            </ion-select>
+
+            <ion-input
+              label="Fecha estimada de entrega"
+              labelPlacement="stacked"
+              formControlName="date_estimated"
+              type="date"
+              fill="outline"
+              class="ion-margin-bottom"
+            ></ion-input>
+          </form>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Order Summary -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Resumen del pedido</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>${{ cartTotal().toFixed(2) }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Envío</span>
+            <span>$0.00</span>
+          </div>
+          <div class="summary-row total">
+            <strong>Total</strong>
+            <strong>${{ cartTotal().toFixed(2) }}</strong>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  }
+</ion-content>
+
+@if (cartItems().length > 0) {
+  <ion-footer>
+    <ion-toolbar>
+      <ion-button
+        expand="block"
+        (click)="submitOrder()"
+        [disabled]="isSubmitting()"
+        class="submit-button"
+      >
+        {{ isSubmitting() ? 'Procesando...' : 'Confirmar pedido' }}
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+}
