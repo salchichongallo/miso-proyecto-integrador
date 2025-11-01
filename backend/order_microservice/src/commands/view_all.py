@@ -1,31 +1,30 @@
-# from .base_command import BaseCommannd
-# from ..errors.errors import ApiError
-# from ..models.product import ProductModel
+import logging
+from .base_command import BaseCommannd
+from ..errors.errors import ApiError
+from ..models.order import OrderModel
+
+logger = logging.getLogger(__name__)
 
 
-# class GetAllProducts(BaseCommannd):
-#     """Comando para obtener todos los productos registrados."""
+class GetAllOrders(BaseCommannd):
+    """
+    Obtiene todas las órdenes almacenadas en DynamoDB.
+    """
 
-#     def __init__(self):
-#         # No necesitamos conexión directa ya que usamos PynamoDB
-#         pass
+    def execute(self):
+        try:
+            logger.info("📦 Obteniendo todas las órdenes...")
 
-#     def execute(self):
-#         """Ejecuta la consulta para obtener todos los productos."""
-#         return self.fetch_all()
+            # Llama al método del modelo que escanea la tabla
+            orders = OrderModel.scan()
 
-#     def fetch_all(self):
-#         """Obtiene todos los productos usando el modelo ProductModel."""
-#         try:
-#             # Usar el modelo ProductModel para obtener todos los productos
-#             products = []
-#             for product in ProductModel.scan():
-#                 products.append(product.to_dict())
+            # Convierte cada objeto OrderModel a diccionario
+            orders_list = [order.to_dict() for order in orders]
 
-#             # 🧾 Ordenar por nombre
-#             products.sort(key=lambda p: p.get("name", "").lower())
+            logger.info(f"✅ Total de órdenes obtenidas: {len(orders_list)}")
 
-#             return products
+            return orders_list
 
-#         except Exception as e:
-#             raise ApiError(f"Error al obtener la lista de productos: {str(e)}")
+        except Exception as e:
+            logger.error(f"❌ Error al obtener órdenes: {e}")
+            raise ApiError(f"Error al obtener órdenes: {str(e)}")

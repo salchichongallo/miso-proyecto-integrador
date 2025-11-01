@@ -25,6 +25,23 @@ class PriorityLevel(Enum):
     HIGH = "HIGH"
 
 
+class ProductSchema(Schema):
+    id = fields.String(
+        required=True,
+        error_messages={"required": "Cada producto debe tener un ID."}
+    )
+    name = fields.String(
+        required=True,
+        error_messages={"required": "Cada producto debe tener un nombre."}
+    )
+    amount = fields.Integer(
+        required=True,
+        validate=validate.Range(min=1, error="El campo 'amount' debe ser mayor o igual a 1."),
+        error_messages={"required": "Cada producto debe tener un campo 'amount'."}
+    )
+
+
+
 class NewOrderJsonSchema(Schema):
 
     priority = fields.String(
@@ -34,7 +51,7 @@ class NewOrderJsonSchema(Schema):
     )
 
     products = fields.List(
-        fields.Dict(),
+        fields.Nested(ProductSchema),
         required=True,
         validate=validate.Length(min=1, error="La lista de productos no puede estar vacía."),
         error_messages={"required": "La lista de productos es obligatoria."}
