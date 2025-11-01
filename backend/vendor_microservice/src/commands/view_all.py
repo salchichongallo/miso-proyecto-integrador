@@ -1,43 +1,30 @@
-import boto3
-from botocore.exceptions import ClientError
+import logging
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
-from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
+from ..models.vendor import VendorModel
+
+logger = logging.getLogger(__name__)
 
 
 class GetAllVendors(BaseCommannd):
-
-    def __init__(self):
-        # 💡 Inicializar conexión DynamoDB (modo local o AWS real)
-        if DYNAMODB_ENDPOINT:
-            self.dynamodb = boto3.resource(
-                "dynamodb",
-                region_name=REGION,
-                endpoint_url=DYNAMODB_ENDPOINT,
-                aws_access_key_id="dummy",
-                aws_secret_access_key="dummy"
-            )
-        else:
-            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-        self.table = self.dynamodb.Table(TABLE_NAME)
+    """
+    Obtiene todos los vendedores almacenados en DynamoDB.
+    """
 
     def execute(self):
-        return self.fetch_all()
-
-    def fetch_all(self):
         try:
-            response = self.table.scan()
-            items = response.get("Items", [])
+            logger.info("📦 Obteniendo lista de vendedores...")
 
-            while "LastEvaluatedKey" in response:
-                response = self.table.scan(ExclusiveStartKey=response["LastEvaluatedKey"])
-                items.extend(response.get("Items", []))
+            # Llamada directa al modelo
+            vendors = VendorModel.get_all()
 
-            # 🧾 Ordenar por nombre o email, opcional
-            items.sort(key=lambda v: v.get("name", "").lower())
+            logger.info(f"✅ Total de vendedores obtenidos: {len(vendors)}")
 
-            return items
+            # Opcional: ordenar por nombre o email antes de devolverlos
+            vendors.sort(key=lambda v: v.get("name", "").lower())
 
-        except ClientError as e:
-            raise ApiError(f"Error al obtener la lista de vendedores: {e.response['Error']['Message']}")
+            return vendors
+
+        except Exception as e:
+            logger.error(f"❌ Error al obtener vendedores: {e}")
+            raise ApiError(f"Error al obtener la lista de vendedores: {str(e)}")

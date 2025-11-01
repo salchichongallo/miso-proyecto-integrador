@@ -1,10 +1,15 @@
 import pytest
+import logging
+from unittest.mock import patch
+from src.errors.errors import ApiError
 
 
-class TestVendorEndpoints:
-    @pytest.mark.usefixtures("client")
-    def test_create_vendor_endpoint(self, client):
-        """✅ Caso exitoso de creación"""
+@pytest.mark.usefixtures("client")
+class TestCreateVendorIntegration:
+    """🧪 Test de integración para la creación de vendedores"""
+
+    def test_successful_vendor_creation(self, client):
+        """✅ Debe crear un vendedor exitosamente y devolver 201"""
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
@@ -12,16 +17,78 @@ class TestVendorEndpoints:
         }
 
         response = client.post("/", json=payload)
-        assert response.status_code == 201
-        data = response.get_json()
-        assert "Vendor created successfully" in data["mssg"]
-        assert data["vendor"]["name"] == "Jhorman Galindo"
+        json_data = response.get_json()
 
-    @pytest.mark.usefixtures("client")
-    def test_create_vendor_schema_falla(self, client):
-        """❌ Falla en validación del JSON schema"""
-        payload_without_email = {"name": "Vendor X", "institutions": []}
-        response = client.post("/", json=payload_without_email)
-        assert response.status_code in (400, 500)
-        data = response.get_json()
-        assert "El campo email es obligatorio." in str(data)
+        logging.info("Response JSON: %s", json_data)
+
+        # ✅ Verificaciones
+        assert response.status_code == 201
+        assert "message" in json_data
+        assert "Vendedor registrado exitosamente" in json_data["message"]
+        assert "vendor" in json_data
+        assert json_data["vendor"]["email"] == "jhorman@example.com"
+        assert json_data["vendor"]["name"] == "Jhorman Galindo"
+        assert isinstance(json_data["vendor"]["institutions"], list)
+        assert len(json_data["vendor"]["institutions"]) == 2
+
+    def test_missing_required_field(self, client):
+        """❌ Debe retornar 400 si falta un campo obligatorio"""
+        payload = {
+            # Falta el campo 'email'
+            "name": "Jhorman Galindo",
+            "institutions": ["Clinica Norte"]
+        }
+
+        response = client.post("/", json=payload)
+        json_data = response.get_json()
+
+        logging.info("Response JSON (error 400): %s", json_data)
+
+        # ✅ Verificaciones
+        assert response.status_code == 400
+        assert "error" in json_data
+        assert "email" in json_data["error"] or "correo" in json_data["error"]
+
+    # 🚫 Caso: ApiError durante la creación
+    @patch("src.commands.create_vendor.CreateVendor.execute")
+    def test_create_vendor_api_error(self, mock_execute, client):
+        """❌ Debe devolver 500 si ocurre un ApiError en el comando"""
+        mock_execute.side_effect = ApiError("Error en DynamoDB al guardar el vendedor")
+
+        payload = {
+            "name": "Jhorman Galindo",
+            "email": "jhorman@example.com",
+            "institutions": ["Clinica Norte"]
+        }
+
+        response = client.post("/", json=payload)
+        json_data = response.get_json()
+
+        logging.info("Response JSON (ApiError 500): %s", json_data)
+
+        # ✅ Verificaciones
+        assert response.status_code == 500
+        assert "error" in json_data
+        assert "Error en DynamoDB" in json_data["error"]
+
+    # 🚫 Caso: excepción inesperada
+    @patch("src.commands.create_vendor.CreateVendor.execute")
+    def test_create_vendor_unexpected_exception(self, mock_execute, client):
+        """❌ Debe devolver 500 si ocurre una excepción inesperada"""
+        mock_execute.side_effect = Exception("Error inesperado en ejecución")
+
+        payload = {
+            "name": "Jhorman Galindo",
+            "email": "jhorman@example.com",
+            "institutions": ["Clinica Norte"]
+        }
+
+        response = client.post("/", json=payload)
+        json_data = response.get_json()
+
+        logging.info("Response JSON (Exception 500): %s", json_data)
+
+        # ✅ Verificaciones
+        assert response.status_code == 500
+        assert "error" in json_data
+        assert "Error inesperado" in json_data["error"]
