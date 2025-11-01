@@ -13,10 +13,6 @@
   </div>
 
   <div class="product-info-card ion-padding">
-    <ion-text color="medium" class="product-brand">
-      <small>MEDYSUPPLY</small>
-    </ion-text>
-
     <div class="product-header">
       <div>
         <h2 class="product-name">{{ product?.name }}</h2>
@@ -25,44 +21,93 @@
         </ion-text>
       </div>
       <div class="product-price">
-        <ion-text color="danger">
+        <ion-text color="primary">
           <h2>${{ product?.unit_value }}</h2>
         </ion-text>
         <ion-text color="medium">
-          <small>$49.00 | -40%</small>
+          <small>Precio unitario</small>
         </ion-text>
       </div>
     </div>
 
     <section class="availability-section">
-      <h3>Disponibilidad en tiempo real</h3>
+      <h3>Información del Producto</h3>
 
-      <div class="location-card">
-        <div class="location-header">
-          <ion-icon slot="start" name="location"></ion-icon>
-          <span class="location-name">Bogotá, Colombia</span>
-        </div>
-        <div class="location-badges">
-          <ion-badge color="success">Lote: {{ product?.batch }}</ion-badge>
-          <ion-badge color="primary">Prioridad: Alta</ion-badge>
-        </div>
-        <ion-text class="location-stock">
-          <p>{{ product?.stock }} unidades</p>
-        </ion-text>
-      </div>
+      <div class="info-grid">
+        @if (product?.batch) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Lote</small>
+            </ion-text>
+            <ion-badge color="success">{{ product?.batch }}</ion-badge>
+          </div>
+        }
 
-      <div class="location-card">
-        <div class="location-header">
-          <ion-icon slot="start" name="location"></ion-icon>
-          <span class="location-name">Medellín, Colombia</span>
-        </div>
-        <div class="location-badges">
-          <ion-badge color="success">Lote: LOT002</ion-badge>
-          <ion-badge color="primary">Prioridad: Media</ion-badge>
-        </div>
-        <ion-text class="location-stock">
-          <p>150 unidades</p>
-        </ion-text>
+        @if (product?.stock !== undefined) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Stock Disponible</small>
+            </ion-text>
+            <ion-text color="primary">
+              <strong>{{ product?.stock }} unidades</strong>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.status) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Estado</small>
+            </ion-text>
+            <ion-badge [color]="product?.status === 'Disponible' ? 'success' : 'warning'">
+              {{ product?.status }}
+            </ion-badge>
+          </div>
+        }
+
+        @if (product?.expiration_date) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Fecha de Vencimiento</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.expiration_date }}</p>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.storage_conditions) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Condiciones de Almacenamiento</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.storage_conditions }}</p>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.temperature_required !== undefined) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>Temperatura Requerida</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.temperature_required }}°C</p>
+            </ion-text>
+          </div>
+        }
+
+        @if (product?.provider_nit) {
+          <div class="info-item">
+            <ion-text color="medium">
+              <small>NIT Proveedor</small>
+            </ion-text>
+            <ion-text>
+              <p>{{ product?.provider_nit }}</p>
+            </ion-text>
+          </div>
+        }
       </div>
     </section>
 

@@ -14,14 +14,6 @@
 }
 
 .product-info-card {
-  .product-brand {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-  }
-
   .product-header {
     display: flex;
     justify-content: space-between;
@@ -52,63 +44,57 @@
 
       small {
         font-size: 0.75rem;
-        text-decoration: line-through;
       }
     }
   }
 }
 
 .availability-section {
+  margin-top: 2rem;
   margin-bottom: 1.5rem;
 
   h3 {
-    font-size: 1rem;
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    color: var(--ion-color-dark);
     font-weight: 600;
-    margin: 0 0 1rem 0;
   }
+}
 
-  .location-card {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
+.info-grid {
+  display: grid;
+  gap: 1.25rem;
 
-    .location-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--ion-color-light);
 
-      ion-icon {
-        font-size: 1.25rem;
-        color: var(--ion-color-primary);
-      }
-
-      .location-name {
-        font-weight: 600;
-        font-size: 0.875rem;
-      }
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
     }
 
-    .location-badges {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      flex-wrap: wrap;
-
-      ion-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
-      }
+    small {
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
-    .location-stock {
-      p {
-        margin: 0;
-        font-size: 0.875rem;
-        color: var(--ion-color-dark);
-      }
+    p {
+      margin: 0;
+      color: var(--ion-color-dark);
+    }
+
+    strong {
+      font-size: 1.125rem;
+    }
+
+    ion-badge {
+      align-self: flex-start;
     }
   }
 }

@@ -18,25 +18,58 @@
     (ionInput)="onSearchChange()"
     clearInput
     fill="outline"
+    [disabled]="isLoading()"
   ></ion-input>
 
-  <section class="products-list">
-    @for (product of products(); track $index) {
-      <ion-item [button]="true" detail="false" class="product-item" (click)="viewProductDetail(product)">
-        <div class="unread-indicator-wrapper" slot="start">
-          <img src="/assets/icon/icons8-pills-48.png" alt="Producto" />
-        </div>
-        <ion-label>
-          <strong>{{ product.name }}</strong> <br />
-          <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
-        </ion-label>
-        <div class="metadata-end-wrapper" slot="end">
-          <ion-note color="medium">Disponibilidad</ion-note> <br />
-          <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
-        </div>
-      </ion-item>
-    }
-  </section>
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Cargando productos...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (errorMessage()) {
+    <div class="error-container">
+      <ion-icon name="alert-circle-outline" color="danger" class="error-icon"></ion-icon>
+      <h3>Error al cargar productos</h3>
+      <p>{{ errorMessage() }}</p>
+      <ion-button (click)="retryLoad()" fill="outline">
+        Reintentar
+      </ion-button>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @else if (products().length === 0) {
+    <div class="empty-container">
+      <ion-icon name="search-outline" color="medium" class="empty-icon"></ion-icon>
+      <h3>No se encontraron productos</h3>
+      <p>Intenta con otros términos de búsqueda</p>
+    </div>
+  }
+
+  <!-- Products List -->
+  @else {
+    <section class="products-list">
+      @for (product of products(); track $index) {
+        <ion-item [button]="true" detail="false" class="product-item" (click)="viewProductDetail(product)">
+          <div class="unread-indicator-wrapper" slot="start">
+            <img src="/assets/icon/icons8-pills-48.png" alt="Producto" />
+          </div>
+          <ion-label>
+            <strong>{{ product.name }}</strong> <br />
+            <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
+          </ion-label>
+          <div class="metadata-end-wrapper" slot="end">
+            <ion-note color="medium">Disponibilidad</ion-note> <br />
+            <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
+          </div>
+        </ion-item>
+      }
+    </section>
+  }
 
   <div class="fab-wrapper" [class.fab-visible]="cartItemCount() > 0">
     <ion-fab slot="fixed" vertical="bottom" horizontal="end">

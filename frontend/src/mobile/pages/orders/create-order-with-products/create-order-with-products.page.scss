@@ -13,6 +13,45 @@
   text-align: right;
 }
 
+.loading-container,
+.error-container,
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+
+  ion-spinner {
+    margin-bottom: 1rem;
+    transform: scale(1.5);
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin: 0.5rem 0;
+  }
+
+  h3 {
+    color: var(--ion-color-dark);
+    margin: 1rem 0 0.5rem;
+    font-size: 1.125rem;
+  }
+}
+
+.error-icon,
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 1rem;
+}
+
+.error-container {
+  ion-button {
+    margin-top: 1rem;
+  }
+}
+
 .fab-wrapper {
   position: fixed;
   bottom: 16px;

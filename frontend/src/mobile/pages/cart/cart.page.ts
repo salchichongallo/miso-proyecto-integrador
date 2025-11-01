@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import {
@@ -63,6 +63,7 @@ import { OrderRequest } from '@mobile/models/order.model';
     IonToolbar,
     IonHeader,
     ReactiveFormsModule,
+    RouterLink,
   ],
 })
 export class CartPage {
