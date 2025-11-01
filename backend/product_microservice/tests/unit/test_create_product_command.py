@@ -38,7 +38,7 @@ class TestCreateProductCommand:
         assert "registrado exitosamente" in result["message"]
 
         # Verificar que se llamó find_existing_product
-        mock_product_model.find_existing_product.assert_called_once_with("1234567890", "Paracetamol 500mg", "L001")
+        mock_product_model.find_existing_product.assert_called_once_with("WH123", "SKU12345")
 
         # Verificar que se creó una nueva instancia del modelo
         mock_product_model.assert_called_once()
@@ -74,7 +74,7 @@ class TestCreateProductCommand:
         assert "actualizado" in result["message"]
 
         # Verificar que se llamó find_existing_product
-        mock_product_model.find_existing_product.assert_called_once_with("1234567890", "Paracetamol 500mg", "L001")
+        mock_product_model.find_existing_product.assert_called_once_with("WH123", "SKU12345")
 
         # Verificar que se llamó update_stock en el producto existente
         mock_existing_product.update_stock.assert_called_once_with(5)
