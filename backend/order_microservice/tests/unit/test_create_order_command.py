@@ -28,8 +28,8 @@ class TestCreateOrderCommand:
         body = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "name": "Mouse", "amount": 2},
-                {"id": "P-1002", "name": "Keyboard", "amount": 1}
+                {"id": "P-1001", "name": "Mouse", "amount": 2, "id_warehouse": "W-001"},
+                {"id": "P-1002", "name": "Keyboard", "amount": 1, "id_warehouse": "W-002"}
             ],
             "country": "Mexico",
             "city": "Monterrey",
@@ -60,7 +60,7 @@ class TestCreateOrderCommand:
 
         body = {
             "priority": "HIGH",
-            "products": [{"id": "P-1", "name": "Mouse", "amount": 1}],
+            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}],
             "country": "Mexico",
             "city": "Monterrey",
             "address": "Av. Constitución #1500",
@@ -79,7 +79,7 @@ class TestCreateOrderCommand:
         """❌ La fecha estimada debe ser posterior a la actual"""
         body = {
             "priority": "MEDIUM",
-            "products": [{"id": "P-1", "name": "Mouse", "amount": 1}],
+            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}],
             "country": "Mexico",
             "city": "CDMX",
             "address": "Reforma 123",
@@ -116,7 +116,7 @@ class TestCreateOrderCommand:
         """❌ Debe fallar si falta un campo obligatorio"""
         body = {
             "priority": "HIGH",
-            "products": [{"id": "P-1", "name": "Mouse", "amount": 1}],
+            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}],
             # ❌ Falta 'country'
             "city": "Medellín",
             "address": "Cra 45 #12",
@@ -134,7 +134,7 @@ class TestCreateOrderCommand:
         body = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "amount": 2}  # ❌ falta 'name'
+                {"id": "P-1001", "amount": 2, "id_warehouse": "W-001"}  # ❌ falta 'name'
             ],
             "country": "Mexico",
             "city": "Monterrey",

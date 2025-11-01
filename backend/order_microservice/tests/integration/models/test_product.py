@@ -61,7 +61,7 @@ class TestCreateOrder:
         """✅ Debe crear una orden y asignar campos automáticos"""
         order = OrderModel.create(
             priority="HIGH",
-            products=[{"id": "P1", "name": "Mouse", "amount": 1}],
+            products=[{"id": "P1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}],
             id_client="CLIENT-1",
             id_vendor="VENDOR-1",
             country="Mexico",
@@ -94,7 +94,7 @@ class TestToDict:
         order = OrderModel(
             id="ORDER-999",
             priority="HIGH",
-            products=[{"id": "P1", "name": "Mouse", "amount": 2}],
+            products=[{"id": "P1", "name": "Mouse", "amount": 2, "id_warehouse": "W-001"}],
             id_client="CLIENT-X",
             id_vendor="VENDOR-X",
             country="Colombia",

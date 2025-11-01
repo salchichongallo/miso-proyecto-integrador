@@ -14,8 +14,8 @@ class TestGetOrderByIdIntegration:
         create_payload = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "name": "Mouse", "amount": 2},
-                {"id": "P-2002", "name": "Keyboard", "amount": 1}
+                {"id": "P-1001", "name": "Mouse", "amount": 2, "id_warehouse": "W-001"},
+                {"id": "P-2002", "name": "Keyboard", "amount": 1, "id_warehouse": "W-002"}
             ],
             "country": "Mexico",
             "city": "Monterrey",

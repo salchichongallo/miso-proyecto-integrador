@@ -19,7 +19,7 @@ def ping():
 
 
 @orders_blueprint.post("/")
-# @cognito_auth_required
+@cognito_auth_required
 def create_order():
     try:
         json_data = request.get_json()
@@ -37,7 +37,7 @@ def create_order():
 
 
 @orders_blueprint.get("/")
-# @cognito_auth_required
+@cognito_auth_required
 def get_all_orders():
     try:
         orders = GetAllOrders().execute()
@@ -51,7 +51,7 @@ def get_all_orders():
 
 
 @orders_blueprint.get("/<order_id>")
-# @cognito_auth_required
+@cognito_auth_required
 def get_order_by_id(order_id):
     try:
         result = GetOrderById(order_id).execute()

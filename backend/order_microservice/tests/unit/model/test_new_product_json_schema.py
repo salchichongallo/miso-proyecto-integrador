@@ -10,7 +10,8 @@ class TestProductSchema:
         product = {
             "id": "P-1001",
             "name": "Mouse óptico",
-            "amount": 2
+            "amount": 2,
+            "id_warehouse": "W-001"
         }
         product.update(overrides)
         return product
@@ -48,8 +49,8 @@ class TestNewOrderJsonSchema:
         payload = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "name": "Mouse óptico", "amount": 2},
-                {"id": "P-2002", "name": "Teclado", "amount": 1}
+                {"id": "P-1001", "name": "Mouse óptico", "amount": 2, "id_warehouse": "W-001"},
+                {"id": "P-2002", "name": "Teclado", "amount": 1, "id_warehouse": "W-002"}
             ],
             "country": "Colombia",
             "city": "Bogotá",
@@ -127,4 +128,4 @@ class TestNewOrderJsonSchema:
         payload = self.build_valid_payload()
         schema = NewOrderJsonSchema()
         errors = schema.validate(payload)
-        assert errors == {}  
+        assert errors == {}

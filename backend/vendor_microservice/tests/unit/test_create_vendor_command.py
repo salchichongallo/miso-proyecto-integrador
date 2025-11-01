@@ -1,90 +1,96 @@
 import pytest
-from unittest.mock import MagicMock, patch
-from botocore.exceptions import ClientError
+from unittest.mock import patch, MagicMock
 from src.commands.create_vendor import CreateVendor
 from src.errors.errors import ParamError, ApiError
+from src.models.vendor import VendorModel
 
 
 class TestCreateVendorCommand:
+    """🧪 Pruebas unitarias para CreateVendor"""
 
     # ✅ Caso exitoso de creación
-    @patch("boto3.resource")
-    def test_execute_crea_vendor_exitosamente(self, mock_dynamodb):
-        """✅ Vendor creado correctamente"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.return_value = {}  # no existe
-        mock_table.put_item.return_value = {"ResponseMetadata": {"HTTPStatusCode": 200}}
+    @patch.object(VendorModel, "create")
+    @patch.object(VendorModel, "find_existing_vendor", return_value=None)
+    def test_execute_crea_vendor_exitosamente(self, mock_find, mock_create):
+        """✅ Debe crear un vendedor correctamente"""
+        mock_vendor = MagicMock()
+        mock_vendor.to_dict.return_value = {
+            "email": "jhorman@example.com",
+            "name": "Jhorman Galindo",
+            "institutions": ["Clinica Norte", "Hospital Central"],
+        }
+        mock_create.return_value = mock_vendor
 
-        vendor = CreateVendor(
-            name="Jhorman Galindo",
-            email="jhorman@example.com",
-            institutions=["Clinica Norte", "Hospital Central"]
-        )
+        command = CreateVendor({
+            "name": "Jhorman Galindo",
+            "email": "jhorman@example.com",
+            "institutions": ["Clinica Norte", "Hospital Central"],
+        })
 
-        result = vendor.execute()
+        result = command.execute()
 
-        assert "vendor_id" in result
-        assert result["name"] == "Jhorman Galindo"
-        assert result["email"] == "jhorman@example.com"
-        assert result["institutions"] == ["Clinica Norte", "Hospital Central"]
-        mock_table.put_item.assert_called_once()
+        assert "message" in result
+        assert "vendor" in result
+        assert result["vendor"]["email"] == "jhorman@example.com"
+        assert result["vendor"]["name"] == "Jhorman Galindo"
+        assert len(result["vendor"]["institutions"]) == 2
+
+        mock_find.assert_called_once_with("jhorman@example.com")
+        mock_create.assert_called_once()
 
     # 🚫 Falta nombre o email
-    def test_validate_campos_obligatorios_faltantes(self):
-        """❌ No debe permitir name o email vacíos"""
-        vendor = CreateVendor(name="", email="", institutions=[])
+    def test_campos_obligatorios_faltantes(self):
+        """❌ Debe fallar si name o email están vacíos"""
+        command = CreateVendor({"name": "", "email": "", "institutions": []})
         with pytest.raises(ParamError, match="obligatorios"):
-            vendor.validate()
+            command.execute()
+
+    # 🚫 Institutions no es lista
+    def test_institutions_no_es_lista(self):
+        """❌ Debe fallar si institutions no es lista"""
+        command = CreateVendor({
+            "name": "Jhorman",
+            "email": "jhorman@example.com",
+            "institutions": "Texto"
+        })
+        with pytest.raises(ParamError, match="lista"):
+            command.execute()
 
     # 🚫 Demasiadas instituciones
-    def test_validate_demasiadas_instituciones(self):
+    def test_demasiadas_instituciones(self):
         """❌ No debe permitir más de 30 instituciones"""
         institutions = [f"Inst_{i}" for i in range(31)]
-        vendor = CreateVendor("Jhorman", "jhorman@example.com", institutions)
+        command = CreateVendor({
+            "name": "Jhorman",
+            "email": "jhorman@example.com",
+            "institutions": institutions
+        })
         with pytest.raises(ParamError, match="30 instituciones"):
-            vendor.validate()
+            command.execute()
 
-    # 🚫 Correo ya existente
-    @patch("boto3.resource")
-    def test_validate_vendor_duplicado(self, mock_dynamodb):
-        """❌ Email duplicado en DynamoDB"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.return_value = {"Item": {"email": "jhorman@example.com"}}
-
-        vendor = CreateVendor("Jhorman", "jhorman@example.com", ["Clinica X"])
-
+    # 🚫 Email duplicado
+    @patch.object(VendorModel, "find_existing_vendor")
+    def test_email_duplicado(self, mock_find):
+        """❌ Debe fallar si el email ya existe"""
+        mock_find.return_value = MagicMock()  # simula duplicado
+        command = CreateVendor({
+            "name": "Jhorman",
+            "email": "jhorman@example.com",
+            "institutions": ["Inst1"]
+        })
         with pytest.raises(ParamError, match="ya está registrado"):
-            vendor.validate()
+            command.execute()
 
-    # ⚡ Error al verificar duplicado (ClientError)
-    @patch("boto3.resource")
-    def test_validate_error_verificar_duplicado(self, mock_dynamodb):
-        """❌ Falla AWS en get_item debe lanzar ApiError"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.side_effect = ClientError(
-            {"Error": {"Message": "AccessDenied"}}, "GetItem"
-        )
+    # ⚡ Error inesperado al crear
+    @patch.object(VendorModel, "create", side_effect=Exception("Error DynamoDB"))
+    @patch.object(VendorModel, "find_existing_vendor", return_value=None)
+    def test_error_interno_creacion(self, mock_find, mock_create):
+        """❌ Debe lanzar ApiError si ocurre un fallo interno"""
+        command = CreateVendor({
+            "name": "Jhorman",
+            "email": "jhorman@example.com",
+            "institutions": ["Inst1"]
+        })
 
-        vendor = CreateVendor("Jhorman", "jhorman@example.com", ["Clinica Y"])
-
-        with pytest.raises(ApiError, match="Error al verificar duplicado"):
-            vendor.validate()
-
-    # 💾 Error al guardar en DynamoDB
-    @patch("boto3.resource")
-    def test_save_error_dynamodb(self, mock_dynamodb):
-        """❌ Falla en put_item debe lanzar ApiError"""
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.put_item.side_effect = ClientError(
-            {"Error": {"Message": "Network error"}}, "PutItem"
-        )
-
-        vendor = CreateVendor("Jhorman", "jhorman@example.com", ["Inst1"])
-        vendor.vendor_id = "abc-123"
-
-        with pytest.raises(ApiError, match="Error al registrar vendedor"):
-            vendor.save()
+        with pytest.raises(ApiError, match="Error al crear vendedor"):
+            command.execute()

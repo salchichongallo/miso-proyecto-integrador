@@ -20,13 +20,8 @@ def create_vendor():
     try:
         json = request.get_json()
         NewVendorJsonSchema.check(json)
-        payload = {
-            "name": json["name"],
-            "email": json["email"],
-            "institutions": json["institutions"]
-        }
-        create_vendor = CreateVendor(**payload).execute()
-        return jsonify({"mssg": "Vendor created successfully", "vendor": create_vendor}), 201
+        create_vendor = CreateVendor(json).execute()
+        return jsonify(create_vendor), 201
 
     except ParamError as e:
         return jsonify({"error": str(e)}), 400

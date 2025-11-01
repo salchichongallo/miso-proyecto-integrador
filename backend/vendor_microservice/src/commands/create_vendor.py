@@ -1,68 +1,59 @@
-import boto3
-import uuid
-from botocore.exceptions import ClientError
+import logging
+import datetime
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
-from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
+from ..models.vendor import VendorModel
+
+logger = logging.getLogger(__name__)
 
 
 class CreateVendor(BaseCommannd):
+    """
+    Crea un nuevo vendedor en la base de datos DynamoDB.
+    """
 
-    def __init__(self, name: str, email: str, institutions: list):
-        self.name = name.strip() if name else None
-        self.email = email.strip().lower() if email else None
-        self.institutions = institutions or []
-        self.vendor_id = None
-
-        # 🧩 Inicializar conexión DynamoDB (local o real)
-        if DYNAMODB_ENDPOINT:
-            self.dynamodb = boto3.resource(
-                "dynamodb",
-                region_name=REGION,
-                endpoint_url=DYNAMODB_ENDPOINT,
-                aws_access_key_id="dummy",
-                aws_secret_access_key="dummy"
-            )
-        else:
-            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-        self.table = self.dynamodb.Table(TABLE_NAME)
+    def __init__(self, body: dict):
+        self.body = body
 
     def execute(self):
-        self.validate()
-        self.vendor_id = str(uuid.uuid4())
-        self.save()
-        return {
-            "vendor_id": self.vendor_id,
-            "email": self.email,
-            "name": self.name,
-            "institutions": self.institutions,
-        }
-
-    def validate(self):
-        if not self.name or not self.email:
-            raise ParamError("El nombre y el correo son obligatorios.")
-
-        if len(self.institutions) > 30:
-            raise ParamError("No se pueden asignar más de 30 instituciones por vendedor.")
-
-        # Verificar si el correo ya existe
         try:
-            existing = self.table.get_item(Key={"email": self.email})
-            if "Item" in existing:
+            logger.info("🚀 Creando nuevo vendedor...")
+
+            # ✅ Validaciones básicas de negocio
+            name = self.body.get("name", "").strip()
+            email = self.body.get("email", "").strip().lower()
+            institutions = self.body.get("institutions", [])
+
+            if not name or not email:
+                raise ParamError("El nombre y el correo son obligatorios.")
+
+            if not isinstance(institutions, list):
+                raise ParamError("El campo 'institutions' debe ser una lista.")
+
+            if len(institutions) > 30:
+                raise ParamError("No se pueden asignar más de 30 instituciones por vendedor.")
+
+            # Verificar si el email ya existe
+            existing_vendor = VendorModel.find_existing_vendor(email)
+            if existing_vendor:
                 raise ParamError("El correo electrónico ya está registrado.")
-        except ClientError as e:
-            raise ApiError(f"Error al verificar duplicado: {e.response['Error']['Message']}")
 
-    def save(self):
-        item = {
-            "vendor_id": self.vendor_id,
-            "email": self.email,
-            "name": self.name,
-            "institutions": self.institutions,
-        }
+            # Crear registro
+            vendor = VendorModel.create(
+                name=name,
+                email=email,
+                institutions=institutions,
+            )
 
-        try:
-            self.table.put_item(Item=item)
-        except ClientError as e:
-            raise ApiError(f"Error al registrar vendedor: {e.response['Error']['Message']}")
+            logger.info(f"✅ Vendedor creado correctamente: {vendor.email}")
+
+            return {
+                "message": "Vendedor registrado exitosamente.",
+                "vendor": vendor.to_dict()
+            }
+
+        except ParamError as e:
+            raise e
+        except Exception as e:
+            logger.error(f"❌ Error al crear vendedor: {e}")
+            raise ApiError(f"Error al crear vendedor: {str(e)}")
