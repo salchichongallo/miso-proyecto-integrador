@@ -14,6 +14,8 @@
     labelPlacement="stacked"
     type="text"
     placeholder="Ingrese el nombre del producto"
+    [(ngModel)]="searchQuery"
+    (ionInput)="onSearchChange()"
     clearInput
     fill="outline"
   ></ion-input>
@@ -35,4 +37,17 @@
       </ion-item>
     }
   </section>
+
+  <div class="fab-wrapper" [class.fab-visible]="cartItemCount() > 0">
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button (click)="goToCart()">
+        <ion-icon name="cart-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    @if (cartItemCount() > 0) {
+      <div class="fab-badge-wrapper">
+        <ion-badge color="danger">{{ cartItemCount() }}</ion-badge>
+      </div>
+    }
+  </div>
 </ion-content>

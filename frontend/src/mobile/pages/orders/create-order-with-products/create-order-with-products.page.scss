@@ -12,3 +12,35 @@
   margin: 0;
   text-align: right;
 }
+
+.fab-wrapper {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 999;
+  display: none;
+
+  &.fab-visible {
+    display: block;
+  }
+}
+
+.fab-badge-wrapper {
+  position: absolute;
+  top: -70px;
+  right: 5px;
+  z-index: 1000;
+  pointer-events: none;
+
+  ion-badge {
+    font-size: 12px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    padding: 2px 6px;
+  }
+}
