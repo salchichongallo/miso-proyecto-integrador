@@ -2,6 +2,7 @@ export interface OrderProduct {
   id: string;
   name: string;
   amount: number;
+  id_warehouse: string;
 }
 
 export interface OrderRequest {

@@ -26,13 +26,26 @@
 
 .cart-content {
   padding-bottom: 1rem;
+
+  ion-item {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --inner-padding-end: 0;
+    margin-bottom: 0.5rem;
+    overflow: visible;
+
+    &::part(native) {
+      overflow: visible;
+    }
+  }
 }
 
 .item-content {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 1rem;
+  gap: 1.25rem;
+  padding: 0.75rem 0;
 }
 
 .item-info {
@@ -48,6 +61,18 @@
       margin: 0.25rem 0;
     }
 
+    .warehouse {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.8rem;
+      color: var(--ion-color-primary);
+
+      ion-icon {
+        font-size: 0.875rem;
+      }
+    }
+
     .price {
       font-weight: 500;
       color: var(--ion-color-primary);
@@ -60,6 +85,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  overflow: visible;
+
+  ion-button {
+    flex-shrink: 0;
+  }
 }
 
 .quantity-controls {

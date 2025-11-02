@@ -29,7 +29,10 @@ export class CartService {
     }
 
     const currentItems = [...this.cartItems()];
-    const existingItemIndex = currentItems.findIndex((item) => item.product.sku === product.sku);
+    // Usar SKU + warehouse para identificar productos únicos
+    const existingItemIndex = currentItems.findIndex(
+      (item) => item.product.sku === product.sku && item.product.warehouse === product.warehouse
+    );
 
     if (existingItemIndex >= 0) {
       const newQuantity = currentItems[existingItemIndex].quantity + quantity;
@@ -62,14 +65,22 @@ export class CartService {
     };
   }
 
-  public removeFromCart(sku: string): void {
-    const currentItems = this.cartItems().filter((item) => item.product.sku !== sku);
+  public removeFromCart(sku: string, warehouse: string): void {
+    const currentItems = this.cartItems().filter(
+      (item) => !(item.product.sku === sku && item.product.warehouse === warehouse)
+    );
     this.cartItems.set(currentItems);
   }
 
-  public updateQuantity(sku: string, quantity: number): { success: boolean; message: string } {
+  public updateQuantity(
+    sku: string,
+    warehouse: string,
+    quantity: number
+  ): { success: boolean; message: string } {
     const currentItems = [...this.cartItems()];
-    const itemIndex = currentItems.findIndex((item) => item.product.sku === sku);
+    const itemIndex = currentItems.findIndex(
+      (item) => item.product.sku === sku && item.product.warehouse === warehouse
+    );
 
     if (itemIndex < 0) {
       return {
@@ -81,7 +92,7 @@ export class CartService {
     const item = currentItems[itemIndex];
 
     if (quantity <= 0) {
-      this.removeFromCart(sku);
+      this.removeFromCart(sku, warehouse);
       return {
         success: true,
         message: 'Producto eliminado del carrito',
@@ -112,7 +123,9 @@ export class CartService {
     this.cartItems.set([]);
   }
 
-  public getCartItem(sku: string): CartItem | undefined {
-    return this.cartItems().find((item) => item.product.sku === sku);
+  public getCartItem(sku: string, warehouse: string): CartItem | undefined {
+    return this.cartItems().find(
+      (item) => item.product.sku === sku && item.product.warehouse === warehouse
+    );
   }
 }

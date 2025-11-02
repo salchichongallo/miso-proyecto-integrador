@@ -30,7 +30,12 @@ import {
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { trashOutline, removeCircleOutline, addCircleOutline } from 'ionicons/icons';
+import {
+  trashOutline,
+  removeCircleOutline,
+  addCircleOutline,
+  locationOutline,
+} from 'ionicons/icons';
 
 import { CartService } from '@mobile/services/cart/cart.service';
 import { OrderService } from '@mobile/services/order/order.service';
@@ -83,7 +88,7 @@ export class CartPage {
   public readonly isSubmitting = signal(false);
 
   constructor() {
-    addIcons({ trashOutline, removeCircleOutline, addCircleOutline });
+    addIcons({ trashOutline, removeCircleOutline, addCircleOutline, locationOutline });
 
     this.checkoutForm = this.fb.group({
       country: ['Colombia', [Validators.required]],
@@ -96,17 +101,17 @@ export class CartPage {
     });
   }
 
-  public removeItem(sku: string): void {
-    this.cartService.removeFromCart(sku);
+  public removeItem(sku: string, warehouse: string): void {
+    this.cartService.removeFromCart(sku, warehouse);
     this.showToast('Producto eliminado del carrito', 'success');
   }
 
-  public updateQuantity(sku: string, change: number): void {
-    const item = this.cartService.getCartItem(sku);
+  public updateQuantity(sku: string, warehouse: string, change: number): void {
+    const item = this.cartService.getCartItem(sku, warehouse);
     if (!item) return;
 
     const newQuantity = item.quantity + change;
-    const result = this.cartService.updateQuantity(sku, newQuantity);
+    const result = this.cartService.updateQuantity(sku, warehouse, newQuantity);
 
     if (!result.success) {
       this.showToast(result.message, 'danger');
@@ -163,6 +168,7 @@ export class CartPage {
           id: item.product.sku,
           name: item.product.name,
           amount: item.quantity,
+          id_warehouse: item.product.warehouse,
         })),
       };
 

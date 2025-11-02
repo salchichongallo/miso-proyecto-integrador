@@ -11,11 +11,11 @@ import { OrderRequest, OrderResponse, Order } from '@mobile/models/order.model';
   providedIn: 'root',
 })
 export class OrderService {
-  private readonly baseUrl = environment.salesMicroserviceUrl;
+  private readonly baseUrl = environment.ordersMicroserviceUrl;
   private readonly http = inject(HttpClient);
 
   public createOrder(orderRequest: OrderRequest): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${this.baseUrl}/orders`, orderRequest);
+    return this.http.post<OrderResponse>(`${this.baseUrl}/orders/`, orderRequest);
   }
 
   public getOrders(): Observable<Order[]> {

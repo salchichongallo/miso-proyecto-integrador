@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@env/environment';
@@ -33,9 +33,9 @@ export class ProductService {
             product.name.toLowerCase().includes(lowerQuery) ||
             product.product_type.toLowerCase().includes(lowerQuery) ||
             product.sku.toLowerCase().includes(lowerQuery) ||
-            product.batch.toLowerCase().includes(lowerQuery)
-        )
-      )
+            product.batch.toLowerCase().includes(lowerQuery),
+        ),
+      ),
     );
   }
 }
