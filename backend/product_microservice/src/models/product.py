@@ -97,9 +97,10 @@ class ProductModel(Model):
         table_name = os.getenv("DYNAMODB_TABLE", "Products")
         region = os.getenv("AWS_REGION", "us-east-1")
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
-        aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
-        aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
-        aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
+        if os.getenv("APP_ENV") != "PROD":
+            aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
+            aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
+            aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
 
     # Primary Key
     warehouse = UnicodeAttribute(hash_key=True)
