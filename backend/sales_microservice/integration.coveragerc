@@ -1,8 +1,0 @@
-[run]
-source =
-  src/blueprints
-  src/models
-  src/main.py
-
-omit =
-  __init__.py
