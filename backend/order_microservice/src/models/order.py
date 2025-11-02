@@ -118,6 +118,7 @@ class OrderModel(Model):
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
         aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
         aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
+        aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
 
     # Primary Key
     # id should be the hash (partition) key for Orders

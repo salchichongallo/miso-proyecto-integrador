@@ -46,6 +46,7 @@ class VendorModel(Model):
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
         aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
         aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
+        aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
 
     # Clave primaria (hash key)
     email = UnicodeAttribute(hash_key=True)
@@ -86,7 +87,7 @@ class VendorModel(Model):
             raise ParamError("El correo electrónico ya está registrado.")
 
         vendor = VendorModel(**kwargs)
-        vendor.vendor_id = str(uuid4()) 
+        vendor.vendor_id = str(uuid4())
         vendor.created_at = vendor.updated_at = datetime.datetime.now(datetime.timezone.utc)
         vendor.save()
         return vendor
