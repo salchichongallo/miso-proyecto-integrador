@@ -1,11 +1,19 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from src.commands.create_product import CreateProduct
 from src.errors.errors import ParamError, ApiError
 
 
 class TestCreateProductCommand:
+
+    def _get_future_date_utc(self, days_ahead: int):
+        """Helper para obtener fechas futuras en UTC de forma consistente"""
+        return (datetime.now(timezone.utc) + timedelta(days=days_ahead)).date()
+
+    def _get_current_date_utc(self):
+        """Helper para obtener fecha actual en UTC de forma consistente"""
+        return datetime.now(timezone.utc).date()
 
     # ✅ Caso exitoso: producto nuevo creado correctamente
     @patch("src.commands.create_product.ProductModel")
@@ -23,7 +31,7 @@ class TestCreateProductCommand:
             name="Paracetamol 500mg",
             product_type="Medicamento",
             stock=10,
-            expiration_date=(datetime.now() + timedelta(days=365)).date(),
+            expiration_date=self._get_future_date_utc(365),
             temperature_required=25.0,
             batch="L001",
             status="Disponible",
@@ -38,7 +46,7 @@ class TestCreateProductCommand:
         assert "registrado exitosamente" in result["message"]
 
         # Verificar que se llamó find_existing_product
-        mock_product_model.find_existing_product.assert_called_once_with("1234567890", "Paracetamol 500mg", "L001")
+        mock_product_model.find_existing_product.assert_called_once_with("WH123", "SKU12345")
 
         # Verificar que se creó una nueva instancia del modelo
         mock_product_model.assert_called_once()
@@ -60,7 +68,7 @@ class TestCreateProductCommand:
             name="Paracetamol 500mg",
             product_type="Medicamento",
             stock=5,
-            expiration_date=(datetime.now() + timedelta(days=100)).date(),
+            expiration_date=self._get_future_date_utc(100),
             temperature_required=22.0,
             batch="L001",
             status="Disponible",
@@ -74,7 +82,7 @@ class TestCreateProductCommand:
         assert "actualizado" in result["message"]
 
         # Verificar que se llamó find_existing_product
-        mock_product_model.find_existing_product.assert_called_once_with("1234567890", "Paracetamol 500mg", "L001")
+        mock_product_model.find_existing_product.assert_called_once_with("WH123", "SKU12345")
 
         # Verificar que se llamó update_stock en el producto existente
         mock_existing_product.update_stock.assert_called_once_with(5)
@@ -87,7 +95,7 @@ class TestCreateProductCommand:
             name="Ibuprofeno",
             product_type="Medicamento",
             stock=5,
-            expiration_date=datetime.now().date(),
+            expiration_date=self._get_current_date_utc(),
             temperature_required=25.0,
             batch="L002",
             status="Disponible",
@@ -108,7 +116,7 @@ class TestCreateProductCommand:
             name="Aspirina",
             product_type="Medicamento",
             stock=0,
-            expiration_date=(datetime.now() + timedelta(days=30)).date(),
+            expiration_date=self._get_future_date_utc(30),
             temperature_required=20.0,
             batch="L003",
             status="Disponible",
@@ -129,7 +137,7 @@ class TestCreateProductCommand:
             name="",
             product_type="",
             stock=10,
-            expiration_date=(datetime.now() + timedelta(days=30)).date(),
+            expiration_date=self._get_future_date_utc(30),
             temperature_required=25.0,
             batch="",
             status="",
@@ -158,7 +166,7 @@ class TestCreateProductCommand:
             name="Ibuprofeno 400mg",
             product_type="Medicamento",
             stock=10,
-            expiration_date=(datetime.now() + timedelta(days=120)).date(),
+            expiration_date=self._get_future_date_utc(120),
             temperature_required=20.0,
             batch="L004",
             status="Disponible",
