@@ -72,7 +72,7 @@ def bulk_upload_products():
         file = request.files["file"]
         file_bytes = file.read()
         filename = file.filename
-        warehouse = request.form.get("warehouse", "DEFAULT_WH")
+        warehouse = request.form.get("warehouse", "1")
 
         result = CreateProductsBulk(file_bytes, filename, warehouse).execute()
         return jsonify(result), 200

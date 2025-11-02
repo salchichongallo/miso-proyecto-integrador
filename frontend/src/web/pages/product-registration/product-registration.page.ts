@@ -110,7 +110,7 @@ export class ProductRegistrationPage {
   ];
 
   public readonly productForm = new FormGroup({
-    warehouse: new FormControl('', {
+    warehouse: new FormControl('1', {
       nonNullable: true,
       validators: [Validators.required],
     }),

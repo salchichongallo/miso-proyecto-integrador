@@ -9,6 +9,7 @@ from flask_cognito import CognitoAuth
 from .blueprints.products import products_blueprint
 from .blueprints.warehouses import warehouses_blueprint
 from .errors.errors import ApiError, ParamError
+from .models.warehouse import WarehouseModel
 
 # Cargar variables de entorno
 load_dotenv()
@@ -67,3 +68,4 @@ if __name__ != "__main__":
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
     logging.basicConfig(level=gunicorn_logger.level)
+    WarehouseModel.populate()

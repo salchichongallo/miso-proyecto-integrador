@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class CreateProductsBulk(BaseCommannd):
-    def __init__(self, file_bytes, filename, warehouse="DEFAULT_WH"):
+    def __init__(self, file_bytes, filename, warehouse="1"):
         self.file_bytes = file_bytes
         self.filename = filename
         self.warehouse = warehouse
