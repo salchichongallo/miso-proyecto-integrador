@@ -8,7 +8,7 @@ class ProductMirrorModel(Model):
     Modelo de lectura para los productos.
     """
     class Meta:
-        table_name = os.getenv("DYNAMODB_MIRROR_TABLE", "ProductsMirror")
+        table_name = os.getenv("DYNAMODB_PRODUCTS_MIRROR_TABLE", "ProductsMirror")
         region = os.getenv("AWS_REGION", "us-east-1")
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
         aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
