@@ -3,6 +3,7 @@ from uuid import uuid4
 from unittest.mock import patch
 from src.models.product import ProductModel
 from src.models.warehouse import WarehouseModel
+from src.models.product_mirror import ProductMirrorModel
 
 
 # --- Fixture de cliente Flask ---
@@ -32,7 +33,7 @@ def db_clearer():
 
 
 def clear_db():
-    models = [ProductModel, WarehouseModel]
+    models = [ProductModel, WarehouseModel, ProductMirrorModel]
     for model in models:
         with model.batch_write() as batch:
             for item in model.scan():
