@@ -15,22 +15,19 @@ export class OrderService {
   private readonly http = inject(HttpClient);
 
   public createOrder(orderRequest: OrderRequest): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${this.baseUrl}/orders/`, orderRequest);
+    return this.http.post<OrderResponse>(`${this.baseUrl}/`, orderRequest);
   }
 
   public getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}/orders`);
+    return this.http.get<Order[]>(`${this.baseUrl}/`);
   }
 
   public getOrderById(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.baseUrl}/orders/${orderId}`);
+    return this.http.get<Order>(`${this.baseUrl}/${orderId}`);
   }
 
-  public updateOrderStatus(
-    orderId: string,
-    status: OrderRequest['order_status']
-  ): Observable<Order> {
-    return this.http.patch<Order>(`${this.baseUrl}/orders/${orderId}/status`, { status });
+  public updateOrderStatus(orderId: string, status: OrderRequest['order_status']): Observable<Order> {
+    return this.http.patch<Order>(`${this.baseUrl}/${orderId}/status`, { status });
   }
 
   public cancelOrder(orderId: string): Observable<Order> {
