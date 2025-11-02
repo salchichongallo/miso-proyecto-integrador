@@ -94,7 +94,6 @@ jobs:
           APP_VENDOR_MICROSERVICE_URL: ${{ vars.APP_VENDOR_MICROSERVICE_URL }}
           APP_PROVIDER_MICROSERVICE_URL: ${{ vars.APP_PROVIDER_MICROSERVICE_URL }}
           APP_PRODUCT_MICROSERVICE_URL: ${{ vars.APP_PRODUCT_MICROSERVICE_URL }}
-          APP_SALES_MICROSERVICE_URL: ${{ vars.APP_SALES_MICROSERVICE_URL }}
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v5.0.0

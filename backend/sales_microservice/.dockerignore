@@ -1,7 +1,0 @@
-**
-*.pyc
-
-!Pipfile
-!Pipfile.lock
-!src/
-!requirements.txt
