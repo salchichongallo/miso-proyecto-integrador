@@ -2,6 +2,7 @@ import pytest
 from uuid import uuid4
 from unittest.mock import patch
 from src.models.vendor import VendorModel
+from src.models.sales_plan import SalesPlanModel
 
 # --- Fixture de cliente Flask ---
 @pytest.fixture
@@ -30,7 +31,7 @@ def db_clearer():
 
 
 def clear_db():
-    models = [VendorModel]
+    models = [VendorModel, SalesPlanModel]
     for model in models:
         with model.batch_write() as batch:
             for item in model.scan():
