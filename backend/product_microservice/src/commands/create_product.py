@@ -50,7 +50,9 @@ class CreateProduct(BaseCommannd):
             except ValueError:
                 raise ParamError("La fecha de vencimiento debe tener formato YYYY-MM-DD.")
 
-        if self.expiration_date <= datetime.datetime.now().date():
+        # Usar UTC para consistencia entre entornos (local UTC-5, GitHub Actions UTC+0)
+        current_date_utc = datetime.datetime.now(datetime.timezone.utc).date()
+        if self.expiration_date <= current_date_utc:
             raise ParamError("La fecha de vencimiento debe ser posterior a la actual.")
 
         # Stock

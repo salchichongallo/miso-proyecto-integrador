@@ -13,6 +13,7 @@ class TestGetAllWarehouses:
 
     def create_warehouse(self, client):
         payload = {
+            "name": "foo warehouse",
             "address": "foo street",
             "country": "Colombia",
             "city": "Medellin",
