@@ -44,6 +44,11 @@ export const routes: Routes = [
           import('./pages/product-bulk-upload/product-bulk-upload.page').then((m) => m.ProductBulkUploadPage),
       },
       {
+        path: 'sales-plan-creation',
+        loadComponent: () =>
+          import('./pages/sales-plan-creation/sales-plan-creation.page').then((m) => m.SalesPlanCreationPage),
+      },
+      {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },

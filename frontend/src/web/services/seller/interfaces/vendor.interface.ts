@@ -1,0 +1,8 @@
+export interface Vendor {
+  vendor_id: string;
+  name: string;
+  email: string;
+  institutions: string[];
+  created_at: string;
+  updated_at: string;
+}
