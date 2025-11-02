@@ -1,3 +1,4 @@
+import uuid
 import traceback
 import datetime
 from flask import jsonify, Blueprint, request
@@ -9,6 +10,7 @@ from ..errors.errors import ParamError, ApiError
 from ..commands.create_product import CreateProduct
 from ..commands.create_products_bulk import CreateProductsBulk
 from ..queries.search_products import SearchProductsQuery
+from ..queries.get_product_detail import GetProductDetailQuery
 
 from flask_cognito import cognito_auth_required
 
@@ -53,6 +55,12 @@ def get_all_products():
     return jsonify(products), 200
 
 
+@products_blueprint.get("/<string:sku>")
+@cognito_auth_required
+def get_product(sku):
+    products = GetProductDetailQuery(sku).execute()
+    return jsonify(products), 200
+
 
 @products_blueprint.post("/bulk")
 @cognito_auth_required
@@ -85,6 +93,7 @@ def create_product_mirror():
     formatted_date = expiration_date_obj.isoformat()
 
     product_mirror = ProductMirrorModel(
+        id=str(uuid.uuid4()),
         sku=body["sku"],
         provider_nit=body["provider_nit"],
         name=body["name"],
