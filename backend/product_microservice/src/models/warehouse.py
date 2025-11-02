@@ -27,6 +27,7 @@ class WarehouseModel(Model):
     """
     Modelo PynamoDB para las bodegas.
     """
+
     class Meta:
         table_name = os.getenv("DYNAMODB_WAREHOUSE_TABLE", "Warehouses")
         region = os.getenv("AWS_REGION", "us-east-1")
@@ -72,3 +73,17 @@ class WarehouseModel(Model):
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
+
+    @classmethod
+    def populate(cls):
+        main_warehouse = cls(
+            id="1",
+            name="Bodega Principal",
+            address="Calle 123",
+            country="Colombia",
+            city="Medellin",
+            capacity=100000,
+            created_at=datetime.datetime.now(datetime.timezone.utc),
+            updated_at=datetime.datetime.now(datetime.timezone.utc),
+        )
+        main_warehouse.save()

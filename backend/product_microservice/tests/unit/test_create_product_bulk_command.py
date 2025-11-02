@@ -175,7 +175,7 @@ class TestCreateProductsBulkCommand:
         # El sku se genera como uuid, así que solo verificamos que fue llamado
         mock_product_model.find_existing_product.assert_called_once()
         call_args = mock_product_model.find_existing_product.call_args[0]
-        assert call_args[0] == "DEFAULT_WH"  # warehouse por defecto
+        assert call_args[0] == "1"  # warehouse por defecto
         assert len(call_args[1]) == 32  # sku generado como uuid hex
 
     # ⚡ Test: error ProductModel
