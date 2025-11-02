@@ -84,10 +84,10 @@ TABLES_CONFIG = {
     },
     PRODUCTS_MIRROR_TABLE: {
         "AttributeDefinitions": [
-            {"AttributeName": "sku", "AttributeType": "S"}
+            {"AttributeName": "id", "AttributeType": "S"}
         ],
         "KeySchema": [
-            {"AttributeName": "sku", "KeyType": "HASH"}
+            {"AttributeName": "id", "KeyType": "HASH"}
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 5,

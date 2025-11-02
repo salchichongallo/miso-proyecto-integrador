@@ -16,9 +16,10 @@ class ProductMirrorModel(Model):
         aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
 
     # Primary Key
-    sku = UnicodeAttribute(hash_key=True)
+    id = UnicodeAttribute(hash_key=True)
 
     # Atributos del producto
+    sku = UnicodeAttribute()
     provider_nit = UnicodeAttribute()
     name = UnicodeAttribute()
     product_type = UnicodeAttribute()
@@ -41,6 +42,7 @@ class ProductMirrorModel(Model):
 
     def to_dict(self):
         return {
+            "id": self.id,
             "sku": self.sku,
             "provider_nit": self.provider_nit,
             "name": self.name,
