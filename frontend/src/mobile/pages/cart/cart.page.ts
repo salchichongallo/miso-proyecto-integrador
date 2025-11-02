@@ -163,6 +163,7 @@ export class CartPage {
           id: item.product.sku,
           name: item.product.name,
           amount: item.quantity,
+          id_warehouse: item.product.warehouse,
         })),
       };
 

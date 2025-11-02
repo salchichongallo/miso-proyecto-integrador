@@ -30,83 +30,101 @@
       </div>
     </div>
 
+    <!-- Disponibilidad en tiempo real -->
+    @if (product && product.locations?.length) {
     <section class="availability-section">
+      <h3>Disponibilidad en tiempo real</h3>
+
+      @for (location of product.locations; track $index) {
+      <div class="location-card">
+        <div class="location-header">
+          <ion-icon slot="start" name="location"></ion-icon>
+          <span class="location-name">{{ location.city }}, {{ location.country }}</span>
+        </div>
+        <div class="location-badges">
+          <ion-badge color="success">Lote: {{ location.batch }}</ion-badge>
+          <ion-badge [color]="getPriorityColor(location.priority)">
+            Prioridad: {{ getPriorityLabel(location.priority) }}
+          </ion-badge>
+        </div>
+        <ion-text class="location-stock">
+          <p>{{ location.stock }} unidades</p>
+        </ion-text>
+      </div>
+      }
+    </section>
+    }
+
+    <!-- Información del Producto -->
+    <section class="info-section">
       <h3>Información del Producto</h3>
 
-      <div class="info-grid">
+      <div class="info-grid-primary">
         @if (product?.batch) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>Lote</small>
-            </ion-text>
-            <ion-badge color="success">{{ product?.batch }}</ion-badge>
-          </div>
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>Lote</small>
+          </ion-text>
+          <ion-badge color="success">{{ product?.batch }}</ion-badge>
+        </div>
+        } @if (product?.stock !== undefined) {
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>Stock Total</small>
+          </ion-text>
+          <ion-text color="primary">
+            <strong>{{ product?.stock }} unidades</strong>
+          </ion-text>
+        </div>
+        } @if (product?.status) {
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>Estado</small>
+          </ion-text>
+          <ion-badge [color]="product?.status === 'Disponible' ? 'success' : 'warning'">
+            {{ product?.status }}
+          </ion-badge>
+        </div>
         }
+      </div>
 
-        @if (product?.stock !== undefined) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>Stock Disponible</small>
-            </ion-text>
-            <ion-text color="primary">
-              <strong>{{ product?.stock }} unidades</strong>
-            </ion-text>
-          </div>
-        }
-
-        @if (product?.status) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>Estado</small>
-            </ion-text>
-            <ion-badge [color]="product?.status === 'Disponible' ? 'success' : 'warning'">
-              {{ product?.status }}
-            </ion-badge>
-          </div>
-        }
-
+      <div class="info-grid">
         @if (product?.expiration_date) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>Fecha de Vencimiento</small>
-            </ion-text>
-            <ion-text>
-              <p>{{ product?.expiration_date }}</p>
-            </ion-text>
-          </div>
-        }
-
-        @if (product?.storage_conditions) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>Condiciones de Almacenamiento</small>
-            </ion-text>
-            <ion-text>
-              <p>{{ product?.storage_conditions }}</p>
-            </ion-text>
-          </div>
-        }
-
-        @if (product?.temperature_required !== undefined) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>Temperatura Requerida</small>
-            </ion-text>
-            <ion-text>
-              <p>{{ product?.temperature_required }}°C</p>
-            </ion-text>
-          </div>
-        }
-
-        @if (product?.provider_nit) {
-          <div class="info-item">
-            <ion-text color="medium">
-              <small>NIT Proveedor</small>
-            </ion-text>
-            <ion-text>
-              <p>{{ product?.provider_nit }}</p>
-            </ion-text>
-          </div>
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>Fecha de Vencimiento</small>
+          </ion-text>
+          <ion-text>
+            <p>{{ product?.expiration_date }}</p>
+          </ion-text>
+        </div>
+        } @if (product?.storage_conditions) {
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>Condiciones de Almacenamiento</small>
+          </ion-text>
+          <ion-text>
+            <p>{{ product?.storage_conditions }}</p>
+          </ion-text>
+        </div>
+        } @if (product?.temperature_required !== undefined) {
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>Temperatura Requerida</small>
+          </ion-text>
+          <ion-text>
+            <p>{{ product?.temperature_required }}°C</p>
+          </ion-text>
+        </div>
+        } @if (product?.provider_nit) {
+        <div class="info-item">
+          <ion-text color="medium">
+            <small>NIT Proveedor</small>
+          </ion-text>
+          <ion-text>
+            <p>{{ product?.provider_nit }}</p>
+          </ion-text>
+        </div>
         }
       </div>
     </section>

@@ -67,6 +67,24 @@ export class ProductDetailPage implements OnInit {
     }
   }
 
+  public getPriorityColor(priority: string): string {
+    const colors: Record<string, string> = {
+      HIGH: 'danger',
+      MEDIUM: 'warning',
+      LOW: 'success',
+    };
+    return colors[priority] || 'medium';
+  }
+
+  public getPriorityLabel(priority: string): string {
+    const labels: Record<string, string> = {
+      HIGH: 'Alta',
+      MEDIUM: 'Media',
+      LOW: 'Baja',
+    };
+    return labels[priority] || priority;
+  }
+
   public async addToCart(): Promise<void> {
     if (!this.product) {
       await this.showToast('Error: Producto no encontrado', 'danger');
