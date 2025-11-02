@@ -15,7 +15,7 @@ def ping():
 
 
 @sales_blueprint.post("/")
-# @cognito_auth_required
+@cognito_auth_required
 def create_sales_plan():
     try:
         json_data = request.get_json()
@@ -33,7 +33,7 @@ def create_sales_plan():
 
 
 @sales_blueprint.get("/")
-# @cognito_auth_required
+@cognito_auth_required
 def get_all_sales_plans():
     try:
         response = GetAllSalesPlans().execute()
