@@ -15,12 +15,22 @@ class CreateSalesPlan(BaseCommannd):
         try:
             logger.info("🚀 Creating new Sales Plan...")
 
-            # ---------------------- Extract fields ----------------------
             vendor_id = self.body.get("vendor_id", "").strip()
             period = self.body.get("period", "").strip().upper()
             region = self.body.get("region", "").strip()
             products = self.body.get("products", [])
 
+            # ---------------------- VALIDACIONES BÁSICAS ----------------------
+            if not vendor_id:
+                raise ParamError("The field 'vendor_id' is required.")
+            if not period:
+                raise ParamError("The field 'period' is required.")
+            if not region:
+                raise ParamError("The field 'region' is required.")
+            if not isinstance(products, list) or len(products) == 0:
+                raise ParamError("At least one product must be included in the plan.")
+
+            # ---------------------- VALIDACIÓN DE PRODUCTOS ----------------------
             for p in products:
                 if "product_id" not in p or not p["product_id"]:
                     raise ParamError("Each product must have a 'product_id'.")
