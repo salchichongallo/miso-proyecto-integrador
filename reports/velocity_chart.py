@@ -259,7 +259,12 @@ class JiraVelocityGenerator:
             if len(weeks_with_data) > 1:
                 z = np.polyfit(weeks_with_data, points_with_data, 1)
                 p = np.poly1d(z)
-                plt.plot(x, p(x), "r--", alpha=0.7, linewidth=1, label='Tendencia Real')
+                # Solo dibujar la tendencia en el rango donde hay datos
+                trend_x = np.array(weeks_with_data)
+                trend_y = p(trend_x)
+                # Asegurar que no haya valores negativos en la tendencia
+                trend_y = np.maximum(trend_y, 0)
+                plt.plot(trend_x, trend_y, "r--", alpha=0.7, linewidth=1, label='Tendencia Real')
                 plt.legend()
 
         # Ajustar layout
