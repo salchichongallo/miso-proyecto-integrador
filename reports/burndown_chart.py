@@ -375,22 +375,19 @@ def main():
             print(f"{i + 1}. {status_emoji} {sprint.name} ({sprint.state})")
             print(f"   📅 {sprint.start_date.strftime('%d/%m/%Y')} - {sprint.end_date.strftime('%d/%m/%Y')}")
 
-        # Seleccionar sprint
-        if len(sprints) == 1:
-            selected_sprint = sprints[0]
-            print(f"\n🎯 Procesando sprint único: {selected_sprint.name}")
+        # Seleccionar sprint activo automáticamente
+        active_sprints = [sprint for sprint in sprints if sprint.state == "active"]
+
+        if active_sprints:
+            selected_sprint = active_sprints[0]
+            print(f"\n🎯 Sprint activo seleccionado automáticamente: {selected_sprint.name}")
+        elif sprints:
+            # Si no hay sprint activo, usar el más reciente (último cerrado)
+            selected_sprint = sprints[-1]
+            print(f"\n🎯 No hay sprint activo. Seleccionado el más reciente: {selected_sprint.name}")
         else:
-            while True:
-                try:
-                    choice = input(f"\n🎯 Selecciona un sprint (1-{len(sprints)}): ")
-                    sprint_index = int(choice) - 1
-                    if 0 <= sprint_index < len(sprints):
-                        selected_sprint = sprints[sprint_index]
-                        break
-                    else:
-                        print("❌ Número inválido")
-                except ValueError:
-                    print("❌ Por favor ingresa un número válido")
+            print("❌ No se encontraron sprints disponibles")
+            return 1
 
         # Obtener issues del sprint
         print(f"\n📊 Obteniendo issues del sprint: {selected_sprint.name}")
