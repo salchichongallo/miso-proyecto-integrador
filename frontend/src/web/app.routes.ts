@@ -49,6 +49,12 @@ export const routes: Routes = [
           import('./pages/sales-plan-creation/sales-plan-creation.page').then((m) => m.SalesPlanCreationPage),
       },
       {
+        path: 'product-inventory',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/product-inventory/product-inventory.page').then((m) => m.ProductInventoryPage),
+      },
+      {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
