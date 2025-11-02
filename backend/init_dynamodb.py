@@ -25,6 +25,7 @@ CLIENTS_TABLE = os.getenv("CLIENTS_TABLE", "Clients")
 VENDORS_TABLE = os.getenv("VENDORS_TABLE", "Vendors")
 PROVIDERS_TABLE = os.getenv("PROVIDERS_TABLE", "Providers")
 PRODUCTS_TABLE = os.getenv("PRODUCTS_TABLE", "Products")
+PRODUCTS_MIRROR_TABLE = os.getenv("PRODUCTS_MIRROR_TABLE", "ProductsMirror")
 WAREHOUSES_TABLE = os.getenv("WAREHOUSES_TABLE", "Warehouses")
 SALES_TABLE = os.getenv("SALES_TABLE", "Sales")
 ORDERS_TABLE = os.getenv("ORDERS_TABLE", "Orders")
@@ -76,6 +77,18 @@ TABLES_CONFIG = {
         "KeySchema": [
             {"AttributeName": "warehouse", "KeyType": "HASH"},
             {"AttributeName": "sku", "KeyType": "RANGE"}
+        ],
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        }
+    },
+    PRODUCTS_MIRROR_TABLE: {
+        "AttributeDefinitions": [
+            {"AttributeName": "id", "AttributeType": "S"}
+        ],
+        "KeySchema": [
+            {"AttributeName": "id", "KeyType": "HASH"}
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 5,

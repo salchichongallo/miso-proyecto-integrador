@@ -9,6 +9,7 @@ from ..errors.errors import ParamError
 
 
 class NewWarehouseSchema(Schema):
+    name = fields.String(required=True, validate=validate.Length(min=2, max=100))
     address = fields.String(required=True, validate=validate.Length(min=2, max=100))
     country = fields.String(required=True, validate=validate.Length(min=2, max=100))
     city = fields.String(required=True, validate=validate.Length(min=2, max=100))
@@ -32,11 +33,13 @@ class WarehouseModel(Model):
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
         aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
         aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
+        aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
 
     # Primary Key
     id = UnicodeAttribute(hash_key=True)
 
     # Attributes
+    name = UnicodeAttribute()
     address = UnicodeAttribute()
     country = UnicodeAttribute()
     city = UnicodeAttribute()
@@ -61,6 +64,7 @@ class WarehouseModel(Model):
     def to_dict(self):
         return {
             "id": self.id,
+            "name": self.name,
             "address": self.address,
             "country": self.country,
             "city": self.city,

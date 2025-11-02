@@ -81,7 +81,9 @@ class NewProductJsonSchema(Schema):
         """Valida el cuerpo del request y lanza ParamError si hay errores."""
         try:
             data = NewProductJsonSchema().load(json)
-            if data["expiration_date"] <= datetime.datetime.now().date():
+            # Usar UTC para consistencia entre entornos (local UTC-5, GitHub Actions UTC+0)
+            current_date_utc = datetime.datetime.now(datetime.timezone.utc).date()
+            if data["expiration_date"] <= current_date_utc:
                 raise ParamError("La fecha de vencimiento debe ser posterior a la fecha actual.")
         except ValidationError as exception:
             raise ParamError.first_from(exception.messages)
@@ -97,6 +99,7 @@ class ProductModel(Model):
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
         aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
         aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
+        aws_session_token = os.getenv("AWS_SESSION_TOKEN", None)
 
     # Primary Key
     warehouse = UnicodeAttribute(hash_key=True)

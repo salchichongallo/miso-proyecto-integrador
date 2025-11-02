@@ -3,7 +3,7 @@ import uuid
 import logging
 import pandas as pd
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from .base_command import BaseCommannd
 from ..errors.errors import ApiError
 from ..models.product import ProductModel
@@ -13,9 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 class CreateProductsBulk(BaseCommannd):
-    def __init__(self, file_bytes, filename):
+    def __init__(self, file_bytes, filename, warehouse="DEFAULT_WH"):
         self.file_bytes = file_bytes
         self.filename = filename
+        self.warehouse = warehouse
 
     # ----------------------------------------------------------
     def execute(self):
@@ -90,16 +91,21 @@ class CreateProductsBulk(BaseCommannd):
 
             try:
                 expiration_date = datetime.strptime(str(row["expiration_date"]), "%Y-%m-%d").date()
-                if expiration_date <= datetime.now().date():
+                # Usar UTC para consistencia entre entornos (local UTC-5, GitHub Actions UTC+0)
+                current_date_utc = datetime.now(timezone.utc).date()
+                if expiration_date <= current_date_utc:
                     invalid.append({**row.to_dict(), "error": "Fecha de vencimiento inválida"})
                     continue
             except Exception:
                 invalid.append({**row.to_dict(), "error": "Formato de fecha inválido (YYYY-MM-DD)"})
                 continue
 
+            # Generar SKU único
+            sku = uuid.uuid4().hex
+
             # 🔍 Validar duplicados
             try:
-                existing_product = ProductModel.find_existing_product(provider_nit, name, batch)
+                existing_product = ProductModel.find_existing_product(self.warehouse, sku)
                 if existing_product:
                     invalid.append({**row.to_dict(), "error": "Duplicado en base de datos"})
                     continue
@@ -109,7 +115,8 @@ class CreateProductsBulk(BaseCommannd):
 
             # Crear instancia del modelo ProductModel
             product_data = {
-                "sku": uuid.uuid4().hex,
+                "warehouse": self.warehouse,
+                "sku": sku,
                 "provider_nit": provider_nit,
                 "name": name,
                 "product_type": product_type,
@@ -120,7 +127,7 @@ class CreateProductsBulk(BaseCommannd):
                 "status": status,
                 "unit_value": unit_value,
                 "storage_conditions": storage_conditions,
-                "created_at": datetime.utcnow()
+                "created_at": datetime.now(timezone.utc)
             }
             valid.append(product_data)
 

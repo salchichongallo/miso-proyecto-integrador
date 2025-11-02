@@ -12,6 +12,7 @@ services:
       - SALES_PLANS_TABLE=Orders
       - PROVIDERS_TABLE=Providers
       - PRODUCTS_TABLE=Products
+      - PRODUCTS_MIRROR_TABLE=ProductsMirror
       - SALES_TABLE=Sales
       - WAREHOUSES_TABLE=Warehouses
     depends_on:

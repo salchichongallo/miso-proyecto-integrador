@@ -171,8 +171,12 @@ class TestCreateProductsBulkCommand:
         assert result["rechazados"] == 1
         assert "Duplicado" in result["rechazados_detalle"][0]["error"]
 
-        # Verificar que se llamó find_existing_product
-        mock_product_model.find_existing_product.assert_called_once_with("123", "Prod", "B001")
+        # Verificar que se llamó find_existing_product con warehouse y sku generado
+        # El sku se genera como uuid, así que solo verificamos que fue llamado
+        mock_product_model.find_existing_product.assert_called_once()
+        call_args = mock_product_model.find_existing_product.call_args[0]
+        assert call_args[0] == "DEFAULT_WH"  # warehouse por defecto
+        assert len(call_args[1]) == 32  # sku generado como uuid hex
 
     # ⚡ Test: error ProductModel
     @patch("src.commands.create_products_bulk.ProductModel")
