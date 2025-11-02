@@ -99,6 +99,7 @@ jobs:
       APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
       DYNAMODB_TABLE: ${{ vars.DYNAMODB_VENDORS_TABLE }}
+      DYNAMODB_TABLE_SALES_PLANS: ${{ vars.DYNAMODB_TABLE_SALES_PLANS }}
 
     steps:
       - name: Checkout code
