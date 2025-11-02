@@ -5,6 +5,7 @@ class TestCreateWarehouse:
     @pytest.mark.usefixtures("client")
     def test_create_warehouse_endpoint(self, client):
         payload = {
+            "name": "foo warehouse",
             "address": "foo street",
             "country": "Colombia",
             "city": "Medellin",
