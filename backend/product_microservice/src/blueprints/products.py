@@ -64,8 +64,9 @@ def bulk_upload_products():
         file = request.files["file"]
         file_bytes = file.read()
         filename = file.filename
+        warehouse = request.form.get("warehouse", "DEFAULT_WH")
 
-        result = CreateProductsBulk(file_bytes, filename).execute()
+        result = CreateProductsBulk(file_bytes, filename, warehouse).execute()
         return jsonify(result), 200
 
     except ApiError as e:
@@ -79,7 +80,9 @@ def bulk_upload_products():
 def create_product_mirror():
     body = request.get_json()
 
-    formatted_date = str(datetime.datetime.strptime(body["expiration_date"], "%Y-%m-%d"))
+    # Convertir fecha de expiración a formato ISO string
+    expiration_date_obj = datetime.datetime.strptime(body["expiration_date"], "%Y-%m-%d").date()
+    formatted_date = expiration_date_obj.isoformat()
 
     product_mirror = ProductMirrorModel(
         sku=body["sku"],
