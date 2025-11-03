@@ -135,4 +135,34 @@ describe('ProductService', () => {
       req.flush(mockError, { status: 400, statusText: 'Bad Request' });
     });
   });
+
+  describe('search', () => {
+    it('should send GET request with query parameters to product microservice URL', async () => {
+      const mockParams = {
+        productName: 'Ibuprofeno',
+        batch: 'L-2025-001',
+        status: 'Disponible',
+        warehouseName: 'WH-001',
+      };
+
+      const mockResponse: unknown[] = [];
+
+      const promise = service.search(mockParams);
+
+      const req = httpMock.expectOne(
+        (request) =>
+          request.url === mockProductUrl &&
+          request.params.get('product_name') === mockParams.productName &&
+          request.params.get('batch') === mockParams.batch &&
+          request.params.get('status') === mockParams.status &&
+          request.params.get('warehouse_name') === mockParams.warehouseName,
+      );
+
+      expect(req.request.method).toBe('GET');
+      req.flush(mockResponse);
+
+      const result = await promise;
+      expect(result).toEqual(mockResponse);
+    });
+  });
 });

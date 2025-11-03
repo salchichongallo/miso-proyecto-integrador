@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonLabel, IonIcon } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
-import { chevronForwardOutline, personAdd, business, medkitOutline } from 'ionicons/icons';
+import { chevronForwardOutline, personAdd, business, medkitOutline, storefrontOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +14,7 @@ import { chevronForwardOutline, personAdd, business, medkitOutline } from 'ionic
 })
 export class HomePage {
   constructor(private readonly router: Router) {
-    addIcons({ chevronForwardOutline, personAdd, business, medkitOutline });
+    addIcons({ chevronForwardOutline, personAdd, business, medkitOutline, storefrontOutline });
   }
 
   public navigateTo(route: string): void {

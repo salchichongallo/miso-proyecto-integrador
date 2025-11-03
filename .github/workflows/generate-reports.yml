@@ -2,17 +2,21 @@ name: Generate Jira Reports
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'reports/**'
+      - '.github/workflows/generate-reports.yml'
 
 jobs:
   generate-reports:
     runs-on: ubuntu-latest
-    
+
     environment: prod
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Verify required secrets
       env:
         JIRA_SERVER_URL: ${{ secrets.JIRA_SERVER_URL }}
@@ -38,12 +42,12 @@ jobs:
           exit 1
         fi
         echo "✅ Todos los secrets están configurados"
-      
+
     - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-        
+
     - name: Cache Python dependencies
       uses: actions/cache@v3
       with:
@@ -51,15 +55,15 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
-          
+
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         cd reports
         pip install -r requirements.txt
-        
 
-        
+
+
     - name: Generate Burndown Chart
       id: burndown
       continue-on-error: true
@@ -72,7 +76,7 @@ jobs:
         cd reports
         echo "🔥 Generating Burndown Chart..."
         python burndown_chart.py
-        
+
         # Find the generated PDF
         BURNDOWN_PDF=$(ls burndown_chart_*.pdf 2>/dev/null | head -1)
         if [ -f "$BURNDOWN_PDF" ]; then
@@ -83,8 +87,8 @@ jobs:
           echo "burndown_success=false" >> $GITHUB_OUTPUT
           echo "❌ Burndown Chart generation failed"
         fi
-        
-    - name: Generate Velocity Chart  
+
+    - name: Generate Velocity Chart
       id: velocity
       continue-on-error: true
       env:
@@ -96,7 +100,7 @@ jobs:
         cd reports
         echo "📈 Generating Velocity Chart..."
         python velocity_chart.py
-        
+
         # Find the generated PDF
         VELOCITY_PDF=$(ls velocity_chart_*.pdf 2>/dev/null | head -1)
         if [ -f "$VELOCITY_PDF" ]; then
@@ -107,7 +111,7 @@ jobs:
           echo "velocity_success=false" >> $GITHUB_OUTPUT
           echo "❌ Velocity Chart generation failed"
         fi
-        
+
     - name: Generate Business Value Chart
       id: business_value
       continue-on-error: true
@@ -120,7 +124,7 @@ jobs:
         cd reports
         echo "💰 Generating Business Value Chart..."
         python business_value_chart.py
-        
+
         # Find the generated PDF
         BUSINESS_VALUE_PDF=$(ls business_value_chart_*.pdf 2>/dev/null | head -1)
         if [ -f "$BUSINESS_VALUE_PDF" ]; then
@@ -131,7 +135,7 @@ jobs:
           echo "business_value_success=false" >> $GITHUB_OUTPUT
           echo "❌ Business Value Chart generation failed"
         fi
-        
+
     - name: Generate Release Burndown Chart
       id: release_burndown
       continue-on-error: true
@@ -144,7 +148,7 @@ jobs:
         cd reports
         echo "📉 Generating Release Burndown Chart..."
         python release_burndown_chart.py
-        
+
         # Find the generated PDF
         RELEASE_BURNDOWN_PDF=$(ls release_burndown_chart_*.pdf 2>/dev/null | head -1)
         if [ -f "$RELEASE_BURNDOWN_PDF" ]; then
@@ -155,33 +159,33 @@ jobs:
           echo "release_burndown_success=false" >> $GITHUB_OUTPUT
           echo "❌ Release Burndown Chart generation failed"
         fi
-        
+
     - name: List generated files
       run: |
         cd reports
         echo "📁 Generated files:"
         ls -la *.pdf 2>/dev/null || echo "No PDF files found"
-        
+
     - name: Create Reports ZIP Archive
       if: always()
       run: |
         cd reports
         echo "📦 Creating ZIP archive with all generated reports..."
-        
+
         # Create timestamp for unique filename
         TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
         ZIP_NAME="jira_reports_${TIMESTAMP}.zip"
-        
+
         # Count available PDFs
         PDF_COUNT=$(ls -1 *.pdf 2>/dev/null | wc -l)
-        
+
         if [ "$PDF_COUNT" -gt 0 ]; then
           # Create ZIP with all PDFs
           zip -r "$ZIP_NAME" *.pdf
           echo "✅ ZIP archive created: $ZIP_NAME"
           echo "📊 Reports included: $PDF_COUNT PDFs"
           ls -la "$ZIP_NAME"
-          
+
           # Set output for next step
           echo "zip_file=$ZIP_NAME" >> $GITHUB_OUTPUT
           echo "zip_success=true" >> $GITHUB_OUTPUT
@@ -189,7 +193,7 @@ jobs:
           echo "❌ No PDF files found to archive"
           echo "zip_success=false" >> $GITHUB_OUTPUT
         fi
-        
+
     - name: Upload Reports ZIP Archive
       if: always()
       uses: actions/upload-artifact@v4
@@ -197,7 +201,7 @@ jobs:
         name: jira-reports-archive
         path: reports/*.zip
         retention-days: 90
-        
+
     - name: Generate Summary Report
       if: always()
       env:
@@ -211,31 +215,31 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "## 📈 Report Status" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        
+
         if [ "${{ steps.burndown.outputs.burndown_success }}" == "true" ]; then
           echo "- ✅ **Burndown Chart** - Successfully generated" >> $GITHUB_STEP_SUMMARY
         else
           echo "- ❌ **Burndown Chart** - Generation failed" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         if [ "${{ steps.velocity.outputs.velocity_success }}" == "true" ]; then
           echo "- ✅ **Velocity Chart** - Successfully generated" >> $GITHUB_STEP_SUMMARY
         else
           echo "- ❌ **Velocity Chart** - Generation failed" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         if [ "${{ steps.business_value.outputs.business_value_success }}" == "true" ]; then
           echo "- ✅ **Business Value Chart** - Successfully generated" >> $GITHUB_STEP_SUMMARY
         else
           echo "- ❌ **Business Value Chart** - Generation failed" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         if [ "${{ steps.release_burndown.outputs.release_burndown_success }}" == "true" ]; then
           echo "- ✅ **Release Burndown Chart** - Successfully generated" >> $GITHUB_STEP_SUMMARY
         else
           echo "- ❌ **Release Burndown Chart** - Generation failed" >> $GITHUB_STEP_SUMMARY
         fi
-        
+
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "## 📁 Download Reports" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY

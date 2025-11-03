@@ -1,0 +1,102 @@
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+.sidebar {
+  width: 100%;
+  flex-shrink: 0;
+
+  // On mobile, sidebar takes full width
+  @media (max-width: 767px) {
+    margin-bottom: 1rem;
+  }
+
+  // On tablet and desktop, sidebar becomes fixed width
+  @media (min-width: 768px) {
+    width: 320px;
+    max-width: 320px;
+  }
+
+  // On larger screens, increase sidebar width
+  @media (min-width: 1024px) {
+    width: 334px;
+    max-width: 334px;
+  }
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  min-width: 0; // Allows flex item to shrink below content size
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+ion-card {
+  margin: 0;
+  width: 100%;
+}
+
+ion-card-subtitle {
+  margin: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 0.75rem;
+}
+
+.no-results {
+  text-align: center;
+  color: var(--ion-color-dark);
+  background: #F5F6F9;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  color: var(--ion-color-dark);
+
+  ion-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: var(--ion-color-medium);
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
