@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import {
   IonCard,
   IonCardHeader,
@@ -37,7 +37,7 @@ import { SearchInventoryParams } from './interfaces/search-inventory-params.inte
   ],
   styleUrl: './product-inventory.page.scss',
 })
-export class ProductInventoryPage implements OnInit {
+export class ProductInventoryPage implements OnInit, OnDestroy {
   private readonly productsService = inject(ProductService);
 
   protected readonly products = signal<Product[]>([]);
@@ -47,6 +47,8 @@ export class ProductInventoryPage implements OnInit {
   private readonly loader = inject(LoadingController);
 
   private readonly toast = inject(ToastController);
+
+  private intervalId: any;
 
   protected readonly currentFilters = signal<SearchInventoryParams>({
     productName: '',
@@ -61,6 +63,7 @@ export class ProductInventoryPage implements OnInit {
 
   async ngOnInit() {
     await this.loadInitialProducts();
+    this.initSilentRefresh();
   }
 
   private async loadInitialProducts() {
@@ -100,5 +103,17 @@ export class ProductInventoryPage implements OnInit {
   async searchInventory(nextFilters: SearchInventoryParams) {
     this.currentFilters.set(nextFilters);
     await this.loadInitialProducts();
+  }
+
+  private initSilentRefresh() {
+    const REFRESH_INTERVAL_MS = 30_000; // 30 seconds
+    this.intervalId = setInterval(
+      () => this.loadProducts().catch((error) => console.error('Error during silent refresh:', error)),
+      REFRESH_INTERVAL_MS,
+    );
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
   }
 }

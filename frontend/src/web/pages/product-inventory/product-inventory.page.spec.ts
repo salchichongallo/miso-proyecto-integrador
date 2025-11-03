@@ -52,4 +52,21 @@ describe('ProductInventoryPage', () => {
     consoleErrorSpy.mockRestore();
     toastCreateSpy.mockRestore();
   });
+
+  describe('silent refresh', () => {
+    jest.useFakeTimers();
+
+    it('should refresh products at intervals', async () => {
+      await component.ngOnInit();
+      expect(productService.search).toHaveBeenCalledTimes(1);
+
+      jest.advanceTimersByTime(30000); // Advance time by 30 seconds
+      await Promise.resolve(); // Wait for any pending promises
+      expect(productService.search).toHaveBeenCalledTimes(2);
+
+      jest.advanceTimersByTime(30000); // Advance time by another 30 seconds
+      await Promise.resolve(); // Wait for any pending promises
+      expect(productService.search).toHaveBeenCalledTimes(3);
+    });
+  });
 });
