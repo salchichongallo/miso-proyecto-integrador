@@ -1,0 +1,52 @@
+<ion-card>
+  <ion-card-content>
+    <form [formGroup]="form" (ngSubmit)="submit()" (reset)="reset()">
+      <div class="header">
+        <ion-icon name="filter"></ion-icon>
+        <h2>Filtros de búsqueda</h2>
+      </div>
+
+      <ion-list>
+        <ion-item>
+          <ion-input
+            formControlName="productName"
+            type="text"
+            id="productName"
+            label="Producto"
+            placeholder="Producto"
+            name="productName"
+            labelPlacement="floating"
+          />
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            formControlName="batch"
+            type="text"
+            id="batch"
+            label="Lote"
+            placeholder="Lote"
+            name="batch"
+            labelPlacement="floating"
+          />
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            formControlName="warehouseName"
+            type="text"
+            id="warehouseName"
+            label="Bodega"
+            placeholder="Nombre de la Bodega"
+            name="warehouseName"
+            labelPlacement="floating"
+          />
+        </ion-item>
+      </ion-list>
+      <div class="actions">
+        <ion-button type="submit" expand="full">CONSULTAR INVENTARIO</ion-button>
+        <ion-button type="reset" expand="full" fill="clear">LIMPIAR</ion-button>
+      </div>
+    </form>
+  </ion-card-content>
+</ion-card>

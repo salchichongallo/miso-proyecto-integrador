@@ -13,11 +13,23 @@ import {
 import { Product } from '@mobile/models/product.model';
 import { ProductService } from '@web/services/product/product.service';
 import { ProductInventaryItem } from '@web/components/product-inventary-item/product-inventary-item';
+import { InventoryFilterComponent } from '@web/components/inventory-filter/inventory-filter';
+
+import { SearchInventoryParams } from './interfaces/search-inventory-params.interface';
 
 @Component({
   selector: 'app-product-inventory',
   templateUrl: 'product-inventory.page.html',
-  imports: [IonText, IonCardSubtitle, IonCardContent, IonCardTitle, IonCardHeader, IonCard, ProductInventaryItem],
+  imports: [
+    IonText,
+    IonCardSubtitle,
+    IonCardContent,
+    IonCardTitle,
+    IonCardHeader,
+    IonCard,
+    ProductInventaryItem,
+    InventoryFilterComponent,
+  ],
   styleUrl: './product-inventory.page.scss',
 })
 export class ProductInventoryPage implements OnInit {
@@ -28,6 +40,13 @@ export class ProductInventoryPage implements OnInit {
   private readonly loader = inject(LoadingController);
 
   private readonly toast = inject(ToastController);
+
+  protected readonly currentFilters = signal<SearchInventoryParams>({
+    productName: '',
+    batch: '',
+    status: '',
+    warehouseName: '',
+  });
 
   async ngOnInit() {
     await this.loadInitialProducts();
@@ -46,8 +65,7 @@ export class ProductInventoryPage implements OnInit {
   }
 
   private async loadProducts() {
-    // TODO: get search from form
-    const products = await this.productsService.search({ productName: '', batch: '', status: '', warehouseName: '' });
+    const products = await this.productsService.search(this.currentFilters());
     this.products.set(products);
   }
 
@@ -66,5 +84,10 @@ export class ProductInventoryPage implements OnInit {
     return this.toast
       .create({ message: `Error al consultar productos. ${error?.message}`, duration: 7000, color: 'danger' })
       .then((toast) => toast.present());
+  }
+
+  async searchInventory(nextFilters: SearchInventoryParams) {
+    this.currentFilters.set(nextFilters);
+    await this.loadInitialProducts();
   }
 }
