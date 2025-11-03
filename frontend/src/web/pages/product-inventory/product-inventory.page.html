@@ -16,11 +16,19 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
+        @if (hasProducts()) {
         <div class="items">
           @for (product of products(); track $index) {
           <app-product-inventary-item [product]="product" />
           }
         </div>
+        } @else {
+        <div class="no-results">
+          <ion-icon name="information-circle"></ion-icon>
+          <h3>Sin resultados</h3>
+          <p>Vuelve a intentar con otros filtros.</p>
+        </div>
+        }
       </ion-card-content>
     </ion-card>
   </main>

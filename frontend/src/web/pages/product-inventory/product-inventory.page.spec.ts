@@ -29,6 +29,7 @@ describe('ProductInventoryPage', () => {
       warehouseName: '',
     });
     expect(component['products']()).toEqual([]);
+    expect(component['hasProducts']()).toBe(false);
   });
 
   it('should handle errors when loading initial products', async () => {

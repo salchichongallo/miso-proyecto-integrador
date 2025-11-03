@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import {
   IonCard,
   IonCardHeader,
@@ -8,7 +8,11 @@ import {
   IonCardSubtitle,
   IonText,
   ToastController,
+  IonIcon,
 } from '@ionic/angular/standalone';
+
+import { addIcons } from 'ionicons';
+import { informationCircle } from 'ionicons/icons';
 
 import { Product } from '@mobile/models/product.model';
 import { ProductService } from '@web/services/product/product.service';
@@ -21,6 +25,7 @@ import { SearchInventoryParams } from './interfaces/search-inventory-params.inte
   selector: 'app-product-inventory',
   templateUrl: 'product-inventory.page.html',
   imports: [
+    IonIcon,
     IonText,
     IonCardSubtitle,
     IonCardContent,
@@ -37,6 +42,8 @@ export class ProductInventoryPage implements OnInit {
 
   protected readonly products = signal<Product[]>([]);
 
+  protected readonly hasProducts = computed(() => this.products().length > 0);
+
   private readonly loader = inject(LoadingController);
 
   private readonly toast = inject(ToastController);
@@ -47,6 +54,10 @@ export class ProductInventoryPage implements OnInit {
     status: '',
     warehouseName: '',
   });
+
+  constructor() {
+    addIcons({ informationCircle });
+  }
 
   async ngOnInit() {
     await this.loadInitialProducts();
