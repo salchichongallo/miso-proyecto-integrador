@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Añadir producto</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="productForm">
+    <ion-item [class.ion-invalid]="productIdControl?.invalid && productIdControl?.touched">
+      <ion-label position="stacked">Producto</ion-label>
+      <ion-select formControlName="product_id" placeholder="Seleccione un producto">
+        @for (product of products; track product.id) {
+          <ion-select-option [value]="product.id">{{ product.name }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+    @if (productIdControl?.invalid && productIdControl?.touched) {
+      <div class="error-message">
+        @if (productIdControl?.errors?.['required']) {
+          <small>El producto es requerido</small>
+        }
+      </div>
+    }
+
+    <ion-item [class.ion-invalid]="targetUnitsControl?.invalid && targetUnitsControl?.touched">
+      <ion-label position="stacked">Meta (unidades)</ion-label>
+      <ion-input
+        type="number"
+        formControlName="target_units"
+        placeholder="Ingrese la meta en unidades"
+        [clearInput]="true"
+      ></ion-input>
+    </ion-item>
+    @if (targetUnitsControl?.invalid && targetUnitsControl?.touched) {
+      <div class="error-message">
+        @if (targetUnitsControl?.errors?.['required']) {
+          <small>La meta en unidades es requerida</small>
+        }
+        @if (targetUnitsControl?.errors?.['positiveInteger']) {
+          <small>Debe ser un número entero positivo</small>
+        }
+      </div>
+    }
+
+    <ion-item [class.ion-invalid]="targetValueControl?.invalid && targetValueControl?.touched">
+      <ion-label position="stacked">Valor</ion-label>
+      <ion-input
+        type="number"
+        formControlName="target_value"
+        placeholder="Ingrese el valor objetivo"
+        [clearInput]="true"
+      ></ion-input>
+    </ion-item>
+    @if (targetValueControl?.invalid && targetValueControl?.touched) {
+      <div class="error-message">
+        @if (targetValueControl?.errors?.['required']) {
+          <small>El valor es requerido</small>
+        }
+        @if (targetValueControl?.errors?.['positiveNumber']) {
+          <small>Debe ser un número positivo</small>
+        }
+      </div>
+    }
+
+    <ion-button
+      expand="block"
+      color="primary"
+      (click)="confirm()"
+      [disabled]="productForm.invalid"
+      class="confirm-button"
+    >
+      Añadir
+    </ion-button>
+  </form>
+</ion-content>

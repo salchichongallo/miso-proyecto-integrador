@@ -5,8 +5,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { SellerService } from './seller.service';
 import { RegisterSellerRequest } from '@web/pages/seller-registration/interfaces/register-seller-request.interface';
 import { RegisterSellerResponse } from '@web/pages/seller-registration/interfaces/register-seller-response.interface';
+import { Vendor } from './interfaces/vendor.interface';
 
-// Mock environment
 jest.mock('@env/environment', () => ({
   environment: {
     vendorMicroserviceUrl: 'http://test-vendor-api.com',
@@ -84,6 +84,70 @@ describe('SellerService', () => {
 
       const req = httpMock.expectOne(mockVendorUrl);
       req.flush(mockError, { status: 400, statusText: 'Bad Request' });
+    });
+  });
+
+  describe('getVendors', () => {
+    it('should send GET request to vendor microservice URL', () => {
+      const mockVendors: Vendor[] = [
+        {
+          vendor_id: 'VENDOR-001',
+          name: 'John Doe',
+          email: 'john@example.com',
+          institutions: ['inst-1', 'inst-2'],
+          created_at: '2025-01-15T10:00:00Z',
+          updated_at: '2025-01-15T10:00:00Z',
+        },
+        {
+          vendor_id: 'VENDOR-002',
+          name: 'Jane Smith',
+          email: 'jane@example.com',
+          institutions: ['inst-3'],
+          created_at: '2025-01-15T10:00:00Z',
+          updated_at: '2025-01-15T10:00:00Z',
+        },
+      ];
+
+      service.getVendors().subscribe((vendors) => {
+        expect(vendors).toEqual(mockVendors);
+        expect(vendors.length).toBe(2);
+        expect(vendors[0].vendor_id).toBe('VENDOR-001');
+      });
+
+      const req = httpMock.expectOne(mockVendorUrl);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockVendors);
+    });
+
+    it('should handle error response when getting vendors', () => {
+      const mockError = {
+        error: 'Failed to retrieve vendors',
+        message: 'Internal Server Error',
+      };
+
+      service.getVendors().subscribe({
+        next: () => fail('should have failed with error'),
+        error: (error) => {
+          expect(error.status).toBe(500);
+          expect(error.error).toEqual(mockError);
+        },
+      });
+
+      const req = httpMock.expectOne(mockVendorUrl);
+      req.flush(mockError, { status: 500, statusText: 'Internal Server Error' });
+    });
+
+    it('should handle empty vendors list', () => {
+      const emptyVendors: Vendor[] = [];
+
+      service.getVendors().subscribe((vendors) => {
+        expect(vendors).toEqual(emptyVendors);
+        expect(vendors.length).toBe(0);
+      });
+
+      const req = httpMock.expectOne(mockVendorUrl);
+      expect(req.request.method).toBe('GET');
+      req.flush(emptyVendors);
     });
   });
 });
