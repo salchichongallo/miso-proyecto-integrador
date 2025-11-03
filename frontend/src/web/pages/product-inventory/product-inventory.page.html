@@ -1,1 +1,19 @@
-<h1>Inventario de Productos</h1>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      <h1 class="title">Resultado de inventario ({{ products().length }})</h1>
+    </ion-card-title>
+    <ion-card-subtitle>
+      <ion-text color="medium">
+        <span class="subtitle"> Información actualizada en tiempo real </span>
+      </ion-text>
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="items">
+      @for (product of products(); track $index) {
+      <app-product-inventary-item [product]="product" />
+      }
+    </div>
+  </ion-card-content>
+</ion-card>
