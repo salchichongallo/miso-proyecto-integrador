@@ -1,0 +1,50 @@
+<section>
+  <header>
+    <div>
+      <ion-text color="dark">
+        <h1>{{product().name}}</h1>
+      </ion-text>
+      <div class="batch">
+        <ion-text color="medium">
+          <p>Lote: {{product().batch}}</p>
+        </ion-text>
+        <span [ngClass]="['badge', `badge--status-${product().status}`]"> {{product().status}} </span>
+      </div>
+    </div>
+    <div class="stock">
+      <p class="stock__quantity">{{product().stock}}</p>
+      <ion-text color="medium">
+        <p class="stock__label">unidades</p>
+      </ion-text>
+    </div>
+  </header>
+
+  @if (expiringSoon()) {
+  <div class="alert alert--warning">
+    <div>
+      <ion-icon name="alert-circle"></ion-icon>
+      <p>Próximo a vencer</p>
+    </div>
+    <p>Este lote vence en menos de {{ remainingDays() }} días. Priorizar para despacho.</p>
+  </div>
+  }
+
+  <div class="details">
+    <ion-text color="medium" class="details__location">
+      <ion-icon name="location"></ion-icon>
+      <span> Ubicación </span>
+    </ion-text>
+    <p class="details__name">{{ product().warehouse_name }}</p>
+    <p class="details__address">{{ product().warehouse_address }}</p>
+    <p class="details__city">{{ product().warehouse_city }}, {{product().warehouse_country}}</p>
+  </div>
+
+  <div class="details">
+    <ion-text color="medium" class="details__location">
+      <ion-icon name="calendar-number"></ion-icon>
+      <span> Vencimiento </span>
+    </ion-text>
+    <p class="details__name">{{ product().expiration_date }}</p>
+    <p class="details__city">{{ remainingDays() }} días restantes</p>
+  </div>
+</section>
