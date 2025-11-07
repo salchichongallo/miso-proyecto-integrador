@@ -18,6 +18,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { finalize } from 'rxjs';
 
@@ -46,6 +47,7 @@ import { CustomersService } from '@mobile/services/customers/customers.service';
     IonSelect,
     IonSelectOption,
     IonTextarea,
+    TranslateModule,
   ],
 })
 export class RegisterInstitutionalPage {
@@ -61,6 +63,7 @@ export class RegisterInstitutionalPage {
     private readonly customerService: CustomersService,
     private readonly loadingController: LoadingController,
     private readonly toastController: ToastController,
+    private readonly translate: TranslateService,
   ) {
     this.institutionalClientForm = this.fb.group({
       taxId: ['', [Validators.required, Validators.maxLength(20)]],
@@ -94,7 +97,7 @@ export class RegisterInstitutionalPage {
     };
 
     const loading = await this.loadingController.create({
-      message: 'Registrando cliente institucional...',
+      message: this.translate.instant('customers.register.toast.loading'),
     });
 
     loading.present();
@@ -106,14 +109,14 @@ export class RegisterInstitutionalPage {
         next: () => {
           this.institutionalClientForm.reset();
           this.router.navigate(['/tabs/customers']);
-          this.showSuccessMessage('Cliente institucional registrado exitosamente.');
+          this.showSuccessMessage(this.translate.instant('customers.register.toast.success'));
         },
         error: (error) => {
           this.showErrorMessage(
             error.error?.error ??
               error.error?.message ??
               error.message ??
-              'Error al registrar el cliente institucional.',
+              this.translate.instant('customers.register.toast.error'),
           );
         },
       });

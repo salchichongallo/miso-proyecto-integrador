@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/customers"></ion-back-button>
     </ion-buttons>
-    <ion-title>Registrar cliente institucional</ion-title>
+    <ion-title>{{ 'customers.register.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,32 +12,32 @@
     <ion-card-content>
       <form [formGroup]="institutionalClientForm" (ngSubmit)="submit()" class="form">
         <ion-input
-          label="Identificador tributario"
+          [label]="'customers.register.form.taxId.label' | translate"
           labelPlacement="stacked"
           type="text"
           formControlName="taxId"
-          placeholder="Ingrese el identificador tributario"
+          [placeholder]="'customers.register.form.taxId.placeholder' | translate"
           maxlength="20"
-          errorText="El identificador tributario es requerido"
+          [errorText]="'customers.register.form.taxId.required' | translate"
         ></ion-input>
 
         <ion-input
-          label="Razón social"
+          [label]="'customers.register.form.businessName.label' | translate"
           labelPlacement="stacked"
           type="text"
           formControlName="companyName"
-          placeholder="Ingrese la razón social"
+          [placeholder]="'customers.register.form.businessName.placeholder' | translate"
           maxlength="100"
-          errorText="La razón social es requerida"
+          [errorText]="'customers.register.form.businessName.required' | translate"
         ></ion-input>
 
         <ion-select
-          label="País"
+          [label]="'customers.register.form.country.label' | translate"
           labelPlacement="stacked"
           formControlName="country"
-          placeholder="Seleccione un país"
+          [placeholder]="'customers.register.form.country.placeholder' | translate"
           interface="action-sheet"
-          cancelText="Cancelar"
+          [cancelText]="'common.cancel' | translate"
         >
           @for (country of countries; track country.code) {
             <ion-select-option [value]="country.code">{{ country.name }}</ion-select-option>
@@ -45,12 +45,12 @@
         </ion-select>
 
         <ion-select
-          label="Nivel de atención"
+          [label]="'customers.register.form.careLevel.label' | translate"
           labelPlacement="stacked"
           formControlName="careLevel"
-          placeholder="Seleccione el nivel"
+          [placeholder]="'customers.register.form.careLevel.placeholder' | translate"
           interface="action-sheet"
-          cancelText="Cancelar"
+          [cancelText]="'common.cancel' | translate"
         >
           @for (level of careLevels; track level.value) {
             <ion-select-option [value]="level.value">Nivel {{ level.value }}</ion-select-option>
@@ -58,12 +58,12 @@
         </ion-select>
 
         <ion-select
-          label="Especialidad"
+          [label]="'customers.register.form.specialty.label' | translate"
           labelPlacement="stacked"
           formControlName="specialty"
-          placeholder="Seleccione una especialidad"
+          [placeholder]="'customers.register.form.specialty.placeholder' | translate"
           interface="action-sheet"
-          cancelText="Cancelar"
+          [cancelText]="'common.cancel' | translate"
         >
           @for (specialty of specialties; track specialty) {
             <ion-select-option [value]="specialty">{{ specialty }}</ion-select-option>
@@ -71,10 +71,10 @@
         </ion-select>
 
         <ion-textarea
-          label="Ubicación"
+          [label]="'customers.register.form.location.label' | translate"
           labelPlacement="stacked"
           formControlName="location"
-          placeholder="Ingrese la dirección completa"
+          [placeholder]="'customers.register.form.location.placeholder' | translate"
           rows="3"
           maxlength="200"
           counter="true"
@@ -82,10 +82,10 @@
 
         <section class="button-container">
           <ion-button expand="block" fill="outline" color="primary" type="button" (click)="cancelRegister()" onkeypress>
-            Cancelar
+            {{ 'customers.register.buttons.cancel' | translate }}
           </ion-button>
           <ion-button expand="block" color="primary" type="submit" [disabled]="!institutionalClientForm.valid">
-            Guardar
+            {{ 'customers.register.buttons.save' | translate }}
           </ion-button>
         </section>
       </form>

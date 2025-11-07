@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
@@ -18,6 +18,7 @@ import {
   IonLabel,
   IonText,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, homeOutline, receiptOutline } from 'ionicons/icons';
@@ -45,10 +46,13 @@ import { Order } from '@mobile/models/order.model';
     IonTitle,
     IonToolbar,
     IonHeader,
+    TranslateModule,
   ],
 })
 export class OrderConfirmationPage implements OnInit {
   public order: Order | null = null;
+
+  private readonly translate = inject(TranslateService);
 
   constructor(private router: Router) {
     addIcons({ checkmarkCircleOutline, homeOutline, receiptOutline });
@@ -93,23 +97,13 @@ export class OrderConfirmationPage implements OnInit {
   }
 
   public getPriorityLabel(priority: string): string {
-    const priorityLabels: Record<string, string> = {
-      HIGH: 'Alta',
-      MEDIUM: 'Media',
-      LOW: 'Baja',
-    };
-    return priorityLabels[priority] || priority;
+    const priorityKey = priority.toLowerCase();
+    return this.translate.instant(`orders.cart.form.priority.${priorityKey}`);
   }
 
   public getStatusLabel(status: string): string {
-    const statusLabels: Record<string, string> = {
-      PENDING: 'Pendiente',
-      CONFIRMED: 'Confirmado',
-      SHIPPED: 'Enviado',
-      DELIVERED: 'Entregado',
-      CANCELLED: 'Cancelado',
-    };
-    return statusLabels[status] || status;
+    const statusKey = status.toLowerCase();
+    return this.translate.instant(`orders.searchPage.status.${statusKey}`);
   }
 
   public getTotalAmount(): number {

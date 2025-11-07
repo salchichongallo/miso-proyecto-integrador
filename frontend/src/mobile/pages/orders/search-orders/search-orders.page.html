@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/orders"></ion-back-button>
     </ion-buttons>
-    <ion-title> Consulta de pedidos </ion-title>
+    <ion-title>{{ 'orders.searchPage.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
   @if (isLoading()) {
     <div class="loading-container">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Cargando pedidos...</p>
+      <p>{{ 'orders.searchPage.loading' | translate }}</p>
     </div>
   } @else {
       @for (order of orders; track $index) {
@@ -24,17 +24,17 @@
               </ion-chip>
             </div>
             <ion-card-subtitle>
-              Vendedor: {{ order.id_vendor }} <br>
-              <span>{{ order.products.length }} productos</span>
+              {{ 'orders.searchPage.vendor' | translate }}: {{ order.id_vendor }} <br>
+              <span>{{ 'orders.searchPage.products' | translate: {count: order.products.length} }}</span>
             </ion-card-subtitle>
           </ion-card-header>
         </ion-card>
       } @empty {
         <ion-card class="empty-state-card">
           <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
-          <ion-card-title class="empty-state-card__title">Sin resultados</ion-card-title>
+          <ion-card-title class="empty-state-card__title">{{ 'orders.searchPage.empty.title' | translate }}</ion-card-title>
           <ion-card-content class="empty-state-card__content">
-            No se encontraron pedidos en este momento. Intenta más tarde.
+            {{ 'orders.searchPage.empty.message' | translate }}
           </ion-card-content>
         </ion-card>
       }

@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Platform } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { Keyboard } from '@capacitor/keyboard';
 
 import { LoginTemplate } from './login.template';
@@ -23,7 +24,7 @@ describe('LoginTemplate', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [LoginTemplate],
+      imports: [LoginTemplate, TranslateModule.forRoot()],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: Platform, useValue: mockPlatform },

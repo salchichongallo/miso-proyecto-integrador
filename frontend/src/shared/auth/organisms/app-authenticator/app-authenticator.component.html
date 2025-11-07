@@ -6,17 +6,17 @@
           <ion-input
             formControlName="email"
             size=""
-            label="Correo electrónico"
+            [label]="'auth.email.label' | translate"
             type="email"
             id="email"
             name="email"
-            placeholder="Por favor ingresa tu correo"
+            [placeholder]="'auth.email.placeholder' | translate"
             labelPlacement="stacked"
             [errorText]="
               form.controls.email.errors?.['required']
-                ? 'El correo es obligatorio'
+                ? ('auth.email.required' | translate)
                 : form.controls.email.errors?.['email']
-                  ? 'Correo no válido'
+                  ? ('auth.email.invalid' | translate)
                   : ''
             "
           />
@@ -25,17 +25,17 @@
         <ion-item>
           <ion-input
             formControlName="password"
-            label="Contraseña"
+            [label]="'auth.password.label' | translate"
             type="password"
             id="password"
             name="password"
-            placeholder="Por favor ingresa tu contraseña"
+            [placeholder]="'auth.password.placeholder' | translate"
             labelPlacement="stacked"
             [errorText]="
               form.controls.password.errors?.['required']
-                ? 'La contraseña es obligatoria'
+                ? ('auth.password.required' | translate)
                 : form.controls.password.errors?.['minlength']
-                  ? 'La contraseña debe tener al menos 6 caracteres'
+                  ? ('auth.password.minLength' | translate)
                   : ''
             "
           >
@@ -44,7 +44,7 @@
         </ion-item>
       </ion-list>
 
-      <ion-button type="submit" expand="full" class="submit-button">Ingresar</ion-button>
+      <ion-button type="submit" expand="full" class="submit-button">{{ 'auth.login.button' | translate }}</ion-button>
     </form>
   </ion-card-content>
 </ion-card>

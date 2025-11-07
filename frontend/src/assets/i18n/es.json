@@ -1,0 +1,267 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "retry": "Reintentar",
+    "error": "Error",
+    "success": "Éxito",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Volver",
+    "processing": "Procesando..."
+  },
+  "tabs": {
+    "customers": "Clientes",
+    "orders": "Pedidos",
+    "institutions": "Instituciones",
+    "settings": "Ajustes"
+  },
+  "auth": {
+    "title": "Iniciar Sesión",
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "Por favor ingresa tu correo",
+      "required": "El correo es obligatorio",
+      "invalid": "Correo no válido"
+    },
+    "password": {
+      "label": "Contraseña",
+      "placeholder": "Por favor ingresa tu contraseña",
+      "required": "La contraseña es obligatoria",
+      "minLength": "La contraseña debe tener al menos 6 caracteres"
+    },
+    "login": {
+      "button": "Ingresar",
+      "loading": "Cargando...",
+      "error": "Error al iniciar sesión. Por favor intenta de nuevo."
+    }
+  },
+  "customers": {
+    "title": "Clientes",
+    "registerInstitutional": "Registrar cliente institucional",
+    "register": {
+      "title": "Registro de Cliente Institucional",
+      "form": {
+        "taxId": {
+          "label": "Identificador tributario",
+          "placeholder": "Ingrese el identificador tributario",
+          "required": "El identificador tributario es requerido"
+        },
+        "businessName": {
+          "label": "Razón social",
+          "placeholder": "Ingrese la razón social",
+          "required": "La razón social es requerida"
+        },
+        "country": {
+          "label": "País",
+          "placeholder": "Seleccione un país"
+        },
+        "careLevel": {
+          "label": "Nivel de atención",
+          "placeholder": "Seleccione un nivel de atención"
+        },
+        "specialty": {
+          "label": "Especialidad",
+          "placeholder": "Seleccione una especialidad"
+        },
+        "location": {
+          "label": "Ubicación",
+          "placeholder": "Ingrese la ubicación"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Guardar"
+      },
+      "toast": {
+        "loading": "Registrando cliente institucional...",
+        "success": "Cliente institucional registrado exitosamente.",
+        "error": "Error al registrar el cliente institucional. Por favor intenta de nuevo."
+      }
+    }
+  },
+  "orders": {
+    "title": "Pedidos",
+    "createWithProducts": "Crear pedido con productos",
+    "search": "Consultar pedidos",
+    "searchPage": {
+      "title": "Consulta de pedidos",
+      "loading": "Cargando pedidos...",
+      "empty": {
+        "title": "Sin resultados",
+        "message": "No se encontraron pedidos en este momento. Intenta más tarde."
+      },
+      "vendor": "Vendedor",
+      "products": "{{count}} productos",
+      "status": {
+        "pending": "Pendiente",
+        "confirmed": "Confirmado",
+        "processing": "Procesando",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "cancelled": "Cancelado",
+        "returned": "Devuelto"
+      }
+    },
+    "createPage": {
+      "title": "Crear pedido",
+      "search": {
+        "label": "Buscar productos",
+        "placeholder": "Ingrese el nombre del producto"
+      },
+      "loading": "Cargando productos...",
+      "error": {
+        "title": "Error al cargar productos",
+        "button": "Reintentar",
+        "toast": "No se pudieron cargar los productos. Por favor intenta de nuevo.",
+        "searchToast": "Error al buscar productos. Por favor intenta de nuevo."
+      },
+      "empty": {
+        "title": "No se encontraron productos",
+        "message": "Intenta con otros términos de búsqueda"
+      },
+      "availability": "Disponibilidad",
+      "stock": "Stock"
+    },
+    "productDetail": {
+      "title": "Crear pedido",
+      "labels": {
+        "price": "Precio",
+        "batch": "Lote",
+        "stockTotal": "Stock Total",
+        "status": "Estado",
+        "expirationDate": "Fecha de vencimiento",
+        "storageConditions": "Condiciones de almacenamiento",
+        "temperatureRequired": "Temperatura requerida",
+        "nitProvider": "NIT Proveedor",
+        "providerName": "Nombre del proveedor",
+        "warehouseId": "ID Bodega",
+        "warehouseName": "Nombre de la bodega"
+      },
+      "quantity": {
+        "label": "Cantidad a pedir",
+        "placeholder": "Seleccione cantidad"
+      },
+      "priority": {
+        "label": "Prioridad",
+        "high": "Alta",
+        "medium": "Media",
+        "low": "Baja"
+      },
+      "button": "Agregar al carrito",
+      "toast": {
+        "productNotFound": "Error: Producto no encontrado",
+        "invalidQuantity": "Por favor ingrese una cantidad válida"
+      }
+    },
+    "cart": {
+      "title": "Carrito",
+      "titleWithCount": "Carrito ({{count}})",
+      "empty": {
+        "title": "Tu carrito está vacío",
+        "message": "Agrega productos para comenzar tu pedido",
+        "button": "Ver productos"
+      },
+      "sections": {
+        "products": "Productos",
+        "delivery": "Información de entrega",
+        "summary": "Resumen del pedido"
+      },
+      "form": {
+        "country": {
+          "label": "País",
+          "placeholder": "Seleccione un país"
+        },
+        "city": {
+          "label": "Ciudad",
+          "placeholder": "Ingrese la ciudad"
+        },
+        "address": {
+          "label": "Dirección",
+          "placeholder": "Ingrese la dirección de entrega"
+        },
+        "priority": {
+          "label": "Prioridad",
+          "placeholder": "Seleccione la prioridad",
+          "high": "Alta",
+          "medium": "Media",
+          "low": "Baja"
+        },
+        "estimatedDate": {
+          "label": "Fecha estimada de entrega",
+          "placeholder": "Seleccione la fecha"
+        }
+      },
+      "summary": {
+        "subtotal": "Subtotal",
+        "shipping": "Envío",
+        "total": "Total"
+      },
+      "buttons": {
+        "confirm": "Confirmar pedido",
+        "empty": "Vaciar carrito",
+        "processing": "Procesando..."
+      },
+      "alert": {
+        "title": "Vaciar carrito",
+        "message": "¿Estás seguro de que deseas vaciar el carrito?",
+        "cancel": "Cancelar",
+        "confirm": "Vaciar"
+      },
+      "toast": {
+        "productRemoved": "Producto eliminado del carrito",
+        "cartCleared": "Carrito vaciado",
+        "validationError": "Por favor completa todos los campos del formulario",
+        "success": "Pedido creado exitosamente",
+        "error": "Error al crear el pedido. Por favor intenta de nuevo."
+      }
+    },
+    "confirmation": {
+      "title": "Confirmación de Pedido",
+      "success": {
+        "title": "¡Pedido Creado Exitosamente!",
+        "message": "Tu pedido ha sido registrado y está siendo procesado"
+      },
+      "sections": {
+        "details": "Detalles del Pedido",
+        "address": "Dirección de Entrega",
+        "products": "Productos",
+        "productsWithCount": "Productos ({{count}})",
+        "additional": "Información Adicional"
+      },
+      "labels": {
+        "orderId": "ID del Pedido",
+        "status": "Estado",
+        "priority": "Prioridad",
+        "estimatedDate": "Fecha Estimada",
+        "country": "País",
+        "city": "Ciudad",
+        "address": "Dirección",
+        "clientId": "ID Cliente",
+        "vendorId": "ID Vendedor",
+        "createdAt": "Fecha de Creación"
+      },
+      "summary": {
+        "totalUnits": "Total de unidades"
+      },
+      "buttons": {
+        "viewOrders": "Ver Mis Pedidos",
+        "createNew": "Crear Nuevo Pedido"
+      }
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": {
+      "title": "Idioma",
+      "label": "Selecciona tu idioma",
+      "es": "Español",
+      "en": "Inglés",
+      "toast": {
+        "changed": "Idioma cambiado a {{language}}"
+      }
+    }
+  }
+}

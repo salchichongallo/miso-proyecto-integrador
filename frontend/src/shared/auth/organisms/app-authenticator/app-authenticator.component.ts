@@ -11,6 +11,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@shared/auth/auth.service';
 
@@ -27,10 +28,12 @@ import { AuthService } from '@shared/auth/auth.service';
     IonInput,
     IonCardContent,
     IonInputPasswordToggle,
+    TranslateModule,
   ],
 })
 export class AppAuthenticatorComponent {
   private readonly service = inject(AuthService);
+  private readonly translate = inject(TranslateService);
 
   readonly loginSuccessfully = output<void>();
 
@@ -60,7 +63,7 @@ export class AppAuthenticatorComponent {
         this.form.controls.password.reset();
         await loading.dismiss();
         await this.toast
-          .create({ message: `Error al iniciar sesión. ${error}`, duration: 7000, color: 'danger' })
+          .create({ message: this.translate.instant('auth.login.error'), duration: 7000, color: 'danger' })
           .then((toast) => toast.present());
       }
     }
@@ -68,7 +71,7 @@ export class AppAuthenticatorComponent {
 
   private async showLoader() {
     const loading = await this.loader.create({
-      message: 'Cargando...',
+      message: this.translate.instant('auth.login.loading'),
       keyboardClose: false,
       backdropDismiss: false,
     });

@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { Keyboard, KeyboardInfo } from '@capacitor/keyboard';
 import { IonImg, IonThumbnail, Platform } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AppAuthenticatorComponent } from '../app-authenticator/app-authenticator.component';
 
@@ -9,7 +10,7 @@ import { AppAuthenticatorComponent } from '../app-authenticator/app-authenticato
   selector: 'app-login-template',
   templateUrl: 'login.template.html',
   styleUrls: ['login.template.scss'],
-  imports: [IonImg, AppAuthenticatorComponent, IonThumbnail],
+  imports: [IonImg, AppAuthenticatorComponent, IonThumbnail, TranslateModule],
 })
 export class LoginTemplate {
   private readonly router = inject(Router);

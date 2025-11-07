@@ -3,17 +3,17 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/orders"></ion-back-button>
     </ion-buttons>
-    <ion-title>Crear pedido</ion-title>
+    <ion-title>{{ 'orders.createPage.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <br />
   <ion-input
-    label="Buscar productos"
+    [label]="'orders.createPage.search.label' | translate"
     labelPlacement="stacked"
     type="text"
-    placeholder="Ingrese el nombre del producto"
+    [placeholder]="'orders.createPage.search.placeholder' | translate"
     [(ngModel)]="searchQuery"
     (ionInput)="onSearchChange()"
     clearInput
@@ -25,7 +25,7 @@
   @if (isLoading()) {
     <div class="loading-container">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Cargando productos...</p>
+      <p>{{ 'orders.createPage.loading' | translate }}</p>
     </div>
   }
 
@@ -33,10 +33,10 @@
   @else if (errorMessage()) {
     <div class="error-container">
       <ion-icon name="alert-circle-outline" color="danger" class="error-icon"></ion-icon>
-      <h3>Error al cargar productos</h3>
+      <h3>{{ 'orders.createPage.error.title' | translate }}</h3>
       <p>{{ errorMessage() }}</p>
       <ion-button (click)="retryLoad()" fill="outline">
-        Reintentar
+        {{ 'orders.createPage.error.button' | translate }}
       </ion-button>
     </div>
   }
@@ -45,8 +45,8 @@
   @else if (products().length === 0) {
     <div class="empty-container">
       <ion-icon name="search-outline" color="medium" class="empty-icon"></ion-icon>
-      <h3>No se encontraron productos</h3>
-      <p>Intenta con otros términos de búsqueda</p>
+      <h3>{{ 'orders.createPage.empty.title' | translate }}</h3>
+      <p>{{ 'orders.createPage.empty.message' | translate }}</p>
     </div>
   }
 
@@ -63,7 +63,7 @@
             <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
           </ion-label>
           <div class="metadata-end-wrapper" slot="end">
-            <ion-note color="medium">Disponibilidad</ion-note> <br />
+            <ion-note color="medium">{{ 'orders.createPage.availability' | translate }}</ion-note> <br />
             <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
           </div>
         </ion-item>
