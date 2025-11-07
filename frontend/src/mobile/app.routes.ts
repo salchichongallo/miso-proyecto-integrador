@@ -40,6 +40,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'orders/search-orders',
+        loadComponent: () =>
+          import('./pages/orders/search-orders/search-orders.page').then(
+            (m) => m.SearchOrdersPage,
+          ),
+      },
+      {
         path: 'orders/create-order-with-products',
         loadComponent: () =>
           import('./pages/orders/create-order-with-products/create-order-with-products.page').then(

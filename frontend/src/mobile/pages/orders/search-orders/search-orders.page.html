@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/orders"></ion-back-button>
+    </ion-buttons>
+    <ion-title> Consulta de pedidos </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  @if (isLoading()) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Cargando pedidos...</p>
+    </div>
+  } @else {
+      @for (order of orders; track $index) {
+        <ion-card>
+          <ion-card-header>
+            <div class="order-header">
+              <ion-card-title>{{ order.id }}</ion-card-title>
+              <ion-chip [color]="getStatusColor(order.order_status)">
+                {{ getStatusLabel(order.order_status) }}
+              </ion-chip>
+            </div>
+            <ion-card-subtitle>
+              Vendedor: {{ order.id_vendor }} <br>
+              <span>{{ order.products.length }} productos</span>
+            </ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      } @empty {
+        <ion-card class="empty-state-card">
+          <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
+          <ion-card-title class="empty-state-card__title">Sin resultados</ion-card-title>
+          <ion-card-content class="empty-state-card__content">
+            No se encontraron pedidos en este momento. Intenta más tarde.
+          </ion-card-content>
+        </ion-card>
+      }
+  }
+</ion-content>
