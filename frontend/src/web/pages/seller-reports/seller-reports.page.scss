@@ -1,0 +1,318 @@
+.page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  margin: 0;
+}
+
+// Filter Card
+.filter-card {
+  margin-bottom: 24px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.14), 0px 3px 4px 0px rgba(0, 0, 0, 0.12),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+
+  ion-card-content {
+    padding: 20px 16px;
+  }
+}
+
+// Simple Filter (Initial State)
+.filter-form-simple {
+  .filter-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .vendor-select {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .generate-button {
+    flex-shrink: 0;
+    height: 36px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.84px;
+  }
+}
+
+// Advanced Filter (Report State)
+.filter-form-advanced {
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+
+    ion-button {
+      height: 36px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      text-transform: uppercase;
+      font-weight: 500;
+      font-size: 14px;
+      letter-spacing: 0.84px;
+    }
+  }
+}
+
+// Initial State Preview
+.report-preview {
+  margin-top: 40px;
+
+  .preview-title {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.87);
+    margin-bottom: 16px;
+  }
+
+  .preview-grid {
+    padding: 0;
+  }
+
+  .metric-card,
+  .products-card {
+    &.preview {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+}
+
+// Metric Cards
+.metrics-grid {
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  height: 100%;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.14), 0px 3px 4px 0px rgba(0, 0, 0, 0.12),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+
+  ion-card-content {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .metric-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000000;
+    letter-spacing: 0.84px;
+    text-transform: uppercase;
+  }
+
+  .metric-label {
+    font-size: 16px;
+    font-weight: 300;
+    color: #000000;
+    letter-spacing: 0.84px;
+  }
+
+  .metric-growth {
+    font-size: 14px;
+    font-weight: 500;
+
+    &.growth-positive {
+      color: #28ba62;
+    }
+
+    &.growth-negative {
+      color: #dc3545;
+    }
+  }
+}
+
+// Charts Section
+.charts-grid {
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.14), 0px 3px 4px 0px rgba(0, 0, 0, 0.12),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.2);
+
+  ion-card-header {
+    padding: 8px;
+  }
+
+  ion-card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000000;
+    letter-spacing: 0.84px;
+  }
+
+  .chart-placeholder {
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f6f9;
+    border-radius: 8px;
+  }
+
+  .chart-info {
+    color: #666666;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+// Top Products List
+.products-card {
+  ion-card-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-item {
+  background: #f5f6f9;
+  padding: 10px;
+  border-radius: 8px;
+
+  .product-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+  }
+
+  .product-units {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 2px;
+  }
+}
+
+// Table Section
+.table-section {
+  margin-top: 40px;
+}
+
+.table-title {
+  font-size: 32px;
+  font-weight: 500;
+  color: #000000;
+  margin-bottom: 24px;
+}
+
+.table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0px 2px 4px -2px rgba(0, 0, 0, 0.1), 0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0px 0px 0px 1px rgba(0, 0, 0, 0.1);
+}
+
+.performance-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background: #f1f5f9;
+
+    th {
+      padding: 14px 12px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      color: #000000;
+      border-right: 1px solid #cbd5e1;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #cbd5e1;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 14px 12px;
+      font-size: 12px;
+      color: #000000;
+      border-right: 1px solid #cbd5e1;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
+
+// No Data Messages
+.no-data {
+  text-align: center;
+  color: #666666;
+  font-size: 14px;
+  padding: 20px;
+  margin: 0;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .page-container {
+    padding: 12px;
+  }
+
+  .metric-card {
+    .metric-value {
+      font-size: 20px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+    }
+  }
+
+  .table-container {
+    font-size: 11px;
+  }
+
+  .performance-table {
+    thead th,
+    tbody td {
+      padding: 10px 8px;
+      font-size: 11px;
+    }
+  }
+}

@@ -1,0 +1,337 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="page-container">
+    <!-- Header -->
+    <div class="page-header">
+      <h1 class="page-title">{{ 'sellerReports.title' | translate }}</h1>
+    </div>
+
+    <!-- Initial State: Simple Vendor Selection -->
+    @if (showInitialState()) {
+      <div class="initial-state">
+        <ion-card class="filter-card">
+          <ion-card-content>
+            <form [formGroup]="filterForm" class="filter-form-simple">
+              <div class="filter-row">
+                <ion-select
+                  formControlName="vendorId"
+                  [label]="'sellerReports.filters.vendor' | translate"
+                  labelPlacement="stacked"
+                  [placeholder]="'sellerReports.filters.selectVendor' | translate"
+                  class="vendor-select">
+                  @for (vendor of filterOptions().vendors; track vendor.id) {
+                    <ion-select-option [value]="vendor.id">
+                      {{ vendor.name }}
+                    </ion-select-option>
+                  }
+                </ion-select>
+
+                <ion-button
+                  (click)="onGenerateReport()"
+                  color="primary"
+                  class="generate-button">
+                  {{ 'sellerReports.actions.generateReport' | translate }}
+                </ion-button>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Empty State Preview -->
+        <div class="report-preview">
+          <h2 class="preview-title">{{ 'sellerReports.preview.title' | translate }}</h2>
+          <ion-grid class="preview-grid">
+            <ion-row>
+              <ion-col size="12" sizeMd="6">
+                <ion-card class="metric-card preview">
+                  <ion-card-content>
+                    <div class="metric-value">83%</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.goalCompletion' | translate }}</div>
+                  </ion-card-content>
+                </ion-card>
+
+                <ion-card class="metric-card preview">
+                  <ion-card-content>
+                    <div class="metric-value">184</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.ordersGenerated' | translate }}</div>
+                  </ion-card-content>
+                </ion-card>
+
+                <ion-card class="metric-card preview">
+                  <ion-card-content>
+                    <div class="metric-value">93</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.customersServed' | translate }}</div>
+                  </ion-card-content>
+                </ion-card>
+
+                <ion-card class="metric-card preview">
+                  <ion-card-content>
+                    <div class="metric-value">US$ 9.414.000</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.totalSales' | translate }}</div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeMd="6">
+                <ion-card class="products-card preview">
+                  <ion-card-header>
+                    <ion-card-title>{{ 'sellerReports.topProducts.title' | translate }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <div class="product-item">
+                      <div class="product-name">Acetaminofén 500mg</div>
+                      <div class="product-units">2500 {{ 'sellerReports.topProducts.units' | translate }}</div>
+                    </div>
+                    <div class="product-item">
+                      <div class="product-name">Guantes de látex</div>
+                      <div class="product-units">1800 {{ 'sellerReports.topProducts.units' | translate }}</div>
+                    </div>
+                    <div class="product-item">
+                      <div class="product-name">Mascarillas N95</div>
+                      <div class="product-units">1200 {{ 'sellerReports.topProducts.units' | translate }}</div>
+                    </div>
+                    <div class="product-item">
+                      <div class="product-name">Suero fisiológico</div>
+                      <div class="product-units">850 {{ 'sellerReports.topProducts.units' | translate }}</div>
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </div>
+    }
+
+    <!-- Report Generated State: Advanced Filters & Results -->
+    @if (hasReport()) {
+      <div class="report-state">
+        <!-- Advanced Filters -->
+        <ion-card class="filter-card advanced">
+          <ion-card-content>
+            <form [formGroup]="filterForm" class="filter-form-advanced">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" sizeMd="6" sizeLg="2.4">
+                    <ion-input
+                      formControlName="startDate"
+                      type="date"
+                      [label]="'sellerReports.filters.startDate' | translate"
+                      labelPlacement="stacked">
+                      <ion-icon slot="end" name="calendar-outline"></ion-icon>
+                    </ion-input>
+                  </ion-col>
+
+                  <ion-col size="12" sizeMd="6" sizeLg="2.4">
+                    <ion-input
+                      formControlName="endDate"
+                      type="date"
+                      [label]="'sellerReports.filters.endDate' | translate"
+                      labelPlacement="stacked">
+                      <ion-icon slot="end" name="calendar-outline"></ion-icon>
+                    </ion-input>
+                  </ion-col>
+
+                  <ion-col size="12" sizeMd="6" sizeLg="2.4">
+                    <ion-select
+                      formControlName="region"
+                      [label]="'sellerReports.filters.region' | translate"
+                      labelPlacement="stacked"
+                      [placeholder]="'sellerReports.filters.selectRegion' | translate">
+                      @for (region of filterOptions().regions; track region.id) {
+                        <ion-select-option [value]="region.id">
+                          {{ region.name }}
+                        </ion-select-option>
+                      }
+                    </ion-select>
+                  </ion-col>
+
+                  <ion-col size="12" sizeMd="6" sizeLg="2.4">
+                    <ion-select
+                      formControlName="vendorId"
+                      [label]="'sellerReports.filters.vendor' | translate"
+                      labelPlacement="stacked"
+                      [placeholder]="'sellerReports.filters.selectVendor' | translate">
+                      @for (vendor of filterOptions().vendors; track vendor.id) {
+                        <ion-select-option [value]="vendor.id">
+                          {{ vendor.name }}
+                        </ion-select-option>
+                      }
+                    </ion-select>
+                  </ion-col>
+
+                  <ion-col size="12" sizeMd="6" sizeLg="2.4">
+                    <ion-select
+                      formControlName="productId"
+                      [label]="'sellerReports.filters.product' | translate"
+                      labelPlacement="stacked"
+                      [placeholder]="'sellerReports.filters.selectProduct' | translate">
+                      @for (product of filterOptions().products; track product.id) {
+                        <ion-select-option [value]="product.id">
+                          {{ product.name }}
+                        </ion-select-option>
+                      }
+                    </ion-select>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col size="12">
+                    <div class="action-buttons">
+                      <ion-button (click)="onGenerateReport()" color="primary">
+                        {{ 'sellerReports.actions.generateReport' | translate }}
+                      </ion-button>
+                      <ion-button (click)="onExportPDF()" color="warning" fill="solid">
+                        <ion-icon slot="start" name="download-outline"></ion-icon>
+                        {{ 'sellerReports.actions.exportPDF' | translate }}
+                      </ion-button>
+                      <ion-button (click)="onExportExcel()" fill="solid" style="--background: #28ba62">
+                        <ion-icon slot="start" name="download-outline"></ion-icon>
+                        {{ 'sellerReports.actions.exportExcel' | translate }}
+                      </ion-button>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </form>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Metrics Cards -->
+        @if (reportData(); as report) {
+          <ion-grid class="metrics-grid">
+            <ion-row>
+              <ion-col size="12" sizeMd="6" sizeLg="3">
+                <ion-card class="metric-card">
+                  <ion-card-content>
+                    <div class="metric-value">{{ formatCurrency(report.totalSales) }}</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.totalSales' | translate }}</div>
+                    <div [class]="getGrowthColor(report.salesGrowth)" class="metric-growth">
+                      {{ formatGrowth(report.salesGrowth) }}
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeMd="6" sizeLg="3">
+                <ion-card class="metric-card">
+                  <ion-card-content>
+                    <div class="metric-value">{{ formatPercentage(report.goalCompletion) }}</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.goalCompletion' | translate }}</div>
+                    <div [class]="getGrowthColor(report.goalGrowth)" class="metric-growth">
+                      {{ formatGrowth(report.goalGrowth) }}
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeMd="6" sizeLg="3">
+                <ion-card class="metric-card">
+                  <ion-card-content>
+                    <div class="metric-value">{{ report.customersServed }}</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.customersServed' | translate }}</div>
+                    <div [class]="getGrowthColor(report.customersGrowth)" class="metric-growth">
+                      {{ formatGrowth(report.customersGrowth) }}
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeMd="6" sizeLg="3">
+                <ion-card class="metric-card">
+                  <ion-card-content>
+                    <div class="metric-value">{{ report.ordersGenerated }}</div>
+                    <div class="metric-label">{{ 'sellerReports.metrics.ordersGenerated' | translate }}</div>
+                    <div [class]="getGrowthColor(report.ordersGrowth)" class="metric-growth">
+                      {{ formatGrowth(report.ordersGrowth) }}
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <!-- Charts Section -->
+          <ion-grid class="charts-grid">
+            <ion-row>
+              <ion-col size="12" sizeLg="6">
+                <ion-card class="chart-card">
+                  <ion-card-header>
+                    <ion-card-title>{{ 'sellerReports.charts.salesByMonth' | translate }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <div class="chart-placeholder">
+                      <p class="chart-info">{{ 'sellerReports.charts.chartPlaceholder' | translate }}</p>
+                    </div>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+
+              <ion-col size="12" sizeLg="6">
+                <ion-card class="chart-card">
+                  <ion-card-header>
+                    <ion-card-title>{{ 'sellerReports.topProducts.title' | translate }}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    @if (report.topProducts.length > 0) {
+                      <div class="products-list">
+                        @for (product of report.topProducts; track product.productId) {
+                          <div class="product-item">
+                            <div class="product-name">{{ product.productName }}</div>
+                            <div class="product-units">
+                              {{ product.unitsSold }} {{ 'sellerReports.topProducts.units' | translate }}
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <p class="no-data">{{ 'sellerReports.topProducts.noData' | translate }}</p>
+                    }
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <!-- Detailed Performance Table -->
+          <div class="table-section">
+            <h2 class="table-title">{{ 'sellerReports.table.title' | translate }}</h2>
+            @if (sellerDetails().length > 0) {
+              <div class="table-container">
+                <table class="performance-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'sellerReports.table.vendor' | translate }}</th>
+                      <th>{{ 'sellerReports.table.email' | translate }}</th>
+                      <th>{{ 'sellerReports.table.institutions' | translate }}</th>
+                      <th>{{ 'sellerReports.table.actions' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (seller of sellerDetails(); track seller.vendorId) {
+                      <tr>
+                        <td>{{ seller.vendorName }}</td>
+                        <td>{{ seller.email }}</td>
+                        <td>{{ seller.institutions.join(', ') }}</td>
+                        <td>
+                          <ion-button size="small" fill="clear" color="primary">
+                            {{ 'sellerReports.table.viewDetails' | translate }}
+                          </ion-button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <ion-card>
+                <ion-card-content>
+                  <p class="no-data">{{ 'sellerReports.table.noData' | translate }}</p>
+                </ion-card-content>
+              </ion-card>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</ion-content>

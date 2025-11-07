@@ -263,5 +263,50 @@
         "changed": "Language changed to {{language}}"
       }
     }
+  },
+  "sellerReports": {
+    "title": "Seller Reports and Performance Analysis",
+    "preview": {
+      "title": "Seller report"
+    },
+    "filters": {
+      "vendor": "Vendor",
+      "selectVendor": "Select a vendor",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "region": "Region",
+      "selectRegion": "Select a region",
+      "product": "Product",
+      "selectProduct": "Select a product"
+    },
+    "actions": {
+      "generateReport": "Generate report",
+      "exportPDF": "Export PDF",
+      "exportExcel": "Export Excel"
+    },
+    "metrics": {
+      "totalSales": "Total sales",
+      "goalCompletion": "Goal completion",
+      "customersServed": "Customers served",
+      "ordersGenerated": "Orders generated"
+    },
+    "charts": {
+      "salesByMonth": "Sales by month",
+      "chartPlaceholder": "Monthly sales chart"
+    },
+    "topProducts": {
+      "title": "Top 5 products",
+      "units": "units",
+      "noData": "No product data available"
+    },
+    "table": {
+      "title": "Detailed Performance by Seller",
+      "vendor": "Vendor",
+      "email": "Corporate email",
+      "institutions": "Institutions",
+      "actions": "Actions",
+      "viewDetails": "View details",
+      "noData": "No records found for the applied filters"
+    }
   }
 }

@@ -263,5 +263,50 @@
         "changed": "Idioma cambiado a {{language}}"
       }
     }
+  },
+  "sellerReports": {
+    "title": "Consulta de reportes e informes de los vendedores",
+    "preview": {
+      "title": "Reporte de vendedor"
+    },
+    "filters": {
+      "vendor": "Vendedor",
+      "selectVendor": "Seleccione un vendedor",
+      "startDate": "Fecha desde",
+      "endDate": "Fecha hasta",
+      "region": "Región",
+      "selectRegion": "Seleccione una región",
+      "product": "Producto",
+      "selectProduct": "Seleccione un producto"
+    },
+    "actions": {
+      "generateReport": "Generar reporte",
+      "exportPDF": "Exportar PDF",
+      "exportExcel": "Exportar Excel"
+    },
+    "metrics": {
+      "totalSales": "Ventas totales",
+      "goalCompletion": "Cumplimiento de meta",
+      "customersServed": "Clientes atendidos",
+      "ordersGenerated": "Pedidos generados"
+    },
+    "charts": {
+      "salesByMonth": "Ventas por mes",
+      "chartPlaceholder": "Gráfico de ventas mensuales"
+    },
+    "topProducts": {
+      "title": "Top 5 productos",
+      "units": "unidades",
+      "noData": "No hay datos de productos disponibles"
+    },
+    "table": {
+      "title": "Desempeño Detallado por Vendedor",
+      "vendor": "Vendedor",
+      "email": "Correo corporativo",
+      "institutions": "Instituciones",
+      "actions": "Acciones",
+      "viewDetails": "Ver detalles",
+      "noData": "No se encontraron registros para los filtros aplicados"
+    }
   }
 }

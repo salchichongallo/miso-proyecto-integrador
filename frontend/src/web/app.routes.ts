@@ -55,6 +55,11 @@ export const routes: Routes = [
           import('./pages/product-inventory/product-inventory.page').then((m) => m.ProductInventoryPage),
       },
       {
+        path: 'seller-reports',
+        loadComponent: () =>
+          import('./pages/seller-reports/seller-reports.page').then((m) => m.SellerReportsPage),
+      },
+      {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
