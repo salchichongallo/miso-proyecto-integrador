@@ -76,9 +76,9 @@ describe('SearchOrdersPage', () => {
     expect(page).toBeTruthy();
   });
 
-  it('should initialize with mock orders', () => {
+  it('should initialize with empty orders array', () => {
     expect(page.orders).toBeDefined();
-    expect(page.orders.length).toBeGreaterThan(0);
+    expect(page.orders).toEqual([]);
   });
 
   it('should initialize with isLoading set to true', () => {
