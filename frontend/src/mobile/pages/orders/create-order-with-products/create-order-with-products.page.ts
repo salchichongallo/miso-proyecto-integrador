@@ -21,6 +21,7 @@ import {
   IonButton,
   IonText,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { ProductService } from '@mobile/services/product/product.service';
 import { CartService } from '@mobile/services/cart/cart.service';
@@ -52,6 +53,7 @@ import { cartOutline, alertCircleOutline, searchOutline } from 'ionicons/icons';
     IonInput,
     FormsModule,
     IonIcon,
+    TranslateModule,
   ],
 })
 export class CreateOrderWithProductsPage implements OnInit {
@@ -63,6 +65,7 @@ export class CreateOrderWithProductsPage implements OnInit {
   private readonly productsService = inject(ProductService);
   private readonly cartService = inject(CartService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   public readonly cartItemCount = this.cartService.itemCount;
 
@@ -85,7 +88,7 @@ export class CreateOrderWithProductsPage implements OnInit {
       },
       error: (error) => {
         console.error('Error loading products:', error);
-        this.errorMessage.set('No se pudieron cargar los productos. Por favor intenta nuevamente.');
+        this.errorMessage.set(this.translate.instant('orders.createPage.error.toast'));
         this.isLoading.set(false);
       },
     });
@@ -107,7 +110,7 @@ export class CreateOrderWithProductsPage implements OnInit {
       },
       error: (error) => {
         console.error('Error searching products:', error);
-        this.errorMessage.set('Error al buscar productos. Por favor intenta nuevamente.');
+        this.errorMessage.set(this.translate.instant('orders.createPage.error.searchToast'));
         this.isLoading.set(false);
       },
     });

@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { LoginPage } from './login.page';
 
@@ -11,6 +12,7 @@ describe('LoginPage', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [TranslateModule.forRoot()],
       providers: [
         LoginPage,
         {

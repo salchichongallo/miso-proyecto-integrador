@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { SearchOrdersPage } from './search-orders.page';
@@ -59,12 +60,32 @@ describe('SearchOrdersPage', () => {
       getOrders: jest.fn(),
     };
 
+    const mockTranslateService = {
+      instant: jest.fn((key: string) => {
+        const translations: Record<string, string> = {
+          'orders.searchPage.status.pending': 'Pendiente',
+          'orders.searchPage.status.confirmed': 'Confirmado',
+          'orders.searchPage.status.processing': 'Procesando',
+          'orders.searchPage.status.shipped': 'Enviado',
+          'orders.searchPage.status.delivered': 'Entregado',
+          'orders.searchPage.status.cancelled': 'Cancelado',
+          'orders.searchPage.status.returned': 'Devuelto',
+        };
+        return translations[key] || key;
+      }),
+    };
+
     TestBed.configureTestingModule({
+      imports: [TranslateModule.forRoot()],
       providers: [
         SearchOrdersPage,
         {
           provide: OrderService,
           useValue: mockOrderService,
+        },
+        {
+          provide: TranslateService,
+          useValue: mockTranslateService,
         },
       ],
     });
@@ -190,7 +211,7 @@ describe('SearchOrdersPage', () => {
     });
 
     it('should return the original status for unknown status', () => {
-      expect(page.getStatusLabel('UNKNOWN')).toBe('UNKNOWN');
+      expect(page.getStatusLabel('UNKNOWN')).toBe('orders.searchPage.status.unknown');
     });
   });
 });

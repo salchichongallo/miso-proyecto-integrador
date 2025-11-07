@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Clientes </ion-title>
+    <ion-title>{{ 'customers.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,7 +14,7 @@
   <ion-list>
     <ion-item button="true" [routerLink]="['/customers/register-institutional']">
       <ion-icon slot="start" name="add"></ion-icon>
-      <ion-label>Registrar cliente institucional</ion-label>
+      <ion-label>{{ 'customers.registerInstitutional' | translate }}</ion-label>
       <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
     </ion-item>
   </ion-list>

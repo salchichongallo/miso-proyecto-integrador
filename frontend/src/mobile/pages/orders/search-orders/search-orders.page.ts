@@ -15,6 +15,7 @@ import {
   IonCardHeader,
   IonChip,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Order } from '@mobile/models/order.model';
 import { OrderService } from '@mobile/services/order/order.service';
@@ -41,6 +42,7 @@ import { informationCircle } from 'ionicons/icons';
     IonToolbar,
     IonHeader,
     IonTitle,
+    TranslateModule,
   ],
 })
 export class SearchOrdersPage implements OnInit {
@@ -48,6 +50,7 @@ export class SearchOrdersPage implements OnInit {
   public readonly isLoading = signal(true);
 
   private readonly ordersService = inject(OrderService);
+  private readonly translate = inject(TranslateService);
 
   constructor() {
     addIcons({ informationCircle });
@@ -84,15 +87,7 @@ export class SearchOrdersPage implements OnInit {
   }
 
   public getStatusLabel(status: string): string {
-    const statusLabels: Record<string, string> = {
-      PENDING: 'Pendiente',
-      CONFIRMED: 'Confirmado',
-      PROCESSING: 'Procesando',
-      SHIPPED: 'Enviado',
-      DELIVERED: 'Entregado',
-      CANCELLED: 'Cancelado',
-      RETURNED: 'Devuelto',
-    };
-    return statusLabels[status] || status;
+    const statusKey = status.toLowerCase();
+    return this.translate.instant(`orders.searchPage.status.${statusKey}`);
   }
 }

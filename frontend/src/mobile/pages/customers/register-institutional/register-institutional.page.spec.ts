@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { RegisterInstitutionalPage } from './register-institutional.page';
@@ -14,6 +15,7 @@ describe('RegisterInstitutionalPage', () => {
   let mockCustomersService: Partial<jest.Mocked<CustomersService>>;
   let mockLoadingController: Partial<jest.Mocked<LoadingController>>;
   let mockToastController: Partial<jest.Mocked<ToastController>>;
+  let mockTranslateService: jest.Mocked<any>;
   let mockLoading: {
     present: jest.Mock;
     dismiss: jest.Mock;
@@ -48,13 +50,27 @@ describe('RegisterInstitutionalPage', () => {
       create: jest.fn().mockResolvedValue(mockToast),
     };
 
+    mockTranslateService = {
+      get: jest.fn().mockReturnValue({ subscribe: jest.fn() }),
+      instant: jest.fn((key: string) => {
+        const translations: Record<string, string> = {
+          'customers.register.toast.loading': 'Registrando cliente institucional...',
+          'customers.register.toast.success': 'Cliente institucional registrado exitosamente.',
+          'customers.register.toast.error': 'Error al registrar el cliente institucional.',
+        };
+        return translations[key] || key;
+      }),
+    };
+
     TestBed.configureTestingModule({
+      imports: [TranslateModule.forRoot()],
       providers: [
         FormBuilder,
         { provide: Router, useValue: mockRouter },
         { provide: CustomersService, useValue: mockCustomersService },
         { provide: LoadingController, useValue: mockLoadingController },
         { provide: ToastController, useValue: mockToastController },
+        { provide: TranslateService, useValue: mockTranslateService },
       ],
     });
 
@@ -63,8 +79,9 @@ describe('RegisterInstitutionalPage', () => {
     const customerService = TestBed.inject(CustomersService);
     const loadingController = TestBed.inject(LoadingController);
     const toastController = TestBed.inject(ToastController);
+    const translateService = mockTranslateService;
 
-    component = new RegisterInstitutionalPage(fb, router, customerService, loadingController, toastController);
+    component = new RegisterInstitutionalPage(fb, router, customerService, loadingController, toastController, translateService);
   });
 
   afterEach(() => {

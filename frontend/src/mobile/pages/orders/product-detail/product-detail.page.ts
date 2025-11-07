@@ -19,6 +19,7 @@ import {
   IonTitle,
   ToastController,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Product } from '@mobile/models/product.model';
 import { CartService } from '@mobile/services/cart/cart.service';
@@ -46,6 +47,7 @@ import { location, cartOutline } from 'ionicons/icons';
     IonSelectOption,
     IonButton,
     IonFooter,
+    TranslateModule,
   ],
 })
 export class ProductDetailPage implements OnInit {
@@ -55,6 +57,7 @@ export class ProductDetailPage implements OnInit {
   private readonly cartService = inject(CartService);
   private readonly toastController = inject(ToastController);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   constructor(private route: ActivatedRoute) {
     addIcons({ location, cartOutline });
@@ -77,24 +80,20 @@ export class ProductDetailPage implements OnInit {
   }
 
   public getPriorityLabel(priority: string): string {
-    const labels: Record<string, string> = {
-      HIGH: 'Alta',
-      MEDIUM: 'Media',
-      LOW: 'Baja',
-    };
-    return labels[priority] || priority;
+    const priorityKey = priority.toLowerCase();
+    return this.translate.instant(`orders.productDetail.priority.${priorityKey}`);
   }
 
   public async addToCart(): Promise<void> {
     if (!this.product) {
-      await this.showToast('Error: Producto no encontrado', 'danger');
+      await this.showToast(this.translate.instant('orders.productDetail.toast.productNotFound'), 'danger');
       return;
     }
 
     const quantityNumber = parseInt(this.quantity, 10);
 
     if (isNaN(quantityNumber) || quantityNumber <= 0) {
-      await this.showToast('Por favor ingrese una cantidad válida', 'warning');
+      await this.showToast(this.translate.instant('orders.productDetail.toast.invalidQuantity'), 'warning');
       return;
     }
 

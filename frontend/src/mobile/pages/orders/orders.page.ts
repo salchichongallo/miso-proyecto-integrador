@@ -14,11 +14,12 @@ import {
   IonIcon,
   IonLabel,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
-  imports: [RouterLink, IonLabel, IonIcon, IonItem, IonList, IonContent, IonToolbar, IonTitle, IonHeader],
+  imports: [RouterLink, IonLabel, IonIcon, IonItem, IonList, IonContent, IonToolbar, IonTitle, IonHeader, TranslateModule],
 })
 export class OrdersPage {
   constructor() {

@@ -28,6 +28,7 @@ import {
   LoadingController,
   AlertController,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
 import {
@@ -69,6 +70,7 @@ import { OrderRequest } from '@mobile/models/order.model';
     IonHeader,
     ReactiveFormsModule,
     RouterLink,
+    TranslateModule,
   ],
 })
 export class CartPage {
@@ -83,6 +85,7 @@ export class CartPage {
   private readonly toastController = inject(ToastController);
   private readonly loadingController = inject(LoadingController);
   private readonly alertController = inject(AlertController);
+  private readonly translate = inject(TranslateService);
 
   public readonly checkoutForm: FormGroup;
   public readonly isSubmitting = signal(false);
@@ -103,7 +106,7 @@ export class CartPage {
 
   public removeItem(sku: string, warehouse: string): void {
     this.cartService.removeFromCart(sku, warehouse);
-    this.showToast('Producto eliminado del carrito', 'success');
+    this.showToast(this.translate.instant('orders.cart.toast.productRemoved'), 'success');
   }
 
   public updateQuantity(sku: string, warehouse: string, change: number): void {
@@ -120,19 +123,19 @@ export class CartPage {
 
   public async clearCart(): Promise<void> {
     const alert = await this.alertController.create({
-      header: 'Vaciar carrito',
-      message: '¿Estás seguro de que deseas vaciar el carrito?',
+      header: this.translate.instant('orders.cart.alert.title'),
+      message: this.translate.instant('orders.cart.alert.message'),
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.translate.instant('orders.cart.alert.cancel'),
           role: 'cancel',
         },
         {
-          text: 'Vaciar',
+          text: this.translate.instant('orders.cart.alert.confirm'),
           role: 'destructive',
           handler: () => {
             this.cartService.clearCart();
-            this.showToast('Carrito vaciado', 'success');
+            this.showToast(this.translate.instant('orders.cart.toast.cartCleared'), 'success');
           },
         },
       ],
@@ -143,18 +146,18 @@ export class CartPage {
 
   public async submitOrder(): Promise<void> {
     if (this.checkoutForm.invalid) {
-      this.showToast('Por favor completa todos los campos requeridos', 'warning');
+      this.showToast(this.translate.instant('orders.cart.toast.validationError'), 'warning');
       this.checkoutForm.markAllAsTouched();
       return;
     }
 
     if (this.cartItems().length === 0) {
-      this.showToast('El carrito está vacío', 'warning');
+      this.showToast(this.translate.instant('orders.cart.empty.title'), 'warning');
       return;
     }
 
     const loading = await this.loadingController.create({
-      message: 'Procesando pedido...',
+      message: this.translate.instant('orders.cart.buttons.processing'),
     });
 
     await loading.present();
@@ -178,7 +181,7 @@ export class CartPage {
           this.isSubmitting.set(false);
           this.cartService.clearCart();
 
-          await this.showToast('¡Pedido creado exitosamente!', 'success');
+          await this.showToast(this.translate.instant('orders.cart.toast.success'), 'success');
 
           // Navigate to confirmation page
           this.router.navigate(['/order-confirmation'], {
@@ -190,7 +193,7 @@ export class CartPage {
           this.isSubmitting.set(false);
           console.error('Error creating order:', error);
           await this.showToast(
-            'Error al crear el pedido. Por favor intenta nuevamente.',
+            this.translate.instant('orders.cart.toast.error'),
             'danger'
           );
         },
@@ -199,7 +202,7 @@ export class CartPage {
       await loading.dismiss();
       this.isSubmitting.set(false);
       console.error('Unexpected error:', error);
-      await this.showToast('Error inesperado. Por favor intenta nuevamente.', 'danger');
+      await this.showToast(this.translate.instant('orders.cart.toast.error'), 'danger');
     }
   }
 

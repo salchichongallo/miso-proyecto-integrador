@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/orders/create-order-with-products"></ion-back-button>
     </ion-buttons>
-    <ion-title>Carrito ({{ cartItemCount() }})</ion-title>
+    <ion-title>{{ 'orders.cart.titleWithCount' | translate: {count: cartItemCount()} }}</ion-title>
     @if (cartItems().length > 0) {
       <ion-buttons slot="end">
         <ion-button (click)="clearCart()" color="danger">
@@ -18,10 +18,10 @@
   @if (cartItems().length === 0) {
     <div class="empty-cart">
       <ion-icon name="cart-outline" class="empty-icon"></ion-icon>
-      <h2>Tu carrito está vacío</h2>
-      <p>Agrega productos para comenzar tu pedido</p>
+      <h2>{{ 'orders.cart.empty.title' | translate }}</h2>
+      <p>{{ 'orders.cart.empty.message' | translate }}</p>
       <ion-button routerLink="/orders/create-order-with-products">
-        Ver productos
+        {{ 'orders.cart.empty.button' | translate }}
       </ion-button>
     </div>
   } @else {
@@ -29,7 +29,7 @@
       <!-- Cart Items -->
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Productos</ion-card-title>
+          <ion-card-title>{{ 'orders.cart.sections.products' | translate }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <ion-list>
@@ -96,51 +96,51 @@
       <!-- Checkout Form -->
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Información de entrega</ion-card-title>
+          <ion-card-title>{{ 'orders.cart.sections.delivery' | translate }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <form [formGroup]="checkoutForm">
             <ion-input
-              label="País"
+              [label]="'orders.cart.form.country.label' | translate"
               labelPlacement="stacked"
               formControlName="country"
-              placeholder="Ingrese el país"
+              [placeholder]="'orders.cart.form.country.placeholder' | translate"
               fill="outline"
               class="ion-margin-bottom"
             ></ion-input>
 
             <ion-input
-              label="Ciudad"
+              [label]="'orders.cart.form.city.label' | translate"
               labelPlacement="stacked"
               formControlName="city"
-              placeholder="Ingrese la ciudad"
+              [placeholder]="'orders.cart.form.city.placeholder' | translate"
               fill="outline"
               class="ion-margin-bottom"
             ></ion-input>
 
             <ion-input
-              label="Dirección"
+              [label]="'orders.cart.form.address.label' | translate"
               labelPlacement="stacked"
               formControlName="address"
-              placeholder="Ingrese la dirección completa"
+              [placeholder]="'orders.cart.form.address.placeholder' | translate"
               fill="outline"
               class="ion-margin-bottom"
             ></ion-input>
 
             <ion-select
-              label="Prioridad"
+              [label]="'orders.cart.form.priority.label' | translate"
               labelPlacement="stacked"
               formControlName="priority"
               fill="outline"
               class="ion-margin-bottom"
             >
-              <ion-select-option value="HIGH">Alta</ion-select-option>
-              <ion-select-option value="MEDIUM">Media</ion-select-option>
-              <ion-select-option value="LOW">Baja</ion-select-option>
+              <ion-select-option value="HIGH">{{ 'orders.cart.form.priority.high' | translate }}</ion-select-option>
+              <ion-select-option value="MEDIUM">{{ 'orders.cart.form.priority.medium' | translate }}</ion-select-option>
+              <ion-select-option value="LOW">{{ 'orders.cart.form.priority.low' | translate }}</ion-select-option>
             </ion-select>
 
             <ion-input
-              label="Fecha estimada de entrega"
+              [label]="'orders.cart.form.estimatedDate.label' | translate"
               labelPlacement="stacked"
               formControlName="date_estimated"
               type="date"
@@ -154,19 +154,19 @@
       <!-- Order Summary -->
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Resumen del pedido</ion-card-title>
+          <ion-card-title>{{ 'orders.cart.sections.summary' | translate }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="summary-row">
-            <span>Subtotal</span>
+            <span>{{ 'orders.cart.summary.subtotal' | translate }}</span>
             <span>${{ cartTotal().toFixed(2) }}</span>
           </div>
           <div class="summary-row">
-            <span>Envío</span>
+            <span>{{ 'orders.cart.summary.shipping' | translate }}</span>
             <span>$0.00</span>
           </div>
           <div class="summary-row total">
-            <strong>Total</strong>
+            <strong>{{ 'orders.cart.summary.total' | translate }}</strong>
             <strong>${{ cartTotal().toFixed(2) }}</strong>
           </div>
         </ion-card-content>
@@ -184,7 +184,7 @@
         [disabled]="isSubmitting()"
         class="submit-button"
       >
-        {{ isSubmitting() ? 'Procesando...' : 'Confirmar pedido' }}
+        {{ isSubmitting() ? ('orders.cart.buttons.processing' | translate) : ('orders.cart.buttons.confirm' | translate) }}
       </ion-button>
     </ion-toolbar>
   </ion-footer>

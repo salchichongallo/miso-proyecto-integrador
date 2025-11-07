@@ -1,6 +1,7 @@
 import { of } from 'rxjs';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@shared/auth/auth.service';
 import { AppAuthenticatorComponent } from './app-authenticator.component';
@@ -48,13 +49,26 @@ describe('AppAuthenticatorComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [AppAuthenticatorComponent],
+      imports: [AppAuthenticatorComponent, TranslateModule.forRoot()],
       providers: [
         { provide: AuthService, useValue: mockAuthService },
         { provide: LoadingController, useValue: mockLoadingController },
         { provide: ToastController, useValue: mockToastController },
       ],
     }).compileComponents();
+
+    // Mock the TranslateService after module setup but before component creation
+    const translateService = TestBed.inject(TranslateService);
+    jest.spyOn(translateService, 'instant').mockImplementation((key: string | string[]) => {
+      const translations: Record<string, string> = {
+        'auth.login.error': 'Error al iniciar sesión',
+        'auth.login.loading': 'Cargando...',
+      };
+      if (typeof key === 'string') {
+        return translations[key] || key;
+      }
+      return key;
+    });
 
     fixture = TestBed.createComponent(AppAuthenticatorComponent);
     component = fixture.componentInstance;
@@ -241,7 +255,7 @@ describe('AppAuthenticatorComponent', () => {
       await component.login();
 
       expect(toastController.create).toHaveBeenCalledWith({
-        message: `Error al iniciar sesión. ${error}`,
+        message: 'Error al iniciar sesión',
         duration: 7000,
         color: 'danger',
       });
@@ -396,7 +410,7 @@ describe('AppAuthenticatorComponent', () => {
       await component.login();
 
       expect(toastController.create).toHaveBeenCalledWith({
-        message: `Error al iniciar sesión. ${networkError}`,
+        message: 'Error al iniciar sesión',
         duration: 7000,
         color: 'danger',
       });
