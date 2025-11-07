@@ -1,0 +1,267 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "retry": "Retry",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "processing": "Processing..."
+  },
+  "tabs": {
+    "customers": "Customers",
+    "orders": "Orders",
+    "institutions": "Institutions",
+    "settings": "Settings"
+  },
+  "auth": {
+    "title": "Sign In",
+    "email": {
+      "label": "Email",
+      "placeholder": "Please enter your email",
+      "required": "Email is required",
+      "invalid": "Invalid email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Please enter your password",
+      "required": "Password is required",
+      "minLength": "Password must be at least 6 characters"
+    },
+    "login": {
+      "button": "Sign In",
+      "loading": "Loading...",
+      "error": "Login failed. Please try again."
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "registerInstitutional": "Register institutional client",
+    "register": {
+      "title": "Institutional Client Registration",
+      "form": {
+        "taxId": {
+          "label": "Tax ID",
+          "placeholder": "Enter tax ID",
+          "required": "Tax ID is required"
+        },
+        "businessName": {
+          "label": "Business name",
+          "placeholder": "Enter business name",
+          "required": "Business name is required"
+        },
+        "country": {
+          "label": "Country",
+          "placeholder": "Select a country"
+        },
+        "careLevel": {
+          "label": "Care level",
+          "placeholder": "Select a care level"
+        },
+        "specialty": {
+          "label": "Specialty",
+          "placeholder": "Select a specialty"
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Enter location"
+        }
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "toast": {
+        "loading": "Registering institutional client...",
+        "success": "Institutional client registered successfully.",
+        "error": "Error registering institutional client. Please try again."
+      }
+    }
+  },
+  "orders": {
+    "title": "Orders",
+    "createWithProducts": "Create order with products",
+    "search": "Search orders",
+    "searchPage": {
+      "title": "Orders Search",
+      "loading": "Loading orders...",
+      "empty": {
+        "title": "No results",
+        "message": "No orders found at this moment. Try again later."
+      },
+      "vendor": "Vendor",
+      "products": "{{count}} products",
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "returned": "Returned"
+      }
+    },
+    "createPage": {
+      "title": "Create order",
+      "search": {
+        "label": "Search products",
+        "placeholder": "Enter product name"
+      },
+      "loading": "Loading products...",
+      "error": {
+        "title": "Error loading products",
+        "button": "Retry",
+        "toast": "Could not load products. Please try again.",
+        "searchToast": "Error searching products. Please try again."
+      },
+      "empty": {
+        "title": "No products found",
+        "message": "Try different search terms"
+      },
+      "availability": "Availability",
+      "stock": "Stock"
+    },
+    "productDetail": {
+      "title": "Create order",
+      "labels": {
+        "price": "Price",
+        "batch": "Batch",
+        "stockTotal": "Total Stock",
+        "status": "Status",
+        "expirationDate": "Expiration date",
+        "storageConditions": "Storage conditions",
+        "temperatureRequired": "Temperature required",
+        "nitProvider": "Provider NIT",
+        "providerName": "Provider name",
+        "warehouseId": "Warehouse ID",
+        "warehouseName": "Warehouse name"
+      },
+      "quantity": {
+        "label": "Quantity to order",
+        "placeholder": "Select quantity"
+      },
+      "priority": {
+        "label": "Priority",
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      },
+      "button": "Add to cart",
+      "toast": {
+        "productNotFound": "Error: Product not found",
+        "invalidQuantity": "Please enter a valid quantity"
+      }
+    },
+    "cart": {
+      "title": "Cart",
+      "titleWithCount": "Cart ({{count}})",
+      "empty": {
+        "title": "Your cart is empty",
+        "message": "Add products to start your order",
+        "button": "View products"
+      },
+      "sections": {
+        "products": "Products",
+        "delivery": "Delivery information",
+        "summary": "Order summary"
+      },
+      "form": {
+        "country": {
+          "label": "Country",
+          "placeholder": "Select a country"
+        },
+        "city": {
+          "label": "City",
+          "placeholder": "Enter city"
+        },
+        "address": {
+          "label": "Address",
+          "placeholder": "Enter delivery address"
+        },
+        "priority": {
+          "label": "Priority",
+          "placeholder": "Select priority",
+          "high": "High",
+          "medium": "Medium",
+          "low": "Low"
+        },
+        "estimatedDate": {
+          "label": "Estimated delivery date",
+          "placeholder": "Select date"
+        }
+      },
+      "summary": {
+        "subtotal": "Subtotal",
+        "shipping": "Shipping",
+        "total": "Total"
+      },
+      "buttons": {
+        "confirm": "Confirm order",
+        "empty": "Empty cart",
+        "processing": "Processing..."
+      },
+      "alert": {
+        "title": "Empty cart",
+        "message": "Are you sure you want to empty the cart?",
+        "cancel": "Cancel",
+        "confirm": "Empty"
+      },
+      "toast": {
+        "productRemoved": "Product removed from cart",
+        "cartCleared": "Cart cleared",
+        "validationError": "Please complete all form fields",
+        "success": "Order created successfully",
+        "error": "Error creating order. Please try again."
+      }
+    },
+    "confirmation": {
+      "title": "Order Confirmation",
+      "success": {
+        "title": "Order Created Successfully!",
+        "message": "Your order has been registered and is being processed"
+      },
+      "sections": {
+        "details": "Order Details",
+        "address": "Delivery Address",
+        "products": "Products",
+        "productsWithCount": "Products ({{count}})",
+        "additional": "Additional Information"
+      },
+      "labels": {
+        "orderId": "Order ID",
+        "status": "Status",
+        "priority": "Priority",
+        "estimatedDate": "Estimated Date",
+        "country": "Country",
+        "city": "City",
+        "address": "Address",
+        "clientId": "Client ID",
+        "vendorId": "Vendor ID",
+        "createdAt": "Created At"
+      },
+      "summary": {
+        "totalUnits": "Total units"
+      },
+      "buttons": {
+        "viewOrders": "View My Orders",
+        "createNew": "Create New Order"
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language",
+      "label": "Select your language",
+      "es": "Spanish",
+      "en": "English",
+      "toast": {
+        "changed": "Language changed to {{language}}"
+      }
+    }
+  }
+}
