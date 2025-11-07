@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { addIcons } from 'ionicons';
-import { arrowForwardOutline, storefront } from 'ionicons/icons';
+import { arrowForwardOutline, storefront, search } from 'ionicons/icons';
 
 import {
   IonTitle,
@@ -22,6 +22,6 @@ import {
 })
 export class OrdersPage {
   constructor() {
-    addIcons({ arrowForwardOutline, storefront });
+    addIcons({ arrowForwardOutline, storefront, search });
   }
 }
