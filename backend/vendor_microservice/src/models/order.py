@@ -3,9 +3,8 @@ import datetime
 from enum import Enum
 from pynamodb.models import Model
 from uuid import uuid4
-from marshmallow import Schema, fields, validate, ValidationError
+from marshmallow import Schema, fields, validate
 from pynamodb.attributes import UnicodeAttribute, UTCDateTimeAttribute, ListAttribute
-from ..errors.errors import ParamError
 
 
 
@@ -53,66 +52,6 @@ class ProductSchema(Schema):
 
 
 
-class NewOrderJsonSchema(Schema):
-
-    priority = fields.String(
-        required=True,
-        validate=validate.OneOf([level.value for level in PriorityLevel], error="El nivel de prioridad no es válido."),
-        error_messages={"required": "El nivel de prioridad es obligatorio."}
-    )
-
-    products = fields.List(
-        fields.Nested(ProductSchema),
-        required=True,
-        validate=validate.Length(min=1, error="La lista de productos no puede estar vacía."),
-        error_messages={"required": "La lista de productos es obligatoria."}
-    )
-
-    order_status = fields.String(
-        required=False,
-        validate=validate.OneOf([status.value for status in OrderStatus], error="El estado de la orden no es válido."),
-    )
-
-    country = fields.String(
-        required=True,
-        error_messages={"required": "El país es obligatorio."}
-    )
-
-    city = fields.String(
-        required=True,
-        error_messages={"required": "La ciudad es obligatoria."}
-    )
-
-    address = fields.String(
-        required=True,
-        error_messages={"required": "La dirección es obligatoria."}
-    )
-
-    date_estimated = fields.Date(
-        required=True,
-        error_messages={"required": "La fecha estimada es obligatoria."}
-    )
-
-    id_client = fields.String(
-        required=True,
-        error_messages={"required": "El ID del cliente es obligatorio."}
-    )
-
-    id_vendor = fields.String(
-        required=True,
-        error_messages={"required": "El ID del vendedor es obligatorio."}
-    )
-
-
-
-    @staticmethod
-    def check(json):
-        """Valida el cuerpo del request y lanza ParamError si hay errores."""
-        try:
-            NewOrderJsonSchema().load(json)
-        except ValidationError as exception:
-            raise ParamError.first_from(exception.messages)
-
 
 class OrderModel(Model):
     """
@@ -147,35 +86,15 @@ class OrderModel(Model):
     created_at = UTCDateTimeAttribute(null=True)
     updated_at = UTCDateTimeAttribute(null=True)
 
-    @classmethod
-    def find_existing_order(cls, id: str):
-        """Busca una orden por su id (clave primaria)."""
-        try:
-            order = cls.get(hash_key=id)
-            return order
-        except cls.DoesNotExist:
-            return None
 
     @classmethod
-    def get_all(cls):
-        """
-        Retorna todas las órdenes almacenadas en la tabla Orders.
-        """
+    def get_by_vendor(cls, vendor_id: str):
+        """Return all orders for a given vendor_id as dicts."""
         try:
-            orders = list(cls.scan())
+            orders = list(cls.scan(cls.id_vendor == vendor_id))
             return [order.to_dict() for order in orders]
         except Exception as e:
-            raise Exception(f"Error retrieving orders: {str(e)}")
-
-    @classmethod
-    def create(cls, **kwargs):
-        """Crea una nueva orden en la base de datos."""
-        order = OrderModel(**kwargs)
-        order.id = str(uuid4())
-        order.created_at = order.updated_at = datetime.datetime.now(datetime.timezone.utc)
-        order.save()
-        return order
-
+            raise Exception(f"Error retrieving orders for vendor {vendor_id}: {str(e)}")
 
 
     def to_dict(self):
