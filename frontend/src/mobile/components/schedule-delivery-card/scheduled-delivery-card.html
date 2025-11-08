@@ -1,0 +1,53 @@
+<div class="scheduled-delivery-card">
+  <div class="scheduled-delivery-card__header">
+    <div>
+      <div class="scheduled-delivery-card__order-id">PED-2025-001234</div>
+      <div class="scheduled-delivery-card__amount">
+        Valor: <span class="scheduled-delivery-card__amount-value">$2,450.00</span>
+      </div>
+    </div>
+    <span [ngClass]="['badge', `badge--status-SHIPPED`]"> En tránsito </span>
+  </div>
+  <hr class="scheduled-delivery-card__divider" />
+  <div class="scheduled-delivery-card__section scheduled-delivery-card__section--date">
+    <div class="scheduled-delivery-card__row">
+      <ion-icon name="calendar-clear-outline" class="scheduled-delivery-card__icon"></ion-icon>
+      <span class="scheduled-delivery-card__date">domingo, 28 de septiembre de 2025</span>
+    </div>
+    <div class="scheduled-delivery-card__row">
+      <ion-icon name="time-outline" class="scheduled-delivery-card__icon"></ion-icon>
+      <span class="scheduled-delivery-card__time">09:30 - 11:30</span>
+    </div>
+  </div>
+  <div class="scheduled-delivery-card__section scheduled-delivery-card__section--vehicle">
+    <div class="scheduled-delivery-card__row">
+      <ion-icon name="bus" class="scheduled-delivery-card__icon"></ion-icon>
+      <span class="scheduled-delivery-card__vehicle">Camión refrigerado CAM-045</span>
+    </div>
+    <div class="scheduled-delivery-card__row">
+      <ion-icon name="person" class="scheduled-delivery-card__icon"></ion-icon>
+      <span class="scheduled-delivery-card__driver">Conductor: Carlos Mendoza</span>
+    </div>
+  </div>
+  <hr class="scheduled-delivery-card__divider" />
+  <div class="scheduled-delivery-card__section scheduled-delivery-card__section--products">
+    <div class="scheduled-delivery-card__row">
+      <ion-icon name="cart-outline" class="scheduled-delivery-card__icon"></ion-icon>
+      <span class="scheduled-delivery-card__products-title">Productos incluidos</span>
+    </div>
+    <div class="scheduled-delivery-card__products-list">
+      <div class="scheduled-delivery-card__product-item">
+        <span>Vacuna COVID-19 Pfizer</span>
+        <span class="scheduled-delivery-card__product-qty">50 unidades</span>
+      </div>
+      <div class="scheduled-delivery-card__product-item">
+        <span>Jeringas desechables 1ml</span>
+        <span class="scheduled-delivery-card__product-qty">100 unidades</span>
+      </div>
+      <div class="scheduled-delivery-card__product-item">
+        <span>Alcohol antiséptico 70%</span>
+        <span class="scheduled-delivery-card__product-qty">10 unidades</span>
+      </div>
+    </div>
+  </div>
+</div>
