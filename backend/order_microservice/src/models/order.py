@@ -45,6 +45,12 @@ class ProductSchema(Schema):
         error_messages={"required": "Cada producto debe tener un campo 'id_warehouse'."}
     )
 
+    unit_price = fields.Float(
+        required=True,
+        validate=validate.Range(min=0.0, error="El campo 'unit_price' debe ser mayor o igual a 0.0."),
+        error_messages={"required": "Cada producto debe tener un campo 'unit_price'."}
+    )
+
 
 
 class NewOrderJsonSchema(Schema):

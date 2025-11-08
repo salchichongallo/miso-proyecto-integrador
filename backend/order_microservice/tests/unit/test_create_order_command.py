@@ -116,7 +116,7 @@ class TestCreateOrderCommand:
         """❌ Debe fallar si falta un campo obligatorio"""
         body = {
             "priority": "HIGH",
-            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}],
+            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001", "unit_price": 25.0}],
             # ❌ Falta 'country'
             "city": "Medellín",
             "address": "Cra 45 #12",
@@ -134,7 +134,7 @@ class TestCreateOrderCommand:
         body = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "amount": 2, "id_warehouse": "W-001"}  # ❌ falta 'name'
+                {"id": "P-1001", "amount": 2, "id_warehouse": "W-001", "unit_price": 150.0}  # ❌ Falta 'name'
             ],
             "country": "Mexico",
             "city": "Monterrey",

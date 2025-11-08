@@ -13,8 +13,8 @@ class TestCreateOrderIntegration:
         payload = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "name": "Mouse", "amount": 2, "id_warehouse": "W-001"},
-                {"id": "P-2002", "name": "Keyboard", "amount": 1, "id_warehouse": "W-002"}
+                {"id": "P-1001", "name": "Mouse", "amount": 2, "id_warehouse": "W-001", "unit_price": 25.0},
+                {"id": "P-2002", "name": "Keyboard", "amount": 1, "id_warehouse": "W-002", "unit_price": 45.0}
             ],
             "country": "Mexico",
             "city": "Monterrey",
@@ -42,7 +42,7 @@ class TestCreateOrderIntegration:
         payload = {
             "priority": "HIGH",
             "products": [
-                {"id": "P-1001", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}
+                {"id": "P-1001", "name": "Mouse", "amount": 1, "id_warehouse": "W-001", "unit_price": 25.0}
             ],
             # Falta 'country'
             "city": "CDMX",
@@ -69,7 +69,7 @@ class TestCreateOrderIntegration:
 
         payload = {
             "priority": "HIGH",
-            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001"}],
+            "products": [{"id": "P-1", "name": "Mouse", "amount": 1, "id_warehouse": "W-001", "unit_price": 25.0}],
             "country": "Mexico",
             "city": "CDMX",
             "address": "Reforma 123",
@@ -95,7 +95,7 @@ class TestCreateOrderIntegration:
 
         payload = {
             "priority": "LOW",
-            "products": [{"id": "P-2", "name": "Teclado", "amount": 2, "id_warehouse": "W-003"}],
+            "products": [{"id": "P-2", "name": "Teclado", "amount": 2, "id_warehouse": "W-003", "unit_price": 45.0}],
             "country": "Colombia",
             "city": "Bogotá",
             "address": "Cra 100 #20-50",
