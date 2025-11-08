@@ -123,3 +123,31 @@ ion-card {
     flex-direction: column;
   }
 }
+
+.no-results {
+  text-align: center;
+  color: var(--ion-color-dark);
+  background: #F5F6F9;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  color: var(--ion-color-dark);
+  margin-bottom: 0.5rem;
+
+  ion-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: var(--ion-color-medium);
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}

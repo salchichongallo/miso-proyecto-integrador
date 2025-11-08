@@ -21,7 +21,7 @@
       </form>
     </ion-card>
 
-    @if (report()) {
+    @if (sellerReport()) {
     <div class="report">
       <ion-text>
         <h2 class="report__title">Reporte de vendedor</h2>
@@ -31,61 +31,53 @@
         <div class="stats-items">
           <ion-card class="stat-card">
             <ion-card-content>
-              <div class="stat-main">83%</div>
+              <div class="stat-main">{{ sellerReport()?.salesPercentage | number: '1.2-2' }}%</div>
               <div class="stat-label">Cumplimiento de meta</div>
             </ion-card-content>
           </ion-card>
           <ion-card class="stat-card">
             <ion-card-content>
-              <div class="stat-main">184</div>
+              <div class="stat-main">{{ sellerReport()?.orderedProducts }}</div>
               <div class="stat-label">Pedidos generados</div>
             </ion-card-content>
           </ion-card>
           <ion-card class="stat-card">
             <ion-card-content>
-              <div class="stat-main">93</div>
+              <div class="stat-main">{{ sellerReport()?.customersServed }}</div>
               <div class="stat-label">Clientes atendidos</div>
             </ion-card-content>
           </ion-card>
           <ion-card class="stat-card">
             <ion-card-content>
-              <div class="stat-main">US$ 9.414.000</div>
+              <div class="stat-main">{{ sellerReport()?.totalSales | currency }}</div>
               <div class="stat-label">Ventas totales</div>
             </ion-card-content>
           </ion-card>
         </div>
         <div class="stats-products">
           <ion-card class="products-card">
+            @if (hasProducts()) {
             <ion-card-header>
               <ion-card-title>
                 <h3>Productos vendidos</h3>
               </ion-card-title>
             </ion-card-header>
+            }
             <ion-list>
+              @if (!hasProducts()) {
+              <div class="no-results">
+                <ion-icon name="information-circle"></ion-icon>
+                <h3>Sin productos</h3>
+                <p>El vendedor no ha vendido productos.</p>
+              </div>
+              } @for (product of sellerReport()?.soldProducts; track product.id) {
               <ion-item lines="none">
                 <ion-label>
-                  <div class="product-name">Acetaminofén 500mg</div>
-                  <span class="product-units">2500 unidades</span>
+                  <div class="product-name">{{ product.name }}</div>
+                  <span class="product-units">{{ product.quantity }} unidades</span>
                 </ion-label>
               </ion-item>
-              <ion-item lines="none">
-                <ion-label>
-                  <div class="product-name">Guantes de látex</div>
-                  <span class="product-units">1800 unidades</span>
-                </ion-label>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label>
-                  <div class="product-name">Mascarillas N95</div>
-                  <span class="product-units">1200 unidades</span>
-                </ion-label>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label>
-                  <div class="product-name">Suero fisiológico</div>
-                  <span class="product-units">850 unidades</span>
-                </ion-label>
-              </ion-item>
+              }
             </ion-list>
           </ion-card>
         </div>
