@@ -1,5 +1,6 @@
 import os
 import datetime
+import random
 from enum import Enum
 from pynamodb.models import Model
 from uuid import uuid4
@@ -7,6 +8,28 @@ from marshmallow import Schema, fields, validate, ValidationError
 from pynamodb.attributes import UnicodeAttribute, UTCDateTimeAttribute, ListAttribute
 from ..errors.errors import ParamError
 
+DISPATCH_WAREHOUSES = [
+    "Calle 80 #45-21, Bogotá, Cundinamarca",
+    "Carrera 7 #26-20, Bogotá, Cundinamarca",
+    "Avenida El Dorado #69-76, Bogotá, Cundinamarca",
+    "Calle 10 #15-30, Medellín, Antioquia",
+    "Carrera 50 #20-10, Cali, Valle del Cauca",
+    "Avenida 6 #32-14, Barranquilla, Atlántico",
+    "Carrera 38 #5A-35, Cartagena, Bolívar",
+    "Calle 44 #65-23, Bucaramanga, Santander",
+    "Carrera 5 #14-55, Pereira, Risaralda",
+    "Avenida Santander #40-32, Manizales, Caldas",
+    "Carrera 27 #51-43, Cúcuta, Norte de Santander",
+    "Calle 25 #8-42, Pasto, Nariño",
+    "Avenida Simón Bolívar #12-30, Popayán, Cauca",
+    "Carrera 15 #45-12, Ibagué, Tolima",
+    "Calle 30 #4B-21, Neiva, Huila",
+    "Avenida 4 #20-50, Villavicencio, Meta",
+    "Carrera 9 #18-22, Tunja, Boyacá",
+    "Calle 11 #9-70, Santa Marta, Magdalena",
+    "Carrera 1 #23-45, Montería, Córdoba",
+    "Avenida Los Libertadores #8-24, Yopal, Casanare"
+]
 
 
 class OrderStatus(Enum):
@@ -132,7 +155,7 @@ class OrderModel(Model):
     id = UnicodeAttribute(hash_key=True)
 
     # Atributos del producto
-    status = UnicodeAttribute(default=OrderStatus.PENDING.value)
+    order_status = UnicodeAttribute(default=OrderStatus.PENDING.value)
     priority = UnicodeAttribute()
     products = ListAttribute(default=list)
     id_client = UnicodeAttribute(null=True)
@@ -141,11 +164,12 @@ class OrderModel(Model):
     city = UnicodeAttribute(null=True)
     address = UnicodeAttribute(null=True)
     date_estimated = UnicodeAttribute(null=True)
-    order_status = UnicodeAttribute(default=OrderStatus.PENDING.value)
+    dispatch_warehouse = UnicodeAttribute(null=True)
 
     # Timestamps
     created_at = UTCDateTimeAttribute(null=True)
     updated_at = UTCDateTimeAttribute(null=True)
+
 
     @classmethod
     def find_existing_order(cls, id: str):
@@ -169,7 +193,8 @@ class OrderModel(Model):
 
     @classmethod
     def create(cls, **kwargs):
-        """Crea una nueva orden en la base de datos."""
+        kwargs["dispatch_warehouse"] = random.choice(DISPATCH_WAREHOUSES)
+        kwargs["order_status"] = random.choice([s.value for s in OrderStatus])
         order = OrderModel(**kwargs)
         order.id = str(uuid4())
         order.created_at = order.updated_at = datetime.datetime.now(datetime.timezone.utc)
@@ -181,11 +206,11 @@ class OrderModel(Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "status": self.status,
             "priority": self.priority,
             "id_client": self.id_client,
             "id_vendor": self.id_vendor,
             "country": self.country,
+            "dispatch_warehouse": self.dispatch_warehouse,
             "city": self.city,
             "address": self.address,
             "date_estimated": self.date_estimated,
