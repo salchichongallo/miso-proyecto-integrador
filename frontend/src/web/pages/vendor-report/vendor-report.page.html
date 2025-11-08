@@ -4,9 +4,9 @@
       <form class="vendor-form__row">
         <ion-item fill="none" class="vendor-form__item">
           <ion-select label="Vendedor" placeholder="Seleccionar vendedor" cancelText="Cancelar" okText="Seleccionar">
-            <ion-select-option value="apple">Vendedor 1</ion-select-option>
-            <ion-select-option value="banana">Vendedor 2</ion-select-option>
-            <ion-select-option value="orange">Vendedor 3</ion-select-option>
+            @for (seller of sellers(); track seller.vendor_id) {
+            <ion-select-option [value]="seller.vendor_id">{{ seller.name }}</ion-select-option>
+            }
           </ion-select>
         </ion-item>
         <ion-button color="primary" class="vendor-report-btn" type="submit">GENERAR REPORTE</ion-button>
