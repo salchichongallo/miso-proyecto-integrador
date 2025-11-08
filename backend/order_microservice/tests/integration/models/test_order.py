@@ -87,10 +87,11 @@ class TestCreateOrder:
 
 
 class TestToDict:
-    """🧪 Pruebas unitarias para to_dict()"""
+    """🧪 Pruebas unitarias para el método to_dict() del modelo OrderModel"""
 
     def test_should_convert_order_to_dict(self):
         """✅ Debe convertir correctamente una instancia a diccionario"""
+        # Crear instancia de orden simulada
         order = OrderModel(
             id="ORDER-999",
             priority="HIGH",
@@ -100,15 +101,19 @@ class TestToDict:
             country="Colombia",
             city="Bogotá",
             address="Calle 100 #10-20",
-            date_estimated="2025-11-05",
+            date_estimated=datetime(2025, 11, 5, tzinfo=timezone.utc),
             order_status="PENDING",
         )
+
+        # Asignar timestamps
         now = datetime.now(timezone.utc)
         order.created_at = now
         order.updated_at = now
 
+        # Ejecutar
         result = order.to_dict()
 
+        # ✅ Verificaciones
         assert result["id"] == "ORDER-999"
         assert result["priority"] == "HIGH"
         assert result["id_client"] == "CLIENT-X"
@@ -118,4 +123,9 @@ class TestToDict:
         assert result["address"] == "Calle 100 #10-20"
         assert result["order_status"] == "PENDING"
         assert result["products"][0]["name"] == "Mouse"
-        assert "created_at" in result and "updated_at" in result
+
+        # Verificar fechas en formato ISO
+        assert "T" in result["created_at"]
+        assert "T" in result["updated_at"]
+        assert result["created_at"].endswith("+00:00")
+        assert result["updated_at"].endswith("+00:00")
