@@ -9,7 +9,16 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="wrapper">
+    @for (order of orders(); track $index) {
     <app-schedule-delivery-card />
-    <app-schedule-delivery-card />
+    } @empty {
+    <ion-card class="empty-state-card">
+      <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
+      <ion-card-title class="empty-state-card__title">Sin resultados</ion-card-title>
+      <ion-card-content class="empty-state-card__content">
+        No tiene entregas programadas en este periodo
+      </ion-card-content>
+    </ion-card>
+    }
   </div>
 </ion-content>

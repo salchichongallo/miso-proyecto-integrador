@@ -5,3 +5,21 @@
   flex-direction: column;
   gap: 1.5rem;
 }
+
+.empty-state-card {
+  margin-top: 10rem;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__icon {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  &__title {
+    text-align: center;
+  }
+  &__content {
+    text-align: center;
+  }
+}
