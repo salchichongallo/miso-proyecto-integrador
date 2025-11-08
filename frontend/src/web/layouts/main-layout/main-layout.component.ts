@@ -37,7 +37,7 @@ export class MainLayoutComponent implements OnInit {
     '/supplier-bulk-upload': 'Registro masivo de proveedores',
     '/product-registration': 'Registrar producto',
     '/product-bulk-upload': 'Registro masivo de productos',
-    '/vendor-report': 'Consulta de reportes e informes de los vendedores',
+    '/seller-report': 'Consulta de reportes e informes de los vendedores',
     '/style-demo': 'Demostración de estilos',
   };
 

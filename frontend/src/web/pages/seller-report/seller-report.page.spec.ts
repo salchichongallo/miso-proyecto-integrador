@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
-import { SellerItem, VendorReportPage } from './vendor-report.page';
+import { SellerItem, VendorReportPage } from './seller-report.page';
 
 import { SellerService } from '../../services/seller/seller.service';
 

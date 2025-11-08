@@ -21,9 +21,9 @@ import { firstValueFrom } from 'rxjs';
 export type SellerItem = Pick<Vendor, 'name' | 'vendor_id'>;
 
 @Component({
-  selector: 'app-vendor-report',
-  templateUrl: 'vendor-report.page.html',
-  styleUrls: ['./vendor-report.page.scss'],
+  selector: 'app-seller-report',
+  templateUrl: 'seller-report.page.html',
+  styleUrls: ['./seller-report.page.scss'],
   standalone: true,
   imports: [
     IonContent,

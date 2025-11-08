@@ -55,9 +55,9 @@ export const routes: Routes = [
           import('./pages/product-inventory/product-inventory.page').then((m) => m.ProductInventoryPage),
       },
       {
-        path: 'vendor-report',
+        path: 'seller-report',
         pathMatch: 'full',
-        loadComponent: () => import('./pages/vendor-report/vendor-report.page').then((m) => m.VendorReportPage),
+        loadComponent: () => import('./pages/seller-report/seller-report.page').then((m) => m.VendorReportPage),
       },
       {
         path: 'style-demo',
