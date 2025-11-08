@@ -57,5 +57,10 @@ describe('HomePage', () => {
       component.navigateTo('/custom-route');
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/custom-route']);
     });
+
+    it('should navigate to vendor report', () => {
+      component.navigateTo('/vendor-report');
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/vendor-report']);
+    });
   });
 });

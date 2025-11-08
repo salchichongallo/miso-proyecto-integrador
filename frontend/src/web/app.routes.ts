@@ -55,6 +55,11 @@ export const routes: Routes = [
           import('./pages/product-inventory/product-inventory.page').then((m) => m.ProductInventoryPage),
       },
       {
+        path: 'vendor-report',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/vendor-report/vendor-report.page').then((m) => m.VendorReportPage),
+      },
+      {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
