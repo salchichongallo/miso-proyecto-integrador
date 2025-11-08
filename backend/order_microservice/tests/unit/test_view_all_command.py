@@ -14,14 +14,14 @@ class TestGetAllOrdersCommand:
         mock_order_1.to_dict.return_value = {
             "id": "ORDER-1",
             "priority": "HIGH",
-            "status": "PENDING"
+            "order_status": "PENDING"
         }
 
         mock_order_2 = MagicMock()
         mock_order_2.to_dict.return_value = {
             "id": "ORDER-2",
             "priority": "LOW",
-            "status": "DELIVERED"
+            "order_status": "DELIVERED"
         }
 
         # Simular el retorno de OrderModel.scan()
@@ -35,7 +35,7 @@ class TestGetAllOrdersCommand:
         assert isinstance(result, list)
         assert len(result) == 2
         assert result[0]["id"] == "ORDER-1"
-        assert result[1]["status"] == "DELIVERED"
+        assert result[1]["order_status"] == "DELIVERED"
 
         # Verificar que se haya llamado scan()
         mock_order_model.scan.assert_called_once()

@@ -15,7 +15,7 @@ class TestGetOrderByIdCommand:
         mock_order_instance.to_dict.return_value = {
             "id": "ORDER-123",
             "priority": "HIGH",
-            "status": "PENDING"
+            "order_status": "PENDING"
         }
 
         mock_order_model.find_existing_order.return_value = mock_order_instance
@@ -26,7 +26,7 @@ class TestGetOrderByIdCommand:
 
         # ✅ Verificaciones
         assert result["id"] == "ORDER-123"
-        assert result["status"] == "PENDING"
+        assert result["order_status"] == "PENDING"
 
         # Verifica que se llamó al modelo con el ID correcto
         mock_order_model.find_existing_order.assert_called_once_with("ORDER-123")
