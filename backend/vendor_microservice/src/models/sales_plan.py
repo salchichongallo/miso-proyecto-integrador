@@ -120,6 +120,15 @@ class SalesPlanModel(Model):
             raise Exception(f"Error retrieving sales plans: {str(e)}")
 
     @classmethod
+    def get_by_vendor(cls, vendor_id: str):
+        """Return all sales plans for a given vendor_id as dicts."""
+        try:
+            plans = list(cls.scan(cls.vendor_id == vendor_id))
+            return [p.to_dict() for p in plans]
+        except Exception as e:
+            raise Exception(f"Error retrieving sales plans for vendor {vendor_id}: {str(e)}")
+
+    @classmethod
     def create(cls, **kwargs):
         """Creates a new sales plan, ensuring one per vendor per period."""
         vendor_id = kwargs.get("vendor_id")
