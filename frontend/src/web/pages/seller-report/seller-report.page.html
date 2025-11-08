@@ -1,0 +1,88 @@
+<ion-content class="ion-padding">
+  <div class="wrapper">
+    <ion-card class="vendor-form">
+      <form class="vendor-form__row" [formGroup]="sellerForm" (ngSubmit)="submit()">
+        <ion-item fill="none" class="vendor-form__item">
+          <ion-select
+            label="Vendedor"
+            placeholder="Selecciona un vendedor"
+            cancelText="Cancelar"
+            okText="Seleccionar"
+            formControlName="seller"
+          >
+            @for (seller of sellers(); track seller.vendor_id) {
+            <ion-select-option [value]="seller.vendor_id">{{ seller.name }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+        <ion-button [disabled]="sellerForm.invalid" color="primary" class="seller-report-btn" type="submit"
+          >GENERAR REPORTE</ion-button
+        >
+      </form>
+    </ion-card>
+
+    @if (sellerReport()) {
+    <div class="report">
+      <ion-text>
+        <h2 class="report__title">Reporte de vendedor</h2>
+      </ion-text>
+
+      <div class="stats-grid">
+        <div class="stats-items">
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <div class="stat-main">{{ sellerReport()?.salesPercentage | number: '1.2-2' }}%</div>
+              <div class="stat-label">Cumplimiento de meta</div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <div class="stat-main">{{ sellerReport()?.orderedProducts }}</div>
+              <div class="stat-label">Pedidos generados</div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <div class="stat-main">{{ sellerReport()?.customersServed }}</div>
+              <div class="stat-label">Clientes atendidos</div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card class="stat-card">
+            <ion-card-content>
+              <div class="stat-main">{{ sellerReport()?.totalSales | currency }}</div>
+              <div class="stat-label">Ventas totales</div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+        <div class="stats-products">
+          <ion-card class="products-card">
+            @if (hasProducts()) {
+            <ion-card-header>
+              <ion-card-title>
+                <h3>Productos vendidos</h3>
+              </ion-card-title>
+            </ion-card-header>
+            }
+            <ion-list>
+              @if (!hasProducts()) {
+              <div class="no-results">
+                <ion-icon name="information-circle"></ion-icon>
+                <h3>Sin productos</h3>
+                <p>El vendedor no ha vendido productos.</p>
+              </div>
+              } @for (product of sellerReport()?.soldProducts; track product.id) {
+              <ion-item lines="none">
+                <ion-label>
+                  <div class="product-name">{{ product.name }}</div>
+                  <span class="product-units">{{ product.quantity }} unidades</span>
+                </ion-label>
+              </ion-item>
+              }
+            </ion-list>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</ion-content>
