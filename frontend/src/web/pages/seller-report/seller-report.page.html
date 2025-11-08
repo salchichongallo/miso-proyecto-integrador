@@ -1,18 +1,27 @@
 <ion-content class="ion-padding">
   <div class="wrapper">
     <ion-card class="vendor-form">
-      <form class="vendor-form__row">
+      <form class="vendor-form__row" [formGroup]="sellerForm" (ngSubmit)="submit()">
         <ion-item fill="none" class="vendor-form__item">
-          <ion-select label="Vendedor" placeholder="Seleccionar vendedor" cancelText="Cancelar" okText="Seleccionar">
+          <ion-select
+            label="Vendedor"
+            placeholder="Selecciona un vendedor"
+            cancelText="Cancelar"
+            okText="Seleccionar"
+            formControlName="seller"
+          >
             @for (seller of sellers(); track seller.vendor_id) {
             <ion-select-option [value]="seller.vendor_id">{{ seller.name }}</ion-select-option>
             }
           </ion-select>
         </ion-item>
-        <ion-button color="primary" class="seller-report-btn" type="submit">GENERAR REPORTE</ion-button>
+        <ion-button [disabled]="sellerForm.invalid" color="primary" class="seller-report-btn" type="submit"
+          >GENERAR REPORTE</ion-button
+        >
       </form>
     </ion-card>
 
+    @if (report()) {
     <div class="report">
       <ion-text>
         <h2 class="report__title">Reporte de vendedor</h2>
@@ -82,5 +91,6 @@
         </div>
       </div>
     </div>
+    }
   </div>
 </ion-content>
