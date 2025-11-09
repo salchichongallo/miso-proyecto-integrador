@@ -150,4 +150,42 @@ describe('SellerService', () => {
       req.flush(emptyVendors);
     });
   });
+
+  describe('getReport', () => {
+    it('should fetch and transform seller report data', async () => {
+      const sellerId = 'seller-123';
+      const mockResponse = {
+        vendor_id: 'seller-123',
+        ordered_products: 150,
+        sales_percentage: 75,
+        sold_products: [
+          { id: 'prod-1', name: 'Product 1', quantity: 50 },
+          { id: 'prod-2', name: 'Product 2', quantity: 100 },
+        ],
+        customers_served: 120,
+        total_sales: 5000,
+      };
+
+      const expectedReport = {
+        sellerId: 'seller-123',
+        orderedProducts: 150,
+        salesPercentage: 75,
+        soldProducts: [
+          { id: 'prod-1', name: 'Product 1', quantity: '50 unidades' },
+          { id: 'prod-2', name: 'Product 2', quantity: '100 unidades' },
+        ],
+        customersServed: 120,
+        totalSales: 5000,
+      };
+
+      const reportPromise = service.getReport(sellerId);
+
+      const req = httpMock.expectOne(`${mockVendorUrl}sales_plan/${sellerId}`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockResponse);
+
+      const report = await reportPromise;
+      expect(report).toEqual(expectedReport);
+    });
+  });
 });
