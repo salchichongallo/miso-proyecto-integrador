@@ -122,36 +122,8 @@ export class VendorReportPage implements OnInit {
     return loading;
   }
 
-  private async loadReportData(): Promise<SellerReport> {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    // TODO: Get report from service
-    return {
-      sellerId: this.sellerId,
-      salesPercentage: Math.random() * 100,
-      orderedProducts: Math.floor(Math.random() * 500),
-      customersServed: Math.floor(Math.random() * 100),
-      totalSales: Math.random() * 1_000_000,
-      soldProducts:
-        Math.random() > 0.5
-          ? [
-              {
-                id: '1',
-                name: 'Acetaminofén 500mg',
-                quantity: '2500 unidades',
-              },
-              {
-                id: '2',
-                name: 'Guantes de látex',
-                quantity: '1800 unidades',
-              },
-              {
-                id: '3',
-                name: 'Mascarillas N95',
-                quantity: '1200 unidades',
-              },
-            ]
-          : [],
-    };
+  private loadReportData() {
+    return this.sellerService.getReport(this.sellerId);
   }
 
   private async showToastError(error: any) {

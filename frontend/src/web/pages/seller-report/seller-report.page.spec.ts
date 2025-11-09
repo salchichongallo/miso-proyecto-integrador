@@ -31,4 +31,34 @@ describe('VendorReportPage', () => {
     expect(sellerService.getVendors).toHaveBeenCalled();
     expect(component.sellers()).toEqual(mockSellers);
   });
+
+  describe('seller report', () => {
+    it('should generate report for selected seller', async () => {
+      sellerService.getReport.mockResolvedValue({ sellerId: 'seller-123' } as any);
+
+      component.sellerForm.setValue({ seller: 'seller-123' });
+      await component.submit();
+
+      const report = component.sellerReport();
+      expect(report).toBeDefined();
+      expect(report!.sellerId).toBe('seller-123');
+    });
+
+    it('should show error toast if report generation fails', async () => {
+      sellerService.getReport.mockRejectedValue(new Error('Report generation failed'));
+
+      component.sellerForm.setValue({ seller: 'seller-123' });
+      const toastSpy = jest.spyOn(component['toast'], 'create').mockResolvedValue({
+        present: jest.fn(),
+      } as any);
+
+      await component.submit();
+
+      expect(toastSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Error al generar reporte. Report generation failed',
+        }),
+      );
+    });
+  });
 });
