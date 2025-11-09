@@ -1,0 +1,151 @@
+.scheduled-delivery-card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  color: #444;
+  width: 100%;
+
+  hr {
+    margin: 0 auto;
+    background-color: #666;
+    &:first-of-type {
+      background-color: #c4c4c4;
+      max-width: calc(100% - 2rem);
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.5rem;
+    padding-right: 2rem;
+  }
+
+  &__order-id {
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+
+  &__amount {
+    font-size: 0.875rem;
+    color: var(--ion-color-medium);
+  }
+
+  &__amount-value {
+    font-weight: 500;
+  }
+
+  &__divider {
+    border: none;
+    border-top: 1.5px solid #e0e0e0;
+  }
+
+  &__section {
+    &--date {
+      color: #757575;
+      font-size: 1rem;
+      padding: 0.5rem;
+      background: #f2f2f2;
+    }
+
+    &--vehicle {
+      padding: 0.5rem;
+    }
+
+    &--products {
+      font-size: 1rem;
+      padding: 0.5rem;
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    gap: 0.5em;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &__icon {
+    font-size: 24px;
+    color: #646464;
+    margin-right: 0.25rem;
+  }
+
+  &__vehicle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ion-color-medium);
+  }
+
+  &__driver {
+    color: #888;
+    font-size: 0.875rem;
+  }
+
+  &__products-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ion-color-medium);
+  }
+
+  &__products-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #444;
+
+    span:first-child {
+      flex: 1;
+    }
+
+    .scheduled-delivery-card__product-qty {
+      font-weight: 600;
+      color: #888;
+      margin-left: 1.5em;
+    }
+  }
+}
+
+.badge {
+  font-size: 0.8125rem;
+  line-height: 1;
+  min-height: 1.25rem;
+  line-height: 1;
+  padding: 0 0.4375rem;
+  border-radius: 0.25rem;
+  color: var(--ion-color-medium-contrast);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+
+  &--status-CONFIRMED,
+  &--status-DELIVERED {
+    background: var(--ion-color-success);
+  }
+
+  &--status-CANCELLED {
+    background: var(--ion-color-danger);
+  }
+
+  &--status-SHIPPED,
+  &--status-PROCESSING,
+  &--status-PENDING {
+    background: var(--ion-color-primary);
+  }
+
+  &--status-RETURNED {
+    background: var(--ion-color-dark);
+  }
+}

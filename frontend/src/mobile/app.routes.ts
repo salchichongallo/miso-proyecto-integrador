@@ -45,10 +45,7 @@ export const routes: Routes = [
       },
       {
         path: 'orders/search-orders',
-        loadComponent: () =>
-          import('./pages/orders/search-orders/search-orders.page').then(
-            (m) => m.SearchOrdersPage,
-          ),
+        loadComponent: () => import('./pages/orders/search-orders/search-orders.page').then((m) => m.SearchOrdersPage),
       },
       {
         path: 'orders/create-order-with-products',
@@ -60,9 +57,7 @@ export const routes: Routes = [
       {
         path: 'orders/product-detail',
         loadComponent: () =>
-          import('./pages/orders/product-detail/product-detail.page').then(
-            (m) => m.ProductDetailPage,
-          ),
+          import('./pages/orders/product-detail/product-detail.page').then((m) => m.ProductDetailPage),
       },
       {
         path: 'cart',
@@ -71,8 +66,14 @@ export const routes: Routes = [
       {
         path: 'order-confirmation',
         loadComponent: () =>
-          import('./pages/order-confirmation/order-confirmation.page').then(
-            (m) => m.OrderConfirmationPage,
+          import('./pages/order-confirmation/order-confirmation.page').then((m) => m.OrderConfirmationPage),
+      },
+      {
+        path: 'orders/scheduled-deliveries',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/orders/scheduled-deliveries/scheduled-deliveries.page').then(
+            (m) => m.ScheduledDeliveriesPage,
           ),
       },
       {
