@@ -3,6 +3,7 @@ python-dotenv==1.1.1
 boto3==1.40.5
 gunicorn==23.0.0
 flask-cors==6.0.1
+pynamodb==6.1.0
 
 # Testing
 pytest==8.4.2

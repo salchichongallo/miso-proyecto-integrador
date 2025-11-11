@@ -1,10 +1,14 @@
 import os
+import logging
 import datetime
 from uuid import uuid4
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, ListAttribute, UTCDateTimeAttribute
 from marshmallow import Schema, fields, validate, ValidationError
-from ..errors.errors import ParamError
+from ..errors.errors import EntityNotFoundError, ParamError
+
+
+logger = logging.getLogger(__name__)
 
 
 class InstitutionSchema(Schema):
@@ -81,6 +85,18 @@ class VendorModel(Model):
             return cls.get(hash_key=email)
         except cls.DoesNotExist:
             return None
+
+    @classmethod
+    def get_by_id(cls, vendor_id: str):
+        """Busca un vendedor por vendor_id (no es clave primaria)."""
+        try:
+            results = cls.scan(cls.vendor_id == vendor_id)
+            for vendor in results:
+                return vendor
+            return None
+        except Exception as e:
+            logger.error(f"Error retrieving vendor by ID: {str(e)}")
+            raise EntityNotFoundError("Vendor", vendor_id)
 
     @classmethod
     def get_all(cls):
