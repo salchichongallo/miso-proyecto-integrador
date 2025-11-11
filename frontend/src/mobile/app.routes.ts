@@ -44,6 +44,12 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'customers/my-clients',
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/customers/vendor-clients/vendor-clients.page').then((m) => m.VendorClientsPage),
+      },
+      {
         path: 'orders/search-orders',
         loadComponent: () => import('./pages/orders/search-orders/search-orders.page').then((m) => m.SearchOrdersPage),
       },
