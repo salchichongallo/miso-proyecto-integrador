@@ -7,9 +7,9 @@ import { PreloadAllModules, provideRouter, RouteReuseStrategy, withPreloading } 
 import { routes } from '@web/app.routes';
 import { AppComponent } from '@web/app.component';
 import { AuthService } from '@shared/auth/auth.service';
+import { TranslationService } from '@shared/services/translation';
 import { tokenInterceptor } from '@shared/interceptors';
-import { provideTranslateService } from '@ngx-translate/core';
-import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideI18nConfig } from '@shared/config';
 
 console.log('🌐 Starting Web Application');
 
@@ -22,15 +22,8 @@ bootstrapApplication(AppComponent, {
     }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([tokenInterceptor])),
+    provideI18nConfig(),
+    provideAppInitializer(() => inject(TranslationService).init()),
     provideAppInitializer(() => inject(AuthService).init()),
-    provideTranslateService({
-      useDefaultLang: true,
-      defaultLanguage: 'es',
-      fallbackLang: 'en',
-      loader: provideTranslateHttpLoader({
-        prefix: './assets/i18n/',
-        suffix: '.json',
-      }),
-    }),
   ],
 }).catch((err) => console.error('Error starting web app:', err));
