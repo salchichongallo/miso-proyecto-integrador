@@ -7,6 +7,17 @@ from marshmallow import Schema, fields, validate, ValidationError
 from ..errors.errors import ParamError
 
 
+class InstitutionSchema(Schema):
+    client_id = fields.String()
+    country = fields.String()
+    level = fields.String()
+    location = fields.String()
+    name = fields.String()
+    specialty = fields.String()
+    tax_id = fields.String()
+    tax_id_encrypted = fields.String()
+
+
 class NewVendorJsonSchema(Schema):
     name = fields.String(
         required=True,
@@ -21,7 +32,7 @@ class NewVendorJsonSchema(Schema):
     )
 
     institutions = fields.List(
-        fields.String(validate=validate.Length(min=1, max=255)),
+        fields.Nested(InstitutionSchema),
         required=True,
         validate=validate.Length(min=1, max=30, error="Debe tener entre 1 y 30 instituciones."),
         error_messages={"required": "El campo 'institutions' es obligatorio."}

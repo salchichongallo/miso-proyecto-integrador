@@ -13,7 +13,7 @@ class TestCreateVendorIntegration:
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": ["Clinica Norte", "Hospital Central"]
+            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
         }
 
         response = client.post("/", json=payload)
@@ -58,7 +58,7 @@ class TestCreateVendorIntegration:
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": ["Clinica Norte"]
+            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
         }
 
         response = client.post("/", json=payload)
@@ -80,7 +80,7 @@ class TestCreateVendorIntegration:
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": ["Clinica Norte"]
+            "institutions": [{ "name":"Clinica Norte" }]
         }
 
         response = client.post("/", json=payload)
