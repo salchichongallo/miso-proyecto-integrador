@@ -1,89 +1,96 @@
-<ion-content [fullscreen]="true">
-  <ion-grid class="home-container">
-    <ion-row class="ion-align-items-center ion-justify-content-center">
-      <!-- Logo Column -->
-      <ion-col size="12" size-md="6" class="logo-column">
-        <div class="logo-wrapper">
-          <img src="assets/logos/logo-MedySupply.png" alt="MediSupply Logo" class="logo" />
-        </div>
-      </ion-col>
+<ion-grid class="home-container">
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <!-- Logo Column -->
+    <ion-col size="12" size-md="6" class="logo-column">
+      <div class="logo-wrapper">
+        <img src="assets/logos/logo-MedySupply.png" alt="MediSupply Logo" class="logo" />
+      </div>
+    </ion-col>
 
-      <!-- Menu Column -->
-      <ion-col size="12" size-md="6" class="menu-column">
-        <ion-list class="menu-list">
-          <ion-item button (click)="navigateTo('/seller-registration')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="person-add"></ion-icon>
-            <ion-label>
-              <h2>Registrar vendedor</h2>
-              <p>Registra un nuevo vendedor en el sistema</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+    <!-- Menu Column -->
+    <ion-col size="12" size-md="6" class="menu-column">
+      <ion-list class="menu-list">
+        <ion-item button (click)="navigateTo('/seller-registration')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="person-add"></ion-icon>
+          <ion-label>
+            <h2>Registrar vendedor</h2>
+            <p>Registra un nuevo vendedor en el sistema</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/product-inventory')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="storefront-outline"></ion-icon>
-            <ion-label>
-              <h2>Consulta de inventario</h2>
-              <p>Consulta el inventario de productos en el sistema</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+        <ion-item button (click)="navigateTo('/product-inventory')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="storefront-outline"></ion-icon>
+          <ion-label>
+            <h2>Consulta de inventario</h2>
+            <p>Consulta el inventario de productos en el sistema</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/supplier-registration')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="business"></ion-icon>
-            <ion-label>
-              <h2>Registrar proveedor</h2>
-              <p>Registra un nuevo proveedor en el sistema</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+        <ion-item button (click)="navigateTo('/supplier-registration')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="business"></ion-icon>
+          <ion-label>
+            <h2>Registrar proveedor</h2>
+            <p>Registra un nuevo proveedor en el sistema</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/supplier-bulk-upload')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="business"></ion-icon>
-            <ion-label>
-              <h2>Registro masivo de proveedores</h2>
-              <p>Carga un archivo con múltiples proveedores</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+        <ion-item button (click)="navigateTo('/supplier-bulk-upload')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="business"></ion-icon>
+          <ion-label>
+            <h2>Registro masivo de proveedores</h2>
+            <p>Carga un archivo con múltiples proveedores</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/product-registration')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="medkit-outline"></ion-icon>
-            <ion-label>
-              <h2>Registrar producto</h2>
-              <p>Registra un producto nuevo individualmente</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+        <ion-item button (click)="navigateTo('/product-registration')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="medkit-outline"></ion-icon>
+          <ion-label>
+            <h2>Registrar producto</h2>
+            <p>Registra un producto nuevo individualmente</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/product-bulk-upload')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="medkit-outline"></ion-icon>
-            <ion-label>
-              <h2>Registro masivo de productos</h2>
-              <p>Carga un archivo con múltiples productos</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+        <ion-item button (click)="navigateTo('/product-bulk-upload')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="medkit-outline"></ion-icon>
+          <ion-label>
+            <h2>Registro masivo de productos</h2>
+            <p>Carga un archivo con múltiples productos</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/seller-report')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="stats-chart-outline"></ion-icon>
-            <ion-label>
-              <h2>Reportes de vendedores</h2>
-              <p>Consulta los reportes de vendedores en el sistema</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
+        <ion-item button (click)="navigateTo('/seller-report')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="stats-chart-outline"></ion-icon>
+          <ion-label>
+            <h2>Reportes de vendedores</h2>
+            <p>Consulta los reportes de vendedores en el sistema</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
 
-          <ion-item button (click)="navigateTo('/sales-plan-creation')" detail="false" class="menu-item" onkeypress>
-            <ion-icon slot="start" name="medkit-outline"></ion-icon>
-            <ion-label>
-              <h2>Crear plan de venta</h2>
-              <p>Crea un plan de venta para gestionar tus objetivos comerciales</p>
-            </ion-label>
-            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+        <ion-item button (click)="navigateTo('/sales-plan-creation')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="medkit-outline"></ion-icon>
+          <ion-label>
+            <h2>Crear plan de venta</h2>
+            <p>Crea un plan de venta para gestionar tus objetivos comerciales</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+
+        <ion-item button (click)="navigateTo('/delivery-routes')" detail="false" class="menu-item" onkeypress>
+          <ion-icon slot="start" name="trending-up"></ion-icon>
+          <ion-label>
+            <h2>Generación de rutas de entrega</h2>
+            <p>Rutas optimizadas de entrega para los clientes</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-grid>
