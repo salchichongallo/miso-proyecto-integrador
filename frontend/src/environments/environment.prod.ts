@@ -12,4 +12,5 @@ export const environment = {
     domain: '#{APP_COGNITO_DOMAIN}#',
     redirectUrls: '#{APP_COGNITO_REDIRECT_URLS}#',
   },
+  mapboxToken: '#{APP_MAPBOX_TOKEN}#',
 };

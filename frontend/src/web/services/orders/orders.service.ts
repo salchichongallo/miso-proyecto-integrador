@@ -24,7 +24,7 @@ export class OrdersService {
     // return this.http.get<Order[]>(`${this.baseUrl}/client/${customerId}`);
 
     // Mock data for CLIENT-1234
-    if (customerId === 'CLIENT-1234') {
+    if (customerId === '9fe4d034-580f-466a-8813-57a60960641c') {
       return of([
         {
           id: 'ORDER-001',
