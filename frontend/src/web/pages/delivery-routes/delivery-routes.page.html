@@ -1,0 +1,23 @@
+<div class="layout-container">
+  <aside class="sidebar">
+    <app-route-configuration (onGenerateRoutes)="onGenerateRoutes($event)" [isLoading]="isGeneratingRoutes()" />
+  </aside>
+
+  <main class="main-content">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <h1 class="title">Generación de rutas de entrega</h1>
+        </ion-card-title>
+        <ion-card-subtitle>
+          <ion-text color="medium">
+            <span class="subtitle"> Configura los parámetros y genera las rutas óptimas </span>
+          </ion-text>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <app-route-map />
+      </ion-card-content>
+    </ion-card>
+  </main>
+</div>

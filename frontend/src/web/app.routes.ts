@@ -60,6 +60,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/seller-report/seller-report.page').then((m) => m.VendorReportPage),
       },
       {
+        path: 'delivery-routes',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/delivery-routes/delivery-routes.page').then((m) => m.DeliveryRoutesPage),
+      },
+      {
         path: 'style-demo',
         loadComponent: () => import('./pages/style-demo/style-demo.page').then((m) => m.StyleDemoPage),
       },
