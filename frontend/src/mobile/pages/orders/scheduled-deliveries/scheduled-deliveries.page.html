@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/orders"></ion-back-button>
     </ion-buttons>
-    <ion-title>Entregas programadas</ion-title>
+    <ion-title>{{ 'orders.scheduledDeliveries.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -14,9 +14,11 @@
     } @empty {
     <ion-card class="empty-state-card">
       <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
-      <ion-card-title class="empty-state-card__title">Sin resultados</ion-card-title>
+      <ion-card-title class="empty-state-card__title">
+        {{ 'orders.scheduledDeliveries.empty.title' | translate }}
+      </ion-card-title>
       <ion-card-content class="empty-state-card__content">
-        No tiene entregas programadas en este periodo
+        {{ 'orders.scheduledDeliveries.empty.message' | translate }}
       </ion-card-content>
     </ion-card>
     }

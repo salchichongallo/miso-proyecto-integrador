@@ -86,6 +86,7 @@
     "title": "Orders",
     "createWithProducts": "Create order with products",
     "search": "Search orders",
+    "scheduledDeliveries": "Scheduled deliveries",
     "searchPage": {
       "title": "Orders Search",
       "loading": "Loading orders...",
@@ -249,6 +250,28 @@
       "buttons": {
         "viewOrders": "View My Orders",
         "createNew": "Create New Order"
+      }
+    },
+    "scheduledDeliveries": {
+      "title": "Scheduled deliveries",
+      "loading": "Loading...",
+      "error": "Error retrieving scheduled deliveries",
+      "empty": {
+        "title": "No results",
+        "message": "You don't have scheduled deliveries in this period"
+      },
+      "card": {
+        "orderId": "Order",
+        "value": "Value",
+        "status": {
+          "inTransit": "In transit",
+          "scheduled": "Scheduled",
+          "delivered": "Delivered"
+        },
+        "vehicle": "Refrigerated truck",
+        "driver": "Driver",
+        "productsIncluded": "Products included",
+        "units": "units"
       }
     }
   },

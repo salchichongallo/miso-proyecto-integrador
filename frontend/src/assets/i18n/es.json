@@ -86,6 +86,7 @@
     "title": "Pedidos",
     "createWithProducts": "Crear pedido con productos",
     "search": "Consultar pedidos",
+    "scheduledDeliveries": "Entregas programadas",
     "searchPage": {
       "title": "Consulta de pedidos",
       "loading": "Cargando pedidos...",
@@ -249,6 +250,28 @@
       "buttons": {
         "viewOrders": "Ver Mis Pedidos",
         "createNew": "Crear Nuevo Pedido"
+      }
+    },
+    "scheduledDeliveries": {
+      "title": "Entregas programadas",
+      "loading": "Cargando...",
+      "error": "Error al obtener entregas programadas",
+      "empty": {
+        "title": "Sin resultados",
+        "message": "No tiene entregas programadas en este periodo"
+      },
+      "card": {
+        "orderId": "Pedido",
+        "value": "Valor",
+        "status": {
+          "inTransit": "En tránsito",
+          "scheduled": "Programado",
+          "delivered": "Entregado"
+        },
+        "vehicle": "Camión refrigerado",
+        "driver": "Conductor",
+        "productsIncluded": "Productos incluidos",
+        "units": "unidades"
       }
     }
   },

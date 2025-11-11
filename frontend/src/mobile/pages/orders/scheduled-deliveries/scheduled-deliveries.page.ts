@@ -12,6 +12,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { informationCircle } from 'ionicons/icons';
 import { IonIcon } from '@ionic/angular/standalone';
@@ -33,14 +34,15 @@ import { ScheduledDeliveryCardComponent } from '@mobile/components/schedule-deli
     IonHeader,
     IonTitle,
     ScheduledDeliveryCardComponent,
+    TranslateModule,
   ],
 })
 export class ScheduledDeliveriesPage implements OnInit {
   protected readonly orders = signal<number[]>([]);
 
   private readonly loader = inject(LoadingController);
-
   private readonly toast = inject(ToastController);
+  private readonly translate = inject(TranslateService);
 
   constructor() {
     addIcons({ informationCircle });
@@ -67,7 +69,7 @@ export class ScheduledDeliveriesPage implements OnInit {
 
   private async showLoader() {
     const loading = await this.loader.create({
-      message: 'Cargando...',
+      message: this.translate.instant('orders.scheduledDeliveries.loading'),
       keyboardClose: false,
       backdropDismiss: false,
     });
@@ -75,10 +77,15 @@ export class ScheduledDeliveriesPage implements OnInit {
     return loading;
   }
 
-  private async showToastError(error: any) {
+  private async showToastError(error: unknown) {
     await this.loader.dismiss();
+    const errorMessage = this.translate.instant('orders.scheduledDeliveries.error');
+    const fullMessage = error && typeof error === 'object' && 'message' in error
+      ? `${errorMessage}. ${(error as { message: string }).message}`
+      : errorMessage;
+
     return this.toast
-      .create({ message: `Error al obtener entregas programadas. ${error?.message}`, duration: 7000, color: 'danger' })
+      .create({ message: fullMessage, duration: 7000, color: 'danger' })
       .then((toast) => toast.present());
   }
 }

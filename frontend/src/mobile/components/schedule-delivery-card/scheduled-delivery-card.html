@@ -3,10 +3,13 @@
     <div>
       <div class="scheduled-delivery-card__order-id">PED-2025-001234</div>
       <div class="scheduled-delivery-card__amount">
-        Valor: <span class="scheduled-delivery-card__amount-value">$2,450.00</span>
+        {{ 'orders.scheduledDeliveries.card.value' | translate }}:
+        <span class="scheduled-delivery-card__amount-value">$2,450.00</span>
       </div>
     </div>
-    <span [ngClass]="['badge', `badge--status-SHIPPED`]"> En tránsito </span>
+    <span [ngClass]="['badge', `badge--status-SHIPPED`]">
+      {{ 'orders.scheduledDeliveries.card.status.inTransit' | translate }}
+    </span>
   </div>
   <hr class="scheduled-delivery-card__divider" />
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--date">
@@ -22,31 +25,43 @@
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--vehicle">
     <div class="scheduled-delivery-card__row">
       <ion-icon name="bus" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__vehicle">Camión refrigerado CAM-045</span>
+      <span class="scheduled-delivery-card__vehicle">
+        {{ 'orders.scheduledDeliveries.card.vehicle' | translate }} CAM-045
+      </span>
     </div>
     <div class="scheduled-delivery-card__row">
       <ion-icon name="person" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__driver">Conductor: Carlos Mendoza</span>
+      <span class="scheduled-delivery-card__driver">
+        {{ 'orders.scheduledDeliveries.card.driver' | translate }}: Carlos Mendoza
+      </span>
     </div>
   </div>
   <hr class="scheduled-delivery-card__divider" />
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--products">
     <div class="scheduled-delivery-card__row">
       <ion-icon name="cart-outline" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__products-title">Productos incluidos</span>
+      <span class="scheduled-delivery-card__products-title">
+        {{ 'orders.scheduledDeliveries.card.productsIncluded' | translate }}
+      </span>
     </div>
     <div class="scheduled-delivery-card__products-list">
       <div class="scheduled-delivery-card__product-item">
         <span>Vacuna COVID-19 Pfizer</span>
-        <span class="scheduled-delivery-card__product-qty">50 unidades</span>
+        <span class="scheduled-delivery-card__product-qty">
+          50 {{ 'orders.scheduledDeliveries.card.units' | translate }}
+        </span>
       </div>
       <div class="scheduled-delivery-card__product-item">
         <span>Jeringas desechables 1ml</span>
-        <span class="scheduled-delivery-card__product-qty">100 unidades</span>
+        <span class="scheduled-delivery-card__product-qty">
+          100 {{ 'orders.scheduledDeliveries.card.units' | translate }}
+        </span>
       </div>
       <div class="scheduled-delivery-card__product-item">
         <span>Alcohol antiséptico 70%</span>
-        <span class="scheduled-delivery-card__product-qty">10 unidades</span>
+        <span class="scheduled-delivery-card__product-qty">
+          10 {{ 'orders.scheduledDeliveries.card.units' | translate }}
+        </span>
       </div>
     </div>
   </div>
