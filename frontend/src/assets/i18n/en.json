@@ -263,5 +263,199 @@
         "changed": "Language changed to {{language}}"
       }
     }
+  },
+  "web": {
+    "home": {
+      "menu": {
+        "seller": {
+          "title": "Register seller",
+          "description": "Register a new seller in the system"
+        },
+        "inventory": {
+          "title": "Inventory query",
+          "description": "Query the product inventory in the system"
+        },
+        "supplier": {
+          "title": "Register supplier",
+          "description": "Register a new supplier in the system"
+        },
+        "supplierBulk": {
+          "title": "Bulk supplier registration",
+          "description": "Upload a file with multiple suppliers"
+        },
+        "product": {
+          "title": "Register product",
+          "description": "Register a new product individually"
+        },
+        "productBulk": {
+          "title": "Bulk product registration",
+          "description": "Upload a file with multiple products"
+        },
+        "sellerReport": {
+          "title": "Seller reports",
+          "description": "View seller reports in the system"
+        },
+        "salesPlan": {
+          "title": "Create sales plan",
+          "description": "Create a sales plan to manage your business goals"
+        },
+        "deliveryRoutes": {
+          "title": "Delivery route generation",
+          "description": "Optimized delivery routes for customers"
+        }
+      }
+    },
+    "seller": {
+      "registration": {
+        "title": "Register seller",
+        "form": {
+          "name": {
+            "label": "Seller name",
+            "placeholder": "Enter seller name",
+            "required": "Name is required",
+            "minLength": "Name must be at least 3 characters"
+          },
+          "email": {
+            "label": "Corporate email",
+            "placeholder": "seller@company.com",
+            "required": "Corporate email is required",
+            "invalid": "Enter a valid email"
+          },
+          "institutions": {
+            "title": "Selected institutions",
+            "count": "{{count}}/30",
+            "add": "Add institution",
+            "empty": "No institutions added"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "submit": "Register seller"
+        }
+      }
+    },
+    "supplier": {
+      "registration": {
+        "title": "Register supplier",
+        "form": {
+          "name": {
+            "label": "Supplier name",
+            "placeholder": "Enter supplier name",
+            "required": "Name is required",
+            "minLength": "Name must be at least 3 characters"
+          },
+          "email": {
+            "label": "Email",
+            "placeholder": "supplier@company.com",
+            "required": "Email is required",
+            "invalid": "Enter a valid email"
+          },
+          "phone": {
+            "label": "Phone",
+            "placeholder": "+57 300 123 4567",
+            "required": "Phone is required",
+            "invalid": "Enter a valid phone number"
+          },
+          "country": {
+            "label": "Country",
+            "placeholder": "Select country",
+            "required": "Country is required"
+          },
+          "nit": {
+            "label": "Tax ID",
+            "placeholder": "900123456-7",
+            "required": "Tax ID is required",
+            "pattern": "Tax ID must contain only numbers and hyphens"
+          },
+          "address": {
+            "label": "Address",
+            "placeholder": "123 Main St #45-67",
+            "required": "Address is required",
+            "minLength": "Address must be at least 5 characters"
+          }
+        },
+        "buttons": {
+          "back": "Back",
+          "save": "Save"
+        }
+      }
+    },
+    "product": {
+      "registration": {
+        "title": "Register product",
+        "form": {
+          "warehouse": {
+            "label": "Warehouse ID",
+            "placeholder": "Enter warehouse ID",
+            "required": "ID is required"
+          },
+          "name": {
+            "label": "Product name",
+            "placeholder": "Enter product name",
+            "required": "Name is required",
+            "minLength": "Name must be at least 3 characters"
+          },
+          "providerNit": {
+            "label": "Provider Tax ID",
+            "placeholder": "900123456-7",
+            "required": "Provider Tax ID is required",
+            "pattern": "Tax ID must contain only numbers and hyphens"
+          },
+          "productType": {
+            "label": "Product type",
+            "placeholder": "Select type",
+            "required": "Product type is required"
+          },
+          "stock": {
+            "label": "Stock",
+            "placeholder": "1",
+            "required": "Stock is required",
+            "positiveInteger": "Stock must be a positive integer"
+          },
+          "lot": {
+            "label": "Lot",
+            "placeholder": "Enter lot number",
+            "required": "Lot is required",
+            "minLength": "Lot must be at least 3 characters"
+          },
+          "state": {
+            "label": "State",
+            "placeholder": "Select state",
+            "required": "State is required"
+          },
+          "sku": {
+            "label": "Product SKU",
+            "placeholder": "Enter SKU",
+            "required": "SKU is required"
+          },
+          "expirationDate": {
+            "label": "Expiration date",
+            "required": "Expiration date is required",
+            "futureDate": "Expiration date must be in the future"
+          },
+          "requiredTemperature": {
+            "label": "Required temperature (°C)",
+            "placeholder": "2-8",
+            "required": "Required temperature is mandatory"
+          },
+          "unitValue": {
+            "label": "Unit price ($)",
+            "placeholder": "0.00",
+            "required": "Unit price is required",
+            "min": "Unit price must be greater than or equal to 0"
+          },
+          "storageConditions": {
+            "label": "Storage conditions",
+            "placeholder": "Describe the required storage conditions",
+            "required": "Storage conditions are mandatory",
+            "minLength": "Provide more detail (minimum 10 characters)"
+          }
+        },
+        "buttons": {
+          "back": "Back",
+          "save": "Save"
+        }
+      }
+    }
   }
 }

@@ -81,6 +81,6 @@ export function provideI18nModuleConfig() {
         deps: [HttpClient],
       },
       defaultLanguage: DEFAULT_LANGUAGE,
-    })
+    }),
   );
 }

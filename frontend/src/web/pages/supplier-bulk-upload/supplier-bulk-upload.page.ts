@@ -73,7 +73,10 @@ export class SupplierBulkUploadPage {
         },
         error: (httpError: HttpErrorResponse) => {
           const message =
-            httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al cargar los proveedores.';
+            httpError.error?.error ??
+            httpError.error?.message ??
+            httpError.message ??
+            'Error al cargar los proveedores.';
           this.showErrorMessage(message);
         },
       });

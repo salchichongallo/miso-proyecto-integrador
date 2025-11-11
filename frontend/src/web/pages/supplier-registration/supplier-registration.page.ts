@@ -21,6 +21,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { finalize } from 'rxjs';
 
@@ -35,6 +36,7 @@ import { LATIN_AMERICA_COUNTRIES } from '@shared/constants/countries.constant';
   styleUrls: ['./supplier-registration.page.scss'],
   imports: [
     ReactiveFormsModule,
+    TranslateModule,
     IonContent,
     IonGrid,
     IonRow,
@@ -152,7 +154,10 @@ export class SupplierRegistrationPage {
         },
         error: (httpError: HttpErrorResponse) => {
           const message =
-            httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al registrar el proveedor.';
+            httpError.error?.error ??
+            httpError.error?.message ??
+            httpError.message ??
+            'Error al registrar el proveedor.';
           this.showErrorMessage(message);
         },
       });

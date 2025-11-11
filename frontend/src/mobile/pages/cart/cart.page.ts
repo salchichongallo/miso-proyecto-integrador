@@ -31,12 +31,7 @@ import {
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
-import {
-  trashOutline,
-  removeCircleOutline,
-  addCircleOutline,
-  locationOutline,
-} from 'ionicons/icons';
+import { trashOutline, removeCircleOutline, addCircleOutline, locationOutline } from 'ionicons/icons';
 
 import { CartService } from '@mobile/services/cart/cart.service';
 import { OrderService } from '@mobile/services/order/order.service';
@@ -192,10 +187,7 @@ export class CartPage {
           await loading.dismiss();
           this.isSubmitting.set(false);
           console.error('Error creating order:', error);
-          await this.showToast(
-            this.translate.instant('orders.cart.toast.error'),
-            'danger'
-          );
+          await this.showToast(this.translate.instant('orders.cart.toast.error'), 'danger');
         },
       });
     } catch (error) {
@@ -206,10 +198,7 @@ export class CartPage {
     }
   }
 
-  private async showToast(
-    message: string,
-    color: 'success' | 'danger' | 'warning'
-  ): Promise<void> {
+  private async showToast(message: string, color: 'success' | 'danger' | 'warning'): Promise<void> {
     const toast = await this.toastController.create({
       message,
       duration: 2500,

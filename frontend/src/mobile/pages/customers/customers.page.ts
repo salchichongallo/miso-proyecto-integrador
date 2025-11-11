@@ -20,7 +20,18 @@ import { TranslateModule } from '@ngx-translate/core';
   selector: 'app-customers-page',
   templateUrl: 'customers.page.html',
   styleUrls: ['customers.page.scss'],
-  imports: [RouterLink, IonIcon, IonLabel, IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent, TranslateModule],
+  imports: [
+    RouterLink,
+    IonIcon,
+    IonLabel,
+    IonList,
+    IonItem,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    TranslateModule,
+  ],
 })
 export class CustomersPage {
   constructor() {

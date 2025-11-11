@@ -229,7 +229,7 @@ describe('AddProductModalComponent', () => {
       expect(typeof dismissCall.target_units).toBe('number');
       expect(typeof dismissCall.target_value).toBe('number');
       expect(dismissCall.target_units).toBe(200);
-      expect(dismissCall.target_value).toBe(15000.50);
+      expect(dismissCall.target_value).toBe(15000.5);
     });
   });
 });

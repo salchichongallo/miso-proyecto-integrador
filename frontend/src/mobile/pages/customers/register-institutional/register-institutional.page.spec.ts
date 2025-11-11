@@ -81,7 +81,14 @@ describe('RegisterInstitutionalPage', () => {
     const toastController = TestBed.inject(ToastController);
     const translateService = mockTranslateService;
 
-    component = new RegisterInstitutionalPage(fb, router, customerService, loadingController, toastController, translateService);
+    component = new RegisterInstitutionalPage(
+      fb,
+      router,
+      customerService,
+      loadingController,
+      toastController,
+      translateService,
+    );
   });
 
   afterEach(() => {
@@ -343,9 +350,7 @@ describe('RegisterInstitutionalPage', () => {
         },
       };
 
-      mockCustomersService.createInstitutionalClient = jest
-        .fn()
-        .mockReturnValue(throwError(() => errorResponse));
+      mockCustomersService.createInstitutionalClient = jest.fn().mockReturnValue(throwError(() => errorResponse));
 
       component.institutionalClientForm.patchValue({
         taxId: '123456789',
@@ -378,9 +383,7 @@ describe('RegisterInstitutionalPage', () => {
         },
       };
 
-      mockCustomersService.createInstitutionalClient = jest
-        .fn()
-        .mockReturnValue(throwError(() => errorResponse));
+      mockCustomersService.createInstitutionalClient = jest.fn().mockReturnValue(throwError(() => errorResponse));
 
       component.institutionalClientForm.patchValue({
         taxId: '123456789',
@@ -480,7 +483,7 @@ describe('RegisterInstitutionalPage', () => {
       expect(mockCustomersService.createInstitutionalClient).toHaveBeenCalledWith(
         expect.objectContaining({
           level: roman,
-        })
+        }),
       );
     });
   });

@@ -24,19 +24,21 @@ describe('SupplierRegistrationPage', () => {
     };
 
     mockSupplierService = {
-      createSupplier: jest.fn().mockReturnValue(of({
-        message: 'Success',
-        provider: {
-          name: 'Test',
-          email: 'test@test.com',
-          phone: '123',
-          country: 'CO',
-          nit: '123',
-          address: 'Test address',
-          message: 'Created',
-          provider_id: '123',
-        },
-      })),
+      createSupplier: jest.fn().mockReturnValue(
+        of({
+          message: 'Success',
+          provider: {
+            name: 'Test',
+            email: 'test@test.com',
+            phone: '123',
+            country: 'CO',
+            nit: '123',
+            address: 'Test address',
+            message: 'Created',
+            provider_id: '123',
+          },
+        }),
+      ),
     };
 
     mockLoading = {
