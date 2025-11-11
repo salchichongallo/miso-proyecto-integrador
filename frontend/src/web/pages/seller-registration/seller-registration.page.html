@@ -19,14 +19,13 @@
                 ></ion-input>
               </ion-item>
               @if (nameControl?.invalid && nameControl?.touched) {
-                <div class="error-message">
-                  @if (nameControl?.errors?.['required']) {
-                    <small>El nombre es requerido</small>
-                  }
-                  @if (nameControl?.errors?.['minlength']) {
-                    <small>El nombre debe tener al menos 3 caracteres</small>
-                  }
-                </div>
+              <div class="error-message">
+                @if (nameControl?.errors?.['required']) {
+                <small>El nombre es requerido</small>
+                } @if (nameControl?.errors?.['minlength']) {
+                <small>El nombre debe tener al menos 3 caracteres</small>
+                }
+              </div>
               }
 
               <ion-item [class.ion-invalid]="emailControl?.invalid && emailControl?.touched">
@@ -39,14 +38,13 @@
                 ></ion-input>
               </ion-item>
               @if (emailControl?.invalid && emailControl?.touched) {
-                <div class="error-message">
-                  @if (emailControl?.errors?.['required']) {
-                    <small>El correo corporativo es requerido</small>
-                  }
-                  @if (emailControl?.errors?.['email']) {
-                    <small>Ingrese un correo válido</small>
-                  }
-                </div>
+              <div class="error-message">
+                @if (emailControl?.errors?.['required']) {
+                <small>El correo corporativo es requerido</small>
+                } @if (emailControl?.errors?.['email']) {
+                <small>Ingrese un correo válido</small>
+                }
+              </div>
               }
 
               <section class="institutions-section">
@@ -68,33 +66,34 @@
                 </div>
 
                 @if (institutions.length === 0) {
-                  <div class="empty-state">
-                    <small>No hay instituciones agregadas</small>
-                  </div>
+                <div class="empty-state">
+                  <small>No hay instituciones agregadas</small>
+                </div>
                 } @else {
-                  <div class="institutions-list">
-                    @for (institution of institutions; track institution.id) {
-                      <div class="institution-item">
-                        <span class="institution-name">{{ institution.name }}</span>
-                        <ion-button
-                          onkeypress
-                          fill="clear"
-                          color="danger"
-                          size="small"
-                          (click)="removeInstitution(institution.id)"
-                        >
-                          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-                        </ion-button>
-                      </div>
-                    }
+                <div class="institutions-list">
+                  @for (institution of institutions; track institution.client_id) {
+                  <div class="institution-item">
+                    <span class="institution-name">{{ institution.name }}</span>
+                    <ion-button
+                      onkeypress
+                      fill="clear"
+                      color="danger"
+                      size="small"
+                      (click)="removeInstitution(institution.client_id)"
+                    >
+                      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                    </ion-button>
                   </div>
+                  }
+                </div>
                 }
               </section>
 
               <ion-grid class="button-group">
                 <ion-row>
                   <ion-col size="6">
-                    <ion-button onkeypress
+                    <ion-button
+                      onkeypress
                       expand="block"
                       fill="outline"
                       color="primary"
@@ -105,12 +104,7 @@
                     </ion-button>
                   </ion-col>
                   <ion-col size="6">
-                    <ion-button
-                      expand="block"
-                      color="primary"
-                      type="submit"
-                      [disabled]="sellerForm.invalid"
-                    >
+                    <ion-button expand="block" color="primary" type="submit" [disabled]="sellerForm.invalid">
                       Registrar vendedor
                     </ion-button>
                   </ion-col>

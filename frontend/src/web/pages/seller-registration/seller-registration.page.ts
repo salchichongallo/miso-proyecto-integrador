@@ -29,9 +29,9 @@ import { add, trashOutline } from 'ionicons/icons';
 import { SellerService } from '@web/services/seller/seller.service';
 
 import { AddInstitutionModalComponent } from './components/add-institution-modal/add-institution-modal.component';
-import { Institution } from './interfaces/institution.interface';
 import { RegisterSellerRequest } from './interfaces/register-seller-request.interface';
 import { SellerFormValue } from './interfaces/seller-form-value.interface';
+import { InstitutionalClient } from '../../services/customers/institutional-client.interface';
 
 @Component({
   selector: 'app-seller-registration',
@@ -56,7 +56,7 @@ import { SellerFormValue } from './interfaces/seller-form-value.interface';
 })
 export class SellerRegistrationPage {
   sellerForm: FormGroup;
-  institutions: Institution[] = [];
+  institutions: InstitutionalClient[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -101,27 +101,22 @@ export class SellerRegistrationPage {
 
     await modal.present();
 
-    const { data, role } = await modal.onWillDismiss<string>();
+    const { data, role } = await modal.onWillDismiss<InstitutionalClient>();
 
     if (role === 'confirm' && data) {
       this.addInstitution(data);
     }
   }
 
-  public addInstitution(name: string): void {
-    const newInstitution: Institution = {
-      id: this.generateId(),
-      name: name,
-    };
-    this.institutions.push(newInstitution);
+  private addInstitution(institution: InstitutionalClient) {
+    const exists = this.institutions.some((inst) => inst.client_id === institution.client_id);
+    if (!exists) {
+      this.institutions.push(institution);
+    }
   }
 
-  public removeInstitution(id: string): void {
-    this.institutions = this.institutions.filter((institution) => institution.id !== id);
-  }
-
-  private generateId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  public removeInstitution(clientId: string): void {
+    this.institutions = this.institutions.filter((institution) => institution.client_id !== clientId);
   }
 
   private async registerSeller(): Promise<void> {
@@ -136,7 +131,7 @@ export class SellerRegistrationPage {
     const sellerData: RegisterSellerRequest = {
       name,
       email,
-      institutions: this.institutions.map((institution) => institution.id),
+      institutions: this.institutions,
     };
 
     this.sellerService
