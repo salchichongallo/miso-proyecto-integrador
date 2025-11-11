@@ -31,7 +31,7 @@ export class CartService {
     const currentItems = [...this.cartItems()];
     // Usar SKU + warehouse para identificar productos únicos
     const existingItemIndex = currentItems.findIndex(
-      (item) => item.product.sku === product.sku && item.product.warehouse === product.warehouse
+      (item) => item.product.sku === product.sku && item.product.warehouse === product.warehouse,
     );
 
     if (existingItemIndex >= 0) {
@@ -67,19 +67,15 @@ export class CartService {
 
   public removeFromCart(sku: string, warehouse: string): void {
     const currentItems = this.cartItems().filter(
-      (item) => !(item.product.sku === sku && item.product.warehouse === warehouse)
+      (item) => !(item.product.sku === sku && item.product.warehouse === warehouse),
     );
     this.cartItems.set(currentItems);
   }
 
-  public updateQuantity(
-    sku: string,
-    warehouse: string,
-    quantity: number
-  ): { success: boolean; message: string } {
+  public updateQuantity(sku: string, warehouse: string, quantity: number): { success: boolean; message: string } {
     const currentItems = [...this.cartItems()];
     const itemIndex = currentItems.findIndex(
-      (item) => item.product.sku === sku && item.product.warehouse === warehouse
+      (item) => item.product.sku === sku && item.product.warehouse === warehouse,
     );
 
     if (itemIndex < 0) {
@@ -124,8 +120,6 @@ export class CartService {
   }
 
   public getCartItem(sku: string, warehouse: string): CartItem | undefined {
-    return this.cartItems().find(
-      (item) => item.product.sku === sku && item.product.warehouse === warehouse
-    );
+    return this.cartItems().find((item) => item.product.sku === sku && item.product.warehouse === warehouse);
   }
 }

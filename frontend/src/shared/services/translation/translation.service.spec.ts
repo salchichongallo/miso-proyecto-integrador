@@ -1,16 +1,33 @@
 import { TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
 
-import { TranslationService, Language } from './translation.service';
+import { TranslationService } from './translation.service';
+import type { Language } from '@shared/config';
 
-jest.mock('@capacitor/preferences');
+jest.mock('@capacitor/core', () => ({
+  Capacitor: {
+    isNativePlatform: jest.fn(),
+  },
+  registerPlugin: jest.fn(),
+}));
+
+jest.mock('@capacitor/preferences', () => ({
+  Preferences: {
+    get: jest.fn(),
+    set: jest.fn(),
+  },
+}));
 
 describe('TranslationService', () => {
   let service: TranslationService;
   let translateService: TranslateService;
 
   beforeEach(() => {
+    // Mock Capacitor to simulate native platform by default
+    (Capacitor.isNativePlatform as jest.Mock).mockReturnValue(true);
+
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
       providers: [TranslationService],
@@ -212,6 +229,48 @@ describe('TranslationService', () => {
       await service.setLanguage('es');
 
       expect(mockSet).toHaveBeenCalledWith({ key: 'app_language', value: 'es' });
+    });
+  });
+
+  describe('Fallback Behavior', () => {
+    it('should fallback to localStorage if Preferences.get fails', async () => {
+      const mockGet = jest.fn().mockRejectedValue(new Error('Preferences not available'));
+      (Preferences.get as jest.Mock) = mockGet;
+
+      // Mock localStorage as fallback
+      const localStorageMock: Record<string, string> = { app_language: 'en' };
+      global.localStorage = {
+        getItem: jest.fn((key: string) => localStorageMock[key] || null),
+        setItem: jest.fn(),
+        removeItem: jest.fn(),
+        clear: jest.fn(),
+        length: 0,
+        key: jest.fn(),
+      } as Storage;
+
+      const useSpy = jest.spyOn(translateService, 'use');
+
+      await service.init();
+
+      // Should use the language from localStorage as fallback
+      expect(useSpy).toHaveBeenCalledWith('en');
+    });
+
+    it('should not throw error if Preferences.set fails (uses localStorage fallback)', async () => {
+      const mockSet = jest.fn().mockRejectedValue(new Error('Preferences not available'));
+      (Preferences.set as jest.Mock) = mockSet;
+
+      global.localStorage = {
+        getItem: jest.fn(() => null),
+        setItem: jest.fn(),
+        removeItem: jest.fn(),
+        clear: jest.fn(),
+        length: 0,
+        key: jest.fn(),
+      } as Storage;
+
+      // Should not throw error, fallback to localStorage
+      await expect(service.setLanguage('es')).resolves.not.toThrow();
     });
   });
 });

@@ -18,6 +18,6 @@ export const authGuard = () => {
         return router.createUrlTree(['/login']);
       }
       return true;
-    })
+    }),
   );
 };

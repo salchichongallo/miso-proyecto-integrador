@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { Keyboard, KeyboardInfo } from '@capacitor/keyboard';
 import { IonImg, IonThumbnail, Platform } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
@@ -12,7 +12,7 @@ import { AppAuthenticatorComponent } from '../app-authenticator/app-authenticato
   styleUrls: ['login.template.scss'],
   imports: [IonImg, AppAuthenticatorComponent, IonThumbnail, TranslateModule],
 })
-export class LoginTemplate {
+export class LoginTemplate implements OnInit, OnDestroy {
   private readonly router = inject(Router);
 
   private readonly platform = inject(Platform);

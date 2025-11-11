@@ -39,7 +39,7 @@ export class AddInstitutionModalComponent {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly modalController: ModalController
+    private readonly modalController: ModalController,
   ) {
     this.institutionForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],

@@ -18,6 +18,6 @@ export const loginGuard = () => {
         return router.createUrlTree(['/']);
       }
       return true;
-    })
+    }),
   );
 };

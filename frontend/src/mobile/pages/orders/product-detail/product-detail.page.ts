@@ -107,10 +107,7 @@ export class ProductDetailPage implements OnInit {
     }
   }
 
-  private async showToast(
-    message: string,
-    color: 'success' | 'danger' | 'warning'
-  ): Promise<void> {
+  private async showToast(message: string, color: 'success' | 'danger' | 'warning'): Promise<void> {
     const toast = await this.toastController.create({
       message,
       duration: 2500,

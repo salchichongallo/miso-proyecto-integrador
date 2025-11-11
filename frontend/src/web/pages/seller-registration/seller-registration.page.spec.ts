@@ -2,12 +2,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { SellerRegistrationPage } from './seller-registration.page';
 import { SellerService } from '../../services/seller/seller.service';
 import { AddInstitutionModalComponent } from './components/add-institution-modal/add-institution-modal.component';
 import { RegisterSellerResponse } from './interfaces/register-seller-response.interface';
+
+class FakeLoader implements TranslateLoader {
+  getTranslation() {
+    return of({});
+  }
+}
 
 describe('SellerRegistrationPage', () => {
   let component: SellerRegistrationPage;
@@ -45,7 +52,12 @@ describe('SellerRegistrationPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SellerRegistrationPage],
+      imports: [
+        SellerRegistrationPage,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: FakeLoader },
+        }),
+      ],
       providers: [
         { provide: SellerService, useValue: sellerServiceMock },
         { provide: ModalController, useValue: modalControllerMock },

@@ -4,7 +4,7 @@
       <ion-col size="12" size-md="10" size-lg="8" size-xl="6">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Registrar producto</ion-card-title>
+            <ion-card-title>{{ 'web.product.registration.title' | translate }}</ion-card-title>
           </ion-card-header>
 
           <ion-card-content>
@@ -15,66 +15,66 @@
                   <ion-col size="12" size-md="6">
                     <!-- Warehouse Field -->
                     <ion-item [class.ion-invalid]="warehouseControl?.invalid && warehouseControl?.touched">
-                      <ion-label position="stacked">ID de bodega</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.warehouse.label' | translate }}</ion-label>
                       <ion-input
                         type="text"
                         formControlName="warehouse"
-                        placeholder="Ingrese el ID de la bodega"
+                        [placeholder]="'web.product.registration.form.warehouse.placeholder' | translate"
                         [clearInput]="true"
                       ></ion-input>
                     </ion-item>
                     @if (warehouseControl?.invalid && warehouseControl?.touched) {
                     <div class="error-message">
                       @if (nameControl?.errors?.['required']) {
-                      <small>El ID requerido</small>
+                      <small>{{ 'web.product.registration.form.warehouse.required' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Name Field -->
                     <ion-item [class.ion-invalid]="nameControl?.invalid && nameControl?.touched">
-                      <ion-label position="stacked">Nombre del producto</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.name.label' | translate }}</ion-label>
                       <ion-input
                         type="text"
                         formControlName="name"
-                        placeholder="Ingrese el nombre del producto"
+                        [placeholder]="'web.product.registration.form.name.placeholder' | translate"
                         [clearInput]="true"
                       ></ion-input>
                     </ion-item>
                     @if (nameControl?.invalid && nameControl?.touched) {
                     <div class="error-message">
                       @if (nameControl?.errors?.['required']) {
-                      <small>El nombre es requerido</small>
+                      <small>{{ 'web.product.registration.form.name.required' | translate }}</small>
                       } @if (nameControl?.errors?.['minlength']) {
-                      <small>El nombre debe tener al menos 3 caracteres</small>
+                      <small>{{ 'web.product.registration.form.name.minLength' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Provider NIT Field -->
                     <ion-item [class.ion-invalid]="providerNitControl?.invalid && providerNitControl?.touched">
-                      <ion-label position="stacked">NIT del proveedor</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.providerNit.label' | translate }}</ion-label>
                       <ion-input
                         type="text"
                         formControlName="providerNit"
-                        placeholder="900123456-7"
+                        [placeholder]="'web.product.registration.form.providerNit.placeholder' | translate"
                         [clearInput]="true"
                       ></ion-input>
                     </ion-item>
                     @if (providerNitControl?.invalid && providerNitControl?.touched) {
                     <div class="error-message">
                       @if (providerNitControl?.errors?.['required']) {
-                      <small>El NIT del proveedor es requerido</small>
+                      <small>{{ 'web.product.registration.form.providerNit.required' | translate }}</small>
                       } @if (providerNitControl?.errors?.['pattern']) {
-                      <small>El NIT debe contener solo números y guiones</small>
+                      <small>{{ 'web.product.registration.form.providerNit.pattern' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Product Type Field -->
                     <ion-item [class.ion-invalid]="productTypeControl?.invalid && productTypeControl?.touched">
-                      <ion-label position="stacked">Tipo de producto</ion-label>
-                      <ion-select formControlName="productType" placeholder="Seleccione el tipo">
+                      <ion-label position="stacked">{{ 'web.product.registration.form.productType.label' | translate }}</ion-label>
+                      <ion-select formControlName="productType" [placeholder]="'web.product.registration.form.productType.placeholder' | translate">
                         @for (type of productTypes; track type.value) {
                         <ion-select-option [value]="type.value">{{ type.label }}</ion-select-option>
                         }
@@ -83,18 +83,18 @@
                     @if (productTypeControl?.invalid && productTypeControl?.touched) {
                     <div class="error-message">
                       @if (productTypeControl?.errors?.['required']) {
-                      <small>El tipo de producto es requerido</small>
+                      <small>{{ 'web.product.registration.form.productType.required' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Stock Field -->
                     <ion-item [class.ion-invalid]="stockControl?.invalid && stockControl?.touched">
-                      <ion-label position="stacked">Stock</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.stock.label' | translate }}</ion-label>
                       <ion-input
                         type="number"
                         formControlName="stock"
-                        placeholder="1"
+                        [placeholder]="'web.product.registration.form.stock.placeholder' | translate"
                         [clearInput]="true"
                         min="1"
                       ></ion-input>
@@ -102,37 +102,37 @@
                     @if (stockControl?.invalid && stockControl?.touched) {
                     <div class="error-message">
                       @if (stockControl?.errors?.['required']) {
-                      <small>El stock es requerido</small>
+                      <small>{{ 'web.product.registration.form.stock.required' | translate }}</small>
                       } @if (stockControl?.errors?.['positiveInteger']) {
-                      <small>El stock debe ser un número entero mayor a 0</small>
+                      <small>{{ 'web.product.registration.form.stock.positiveInteger' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Lot Field -->
                     <ion-item [class.ion-invalid]="lotControl?.invalid && lotControl?.touched">
-                      <ion-label position="stacked">Lote</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.lot.label' | translate }}</ion-label>
                       <ion-input
                         type="text"
                         formControlName="lot"
-                        placeholder="Ingrese el número de lote"
+                        [placeholder]="'web.product.registration.form.lot.placeholder' | translate"
                         [clearInput]="true"
                       ></ion-input>
                     </ion-item>
                     @if (lotControl?.invalid && lotControl?.touched) {
                     <div class="error-message">
                       @if (lotControl?.errors?.['required']) {
-                      <small>El lote es requerido</small>
+                      <small>{{ 'web.product.registration.form.lot.required' | translate }}</small>
                       } @if (lotControl?.errors?.['minlength']) {
-                      <small>El lote debe tener al menos 3 caracteres</small>
+                      <small>{{ 'web.product.registration.form.lot.minLength' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- State Field -->
                     <ion-item [class.ion-invalid]="stateControl?.invalid && stateControl?.touched">
-                      <ion-label position="stacked">Estado</ion-label>
-                      <ion-select formControlName="state" placeholder="Seleccione el estado">
+                      <ion-label position="stacked">{{ 'web.product.registration.form.state.label' | translate }}</ion-label>
+                      <ion-select formControlName="state" [placeholder]="'web.product.registration.form.state.placeholder' | translate">
                         @for (state of productStates; track state.value) {
                         <ion-select-option [value]="state.value">{{ state.label }}</ion-select-option>
                         }
@@ -141,7 +141,7 @@
                     @if (stateControl?.invalid && stateControl?.touched) {
                     <div class="error-message">
                       @if (stateControl?.errors?.['required']) {
-                      <small>El estado es requerido</small>
+                      <small>{{ 'web.product.registration.form.state.required' | translate }}</small>
                       }
                     </div>
                     }
@@ -151,28 +151,28 @@
                   <ion-col size="12" size-md="6">
                     <!-- SKU Field -->
                     <ion-item [class.ion-invalid]="skuControl?.invalid && skuControl?.touched">
-                      <ion-label position="stacked">SKU del producto</ion-label>
-                      <ion-input type="text" formControlName="sku" placeholder="Ingrese el SKU"></ion-input>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.sku.label' | translate }}</ion-label>
+                      <ion-input type="text" formControlName="sku" [placeholder]="'web.product.registration.form.sku.placeholder' | translate"></ion-input>
                     </ion-item>
                     @if (skuControl?.invalid && skuControl?.touched) {
                     <div class="error-message">
                       @if (skuControl?.errors?.['required']) {
-                      <small>El SKU es requerido.</small>
+                      <small>{{ 'web.product.registration.form.sku.required' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Expiration Date Field -->
                     <ion-item [class.ion-invalid]="expirationDateControl?.invalid && expirationDateControl?.touched">
-                      <ion-label position="stacked">Fecha de vencimiento</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.expirationDate.label' | translate }}</ion-label>
                       <ion-input type="date" formControlName="expirationDate"></ion-input>
                     </ion-item>
                     @if (expirationDateControl?.invalid && expirationDateControl?.touched) {
                     <div class="error-message">
                       @if (expirationDateControl?.errors?.['required']) {
-                      <small>La fecha de vencimiento es requerida</small>
+                      <small>{{ 'web.product.registration.form.expirationDate.required' | translate }}</small>
                       } @if (expirationDateControl?.errors?.['futureDate']) {
-                      <small>La fecha de vencimiento debe ser mayor a la fecha actual</small>
+                      <small>{{ 'web.product.registration.form.expirationDate.futureDate' | translate }}</small>
                       }
                     </div>
                     }
@@ -181,29 +181,29 @@
                     <ion-item
                       [class.ion-invalid]="requiredTemperatureControl?.invalid && requiredTemperatureControl?.touched"
                     >
-                      <ion-label position="stacked">Temperatura requerida (°C)</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.requiredTemperature.label' | translate }}</ion-label>
                       <ion-input
                         type="number"
                         formControlName="requiredTemperature"
-                        placeholder="2-8"
+                        [placeholder]="'web.product.registration.form.requiredTemperature.placeholder' | translate"
                         [clearInput]="true"
                       ></ion-input>
                     </ion-item>
                     @if (requiredTemperatureControl?.invalid && requiredTemperatureControl?.touched) {
                     <div class="error-message">
                       @if (requiredTemperatureControl?.errors?.['required']) {
-                      <small>La temperatura requerida es obligatoria</small>
+                      <small>{{ 'web.product.registration.form.requiredTemperature.required' | translate }}</small>
                       }
                     </div>
                     }
 
                     <!-- Unit Value Field -->
                     <ion-item [class.ion-invalid]="unitValueControl?.invalid && unitValueControl?.touched">
-                      <ion-label position="stacked">Valor unitario ($)</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.unitValue.label' | translate }}</ion-label>
                       <ion-input
                         type="number"
                         formControlName="unitValue"
-                        placeholder="0.00"
+                        [placeholder]="'web.product.registration.form.unitValue.placeholder' | translate"
                         [clearInput]="true"
                         min="0"
                         step="0.01"
@@ -212,9 +212,9 @@
                     @if (unitValueControl?.invalid && unitValueControl?.touched) {
                     <div class="error-message">
                       @if (unitValueControl?.errors?.['required']) {
-                      <small>El valor unitario es requerido</small>
+                      <small>{{ 'web.product.registration.form.unitValue.required' | translate }}</small>
                       } @if (unitValueControl?.errors?.['min']) {
-                      <small>El valor unitario debe ser mayor o igual a 0</small>
+                      <small>{{ 'web.product.registration.form.unitValue.min' | translate }}</small>
                       }
                     </div>
                     }
@@ -223,10 +223,10 @@
                     <ion-item
                       [class.ion-invalid]="storageConditionsControl?.invalid && storageConditionsControl?.touched"
                     >
-                      <ion-label position="stacked">Condiciones de almacenamiento</ion-label>
+                      <ion-label position="stacked">{{ 'web.product.registration.form.storageConditions.label' | translate }}</ion-label>
                       <ion-textarea
                         formControlName="storageConditions"
-                        placeholder="Describa las condiciones de almacenamiento requeridas"
+                        [placeholder]="'web.product.registration.form.storageConditions.placeholder' | translate"
                         rows="3"
                         [autoGrow]="true"
                       ></ion-textarea>
@@ -234,9 +234,9 @@
                     @if (storageConditionsControl?.invalid && storageConditionsControl?.touched) {
                     <div class="error-message">
                       @if (storageConditionsControl?.errors?.['required']) {
-                      <small>Las condiciones de almacenamiento son obligatorias</small>
+                      <small>{{ 'web.product.registration.form.storageConditions.required' | translate }}</small>
                       } @if (storageConditionsControl?.errors?.['minlength']) {
-                      <small>Describa con más detalle (mínimo 10 caracteres)</small>
+                      <small>{{ 'web.product.registration.form.storageConditions.minLength' | translate }}</small>
                       }
                     </div>
                     }
@@ -256,12 +256,12 @@
                       type="button"
                       (click)="onCancel()"
                     >
-                      Volver
+                      {{ 'web.product.registration.buttons.back' | translate }}
                     </ion-button>
                   </ion-col>
                   <ion-col size="6">
                     <ion-button expand="block" color="primary" type="submit" [disabled]="productForm.invalid">
-                      Guardar
+                      {{ 'web.product.registration.buttons.save' | translate }}
                     </ion-button>
                   </ion-col>
                 </ion-row>

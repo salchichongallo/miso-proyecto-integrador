@@ -17,6 +17,32 @@ ion-header {
         --background: rgba(255, 255, 255, 0.1);
       }
     }
+
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-right: 1rem;
+
+      ion-icon {
+        color: var(--ion-color-primary-contrast);
+        font-size: 1.25rem;
+      }
+
+      ion-select {
+        max-width: 120px;
+        color: var(--ion-color-primary-contrast);
+
+        &::part(text) {
+          color: var(--ion-color-primary-contrast);
+        }
+
+        &::part(icon) {
+          color: var(--ion-color-primary-contrast);
+          opacity: 0.8;
+        }
+      }
+    }
   }
 }
 

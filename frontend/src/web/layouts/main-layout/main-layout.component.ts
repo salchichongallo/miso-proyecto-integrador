@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import {
   IonApp,
@@ -11,24 +12,48 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline } from 'ionicons/icons';
+import { arrowBackOutline, logOutOutline, languageOutline } from 'ionicons/icons';
 
 import { filter } from 'rxjs/operators';
 
 import { AuthService } from '@shared/auth/auth.service';
+import { TranslationService, type Language } from '@shared/services/translation';
 
 @Component({
   selector: 'app-main-layout',
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.scss'],
-  imports: [RouterOutlet, IonApp, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon],
+  imports: [
+    FormsModule,
+    RouterOutlet,
+    IonApp,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonButton,
+    IonIcon,
+    IonSelect,
+    IonSelectOption,
+    TranslateModule,
+  ],
 })
 export class MainLayoutComponent implements OnInit {
   pageTitle = 'MISO - MediSupply';
   showBackButton = false;
+
+  public currentLanguage: Language = 'es';
+  public readonly availableLanguages = [
+    { value: 'es' as Language, label: 'settings.language.es' },
+    { value: 'en' as Language, label: 'settings.language.en' },
+  ];
 
   private readonly pageTitles: { [key: string]: string } = {
     '/home': 'MISO - MediSupply',
@@ -46,8 +71,10 @@ export class MainLayoutComponent implements OnInit {
     private readonly router: Router,
     private readonly location: Location,
     private readonly authService: AuthService,
+    private readonly translationService: TranslationService,
   ) {
-    addIcons({ arrowBackOutline, logOutOutline });
+    addIcons({ arrowBackOutline, logOutOutline, languageOutline });
+    this.currentLanguage = this.translationService.getCurrentLanguage();
   }
 
   public ngOnInit(): void {
@@ -67,6 +94,12 @@ export class MainLayoutComponent implements OnInit {
   public async onLogout(): Promise<void> {
     await this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  public async onLanguageChange(event: CustomEvent): Promise<void> {
+    const language = event.detail.value as Language;
+    await this.translationService.setLanguage(language);
+    this.currentLanguage = language;
   }
 
   private updatePageTitle(url: string): void {

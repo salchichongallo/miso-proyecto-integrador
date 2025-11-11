@@ -58,10 +58,7 @@ export class SettingsPage {
   private async showLanguageChangedToast(language: Language): Promise<void> {
     const languageName = language === 'es' ? 'Español' : 'English';
     const toast = await this.toastController.create({
-      message:
-        language === 'es'
-          ? `Idioma cambiado a ${languageName}`
-          : `Language changed to ${languageName}`,
+      message: language === 'es' ? `Idioma cambiado a ${languageName}` : `Language changed to ${languageName}`,
       duration: 2000,
       position: 'bottom',
       color: 'success',

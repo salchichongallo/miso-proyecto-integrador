@@ -1,5 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 
 import {
   IonHeader,
@@ -99,7 +106,7 @@ export class AddProductModalComponent {
     }
 
     const { product_id, target_units, target_value } = this.productForm.value;
-    const selectedProduct = this.products.find(p => p.id === product_id);
+    const selectedProduct = this.products.find((p) => p.id === product_id);
 
     if (!selectedProduct) {
       return;

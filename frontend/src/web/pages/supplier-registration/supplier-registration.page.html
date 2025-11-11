@@ -4,78 +4,78 @@
       <ion-col size="12" size-md="10" size-lg="8" size-xl="6">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Registrar proveedor</ion-card-title>
+            <ion-card-title>{{ 'web.supplier.registration.title' | translate }}</ion-card-title>
           </ion-card-header>
 
           <ion-card-content>
             <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
               <!-- Name Field -->
               <ion-item [class.ion-invalid]="nameControl?.invalid && nameControl?.touched">
-                <ion-label position="stacked">Nombre del proveedor</ion-label>
+                <ion-label position="stacked">{{ 'web.supplier.registration.form.name.label' | translate }}</ion-label>
                 <ion-input
                   type="text"
                   formControlName="name"
-                  placeholder="Ingrese el nombre del proveedor"
+                  [placeholder]="'web.supplier.registration.form.name.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (nameControl?.invalid && nameControl?.touched) {
                 <div class="error-message">
                   @if (nameControl?.errors?.['required']) {
-                    <small>El nombre es requerido</small>
+                    <small>{{ 'web.supplier.registration.form.name.required' | translate }}</small>
                   }
                   @if (nameControl?.errors?.['minlength']) {
-                    <small>El nombre debe tener al menos 3 caracteres</small>
+                    <small>{{ 'web.supplier.registration.form.name.minLength' | translate }}</small>
                   }
                 </div>
               }
 
               <!-- Email Field -->
               <ion-item [class.ion-invalid]="emailControl?.invalid && emailControl?.touched">
-                <ion-label position="stacked">Correo electrónico</ion-label>
+                <ion-label position="stacked">{{ 'web.supplier.registration.form.email.label' | translate }}</ion-label>
                 <ion-input
                   type="email"
                   formControlName="email"
-                  placeholder="proveedor@empresa.com"
+                  [placeholder]="'web.supplier.registration.form.email.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (emailControl?.invalid && emailControl?.touched) {
                 <div class="error-message">
                   @if (emailControl?.errors?.['required']) {
-                    <small>El correo electrónico es requerido</small>
+                    <small>{{ 'web.supplier.registration.form.email.required' | translate }}</small>
                   }
                   @if (emailControl?.errors?.['email']) {
-                    <small>Ingrese un correo válido</small>
+                    <small>{{ 'web.supplier.registration.form.email.invalid' | translate }}</small>
                   }
                 </div>
               }
 
               <!-- Phone Field -->
               <ion-item [class.ion-invalid]="phoneControl?.invalid && phoneControl?.touched">
-                <ion-label position="stacked">Teléfono</ion-label>
+                <ion-label position="stacked">{{ 'web.supplier.registration.form.phone.label' | translate }}</ion-label>
                 <ion-input
                   type="tel"
                   formControlName="phone"
-                  placeholder="+57 300 123 4567"
+                  [placeholder]="'web.supplier.registration.form.phone.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (phoneControl?.invalid && phoneControl?.touched) {
                 <div class="error-message">
                   @if (phoneControl?.errors?.['required']) {
-                    <small>El teléfono es requerido</small>
+                    <small>{{ 'web.supplier.registration.form.phone.required' | translate }}</small>
                   }
                   @if (phoneControl?.errors?.['pattern']) {
-                    <small>Ingrese un teléfono válido</small>
+                    <small>{{ 'web.supplier.registration.form.phone.invalid' | translate }}</small>
                   }
                 </div>
               }
 
               <!-- Country Field -->
               <ion-item [class.ion-invalid]="countryControl?.invalid && countryControl?.touched">
-                <ion-label position="stacked">País</ion-label>
-                <ion-select formControlName="country" placeholder="Seleccione el país">
+                <ion-label position="stacked">{{ 'web.supplier.registration.form.country.label' | translate }}</ion-label>
+                <ion-select formControlName="country" [placeholder]="'web.supplier.registration.form.country.placeholder' | translate">
                   @for (country of countries; track country.code) {
                     <ion-select-option [value]="country.code">{{ country.name }}</ion-select-option>
                   }
@@ -84,49 +84,49 @@
               @if (countryControl?.invalid && countryControl?.touched) {
                 <div class="error-message">
                   @if (countryControl?.errors?.['required']) {
-                    <small>El país es requerido</small>
+                    <small>{{ 'web.supplier.registration.form.country.required' | translate }}</small>
                   }
                 </div>
               }
 
               <!-- NIT Field -->
               <ion-item [class.ion-invalid]="nitControl?.invalid && nitControl?.touched">
-                <ion-label position="stacked">NIT</ion-label>
+                <ion-label position="stacked">{{ 'web.supplier.registration.form.nit.label' | translate }}</ion-label>
                 <ion-input
                   type="text"
                   formControlName="nit"
-                  placeholder="900123456-7"
+                  [placeholder]="'web.supplier.registration.form.nit.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (nitControl?.invalid && nitControl?.touched) {
                 <div class="error-message">
                   @if (nitControl?.errors?.['required']) {
-                    <small>El NIT es requerido</small>
+                    <small>{{ 'web.supplier.registration.form.nit.required' | translate }}</small>
                   }
                   @if (nitControl?.errors?.['pattern']) {
-                    <small>El NIT debe contener solo números y guiones</small>
+                    <small>{{ 'web.supplier.registration.form.nit.pattern' | translate }}</small>
                   }
                 </div>
               }
 
               <!-- Address Field -->
               <ion-item [class.ion-invalid]="addressControl?.invalid && addressControl?.touched">
-                <ion-label position="stacked">Dirección</ion-label>
+                <ion-label position="stacked">{{ 'web.supplier.registration.form.address.label' | translate }}</ion-label>
                 <ion-input
                   type="text"
                   formControlName="address"
-                  placeholder="Calle 123 #45-67"
+                  [placeholder]="'web.supplier.registration.form.address.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (addressControl?.invalid && addressControl?.touched) {
                 <div class="error-message">
                   @if (addressControl?.errors?.['required']) {
-                    <small>La dirección es requerida</small>
+                    <small>{{ 'web.supplier.registration.form.address.required' | translate }}</small>
                   }
                   @if (addressControl?.errors?.['minlength']) {
-                    <small>La dirección debe tener al menos 5 caracteres</small>
+                    <small>{{ 'web.supplier.registration.form.address.minLength' | translate }}</small>
                   }
                 </div>
               }
@@ -143,7 +143,7 @@
                       type="button"
                       (click)="onCancel()"
                     >
-                      Volver
+                      {{ 'web.supplier.registration.buttons.back' | translate }}
                     </ion-button>
                   </ion-col>
                   <ion-col size="6">
@@ -153,7 +153,7 @@
                       type="submit"
                       [disabled]="supplierForm.invalid"
                     >
-                      Guardar
+                      {{ 'web.supplier.registration.buttons.save' | translate }}
                     </ion-button>
                   </ion-col>
                 </ion-row>

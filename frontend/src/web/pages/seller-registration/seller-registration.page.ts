@@ -20,6 +20,7 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { finalize } from 'rxjs';
 
@@ -39,6 +40,7 @@ import { SellerFormValue } from './interfaces/seller-form-value.interface';
   styleUrls: ['seller-registration.page.scss'],
   imports: [
     ReactiveFormsModule,
+    TranslateModule,
     IonContent,
     IonCard,
     IonCardHeader,
