@@ -8,20 +8,26 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-searchbar [debounce]="350" (ionInput)="handleInput($event)" placeholder="Buscar cliente" />
+
   <div class="items">
     @for (client of clients(); track client.client_id) {
     <app-vendor-client-card
       [client]="{
-        title: client.name,
-        subtitle: client.specialty,
-        taxId: client.tax_id,
-        location: client.location,
-        country: client.country,
-        level: client.level,
-      }"
+            title: client.name,
+            subtitle: client.specialty,
+            taxId: client.tax_id,
+            location: client.location,
+            country: client.country,
+            level: client.level,
+          }"
     />
     } @empty {
-    <p>No se encontraron clientes...</p>
+    <ion-card class="empty-state-card">
+      <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
+      <ion-card-title class="empty-state-card__title">Sin resultados</ion-card-title>
+      <ion-card-content class="empty-state-card__content"> No se encontraron clientes. </ion-card-content>
+    </ion-card>
     }
   </div>
 </ion-content>
