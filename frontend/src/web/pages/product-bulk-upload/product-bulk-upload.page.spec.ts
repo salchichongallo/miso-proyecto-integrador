@@ -102,7 +102,7 @@ describe('ProductBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockLoadingController.create).toHaveBeenCalledWith({
         message: 'Procesando archivo de productos...',
@@ -119,7 +119,7 @@ describe('ProductBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockProductService.createBulkProduct).toHaveBeenCalledWith(file);
     });
@@ -132,7 +132,7 @@ describe('ProductBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
         message: 'Productos cargados exitosamente.',
@@ -156,7 +156,7 @@ describe('ProductBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
         message: 'Upload failed',
@@ -177,7 +177,7 @@ describe('ProductBulkUploadPage', () => {
 
       component.onProcessFile();
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
         message: 'Http failure',

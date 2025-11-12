@@ -160,7 +160,7 @@ export class SalesPlanCreationPage implements OnInit {
   }
 
   public addProduct(productData: ProductFormItem): void {
-    const existingProduct = this.selectedProducts.find(p => p.product_id === productData.product_id);
+    const existingProduct = this.selectedProducts.find((p) => p.product_id === productData.product_id);
 
     if (existingProduct) {
       this.showErrorMessage('Este producto ya ha sido agregado al plan');
@@ -193,10 +193,7 @@ export class SalesPlanCreationPage implements OnInit {
       },
       error: (httpError: HttpErrorResponse) => {
         const message =
-          httpError.error?.error ??
-          httpError.error?.message ??
-          httpError.message ??
-          'Error al cargar los vendedores.';
+          httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al cargar los vendedores.';
         this.showErrorMessage(message);
       },
     });
@@ -209,10 +206,7 @@ export class SalesPlanCreationPage implements OnInit {
       },
       error: (httpError: HttpErrorResponse) => {
         const message =
-          httpError.error?.error ??
-          httpError.error?.message ??
-          httpError.message ??
-          'Error al cargar los productos.';
+          httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al cargar los productos.';
         this.showErrorMessage(message);
       },
     });

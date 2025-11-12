@@ -1,0 +1,46 @@
+<ion-card class="route-configuration-card">
+  <ion-card-header>
+    <ion-card-title class="card-title">
+      <ion-icon name="filter-outline"></ion-icon>
+      <span>Configuración de rutas</span>
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <ion-list class="form-list">
+        <ion-item lines="none" class="client-select-item">
+          <ion-label position="floating">Cliente</ion-label>
+          <ion-select
+            formControlName="clientId"
+            placeholder="Seleccione un cliente"
+            interface="popover"
+          >
+            @if (isLoadingClients()) {
+              <ion-select-option value="" disabled>Cargando clientes...</ion-select-option>
+            }
+            @for (client of clients(); track client.client_id) {
+              <ion-select-option [value]="client.client_id">
+                {{ client.name }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+
+        @if (clientIdControl.invalid && clientIdControl.touched) {
+          <div class="error-message">
+            @if (clientIdControl.errors?.['required']) {
+              <small>Debe seleccionar un cliente</small>
+            }
+          </div>
+        }
+      </ion-list>
+
+      <div class="button-container">
+        <ion-button type="submit" expand="block" color="primary" [disabled]="isLoading || isLoadingClients()">
+          {{ isLoading ? 'Generando rutas...' : 'GENERAR RUTAS' }}
+        </ion-button>
+      </div>
+    </form>
+  </ion-card-content>
+</ion-card>

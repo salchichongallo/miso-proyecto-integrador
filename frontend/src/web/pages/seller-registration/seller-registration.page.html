@@ -4,54 +4,59 @@
       <ion-col size="12" size-md="10" size-lg="8" size-xl="6">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Registrar vendedor</ion-card-title>
+            <ion-card-title>{{ 'web.seller.registration.title' | translate }}</ion-card-title>
           </ion-card-header>
 
           <ion-card-content>
             <form [formGroup]="sellerForm" (ngSubmit)="onSubmit()">
               <ion-item [class.ion-invalid]="nameControl?.invalid && nameControl?.touched">
-                <ion-label position="stacked">Nombre del vendedor</ion-label>
+                <ion-label position="stacked">{{ 'web.seller.registration.form.name.label' | translate }}</ion-label>
                 <ion-input
                   type="text"
                   formControlName="name"
-                  placeholder="Ingrese el nombre del vendedor"
+                  [placeholder]="'web.seller.registration.form.name.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (nameControl?.invalid && nameControl?.touched) {
               <div class="error-message">
                 @if (nameControl?.errors?.['required']) {
-                <small>El nombre es requerido</small>
+                <small>{{ 'web.seller.registration.form.name.required' | translate }}</small>
                 } @if (nameControl?.errors?.['minlength']) {
-                <small>El nombre debe tener al menos 3 caracteres</small>
+                <small>{{ 'web.seller.registration.form.name.minLength' | translate }}</small>
                 }
               </div>
               }
 
               <ion-item [class.ion-invalid]="emailControl?.invalid && emailControl?.touched">
-                <ion-label position="stacked">Correo corporativo</ion-label>
+                <ion-label position="stacked">{{ 'web.seller.registration.form.email.label' | translate }}</ion-label>
                 <ion-input
                   type="email"
                   formControlName="email"
-                  placeholder="vendedor@empresa.com"
+                  [placeholder]="'web.seller.registration.form.email.placeholder' | translate"
                   [clearInput]="true"
                 ></ion-input>
               </ion-item>
               @if (emailControl?.invalid && emailControl?.touched) {
               <div class="error-message">
                 @if (emailControl?.errors?.['required']) {
-                <small>El correo corporativo es requerido</small>
+                <small>{{ 'web.seller.registration.form.email.required' | translate }}</small>
                 } @if (emailControl?.errors?.['email']) {
-                <small>Ingrese un correo válido</small>
+                <small>{{ 'web.seller.registration.form.email.invalid' | translate }}</small>
                 }
               </div>
               }
 
               <section class="institutions-section">
                 <div class="institutions-header">
-                  <span class="institutions-title">Instituciones seleccionadas</span>
+                  <span class="institutions-title"
+                    >{{ 'web.seller.registration.form.institutions.title' | translate }}</span
+                  >
                   <div class="institutions-actions">
-                    <span class="institutions-count">{{ institutions.length }}/30</span>
+                    <span class="institutions-count"
+                      >{{ 'web.seller.registration.form.institutions.count' | translate:{ count: institutions.length }
+                      }}</span
+                    >
                     <ion-button
                       onkeypress
                       size="small"
@@ -60,14 +65,14 @@
                       [disabled]="institutions.length >= 30"
                     >
                       <ion-icon slot="start" name="add"></ion-icon>
-                      Agregar institución
+                      {{ 'web.seller.registration.form.institutions.add' | translate }}
                     </ion-button>
                   </div>
                 </div>
 
                 @if (institutions.length === 0) {
                 <div class="empty-state">
-                  <small>No hay instituciones agregadas</small>
+                  <small>{{ 'web.seller.registration.form.institutions.empty' | translate }}</small>
                 </div>
                 } @else {
                 <div class="institutions-list">
@@ -100,12 +105,12 @@
                       type="button"
                       (click)="onCancel()"
                     >
-                      Cancelar
+                      {{ 'web.seller.registration.buttons.cancel' | translate }}
                     </ion-button>
                   </ion-col>
                   <ion-col size="6">
                     <ion-button expand="block" color="primary" type="submit" [disabled]="sellerForm.invalid">
-                      Registrar vendedor
+                      {{ 'web.seller.registration.buttons.submit' | translate }}
                     </ion-button>
                   </ion-col>
                 </ion-row>

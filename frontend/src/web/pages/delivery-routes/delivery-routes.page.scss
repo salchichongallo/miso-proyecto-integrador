@@ -1,0 +1,66 @@
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+.sidebar {
+  width: 100%;
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    width: 320px;
+    max-width: 320px;
+  }
+
+  @media (min-width: 1024px) {
+    width: 334px;
+    max-width: 334px;
+  }
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+}
+
+ion-card {
+  margin: 0;
+  width: 100%;
+}
+
+ion-card-subtitle {
+  margin: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 0.75rem;
+}

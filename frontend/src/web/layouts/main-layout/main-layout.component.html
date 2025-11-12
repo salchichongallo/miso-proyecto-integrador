@@ -10,6 +10,20 @@
       }
       <ion-title>{{ pageTitle }}</ion-title>
       <ion-buttons slot="end">
+        <div class="language-selector">
+          <ion-icon name="language-outline"></ion-icon>
+          <ion-select
+            [(ngModel)]="currentLanguage"
+            (ionChange)="onLanguageChange($event)"
+            interface="popover"
+          >
+            @for (lang of availableLanguages; track lang.value) {
+              <ion-select-option [value]="lang.value">
+                {{ lang.label | translate }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </div>
         <ion-button onkeypress="" (click)="onLogout()">
           <ion-icon slot="start" name="log-out-outline"></ion-icon>
           Cerrar Sesión

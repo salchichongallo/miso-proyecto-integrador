@@ -86,6 +86,7 @@
     "title": "Pedidos",
     "createWithProducts": "Crear pedido con productos",
     "search": "Consultar pedidos",
+    "scheduledDeliveries": "Entregas programadas",
     "searchPage": {
       "title": "Consulta de pedidos",
       "loading": "Cargando pedidos...",
@@ -250,6 +251,28 @@
         "viewOrders": "Ver Mis Pedidos",
         "createNew": "Crear Nuevo Pedido"
       }
+    },
+    "scheduledDeliveries": {
+      "title": "Entregas programadas",
+      "loading": "Cargando...",
+      "error": "Error al obtener entregas programadas",
+      "empty": {
+        "title": "Sin resultados",
+        "message": "No tiene entregas programadas en este periodo"
+      },
+      "card": {
+        "orderId": "Pedido",
+        "value": "Valor",
+        "status": {
+          "inTransit": "En tránsito",
+          "scheduled": "Programado",
+          "delivered": "Entregado"
+        },
+        "vehicle": "Camión refrigerado",
+        "driver": "Conductor",
+        "productsIncluded": "Productos incluidos",
+        "units": "unidades"
+      }
     }
   },
   "settings": {
@@ -261,6 +284,200 @@
       "en": "Inglés",
       "toast": {
         "changed": "Idioma cambiado a {{language}}"
+      }
+    }
+  },
+  "web": {
+    "home": {
+      "menu": {
+        "seller": {
+          "title": "Registrar vendedor",
+          "description": "Registra un nuevo vendedor en el sistema"
+        },
+        "inventory": {
+          "title": "Consulta de inventario",
+          "description": "Consulta el inventario de productos en el sistema"
+        },
+        "supplier": {
+          "title": "Registrar proveedor",
+          "description": "Registra un nuevo proveedor en el sistema"
+        },
+        "supplierBulk": {
+          "title": "Registro masivo de proveedores",
+          "description": "Carga un archivo con múltiples proveedores"
+        },
+        "product": {
+          "title": "Registrar producto",
+          "description": "Registra un producto nuevo individualmente"
+        },
+        "productBulk": {
+          "title": "Registro masivo de productos",
+          "description": "Carga un archivo con múltiples productos"
+        },
+        "sellerReport": {
+          "title": "Reportes de vendedores",
+          "description": "Consulta los reportes de vendedores en el sistema"
+        },
+        "salesPlan": {
+          "title": "Crear plan de venta",
+          "description": "Crea un plan de venta para gestionar tus objetivos comerciales"
+        },
+        "deliveryRoutes": {
+          "title": "Generación de rutas de entrega",
+          "description": "Rutas optimizadas de entrega para los clientes"
+        }
+      }
+    },
+    "seller": {
+      "registration": {
+        "title": "Registrar vendedor",
+        "form": {
+          "name": {
+            "label": "Nombre del vendedor",
+            "placeholder": "Ingrese el nombre del vendedor",
+            "required": "El nombre es requerido",
+            "minLength": "El nombre debe tener al menos 3 caracteres"
+          },
+          "email": {
+            "label": "Correo corporativo",
+            "placeholder": "vendedor@empresa.com",
+            "required": "El correo corporativo es requerido",
+            "invalid": "Ingrese un correo válido"
+          },
+          "institutions": {
+            "title": "Instituciones seleccionadas",
+            "count": "{{count}}/30",
+            "add": "Agregar institución",
+            "empty": "No hay instituciones agregadas"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "submit": "Registrar vendedor"
+        }
+      }
+    },
+    "supplier": {
+      "registration": {
+        "title": "Registrar proveedor",
+        "form": {
+          "name": {
+            "label": "Nombre del proveedor",
+            "placeholder": "Ingrese el nombre del proveedor",
+            "required": "El nombre es requerido",
+            "minLength": "El nombre debe tener al menos 3 caracteres"
+          },
+          "email": {
+            "label": "Correo electrónico",
+            "placeholder": "proveedor@empresa.com",
+            "required": "El correo electrónico es requerido",
+            "invalid": "Ingrese un correo válido"
+          },
+          "phone": {
+            "label": "Teléfono",
+            "placeholder": "+57 300 123 4567",
+            "required": "El teléfono es requerido",
+            "invalid": "Ingrese un teléfono válido"
+          },
+          "country": {
+            "label": "País",
+            "placeholder": "Seleccione el país",
+            "required": "El país es requerido"
+          },
+          "nit": {
+            "label": "NIT",
+            "placeholder": "900123456-7",
+            "required": "El NIT es requerido",
+            "pattern": "El NIT debe contener solo números y guiones"
+          },
+          "address": {
+            "label": "Dirección",
+            "placeholder": "Calle 123 #45-67",
+            "required": "La dirección es requerida",
+            "minLength": "La dirección debe tener al menos 5 caracteres"
+          }
+        },
+        "buttons": {
+          "back": "Volver",
+          "save": "Guardar"
+        }
+      }
+    },
+    "product": {
+      "registration": {
+        "title": "Registrar producto",
+        "form": {
+          "warehouse": {
+            "label": "ID de bodega",
+            "placeholder": "Ingrese el ID de la bodega",
+            "required": "El ID es requerido"
+          },
+          "name": {
+            "label": "Nombre del producto",
+            "placeholder": "Ingrese el nombre del producto",
+            "required": "El nombre es requerido",
+            "minLength": "El nombre debe tener al menos 3 caracteres"
+          },
+          "providerNit": {
+            "label": "NIT del proveedor",
+            "placeholder": "900123456-7",
+            "required": "El NIT del proveedor es requerido",
+            "pattern": "El NIT debe contener solo números y guiones"
+          },
+          "productType": {
+            "label": "Tipo de producto",
+            "placeholder": "Seleccione el tipo",
+            "required": "El tipo de producto es requerido"
+          },
+          "stock": {
+            "label": "Stock",
+            "placeholder": "1",
+            "required": "El stock es requerido",
+            "positiveInteger": "El stock debe ser un número entero mayor a 0"
+          },
+          "lot": {
+            "label": "Lote",
+            "placeholder": "Ingrese el número de lote",
+            "required": "El lote es requerido",
+            "minLength": "El lote debe tener al menos 3 caracteres"
+          },
+          "state": {
+            "label": "Estado",
+            "placeholder": "Seleccione el estado",
+            "required": "El estado es requerido"
+          },
+          "sku": {
+            "label": "SKU del producto",
+            "placeholder": "Ingrese el SKU",
+            "required": "El SKU es requerido"
+          },
+          "expirationDate": {
+            "label": "Fecha de vencimiento",
+            "required": "La fecha de vencimiento es requerida",
+            "futureDate": "La fecha de vencimiento debe ser mayor a la fecha actual"
+          },
+          "requiredTemperature": {
+            "label": "Temperatura requerida (°C)",
+            "placeholder": "2-8",
+            "required": "La temperatura requerida es obligatoria"
+          },
+          "unitValue": {
+            "label": "Valor unitario ($)",
+            "placeholder": "0.00",
+            "required": "El valor unitario es requerido",
+            "min": "El valor unitario debe ser mayor o igual a 0"
+          },
+          "storageConditions": {
+            "label": "Condiciones de almacenamiento",
+            "placeholder": "Describa las condiciones de almacenamiento requeridas",
+            "required": "Las condiciones de almacenamiento son obligatorias",
+            "minLength": "Describa con más detalle (mínimo 10 caracteres)"
+          }
+        },
+        "buttons": {
+          "back": "Volver",
+          "save": "Guardar"
+        }
       }
     }
   }

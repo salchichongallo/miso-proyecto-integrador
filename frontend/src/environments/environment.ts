@@ -12,4 +12,5 @@ export const environment = {
     domain: process.env['APP_COGNITO_DOMAIN']!,
     redirectUrls: process.env['APP_COGNITO_REDIRECT_URLS']!,
   },
+  mapboxToken: process.env['APP_MAPBOX_TOKEN']!,
 };
