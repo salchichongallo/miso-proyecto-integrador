@@ -39,7 +39,18 @@ describe('SellerService', () => {
       const mockRequest: RegisterSellerRequest = {
         name: 'John Doe',
         email: 'john@example.com',
-        institutions: ['inst-1', 'inst-2'],
+        institutions: [
+          {
+            client_id: 'clientId-123',
+            country: 'CO',
+            level: 'I',
+            location: 'Medellin',
+            name: 'Test Hospital',
+            specialty: 'Pediatrics',
+            tax_id: '1',
+            tax_id_encrypted: '123',
+          },
+        ],
       };
 
       const mockResponse: RegisterSellerResponse = {
@@ -48,7 +59,7 @@ describe('SellerService', () => {
           vendor_id: 'vendor-123',
           name: 'John Doe',
           email: 'john@example.com',
-          institutions: ['inst-1', 'inst-2'],
+          institutions: [],
         },
       };
 
@@ -66,7 +77,7 @@ describe('SellerService', () => {
       const mockRequest: RegisterSellerRequest = {
         name: 'John Doe',
         email: 'john@example.com',
-        institutions: ['inst-1'],
+        institutions: [],
       };
 
       const mockError = {

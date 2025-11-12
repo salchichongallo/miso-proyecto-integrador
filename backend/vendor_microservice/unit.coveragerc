@@ -2,6 +2,7 @@
 source =
   src/commands
   src/errors
+  src/queries
 
 omit =
   __init__.py

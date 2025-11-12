@@ -17,14 +17,14 @@ class TestCreateVendorCommand:
         mock_vendor.to_dict.return_value = {
             "email": "jhorman@example.com",
             "name": "Jhorman Galindo",
-            "institutions": ["Clinica Norte", "Hospital Central"],
+            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
         }
         mock_create.return_value = mock_vendor
 
         command = CreateVendor({
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": ["Clinica Norte", "Hospital Central"],
+            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
         })
 
         result = command.execute()
@@ -59,7 +59,7 @@ class TestCreateVendorCommand:
     # 🚫 Demasiadas instituciones
     def test_demasiadas_instituciones(self):
         """❌ No debe permitir más de 30 instituciones"""
-        institutions = [f"Inst_{i}" for i in range(31)]
+        institutions = [{"name": f"Inst_{i}"} for i in range(31)]
         command = CreateVendor({
             "name": "Jhorman",
             "email": "jhorman@example.com",
@@ -76,7 +76,7 @@ class TestCreateVendorCommand:
         command = CreateVendor({
             "name": "Jhorman",
             "email": "jhorman@example.com",
-            "institutions": ["Inst1"]
+            "institutions": [{ "name": "Inst1" }],
         })
         with pytest.raises(ParamError, match="ya está registrado"):
             command.execute()
@@ -89,7 +89,7 @@ class TestCreateVendorCommand:
         command = CreateVendor({
             "name": "Jhorman",
             "email": "jhorman@example.com",
-            "institutions": ["Inst1"]
+            "institutions": [{ "name": "Inst1" }],
         })
 
         with pytest.raises(ApiError, match="Error al crear vendedor"):

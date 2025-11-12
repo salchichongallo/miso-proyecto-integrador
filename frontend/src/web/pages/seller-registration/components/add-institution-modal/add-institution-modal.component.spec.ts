@@ -1,93 +1,151 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
 import { ModalController } from '@ionic/angular/standalone';
+
+import { CustomersService } from '@web/services/customers/customers.service';
+import { InstitutionalClient } from '@web/services/customers/institutional-client.interface';
 
 import { AddInstitutionModalComponent } from './add-institution-modal.component';
 
+jest.mock('@web/services/customers/customers.service');
+
 describe('AddInstitutionModalComponent', () => {
   let component: AddInstitutionModalComponent;
-  let fixture: ComponentFixture<AddInstitutionModalComponent>;
   let modalControllerMock: { dismiss: jest.Mock };
+  let service: jest.Mocked<CustomersService>;
 
   beforeEach(async () => {
     modalControllerMock = {
       dismiss: jest.fn(),
     };
 
-    await TestBed.configureTestingModule({
-      imports: [AddInstitutionModalComponent],
-      providers: [{ provide: ModalController, useValue: modalControllerMock }],
-    }).compileComponents();
+    TestBed.configureTestingModule({
+      providers: [
+        AddInstitutionModalComponent,
+        CustomersService,
+        { provide: ModalController, useValue: modalControllerMock },
+      ],
+    });
 
-    fixture = TestBed.createComponent(AddInstitutionModalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    service = TestBed.inject(CustomersService) as jest.Mocked<CustomersService>;
+    service.getAll.mockReturnValue(of([]));
+
+    component = TestBed.inject(AddInstitutionModalComponent);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should not have a selected institution initially', () => {
+    expect(component.selectedInstitution()).toBeNull();
   });
 
-  describe('Form initialization', () => {
-    it('should initialize form with empty name field', () => {
-      expect(component.institutionForm).toBeDefined();
-      expect(component.institutionForm.get('name')?.value).toBe('');
+  describe('compareWith', () => {
+    it('should return true for identical institutions', () => {
+      const institution1 = {
+        client_id: '1',
+        country: 'CO',
+        level: 'A',
+        location: 'Bogotá',
+        name: 'Cliente 1',
+        specialty: 'General',
+        tax_id: '123',
+        tax_id_encrypted: 'abc',
+      };
+      const institution2 = { ...institution1 };
+
+      expect(component.compareWith(institution1, institution2)).toBe(true);
     });
 
-    it('should have required validator on name field', () => {
-      const nameControl = component.institutionForm.get('name');
-      nameControl?.setValue('');
-      expect(nameControl?.hasError('required')).toBe(true);
+    it('should return false for different institutions', () => {
+      const institution1: InstitutionalClient = {
+        client_id: '1',
+        country: 'CO',
+        level: 'A',
+        location: 'Bogotá',
+        name: 'Cliente 1',
+        specialty: 'General',
+        tax_id: '123',
+        tax_id_encrypted: 'abc',
+      };
+      const institution2: InstitutionalClient = {
+        client_id: '2',
+        country: 'CO',
+        level: 'B',
+        location: 'Medellín',
+        name: 'Cliente 2',
+        specialty: 'Especial',
+        tax_id: '456',
+        tax_id_encrypted: 'def',
+      };
+
+      expect(component.compareWith(institution1, institution2)).toBe(false);
     });
 
-    it('should have minLength validator on name field', () => {
-      const nameControl = component.institutionForm.get('name');
-      nameControl?.setValue('ab');
-      expect(nameControl?.hasError('minlength')).toBe(true);
+    it('should handle null values correctly', () => {
+      const institution: InstitutionalClient = {
+        client_id: '1',
+        country: 'CO',
+        level: 'A',
+        location: 'Bogotá',
+        name: 'Cliente 1',
+        specialty: 'General',
+        tax_id: '123',
+        tax_id_encrypted: 'abc',
+      };
 
-      nameControl?.setValue('abc');
-      expect(nameControl?.hasError('minlength')).toBe(false);
+      expect(component.compareWith(institution, null!)).toBe(false);
+      expect(component.compareWith(null!, institution)).toBe(false);
+      expect(component.compareWith(null!, null!)).toBe(true);
     });
   });
 
-  describe('nameControl getter', () => {
-    it('should return the name form control', () => {
-      const nameControl = component.nameControl;
-      expect(nameControl).toBe(component.institutionForm.get('name'));
-    });
+  it('should update selectedInstitution when onClientChange is called', () => {
+    const institution: InstitutionalClient = {
+      client_id: '1',
+      country: 'CO',
+      level: 'A',
+      location: 'Bogotá',
+      name: 'Cliente 1',
+      specialty: 'General',
+      tax_id: '123',
+      tax_id_encrypted: 'abc',
+    };
+
+    const event = {
+      target: {
+        value: institution,
+      },
+    } as unknown as Event;
+
+    component.onClientChange(event);
+
+    expect(component.selectedInstitution()).toEqual(institution);
   });
 
-  describe('onCancel', () => {
-    it('should dismiss modal with cancel role', () => {
-      component.onCancel();
+  it('should dismiss modal with null on onCancel', () => {
+    component.onCancel();
 
-      expect(modalControllerMock.dismiss).toHaveBeenCalledWith(null, 'cancel');
-    });
+    expect(modalControllerMock.dismiss).toHaveBeenCalledWith(null, 'cancel');
   });
 
-  describe('onAdd', () => {
-    it('should dismiss modal with institution name when form is valid', () => {
-      const institutionName = 'Hospital General';
-      component.institutionForm.get('name')?.setValue(institutionName);
+  it('should dismiss modal with selected institution on onSubmit', () => {
+    const institution: InstitutionalClient = {
+      client_id: '1',
+      country: 'CO',
+      level: 'A',
+      location: 'Bogotá',
+      name: 'Cliente 1',
+      specialty: 'General',
+      tax_id: '123',
+      tax_id_encrypted: 'abc',
+    };
+    component.selectedInstitution.set(institution);
 
-      component.onAdd();
+    const event = {
+      preventDefault: jest.fn(),
+    } as unknown as Event;
 
-      expect(modalControllerMock.dismiss).toHaveBeenCalledWith(institutionName, 'confirm');
-    });
+    component.onSubmit(event);
 
-    it('should not dismiss modal when form is invalid', () => {
-      component.institutionForm.get('name')?.setValue('');
-
-      component.onAdd();
-
-      expect(modalControllerMock.dismiss).not.toHaveBeenCalled();
-    });
-
-    it('should not dismiss modal when name is too short', () => {
-      component.institutionForm.get('name')?.setValue('ab');
-
-      component.onAdd();
-
-      expect(modalControllerMock.dismiss).not.toHaveBeenCalled();
-    });
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(modalControllerMock.dismiss).toHaveBeenCalledWith(institution, 'confirm');
   });
 });

@@ -19,14 +19,13 @@
                 ></ion-input>
               </ion-item>
               @if (nameControl?.invalid && nameControl?.touched) {
-                <div class="error-message">
-                  @if (nameControl?.errors?.['required']) {
-                    <small>{{ 'web.seller.registration.form.name.required' | translate }}</small>
-                  }
-                  @if (nameControl?.errors?.['minlength']) {
-                    <small>{{ 'web.seller.registration.form.name.minLength' | translate }}</small>
-                  }
-                </div>
+              <div class="error-message">
+                @if (nameControl?.errors?.['required']) {
+                <small>{{ 'web.seller.registration.form.name.required' | translate }}</small>
+                } @if (nameControl?.errors?.['minlength']) {
+                <small>{{ 'web.seller.registration.form.name.minLength' | translate }}</small>
+                }
+              </div>
               }
 
               <ion-item [class.ion-invalid]="emailControl?.invalid && emailControl?.touched">
@@ -39,21 +38,25 @@
                 ></ion-input>
               </ion-item>
               @if (emailControl?.invalid && emailControl?.touched) {
-                <div class="error-message">
-                  @if (emailControl?.errors?.['required']) {
-                    <small>{{ 'web.seller.registration.form.email.required' | translate }}</small>
-                  }
-                  @if (emailControl?.errors?.['email']) {
-                    <small>{{ 'web.seller.registration.form.email.invalid' | translate }}</small>
-                  }
-                </div>
+              <div class="error-message">
+                @if (emailControl?.errors?.['required']) {
+                <small>{{ 'web.seller.registration.form.email.required' | translate }}</small>
+                } @if (emailControl?.errors?.['email']) {
+                <small>{{ 'web.seller.registration.form.email.invalid' | translate }}</small>
+                }
+              </div>
               }
 
               <section class="institutions-section">
                 <div class="institutions-header">
-                  <span class="institutions-title">{{ 'web.seller.registration.form.institutions.title' | translate }}</span>
+                  <span class="institutions-title"
+                    >{{ 'web.seller.registration.form.institutions.title' | translate }}</span
+                  >
                   <div class="institutions-actions">
-                    <span class="institutions-count">{{ 'web.seller.registration.form.institutions.count' | translate:{ count: institutions.length } }}</span>
+                    <span class="institutions-count"
+                      >{{ 'web.seller.registration.form.institutions.count' | translate:{ count: institutions.length }
+                      }}</span
+                    >
                     <ion-button
                       onkeypress
                       size="small"
@@ -68,33 +71,34 @@
                 </div>
 
                 @if (institutions.length === 0) {
-                  <div class="empty-state">
-                    <small>{{ 'web.seller.registration.form.institutions.empty' | translate }}</small>
-                  </div>
+                <div class="empty-state">
+                  <small>{{ 'web.seller.registration.form.institutions.empty' | translate }}</small>
+                </div>
                 } @else {
-                  <div class="institutions-list">
-                    @for (institution of institutions; track institution.id) {
-                      <div class="institution-item">
-                        <span class="institution-name">{{ institution.name }}</span>
-                        <ion-button
-                          onkeypress
-                          fill="clear"
-                          color="danger"
-                          size="small"
-                          (click)="removeInstitution(institution.id)"
-                        >
-                          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-                        </ion-button>
-                      </div>
-                    }
+                <div class="institutions-list">
+                  @for (institution of institutions; track institution.client_id) {
+                  <div class="institution-item">
+                    <span class="institution-name">{{ institution.name }}</span>
+                    <ion-button
+                      onkeypress
+                      fill="clear"
+                      color="danger"
+                      size="small"
+                      (click)="removeInstitution(institution.client_id)"
+                    >
+                      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                    </ion-button>
                   </div>
+                  }
+                </div>
                 }
               </section>
 
               <ion-grid class="button-group">
                 <ion-row>
                   <ion-col size="6">
-                    <ion-button onkeypress
+                    <ion-button
+                      onkeypress
                       expand="block"
                       fill="outline"
                       color="primary"
@@ -105,12 +109,7 @@
                     </ion-button>
                   </ion-col>
                   <ion-col size="6">
-                    <ion-button
-                      expand="block"
-                      color="primary"
-                      type="submit"
-                      [disabled]="sellerForm.invalid"
-                    >
+                    <ion-button expand="block" color="primary" type="submit" [disabled]="sellerForm.invalid">
                       {{ 'web.seller.registration.buttons.submit' | translate }}
                     </ion-button>
                   </ion-col>

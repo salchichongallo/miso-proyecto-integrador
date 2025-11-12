@@ -14,7 +14,7 @@ class TestGetAllVendorsIntegration:
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": ["Clinica Norte", "Hospital Central"]
+            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
         }
 
         create_response = client.post("/", json=payload)

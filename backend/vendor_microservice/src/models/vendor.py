@@ -1,10 +1,25 @@
 import os
+import logging
 import datetime
 from uuid import uuid4
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, ListAttribute, UTCDateTimeAttribute
 from marshmallow import Schema, fields, validate, ValidationError
-from ..errors.errors import ParamError
+from ..errors.errors import EntityNotFoundError, ParamError
+
+
+logger = logging.getLogger(__name__)
+
+
+class InstitutionSchema(Schema):
+    client_id = fields.String()
+    country = fields.String()
+    level = fields.String()
+    location = fields.String()
+    name = fields.String()
+    specialty = fields.String()
+    tax_id = fields.String()
+    tax_id_encrypted = fields.String()
 
 
 class NewVendorJsonSchema(Schema):
@@ -21,7 +36,7 @@ class NewVendorJsonSchema(Schema):
     )
 
     institutions = fields.List(
-        fields.String(validate=validate.Length(min=1, max=255)),
+        fields.Nested(InstitutionSchema),
         required=True,
         validate=validate.Length(min=1, max=30, error="Debe tener entre 1 y 30 instituciones."),
         error_messages={"required": "El campo 'institutions' es obligatorio."}
@@ -70,6 +85,18 @@ class VendorModel(Model):
             return cls.get(hash_key=email)
         except cls.DoesNotExist:
             return None
+
+    @classmethod
+    def get_by_id(cls, vendor_id: str):
+        """Busca un vendedor por vendor_id (no es clave primaria)."""
+        try:
+            results = cls.scan(cls.vendor_id == vendor_id)
+            for vendor in results:
+                return vendor
+            return None
+        except Exception as e:
+            logger.error(f"Error retrieving vendor by ID: {str(e)}")
+            raise EntityNotFoundError("Vendor", vendor_id)
 
     @classmethod
     def get_all(cls):

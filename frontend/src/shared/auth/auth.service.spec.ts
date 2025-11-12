@@ -591,4 +591,32 @@ describe('AuthService', () => {
       }
     });
   });
+
+  describe('getUserId()', () => {
+    it('should return null when no user is set', () => {
+      expect(service.getUserId()).toBeNull();
+    });
+
+    it('should return user ID when user is set', async () => {
+      const mockUserPayload = {
+        sub: 'user789',
+        email: 'foo@bar.com',
+        'custom:role': 'user',
+      };
+
+      const mockSession = {
+        tokens: {
+          accessToken: { toString: () => 'token' },
+          idToken: {
+            toString: () => `header.${btoa(JSON.stringify(mockUserPayload))}.signature`,
+          },
+        },
+      };
+
+      mockFetchAuthSession.mockResolvedValue(mockSession as any);
+      await service.init();
+
+      expect(service.getUserId()).toBe('user789');
+    });
+  });
 });
