@@ -8,6 +8,13 @@
   padding: 0.5rem 0.625rem;
 }
 
+.vendor-client-card__title-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .vendor-client-card__title {
   font-size: 14px;
   line-height: 20px;
@@ -35,6 +42,7 @@
 
 .vendor-client-card__icon {
   font-size: 1.5rem;
+  flex-shrink: 0;
   color: #757575;
   margin-right: 10px;
 }

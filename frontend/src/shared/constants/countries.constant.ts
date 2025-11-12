@@ -24,3 +24,8 @@ export const LATIN_AMERICA_COUNTRIES: Country[] = [
   { name: 'Uruguay', code: 'UY' },
   { name: 'Venezuela', code: 'VE' },
 ];
+
+export const getCountryNameByCode = (code: string) => {
+  const country = LATIN_AMERICA_COUNTRIES.find((c) => c.code === code);
+  return country ? country.name : null;
+};

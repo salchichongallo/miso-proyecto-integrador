@@ -14,8 +14,10 @@
       [client]="{
         title: client.name,
         subtitle: client.specialty,
-        contactName: '',
-        location: client.location
+        taxId: client.tax_id,
+        location: client.location,
+        country: client.country,
+        level: client.level,
       }"
     />
     } @empty {

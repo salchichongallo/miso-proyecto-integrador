@@ -1,6 +1,6 @@
 import { addIcons } from 'ionicons';
-import { Component, input, signal } from '@angular/core';
-import { location, person } from 'ionicons/icons';
+import { Component, computed, input } from '@angular/core';
+import { location, cardOutline } from 'ionicons/icons';
 import {
   IonCard,
   IonCardContent,
@@ -10,6 +10,7 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { VendorClientItem } from './vendor-client-item.interface';
+import { getCountryNameByCode } from '@shared/constants/countries.constant';
 
 @Component({
   selector: 'app-vendor-client-card',
@@ -21,7 +22,9 @@ import { VendorClientItem } from './vendor-client-item.interface';
 export class VendorClientCardComponent {
   readonly client = input.required<VendorClientItem>();
 
+  readonly countryLabel = computed(() => getCountryNameByCode(this.client().country) || '');
+
   constructor() {
-    addIcons({ person, location });
+    addIcons({ cardOutline, location });
   }
 }
