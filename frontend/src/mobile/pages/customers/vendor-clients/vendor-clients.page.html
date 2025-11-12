@@ -8,5 +8,18 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <p>Página: mis clientes</p>
+  <div class="items">
+    @for (client of clients(); track client.client_id) {
+    <app-vendor-client-card
+      [client]="{
+        title: client.name,
+        subtitle: client.specialty,
+        contactName: '',
+        location: client.location
+      }"
+    />
+    } @empty {
+    <p>No se encontraron clientes...</p>
+    }
+  </div>
 </ion-content>

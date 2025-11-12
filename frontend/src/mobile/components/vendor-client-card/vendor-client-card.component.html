@@ -1,0 +1,16 @@
+<ion-card class="vendor-client-card">
+  <ion-card-header class="vendor-client-card__header">
+    <ion-card-title class="vendor-client-card__title">{{ client().title }}</ion-card-title>
+    <ion-card-subtitle class="vendor-client-card__subtitle">{{ client().subtitle }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content class="vendor-client-card__content">
+    <div class="vendor-client-card__row">
+      <ion-icon name="person" slot="icon" class="vendor-client-card__icon"></ion-icon>
+      <span class="vendor-client-card__text">{{ client().contactName }}</span>
+    </div>
+    <div class="vendor-client-card__row">
+      <ion-icon name="location" slot="icon" class="vendor-client-card__icon"></ion-icon>
+      <span class="vendor-client-card__text">{{ client().location }}</span>
+    </div>
+  </ion-card-content>
+</ion-card>
