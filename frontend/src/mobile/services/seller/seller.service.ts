@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
@@ -18,6 +18,11 @@ export class SellerService {
   public getMyClients(): Observable<InstitutionalClient[]> {
     const vendorId = this.authService.getUserId();
     const url = `${this.baseUrl}/${vendorId}/clients`;
-    return this.http.get<MyClientsResponse>(url);
+    return this.http.get<MyClientsResponse>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching clients:', error);
+        return of([]);
+      }),
+    );
   }
 }
