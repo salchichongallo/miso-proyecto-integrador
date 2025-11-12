@@ -87,4 +87,9 @@ export class AuthService {
   accessToken() {
     return this.accessTokenSubject.value;
   }
+
+  getUserId() {
+    const user = this.userSubject.value;
+    return user ? user.id : null;
+  }
 }
