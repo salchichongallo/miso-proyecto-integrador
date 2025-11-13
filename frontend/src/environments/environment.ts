@@ -11,6 +11,11 @@ export const environment = {
     userPoolClientId: process.env['APP_COGNITO_USER_POOL_CLIENT_ID']!,
     domain: process.env['APP_COGNITO_DOMAIN']!,
     redirectUrls: process.env['APP_COGNITO_REDIRECT_URLS']!,
+    identityPoolId: process.env['APP_COGNITO_IDENTITY_POOL_ID']!,
   },
   mapboxToken: process.env['APP_MAPBOX_TOKEN']!,
+  storageMedia: {
+    region: process.env['APP_S3_MEDIA_REGION']!,
+    bucket: process.env['APP_S3_MEDIA_BUCKET_NAME']!,
+  },
 };
