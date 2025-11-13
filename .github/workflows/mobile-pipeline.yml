@@ -90,6 +90,10 @@ jobs:
           APP_PROVIDER_MICROSERVICE_URL: ${{ vars.APP_PROVIDER_MICROSERVICE_URL }}
           APP_PRODUCT_MICROSERVICE_URL: ${{ vars.APP_PRODUCT_MICROSERVICE_URL }}
           APP_ORDERS_MICROSERVICE_URL: ${{ vars.APP_ORDERS_MICROSERVICE_URL }}
+          APP_MAPBOX_TOKEN: ${{ vars.APP_MAPBOX_TOKEN }}
+          APP_COGNITO_IDENTITY_POOL_ID: ${{ vars.APP_COGNITO_IDENTITY_POOL_ID }}
+          APP_S3_MEDIA_BUCKET_NAME: ${{ vars.APP_S3_MEDIA_BUCKET_NAME }}
+          APP_S3_MEDIA_REGION: ${{ vars.APP_S3_MEDIA_REGION }}
 
       - name: Build Android App
         run: npm run build:android
