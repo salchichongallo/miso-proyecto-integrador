@@ -148,4 +148,25 @@ describe('RegisterVisitPage', () => {
 
     consoleSpy.mockRestore();
   });
+
+  it('should reset error state and form when onRetry is called', () => {
+    component.hasError = true;
+    component.errorMessage = 'Test error';
+    component.visitForm.patchValue({
+      institutionalClient: '1',
+      contactPerson: 'Dr. Test',
+    });
+
+    component.onRetry();
+
+    expect(component.hasError).toBeFalsy();
+    expect(component.errorMessage).toBe('');
+    expect(component.visitForm.value).toEqual({
+      institutionalClient: null,
+      contactPerson: null,
+      visitDate: null,
+      visitTime: null,
+      observations: null,
+    });
+  });
 });

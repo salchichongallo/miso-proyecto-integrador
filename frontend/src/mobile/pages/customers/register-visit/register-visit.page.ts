@@ -147,7 +147,7 @@ export class RegisterVisitPage implements OnInit {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         // Simulate random error for demonstration
-        const shouldFail = Math.random() > 0.7;
+        const shouldFail = true;
         if (shouldFail) {
           reject(new Error('customers.visit.error.generic'));
         } else {
@@ -160,5 +160,11 @@ export class RegisterVisitPage implements OnInit {
   onLoadMedia(): void {
     // TODO: Implement media upload functionality
     console.log('Load media clicked');
+  }
+
+  onRetry(): void {
+    this.hasError = false;
+    this.errorMessage = '';
+    this.visitForm.reset();
   }
 }

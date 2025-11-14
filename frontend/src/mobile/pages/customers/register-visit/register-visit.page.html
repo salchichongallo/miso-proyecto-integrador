@@ -8,8 +8,33 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="visitForm" (ngSubmit)="onSubmit()" class="visit-form">
-    <!-- Información del cliente -->
+  <!-- Error State -->
+  @if (hasError) {
+    <div class="error-state">
+      <!-- Error Banner -->
+      <div class="error-banner">
+        <p class="error-title">{{ 'customers.visit.error.title' | translate }}</p>
+      </div>
+
+      <!-- Error Message -->
+      <p class="error-message">{{ 'customers.visit.error.message' | translate }}</p>
+
+      <!-- Retry Button -->
+      <ion-button
+        expand="block"
+        color="primary"
+        class="retry-button"
+        (click)="onRetry()"
+      >
+        {{ 'customers.visit.error.retry' | translate }}
+      </ion-button>
+    </div>
+  }
+
+  <!-- Form (hidden when there's an error) -->
+  @if (!hasError) {
+    <form [formGroup]="visitForm" (ngSubmit)="onSubmit()" class="visit-form">
+      <!-- Información del cliente -->
     <div class="section">
       <h2 class="section-title">{{ 'customers.visit.sections.clientInfo' | translate }}</h2>
 
@@ -116,4 +141,5 @@
       </ion-button>
     </div>
   </form>
+  }
 </ion-content>

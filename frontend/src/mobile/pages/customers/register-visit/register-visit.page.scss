@@ -167,3 +167,55 @@ ion-content {
     margin-right: 8px;
   }
 }
+
+// Error state styling
+.error-state {
+  padding-top: 51px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-banner {
+  background-color: rgba(235, 68, 90, 0.15);
+  border: 1px solid #cf3c4f;
+  border-radius: 8px;
+  width: 330px;
+  margin: 0 auto;
+}
+
+.error-title {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #52000b;
+  text-transform: uppercase;
+  letter-spacing: 0.84px;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+  line-height: 2.57;
+}
+
+.error-message {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #404040;
+  width: 291px;
+  margin: 60px auto 0;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.retry-button {
+  width: 335px;
+  height: 36px;
+  margin: 45px 20px 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.84px;
+  --border-radius: 4px;
+}
