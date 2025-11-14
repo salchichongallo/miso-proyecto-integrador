@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
-import { AuthService, User } from './auth.service';
+import { AuthService } from './auth.service';
+import { User } from './user.interface';
 
 // Mock AWS Amplify modules
 jest.mock('aws-amplify/auth', () => ({

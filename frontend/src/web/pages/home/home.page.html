@@ -10,7 +10,14 @@
     <!-- Menu Column -->
     <ion-col size="12" size-md="6" class="menu-column">
       <ion-list class="menu-list">
-        <ion-item button (click)="navigateTo('/seller-registration')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'admin'"
+          button
+          (click)="navigateTo('/seller-registration')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="person-add"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.seller.title' | translate }}</h2>
@@ -19,7 +26,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/product-inventory')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'provider'"
+          button
+          (click)="navigateTo('/product-inventory')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="storefront-outline"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.inventory.title' | translate }}</h2>
@@ -28,7 +42,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/supplier-registration')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'admin'"
+          button
+          (click)="navigateTo('/supplier-registration')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="business"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.supplier.title' | translate }}</h2>
@@ -37,7 +58,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/supplier-bulk-upload')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'admin'"
+          button
+          (click)="navigateTo('/supplier-bulk-upload')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="business"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.supplierBulk.title' | translate }}</h2>
@@ -46,7 +74,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/product-registration')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'provider'"
+          button
+          (click)="navigateTo('/product-registration')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="medkit-outline"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.product.title' | translate }}</h2>
@@ -55,7 +90,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/product-bulk-upload')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'provider'"
+          button
+          (click)="navigateTo('/product-bulk-upload')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="medkit-outline"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.productBulk.title' | translate }}</h2>
@@ -64,7 +106,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/seller-report')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'admin'"
+          button
+          (click)="navigateTo('/seller-report')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="stats-chart-outline"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.sellerReport.title' | translate }}</h2>
@@ -73,7 +122,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/sales-plan-creation')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'admin'"
+          button
+          (click)="navigateTo('/sales-plan-creation')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="medkit-outline"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.salesPlan.title' | translate }}</h2>
@@ -82,7 +138,14 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
 
-        <ion-item button (click)="navigateTo('/delivery-routes')" detail="false" class="menu-item" onkeypress>
+        <ion-item
+          *ifHasRole="'admin'"
+          button
+          (click)="navigateTo('/delivery-routes')"
+          detail="false"
+          class="menu-item"
+          onkeypress
+        >
           <ion-icon slot="start" name="trending-up"></ion-icon>
           <ion-label>
             <h2>{{ 'web.home.menu.deliveryRoutes.title' | translate }}</h2>

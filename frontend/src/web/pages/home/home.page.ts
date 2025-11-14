@@ -14,12 +14,13 @@ import {
   statsChartOutline,
   trendingUp,
 } from 'ionicons/icons';
+import { HasRoleDirective } from '@shared/auth';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
-  imports: [IonGrid, IonRow, IonCol, IonList, IonItem, IonLabel, IonIcon, TranslateModule],
+  imports: [IonGrid, IonRow, IonCol, IonList, IonItem, IonLabel, IonIcon, TranslateModule, HasRoleDirective],
 })
 export class HomePage {
   constructor(private readonly router: Router) {

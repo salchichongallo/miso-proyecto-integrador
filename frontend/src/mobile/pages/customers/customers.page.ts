@@ -15,6 +15,7 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { HasRoleDirective } from '@shared/auth';
 
 @Component({
   selector: 'app-customers-page',
@@ -31,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
     IonTitle,
     IonContent,
     TranslateModule,
+    HasRoleDirective,
   ],
 })
 export class CustomersPage {
