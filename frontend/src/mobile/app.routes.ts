@@ -49,6 +49,13 @@ export const routes: Routes = [
           import('./pages/customers/register-visit/register-visit.page').then((m) => m.RegisterVisitPage),
       },
       {
+        path: 'customers/visit-confirmation',
+        loadComponent: () =>
+          import('./pages/customers/visit-confirmation/visit-confirmation.page').then(
+            (m) => m.VisitConfirmationPage,
+          ),
+      },
+      {
         path: 'orders/search-orders',
         loadComponent: () => import('./pages/orders/search-orders/search-orders.page').then((m) => m.SearchOrdersPage),
       },

@@ -65,11 +65,10 @@ export class RegisterVisitPage implements OnInit {
   institutionalClients: Array<InstitutionalClientData> = [];
   contactPersons: Array<{ id: string; name: string }> = [];
 
-  private readonly customersService = inject(CustomersService);
-
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
+    private readonly customersService: CustomersService,
   ) {
     addIcons({ arrowBack, calendarOutline, timeOutline, cloudUploadOutline });
   }
@@ -117,10 +116,24 @@ export class RegisterVisitPage implements OnInit {
       const visitData: ClientVisit = this.visitForm.value;
       await this.registerVisit(visitData);
 
-      this.visitForm.reset();
+      // Get client and contact names for summary
+      const selectedClient = this.institutionalClients.find((c) => c.client_id === visitData.institutionalClient);
+      const clientName = selectedClient?.name || visitData.institutionalClient;
+      const contactName = visitData.contactPerson;
 
-      // Navigate back on success
-      await this.router.navigate(['/tabs/customers']);
+      // Format date and time for display
+      const dateTime = `${visitData.visitDate} ${visitData.visitTime}`;
+
+      // Navigate to confirmation page with summary data
+      await this.router.navigate(['/customers/visit-confirmation'], {
+        state: {
+          visitSummary: {
+            client: clientName,
+            contact: contactName,
+            dateTime: dateTime,
+          },
+        },
+      });
     } catch (error) {
       this.hasError = true;
       this.errorMessage = error instanceof Error ? error.message : 'customers.visit.error.generic';

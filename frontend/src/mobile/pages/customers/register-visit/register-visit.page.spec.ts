@@ -1,30 +1,39 @@
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
 
 import { RegisterVisitPage } from './register-visit.page';
+import { CustomersService } from '@mobile/services/customers/customers.service';
 
 describe('RegisterVisitPage', () => {
   let component: RegisterVisitPage;
   let mockRouter: Partial<jest.Mocked<Router>>;
   let mockFormBuilder: FormBuilder;
+  let mockCustomersService: Partial<jest.Mocked<CustomersService>>;
 
   beforeEach(() => {
     mockRouter = {
       navigate: jest.fn(),
     };
 
+    mockCustomersService = {
+      getInstitutionalClients: jest.fn().mockReturnValue(of([])),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         FormBuilder,
         { provide: Router, useValue: mockRouter },
+        { provide: CustomersService, useValue: mockCustomersService },
       ],
     });
 
     mockFormBuilder = TestBed.inject(FormBuilder);
     const router = TestBed.inject(Router);
+    const customersService = TestBed.inject(CustomersService);
 
-    component = new RegisterVisitPage(mockFormBuilder, router);
+    component = new RegisterVisitPage(mockFormBuilder, router, customersService);
     component.ngOnInit();
   });
 
@@ -42,8 +51,8 @@ describe('RegisterVisitPage', () => {
   });
 
   it('should load mock data on init', () => {
-    expect(component.institutionalClients.length).toBeGreaterThan(0);
     expect(component.contactPersons.length).toBeGreaterThan(0);
+    expect(mockCustomersService.getInstitutionalClients).toHaveBeenCalled();
   });
 
   it('should validate required fields', () => {
@@ -90,10 +99,23 @@ describe('RegisterVisitPage', () => {
     expect(component.errorMessage).toBeTruthy();
   });
 
-  it('should navigate to customers page on successful registration', async () => {
+  it('should navigate to confirmation page on successful registration', async () => {
+    component.institutionalClients = [
+      {
+        client_id: '1',
+        name: 'Hospital Test',
+        tax_id: '123',
+        country: 'CO',
+        level: 'III',
+        specialty: 'Test',
+        location: 'Test Location',
+        message: '',
+      },
+    ];
+
     component.visitForm.patchValue({
       institutionalClient: '1',
-      contactPerson: '1',
+      contactPerson: 'Dr. Test',
       visitDate: '2024-01-15',
       visitTime: '10:30',
     });
@@ -103,7 +125,18 @@ describe('RegisterVisitPage', () => {
 
     await component.onSubmit();
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/tabs/customers']);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(
+      ['/customers/visit-confirmation'],
+      expect.objectContaining({
+        state: {
+          visitSummary: {
+            client: 'Hospital Test',
+            contact: 'Dr. Test',
+            dateTime: '2024-01-15 10:30',
+          },
+        },
+      }),
+    );
   });
 
   it('should call onLoadMedia when upload button is clicked', () => {

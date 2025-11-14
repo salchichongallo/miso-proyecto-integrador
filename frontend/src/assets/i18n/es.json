@@ -122,6 +122,15 @@
       "success": {
         "title": "Visita registrada",
         "message": "La visita del cliente ha sido registrada exitosamente"
+      },
+      "confirmation": {
+        "successTitle": "Visita registrada exitosamente",
+        "successMessage": "La información ha sido guardada y está disponible para consultas futuras.",
+        "summaryTitle": "Resumen de la visita",
+        "client": "Cliente",
+        "contact": "Contacto",
+        "dateTime": "Fecha y hora",
+        "registerNewVisit": "Registrar nueva visita"
       }
     }
   },

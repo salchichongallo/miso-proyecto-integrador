@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/customers" [text]="''"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'customers.visit.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="confirmation-container">
+    <!-- Success Banner -->
+    <div class="success-banner">
+      <p class="success-title">{{ 'customers.visit.confirmation.successTitle' | translate }}</p>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message">
+      <p>{{ 'customers.visit.confirmation.successMessage' | translate }}</p>
+    </div>
+
+    <!-- Visit Summary -->
+    <div class="summary-card">
+      <h2 class="summary-title">{{ 'customers.visit.confirmation.summaryTitle' | translate }}</h2>
+
+      <div class="summary-details">
+        <div class="summary-row">
+          <span class="summary-label">{{ 'customers.visit.confirmation.client' | translate }}</span>
+          <span class="summary-value">{{ visitSummary.client }}</span>
+        </div>
+
+        <div class="summary-row">
+          <span class="summary-label">{{ 'customers.visit.confirmation.contact' | translate }}</span>
+          <span class="summary-value">{{ visitSummary.contact }}</span>
+        </div>
+
+        <div class="summary-row">
+          <span class="summary-label">{{ 'customers.visit.confirmation.dateTime' | translate }}</span>
+          <span class="summary-value">{{ visitSummary.dateTime }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register New Visit Button -->
+    <div class="action-container">
+      <ion-button
+        expand="block"
+        color="primary"
+        class="register-button"
+        (click)="onRegisterNewVisit()"
+      >
+        {{ 'customers.visit.confirmation.registerNewVisit' | translate }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
