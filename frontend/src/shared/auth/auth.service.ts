@@ -4,12 +4,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import { signIn, signOut, fetchAuthSession, confirmSignIn } from 'aws-amplify/auth';
 
 import { configureAmplifyAuth } from './configure-amplify-auth';
-
-export interface User {
-  id: string;
-  email: string;
-  role: string;
-}
+import { User } from './user.interface';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
