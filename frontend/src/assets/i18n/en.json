@@ -119,6 +119,11 @@
         "retry": "Try again",
         "generic": "Error registering visit"
       },
+      "mediaUpload": {
+        "success": "{{count}} file(s) selected successfully",
+        "error": "Error selecting files. Please check permissions and try again.",
+        "permissionDenied": "Permission denied. You need to authorize gallery access to upload files."
+      },
       "success": {
         "title": "Visit registered",
         "message": "Client visit has been registered successfully"

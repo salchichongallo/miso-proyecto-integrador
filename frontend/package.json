@@ -34,6 +34,7 @@
     "@capacitor/keyboard": "7.0.3",
     "@capacitor/preferences": "^7.0.2",
     "@capacitor/status-bar": "7.0.3",
+    "@capawesome/capacitor-file-picker": "^7.2.0",
     "@ionic/angular": "^8.0.0",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",

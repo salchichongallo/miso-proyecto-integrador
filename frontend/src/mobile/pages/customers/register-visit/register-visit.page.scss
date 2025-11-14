@@ -147,6 +147,103 @@ ion-content {
   --border-width: 1px;
   --color: black;
   --border-radius: 8px;
+  position: relative;
+
+  .file-count-badge {
+    margin-left: 8px;
+    font-weight: 600;
+  }
+}
+
+// Selected files list
+.selected-files-list {
+  margin: 20px;
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+    .file-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-right: 12px;
+      flex-shrink: 0;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .video-preview {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e0e0e0;
+
+        .video-icon {
+          font-size: 32px;
+          color: #666;
+        }
+      }
+    }
+
+    .file-info {
+      flex: 1;
+      min-width: 0;
+      margin-right: 8px;
+
+      .file-name {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #383a3e;
+        margin: 0 0 4px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .file-size {
+        font-family: 'Roboto', sans-serif;
+        font-size: 12px;
+        color: #666666;
+        margin: 0 0 2px 0;
+      }
+
+      .file-duration {
+        font-family: 'Roboto', sans-serif;
+        font-size: 12px;
+        color: #4e99ea;
+        margin: 0;
+      }
+    }
+
+    .remove-button {
+      --padding-start: 4px;
+      --padding-end: 4px;
+      margin: 0;
+      height: 40px;
+      width: 40px;
+
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+  }
 }
 
 // Submit button container

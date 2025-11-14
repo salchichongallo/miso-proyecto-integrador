@@ -117,7 +117,46 @@
         (click)="onLoadMedia()"
       >
         {{ 'customers.visit.form.loadMedia' | translate }}
+        @if (selectedMediaFiles.length > 0) {
+          <span class="file-count-badge">({{ selectedMediaFiles.length }})</span>
+        }
       </ion-button>
+
+      <!-- Selected Files List -->
+      @if (selectedMediaFiles.length > 0) {
+        <div class="selected-files-list">
+          @for (file of selectedMediaFiles; track $index) {
+            <div class="file-item">
+              <div class="file-preview">
+                @if (isImageFile(file)) {
+                  <img [src]="getFilePreview(file)" [alt]="file.name" class="preview-image" />
+                } @else if (isVideoFile(file)) {
+                  <div class="video-preview">
+                    <ion-icon name="videocam" class="video-icon"></ion-icon>
+                  </div>
+                }
+              </div>
+
+              <div class="file-info">
+                <p class="file-name">{{ file.name }}</p>
+                <p class="file-size">{{ formatFileSize(file) }}</p>
+                @if (file.duration) {
+                  <p class="file-duration">{{ file.duration }}s</p>
+                }
+              </div>
+
+              <ion-button
+                fill="clear"
+                color="danger"
+                class="remove-button"
+                (click)="removeMediaFile($index)"
+              >
+                <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+              </ion-button>
+            </div>
+          }
+        </div>
+      }
     </div>
 
     <!-- Submit Button -->

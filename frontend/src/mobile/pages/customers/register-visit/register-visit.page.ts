@@ -3,7 +3,15 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { addIcons } from 'ionicons';
-import { arrowBack, calendarOutline, timeOutline, cloudUploadOutline } from 'ionicons/icons';
+import {
+  arrowBack,
+  calendarOutline,
+  timeOutline,
+  cloudUploadOutline,
+  closeCircle,
+  videocam,
+  image,
+} from 'ionicons/icons';
 
 import {
   IonHeader,
@@ -20,10 +28,12 @@ import {
   IonSelectOption,
   IonIcon,
   IonSpinner,
+  ToastController,
 } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomersService } from '@mobile/services/customers/customers.service';
 import { InstitutionalClientData } from '@mobile/models';
+import { MediaPickerService, MediaFile } from '@mobile/services/media-picker/media-picker.service';
 
 interface ClientVisit {
   institutionalClient: string;
@@ -31,7 +41,7 @@ interface ClientVisit {
   visitDate: string;
   visitTime: string;
   observations: string;
-  mediaFiles?: File[];
+  mediaFiles?: MediaFile[];
 }
 
 @Component({
@@ -54,6 +64,7 @@ interface ClientVisit {
     IonSelectOption,
     IonSpinner,
     TranslateModule,
+    IonIcon,
   ],
 })
 export class RegisterVisitPage implements OnInit {
@@ -64,13 +75,17 @@ export class RegisterVisitPage implements OnInit {
 
   institutionalClients: Array<InstitutionalClientData> = [];
   contactPersons: Array<{ id: string; name: string }> = [];
+  selectedMediaFiles: MediaFile[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private readonly customersService: CustomersService,
+    private readonly mediaPickerService: MediaPickerService,
+    private readonly toastController: ToastController,
+    private readonly translate: TranslateService,
   ) {
-    addIcons({ arrowBack, calendarOutline, timeOutline, cloudUploadOutline });
+    addIcons({ arrowBack, calendarOutline, timeOutline, cloudUploadOutline, closeCircle, videocam, image });
   }
 
   ngOnInit(): void {
@@ -113,7 +128,10 @@ export class RegisterVisitPage implements OnInit {
     this.errorMessage = '';
 
     try {
-      const visitData: ClientVisit = this.visitForm.value;
+      const visitData: ClientVisit = {
+        ...this.visitForm.value,
+        mediaFiles: this.selectedMediaFiles,
+      };
       await this.registerVisit(visitData);
 
       // Get client and contact names for summary
@@ -131,6 +149,7 @@ export class RegisterVisitPage implements OnInit {
             client: clientName,
             contact: contactName,
             dateTime: dateTime,
+            mediaCount: this.selectedMediaFiles.length,
           },
         },
       });
@@ -157,14 +176,63 @@ export class RegisterVisitPage implements OnInit {
     });
   }
 
-  onLoadMedia(): void {
-    // TODO: Implement media upload functionality
-    console.log('Load media clicked');
+  async onLoadMedia(): Promise<void> {
+    try {
+      const files = await this.mediaPickerService.pickMedia(true);
+
+      if (files.length > 0) {
+        this.selectedMediaFiles = [...this.selectedMediaFiles, ...files];
+        await this.showToast(
+          this.translate.instant('customers.visit.mediaUpload.success', {
+            count: files.length,
+          }),
+          'success',
+        );
+      }
+    } catch (error) {
+      console.error('Error picking media:', error);
+      await this.showToast(this.translate.instant('customers.visit.mediaUpload.error'), 'danger');
+    }
+  }
+
+  removeMediaFile(index: number): void {
+    this.selectedMediaFiles.splice(index, 1);
+  }
+
+  getFileIcon(file: MediaFile): string {
+    return this.mediaPickerService.isVideo(file) ? 'videocam' : 'image';
+  }
+
+  formatFileSize(file: MediaFile): string {
+    return this.mediaPickerService.formatFileSize(file.size);
+  }
+
+  getFilePreview(file: MediaFile): string {
+    return this.mediaPickerService.getFilePreview(file);
+  }
+
+  isImageFile(file: MediaFile): boolean {
+    return this.mediaPickerService.isImage(file);
+  }
+
+  isVideoFile(file: MediaFile): boolean {
+    return this.mediaPickerService.isVideo(file);
   }
 
   onRetry(): void {
     this.hasError = false;
     this.errorMessage = '';
+    this.selectedMediaFiles = [];
     this.visitForm.reset();
+  }
+
+  private async showToast(message: string, color: 'success' | 'danger' | 'warning' = 'success'): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom',
+      color,
+    });
+    await toast.present();
   }
 }

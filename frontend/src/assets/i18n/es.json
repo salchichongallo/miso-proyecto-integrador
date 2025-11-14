@@ -119,6 +119,11 @@
         "retry": "Intentar nuevamente",
         "generic": "Error al registrar la visita"
       },
+      "mediaUpload": {
+        "success": "{{count}} archivo(s) seleccionado(s) correctamente",
+        "error": "Error al seleccionar archivos. Por favor, verifica los permisos e intenta nuevamente.",
+        "permissionDenied": "Permiso denegado. Necesitas autorizar el acceso a la galería para cargar archivos."
+      },
       "success": {
         "title": "Visita registrada",
         "message": "La visita del cliente ha sido registrada exitosamente"
