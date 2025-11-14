@@ -44,6 +44,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'customers/register-visit',
+        loadComponent: () =>
+          import('./pages/customers/register-visit/register-visit.page').then((m) => m.RegisterVisitPage),
+      },
+      {
         path: 'orders/search-orders',
         loadComponent: () => import('./pages/orders/search-orders/search-orders.page').then((m) => m.SearchOrdersPage),
       },

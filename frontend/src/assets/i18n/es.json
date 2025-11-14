@@ -41,6 +41,7 @@
   "customers": {
     "title": "Clientes",
     "registerInstitutional": "Registrar cliente institucional",
+    "registerVisit": "Registrar visita de cliente",
     "register": {
       "title": "Registro de Cliente Institucional",
       "form": {
@@ -79,6 +80,48 @@
         "loading": "Registrando cliente institucional...",
         "success": "Cliente institucional registrado exitosamente.",
         "error": "Error al registrar el cliente institucional. Por favor intenta de nuevo."
+      }
+    },
+    "visit": {
+      "title": "Registrar visita de cliente",
+      "sections": {
+        "clientInfo": "Información del cliente",
+        "visitDetails": "Detalles de la visita",
+        "visualEvidence": "Evidencia visual"
+      },
+      "form": {
+        "institutionalClient": {
+          "placeholder": "Cliente institucional",
+          "required": "Debe seleccionar un cliente institucional"
+        },
+        "contactPerson": {
+          "placeholder": "Persona de contacto",
+          "required": "Debe seleccionar una persona de contacto"
+        },
+        "visitDate": {
+          "label": "Fecha",
+          "required": "La fecha de visita es requerida"
+        },
+        "visitTime": {
+          "label": "Hora",
+          "required": "La hora de visita es requerida"
+        },
+        "observations": {
+          "label": "Observaciones adicionales",
+          "placeholder": " "
+        },
+        "loadMedia": "Cargar multimedia",
+        "submit": "Registrar visita"
+      },
+      "error": {
+        "title": "Error al registrar la visita",
+        "message": "Ha ocurrido un error inesperado al registrar la visita del cliente, por favor intenta nuevamente el registro.",
+        "retry": "Intentar nuevamente",
+        "generic": "Error al registrar la visita"
+      },
+      "success": {
+        "title": "Visita registrada",
+        "message": "La visita del cliente ha sido registrada exitosamente"
       }
     }
   },

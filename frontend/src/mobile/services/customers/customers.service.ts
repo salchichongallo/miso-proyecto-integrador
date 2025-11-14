@@ -5,7 +5,11 @@ import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
 
-import { CreateInstitutionalClientRequest, CreateInstitutionalClientResponse } from '@mobile/models';
+import {
+  CreateInstitutionalClientRequest,
+  CreateInstitutionalClientResponse,
+  InstitutionalClientData,
+} from '@mobile/models';
 
 @Injectable({
   providedIn: 'root',
@@ -18,5 +22,9 @@ export class CustomersService {
     data: CreateInstitutionalClientRequest,
   ): Observable<CreateInstitutionalClientResponse> {
     return this.http.post<CreateInstitutionalClientResponse>(`${this.baseUrl}/`, data);
+  }
+
+  public getInstitutionalClients(): Observable<InstitutionalClientData[]> {
+    return this.http.get<InstitutionalClientData[]>(`${this.baseUrl}/`);
   }
 }
