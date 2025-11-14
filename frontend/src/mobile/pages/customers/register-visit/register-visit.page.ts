@@ -142,7 +142,7 @@ export class RegisterVisitPage implements OnInit {
     }
   }
 
-  private async registerVisit(visitData: ClientVisit): Promise<void> {
+  protected async registerVisit(visitData: ClientVisit): Promise<void> {
     // Simulate HTTP call that can fail
     return new Promise((resolve, reject) => {
       setTimeout(() => {
