@@ -8,12 +8,17 @@ from src.errors.errors import ApiError
 class TestCreateVendorIntegration:
     """🧪 Test de integración para la creación de vendedores"""
 
-    def test_successful_vendor_creation(self, client):
+    @patch("src.commands.create_vendor.create_user", return_value={"cognito_id": "cognito-test-1"})
+    def test_successful_vendor_creation(self, mock_create_user, client):
         """✅ Debe crear un vendedor exitosamente y devolver 201"""
+
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
+            "institutions": [
+                {"name": "Clinica Norte"},
+                {"name": "Hospital Central"}
+            ],
         }
 
         response = client.post("/", json=payload)
@@ -21,15 +26,22 @@ class TestCreateVendorIntegration:
 
         logging.info("Response JSON: %s", json_data)
 
-        # ✅ Verificaciones
+        # Verificaciones
         assert response.status_code == 201
         assert "message" in json_data
         assert "Vendedor registrado exitosamente" in json_data["message"]
+
+        # Validación del vendor
         assert "vendor" in json_data
-        assert json_data["vendor"]["email"] == "jhorman@example.com"
-        assert json_data["vendor"]["name"] == "Jhorman Galindo"
-        assert isinstance(json_data["vendor"]["institutions"], list)
-        assert len(json_data["vendor"]["institutions"]) == 2
+        vendor = json_data["vendor"]
+
+        assert vendor["email"] == "jhorman@example.com"
+        assert vendor["name"] == "Jhorman Galindo"
+        assert isinstance(vendor["institutions"], list)
+        assert len(vendor["institutions"]) == 2
+
+        # Verificar uso del mock
+        mock_create_user.assert_called_once_with(email="jhorman@example.com")
 
     def test_missing_required_field(self, client):
         """❌ Debe retornar 400 si falta un campo obligatorio"""

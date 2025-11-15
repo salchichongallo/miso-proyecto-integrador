@@ -36,7 +36,7 @@ class TestCreateClientCommand:
 
         result = client.execute()
 
-        assert result["id"] == "abc-123"
+        assert result["client_id"] == "abc-123"
         assert result["name"] == "Hospital Central"
         assert result["tax_id"] == "1234567890"
         assert result["message"] == "Cliente institucional registrado exitosamente"

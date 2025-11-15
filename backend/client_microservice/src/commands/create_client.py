@@ -1,5 +1,4 @@
 import boto3
-import uuid
 import re
 import hashlib
 import logging
@@ -90,7 +89,7 @@ class CreateClient(BaseCommannd):
             "specialty": self.specialty,
             "location": self.location,
             "email": self.tax_id + "@client.com",
-            "id": self.cognito_id
+            "client_id": self.cognito_id
         }
 
         try:
@@ -105,7 +104,7 @@ class CreateClient(BaseCommannd):
         """Construye la respuesta final del comando."""
         logger.info(f"📦 Cliente creado exitosamente: {self.cognito_id}")
         return {
-            "id": self.cognito_id,
+            "client_id": self.cognito_id,
             "tax_id": self.tax_id,
             "name": self.name,
             "country": self.country,

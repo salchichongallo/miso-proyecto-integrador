@@ -71,6 +71,7 @@ class TestCreateVendor:
     def test_should_create_vendor_correctly(self, mock_find, mock_save):
         """✅ Debe crear un vendedor y asignar campos automáticos"""
         vendor = VendorModel.create(
+            vendor_id="UUID-123",
             email="jhorman@example.com",
             name="Jhorman Galindo",
             institutions=["Clinica Norte"]

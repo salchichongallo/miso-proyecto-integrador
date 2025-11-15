@@ -8,13 +8,18 @@ from src.errors.errors import ApiError
 class TestGetAllVendorsIntegration:
     """🧪 Test de integración para listar todos los vendedores"""
 
-    def test_get_all_vendors_success(self, client):
+    @patch("src.commands.create_vendor.create_user", return_value={"cognito_id": "cognito-test-1"})
+    def test_get_all_vendors_success(self, mock_create_user, client):
         """✅ Crea un vendedor y luego lo lista correctamente"""
+
         # 1️⃣ Crear un vendedor primero
         payload = {
             "name": "Jhorman Galindo",
             "email": "jhorman@example.com",
-            "institutions": [{ "name": "Clinica Norte" }, { "name": "Hospital Central" }],
+            "institutions": [
+                { "name": "Clinica Norte" },
+                { "name": "Hospital Central" }
+            ],
         }
 
         create_response = client.post("/", json=payload)
@@ -29,17 +34,20 @@ class TestGetAllVendorsIntegration:
 
         logging.info("Response JSON (listado): %s", json_data)
 
-        # ✅ Verificaciones
+        # Verificaciones
         assert response.status_code == 200
         assert isinstance(json_data, list)
         assert any(v["email"] == "jhorman@example.com" for v in json_data)
 
-        # Verifica campos esperados
+        # Verifica los campos del vendor
         first = next(v for v in json_data if v["email"] == "jhorman@example.com")
         assert "name" in first
         assert "email" in first
         assert "institutions" in first
         assert isinstance(first["institutions"], list)
+
+        # Verifica el mock seguro:
+        mock_create_user.assert_called_once_with(email="jhorman@example.com")
 
     # 🚫 Caso: ApiError en el comando
     @patch("src.commands.view_all.GetAllVendors.execute")

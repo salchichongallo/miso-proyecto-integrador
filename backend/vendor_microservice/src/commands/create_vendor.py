@@ -3,6 +3,7 @@ import datetime
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 from ..models.vendor import VendorModel
+from ..utils.user_requests import create_user
 
 logger = logging.getLogger(__name__)
 
@@ -38,8 +39,12 @@ class CreateVendor(BaseCommannd):
             if existing_vendor:
                 raise ParamError("El correo electrónico ya está registrado.")
 
+            # Creamos usuario en Cognito
+            id_cognito = create_user(email=email).get("cognito_id")
+
             # Crear registro
             vendor = VendorModel.create(
+                vendor_id=id_cognito,
                 name=name,
                 email=email,
                 institutions=institutions,
