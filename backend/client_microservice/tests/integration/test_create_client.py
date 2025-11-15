@@ -1,11 +1,11 @@
 import pytest
 import logging
+from unittest.mock import patch
 
+@pytest.mark.usefixtures("client")
 class TestClientEndpoints:
 
-    @pytest.mark.usefixtures("client")
     def test_create_client_endpoint(self, client):
-        """✅ Caso exitoso de creación"""
         payload = {
             "name": "Hospital Central",
             "tax_id": "1234567890",
@@ -15,36 +15,35 @@ class TestClientEndpoints:
             "location": "Bogotá"
         }
 
-        response = client.post("/", json=payload)
-        logging.debug("Response: %s", response.get_json())
+        # mock
+        with patch("src.commands.create_client.create_user",
+                return_value={"cognito_id": "cognito-test-1"}):
+
+            response = client.post("/", json=payload)
+            data = response.get_json()
+
         assert response.status_code == 201
-        data = response.get_json()
-        assert "Client created successfully" in data["mssg"]
-        assert data["vendor"]["name"] == "Hospital Central"
+        assert "successfully" in data["mssg"].lower()
+        assert data["client"]["name"] == "Hospital Central"
 
-    # # ----------------- 🚫 Casos negativos -----------------
+    # ----------------- 🚫 Casos negativos -----------------
 
-    @pytest.mark.usefixtures("client")
     def test_create_client_schema_falla(self, client):
-        """❌ Falla de validación en el schema JSON"""
-        payload_without_tax_id = {
+        payload = {
             "name": "Hospital Central",
             "country": "CO",
             "level": "I",
             "specialty": "Cardiología",
             "location": "Bogotá"
         }
-        response = client.post("/", json=payload_without_tax_id)
+        response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
-        data = response.get_json()
-        assert "obligatorio" in str(data)
+        assert "obligatorio" in str(response.get_json()).lower()
 
-    @pytest.mark.usefixtures("client")
     def test_create_client_tax_id_invalido(self, client):
-        """❌ NIT inválido (menos o más de 10 dígitos)"""
         payload = {
             "name": "Hospital Norte",
-            "tax_id": "12345",  # ❌ menos de 10 dígitos
+            "tax_id": "12345",
             "country": "CO",
             "level": "II",
             "specialty": "Pediatría",
@@ -54,31 +53,48 @@ class TestClientEndpoints:
         assert response.status_code in (400, 500)
         assert "10 dígitos" in str(response.get_json())
 
-    @pytest.mark.usefixtures("client")
     def test_create_client_duplicado(self, client):
         """❌ Cliente duplicado"""
 
-        # First, create the client successfully
-        tax_id = "1234567890"
         payload = {
             "name": "Hospital Central",
-            "tax_id": tax_id,
+            "tax_id": "1234567890",
             "country": "CO",
             "level": "I",
             "specialty": "Cardiología",
             "location": "Bogotá"
         }
-        client.post("/", json=payload)
 
-        # Try to create the same client again
-        payload = {
-            "name": "Hospital Central",
-            "tax_id": tax_id,
-            "country": "CO",
-            "level": "II",
-            "specialty": "Cardiología",
-            "location": "Bogotá"
-        }
+        with patch("src.commands.create_client.create_user",
+                   return_value={"cognito_id": "cognito-test-1"}):
+            client.post("/", json=payload)
+
+        # segundo intento → DEBE fallar
         response = client.post("/", json=payload)
         assert response.status_code in (400, 500)
         assert "ya está registrado" in str(response.get_json())
+
+    def test_create_client_exception_generica(self, client):
+        """❌ Debe capturar Exception genérica y retornar 500"""
+
+        payload = {
+            "name": "Hospital Crash",
+            "tax_id": "1234567890",
+            "country": "CO",
+            "level": "II",
+            "specialty": "Urgencias",
+            "location": "Medellín"
+        }
+
+        # Mock que lanza una excepción NO controlada
+        with patch("src.commands.create_client.CreateClient.execute",
+                   side_effect=Exception("Error inesperado")):
+
+            response = client.post("/", json=payload)
+            data = response.get_json()
+
+        assert response.status_code == 500
+        assert "error inesperado" in data["error"].lower()
+
+
+    
