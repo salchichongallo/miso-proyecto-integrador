@@ -2,6 +2,7 @@ from flask import jsonify, Blueprint, request
 from flask_cognito import cognito_auth_required, current_cognito_jwt, cognito_group_permissions
 from ..commands.ping import PingCommand
 from ..commands.create_user import CreateCognitoUser
+from ..commands.create_user_bulk import CreateCognitoUserBulk
 from ..errors.errors import ParamError
 
 users_blueprint = Blueprint("users", __name__)
@@ -35,4 +36,17 @@ def create_user():
         raise ParamError("The 'email' and 'role' fields are required.")
 
     result = CreateCognitoUser(email, role).execute()
+    return jsonify(result), 201
+
+
+@users_blueprint.post("/bulk")
+def create_user_bulk():
+
+    data = request.get_json() or {}
+    users = data.get("users")
+
+    if not users:
+        raise ParamError("The field 'users' is required and must be a list.")
+
+    result = CreateCognitoUserBulk(users).execute()
     return jsonify(result), 201
