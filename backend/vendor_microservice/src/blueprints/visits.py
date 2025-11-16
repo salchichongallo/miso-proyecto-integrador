@@ -9,11 +9,6 @@ from ..commands.get_visits_by_vendor import ListVisits
 visits_blueprint = Blueprint("visits", __name__, url_prefix="/visits")
 
 
-@visits_blueprint.get("/ping")
-def ping():
-    return jsonify(PingCommand().execute())
-
-
 @visits_blueprint.post("/")
 @cognito_auth_required
 def create_visit():
