@@ -94,6 +94,19 @@ class VisitModel(Model):
         visit.save()
         return visit
 
+    @classmethod
+    def get_by_id(cls, visit_id):
+        try:
+            visit = cls.get(visit_id)
+            return visit
+        except cls.DoesNotExist:
+            return None
+
+    @classmethod
+    def get_by_vendor(cls, vendor_id):
+        items = list(cls.scan(cls.vendor_id == vendor_id))
+        return [v.to_dict() for v in items]
+
 
     @classmethod
     def get_all(cls):

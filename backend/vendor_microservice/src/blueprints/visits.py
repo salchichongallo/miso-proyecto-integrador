@@ -4,6 +4,7 @@ from flask_cognito import cognito_auth_required, current_cognito_jwt
 from ..errors.errors import ParamError, ApiError
 from ..models.visit import NewVisitJsonSchema
 from ..commands.create_visit import CreateVisit
+from ..commands.get_visits_by_vendor import ListVisits
 
 visits_blueprint = Blueprint("visits", __name__, url_prefix="/visits")
 
@@ -25,6 +26,21 @@ def create_visit():
 
     except ParamError as e:
         return jsonify({"error": str(e)}), 400
+    except ApiError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
+
+
+
+@visits_blueprint.get("/")
+@cognito_auth_required
+def list_visits():
+    try:
+        vendor_id = current_cognito_jwt.get("sub")
+        response = ListVisits(vendor_id).execute()
+        return jsonify(response), 200
+
     except ApiError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
