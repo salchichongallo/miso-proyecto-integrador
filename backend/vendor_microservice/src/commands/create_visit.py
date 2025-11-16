@@ -1,5 +1,4 @@
 import logging
-import datetime
 from .base_command import BaseCommannd
 from ..errors.errors import ParamError, ApiError
 from ..models.visit import VisitModel, NewVisitJsonSchema
