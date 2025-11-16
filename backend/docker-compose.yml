@@ -16,20 +16,26 @@ services:
       - PRODUCTS_MIRROR_TABLE=ProductsMirror
       - SALES_TABLE=Sales
       - WAREHOUSES_TABLE=Warehouses
+      - VISITS_TABLE=Visits
     depends_on:
       - dynamodb-local
     networks:
       - net-medisupply
     restart: "no"  # Execute only once
 
-  users:
+  users: # TODO: Comentar en local y levantar micro independiente con sus variables de entorno .env
     build:
       context: ./user_microservice
       dockerfile: Dockerfile
     container_name: users
     hostname: users
     environment:
+      - AWS_REGION=us-east-1
+      - FLASK_ENV=development
+      - APP_COGNITO_USER_POOL_ID=dummy-local-pool
       - GUNICORN_CMD_ARGS=--log-level info --reload
+      - AWS_ACCESS_KEY_ID=fakeMyKeyId
+      - AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey
     ports:
       - "3000:3000"
     volumes:
@@ -49,6 +55,7 @@ services:
       - FLASK_ENV=development
       - APP_COGNITO_USER_POOL_ID=dummy-local-pool
       - GUNICORN_CMD_ARGS=--log-level info --reload
+      - USER_API_URL=http://192.168.1.83:3000 # TODO: Cambiar cuando el micro de users esté dockerizado
     ports:
       - "3001:3001"
     volumes:
@@ -73,6 +80,7 @@ services:
       - FLASK_ENV=development
       - APP_COGNITO_USER_POOL_ID=dummy-local-pool
       - GUNICORN_CMD_ARGS=--log-level info --reload
+      - USER_API_URL=http://192.168.1.83:3000 # TODO: Cambiar cuando el micro de users esté dockerizado
     ports:
       - "3002:3002"
     volumes:

@@ -9,7 +9,7 @@ from ..commands.view_all import GetAllOrders
 from ..commands.get_order_id import GetOrderById
 from ..commands.get_orders_by_client import GetOrdersByClient
 
-from flask_cognito import cognito_auth_required
+from flask_cognito import cognito_auth_required, current_cognito_jwt
 
 orders_blueprint = Blueprint("orders", __name__)
 
@@ -69,10 +69,11 @@ def get_order_by_id(order_id):
 
 
 
-@orders_blueprint.get("/client/<client_id>")
+@orders_blueprint.get("/client")
 @cognito_auth_required
-def get_orders_by_client(client_id):
+def get_orders_by_client():
     try:
+        client_id = current_cognito_jwt.get("sub")
         result = GetOrdersByClient(client_id).execute()
         return jsonify(result), 200
 

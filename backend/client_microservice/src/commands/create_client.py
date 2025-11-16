@@ -1,10 +1,10 @@
 import boto3
-import uuid
 import re
 import hashlib
 import logging
 from botocore.exceptions import ClientError
 from .base_command import BaseCommannd
+from ..utils.user_requests import create_user
 from ..errors.errors import ParamError, ApiError
 from ..models.db import REGION, TABLE_NAME, DYNAMODB_ENDPOINT
 
@@ -20,8 +20,8 @@ class CreateClient(BaseCommannd):
         self.level = level.strip().upper() if level else None
         self.specialty = specialty.strip() if specialty else None
         self.location = location.strip() if location else None
-        self.client_id = None
         self.tax_id_encrypted = None
+        self.cognito_id = None
 
         # Inicializar conexión DynamoDB
         if DYNAMODB_ENDPOINT:
@@ -44,8 +44,8 @@ class CreateClient(BaseCommannd):
         """Ejecuta la validación, creación y guardado del cliente."""
         logger.info(f"🧾 Iniciando creación del cliente: {self.name}")
         self.validate()
-        self.client_id = str(uuid.uuid4())
         self.encrypt_tax_id()
+        self.save_cognito_user()
         self.save()
         return self.response()
 
@@ -83,12 +83,13 @@ class CreateClient(BaseCommannd):
         item = {
             "tax_id": self.tax_id,
             "tax_id_encrypted": self.tax_id_encrypted,
-            "client_id": self.client_id,
             "name": self.name,
             "country": self.country,
             "level": self.level,
             "specialty": self.specialty,
             "location": self.location,
+            "email": self.tax_id + "@client.com",
+            "client_id": self.cognito_id
         }
 
         try:
@@ -101,9 +102,9 @@ class CreateClient(BaseCommannd):
     # ----------------------------------------------------------
     def response(self):
         """Construye la respuesta final del comando."""
-        logger.info(f"📦 Cliente creado exitosamente: {self.client_id}")
+        logger.info(f"📦 Cliente creado exitosamente: {self.cognito_id}")
         return {
-            "client_id": self.client_id,
+            "client_id": self.cognito_id,
             "tax_id": self.tax_id,
             "name": self.name,
             "country": self.country,
@@ -112,3 +113,9 @@ class CreateClient(BaseCommannd):
             "location": self.location,
             "message": "Cliente institucional registrado exitosamente"
         }
+
+    def save_cognito_user(self):
+        """Crea el usuario en el microservicio de usuarios."""
+        logger.debug(f"🌐 Creando usuario Cognito para el cliente {self.name}...")
+        response = create_user(email=self.tax_id + "@client.com")
+        self.cognito_id = response.get("cognito_id")

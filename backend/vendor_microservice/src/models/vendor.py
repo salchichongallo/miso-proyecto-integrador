@@ -113,9 +113,8 @@ class VendorModel(Model):
         # Verificar si ya existe
         if cls.find_existing_vendor(kwargs["email"]):
             raise ParamError("El correo electrónico ya está registrado.")
-
+        
         vendor = VendorModel(**kwargs)
-        vendor.vendor_id = str(uuid4())
         vendor.created_at = vendor.updated_at = datetime.datetime.now(datetime.timezone.utc)
         vendor.save()
         return vendor

@@ -29,6 +29,7 @@ PRODUCTS_MIRROR_TABLE = os.getenv("PRODUCTS_MIRROR_TABLE", "ProductsMirror")
 WAREHOUSES_TABLE = os.getenv("WAREHOUSES_TABLE", "Warehouses")
 ORDERS_TABLE = os.getenv("ORDERS_TABLE", "Orders")
 SALES_PLANS_TABLE = os.getenv("SALES_PLANS_TABLE", "SalesPlans")
+VISITS_TABLE = os.getenv("VISITS_TABLE", "Visits")
 
 # Definición de tablas
 TABLES_CONFIG = {
@@ -124,6 +125,18 @@ TABLES_CONFIG = {
         ],
         "KeySchema": [
             {"AttributeName": "plan_id", "KeyType": "HASH"}
+        ],
+        "ProvisionedThroughput": {
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        }
+    },
+    VISITS_TABLE: {
+        "AttributeDefinitions": [
+            {"AttributeName": "visit_id", "AttributeType": "S"}
+        ],
+        "KeySchema": [
+            {"AttributeName": "visit_id", "KeyType": "HASH"}
         ],
         "ProvisionedThroughput": {
             "ReadCapacityUnits": 5,
