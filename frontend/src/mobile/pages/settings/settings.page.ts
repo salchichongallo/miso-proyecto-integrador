@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -11,9 +12,11 @@ import {
   IonSelect,
   IonSelectOption,
   ToastController,
+  IonButton,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { AuthService } from '@shared/auth';
 import { TranslationService, Language } from '@shared/services/translation';
 
 @Component({
@@ -21,6 +24,7 @@ import { TranslationService, Language } from '@shared/services/translation';
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   imports: [
+    IonButton,
     CommonModule,
     TranslateModule,
     IonHeader,
@@ -35,6 +39,8 @@ import { TranslationService, Language } from '@shared/services/translation';
   ],
 })
 export class SettingsPage {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
   private readonly translationService = inject(TranslationService);
   private readonly toastController = inject(ToastController);
 
@@ -64,5 +70,10 @@ export class SettingsPage {
       color: 'success',
     });
     await toast.present();
+  }
+
+  async onLogout() {
+    await this.authService.logout();
+    return this.router.navigateByUrl('/login');
   }
 }
