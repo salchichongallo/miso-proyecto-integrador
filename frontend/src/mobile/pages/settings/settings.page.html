@@ -17,17 +17,16 @@
         <h2>{{ 'settings.language.title' | translate }}</h2>
         <p>{{ 'settings.language.label' | translate }}</p>
       </ion-label>
-      <ion-select
-        [value]="currentLanguage"
-        (ionChange)="onLanguageChange($event)"
-        interface="popover"
-      >
+      <ion-select [value]="currentLanguage" (ionChange)="onLanguageChange($event)" interface="popover">
         @for (lang of availableLanguages; track lang.value) {
-          <ion-select-option [value]="lang.value">
-            {{ lang.label | translate }}
-          </ion-select-option>
+        <ion-select-option [value]="lang.value"> {{ lang.label | translate }} </ion-select-option>
         }
       </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="onLogout()" expand="full" size="default" style="flex: 1">
+        {{ 'settings.logout.button' | translate }}
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

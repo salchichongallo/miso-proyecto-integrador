@@ -285,6 +285,9 @@
       "toast": {
         "changed": "Idioma cambiado a {{language}}"
       }
+    },
+    "logout": {
+      "button": "Cerrar sesión"
     }
   },
   "web": {
