@@ -24,7 +24,9 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-button (click)="onLogout()" expand="full" size="default" style="flex: 1"> Cerrar sesión </ion-button>
+      <ion-button (click)="onLogout()" expand="full" size="default" style="flex: 1">
+        {{ 'settings.logout.button' | translate }}
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
