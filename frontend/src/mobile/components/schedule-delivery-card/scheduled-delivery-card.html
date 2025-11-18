@@ -15,11 +15,11 @@
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--date">
     <div class="scheduled-delivery-card__row">
       <ion-icon name="calendar-clear-outline" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__date">{{ order().delivery_date | date: 'fullDate' }}</span>
+      <span class="scheduled-delivery-card__date">{{ order().delivery_date | localDate: 'fullDate' }}</span>
     </div>
     <div class="scheduled-delivery-card__row">
       <ion-icon name="time-outline" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__time">{{ order().delivery_date | date: 'shortTime' }}</span>
+      <span class="scheduled-delivery-card__time">{{ order().delivery_date | localDate: 'shortTime' }}</span>
     </div>
   </div>
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--vehicle">
