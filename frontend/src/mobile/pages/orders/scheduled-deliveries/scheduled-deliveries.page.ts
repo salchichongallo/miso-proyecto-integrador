@@ -12,11 +12,14 @@ import {
   LoadingController,
   ToastController,
 } from '@ionic/angular/standalone';
+import { firstValueFrom } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { addIcons } from 'ionicons';
 import { informationCircle } from 'ionicons/icons';
 import { IonIcon } from '@ionic/angular/standalone';
 import { ScheduledDeliveryCardComponent } from '@mobile/components/schedule-delivery-card/scheduled-delivery-card';
+import { OrderService } from '@mobile/services/order/order.service';
+import { ScheduledOrder } from '@mobile/models/order.model';
 
 @Component({
   selector: 'app-scheduled-deliveries',
@@ -38,11 +41,13 @@ import { ScheduledDeliveryCardComponent } from '@mobile/components/schedule-deli
   ],
 })
 export class ScheduledDeliveriesPage implements OnInit {
-  protected readonly orders = signal<number[]>([]);
+  protected readonly orders = signal<ScheduledOrder[]>([]);
 
   private readonly loader = inject(LoadingController);
   private readonly toast = inject(ToastController);
   private readonly translate = inject(TranslateService);
+
+  private readonly ordersService = inject(OrderService);
 
   constructor() {
     addIcons({ informationCircle });
@@ -55,10 +60,8 @@ export class ScheduledDeliveriesPage implements OnInit {
   private async loadOrders() {
     const loading = await this.showLoader();
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      if (Math.random() < 0.3) {
-        this.orders.set([1, 2, 3]);
-      }
+      const orders = await firstValueFrom(this.ordersService.getMyScheduledOrders());
+      this.orders.set(orders);
     } catch (error: any) {
       console.error(error);
       await this.showToastError(error);
@@ -80,9 +83,10 @@ export class ScheduledDeliveriesPage implements OnInit {
   private async showToastError(error: unknown) {
     await this.loader.dismiss();
     const errorMessage = this.translate.instant('orders.scheduledDeliveries.error');
-    const fullMessage = error && typeof error === 'object' && 'message' in error
-      ? `${errorMessage}. ${(error as { message: string }).message}`
-      : errorMessage;
+    const fullMessage =
+      error && typeof error === 'object' && 'message' in error
+        ? `${errorMessage}. ${(error as { message: string }).message}`
+        : errorMessage;
 
     return this.toast
       .create({ message: fullMessage, duration: 7000, color: 'danger' })

@@ -1,38 +1,36 @@
 <div class="scheduled-delivery-card">
   <div class="scheduled-delivery-card__header">
-    <div>
-      <div class="scheduled-delivery-card__order-id">PED-2025-001234</div>
+    <div class="scheduled-delivery-card__header-content">
+      <div class="scheduled-delivery-card__order-id" [title]="order().id">{{ order().id }}</div>
       <div class="scheduled-delivery-card__amount">
         {{ 'orders.scheduledDeliveries.card.value' | translate }}:
-        <span class="scheduled-delivery-card__amount-value">$2,450.00</span>
+        <span class="scheduled-delivery-card__amount-value">{{ totalSum() | currency}}</span>
       </div>
     </div>
-    <span [ngClass]="['badge', `badge--status-SHIPPED`]">
-      {{ 'orders.scheduledDeliveries.card.status.inTransit' | translate }}
+    <span [ngClass]="['badge', `badge--status-${order().order_status}`]">
+      {{ 'orders.scheduledDeliveries.card.status.' + order().order_status | translate }}
     </span>
   </div>
   <hr class="scheduled-delivery-card__divider" />
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--date">
     <div class="scheduled-delivery-card__row">
       <ion-icon name="calendar-clear-outline" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__date">domingo, 28 de septiembre de 2025</span>
+      <span class="scheduled-delivery-card__date">{{ order().delivery_date | date: 'fullDate' }}</span>
     </div>
     <div class="scheduled-delivery-card__row">
       <ion-icon name="time-outline" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__time">09:30 - 11:30</span>
+      <span class="scheduled-delivery-card__time">{{ order().delivery_date | date: 'shortTime' }}</span>
     </div>
   </div>
   <div class="scheduled-delivery-card__section scheduled-delivery-card__section--vehicle">
     <div class="scheduled-delivery-card__row">
       <ion-icon name="bus" class="scheduled-delivery-card__icon"></ion-icon>
-      <span class="scheduled-delivery-card__vehicle">
-        {{ 'orders.scheduledDeliveries.card.vehicle' | translate }} CAM-045
-      </span>
+      <span class="scheduled-delivery-card__vehicle"> {{ order().delivery_vehicle }} </span>
     </div>
     <div class="scheduled-delivery-card__row">
       <ion-icon name="person" class="scheduled-delivery-card__icon"></ion-icon>
       <span class="scheduled-delivery-card__driver">
-        {{ 'orders.scheduledDeliveries.card.driver' | translate }}: Carlos Mendoza
+        {{ 'orders.scheduledDeliveries.card.driver' | translate }}: {{ order().driver_name }}
       </span>
     </div>
   </div>
@@ -45,24 +43,15 @@
       </span>
     </div>
     <div class="scheduled-delivery-card__products-list">
+      @for (product of order().products; track product.id) {
       <div class="scheduled-delivery-card__product-item">
-        <span>Vacuna COVID-19 Pfizer</span>
+        <span>{{ product.name }}</span>
         <span class="scheduled-delivery-card__product-qty">
-          50 {{ 'orders.scheduledDeliveries.card.units' | translate }}
+          {{product.amount}} {{ 'orders.scheduledDeliveries.card.'+ (product.amount === 1 ? 'unit' : 'units') |
+          translate }}
         </span>
       </div>
-      <div class="scheduled-delivery-card__product-item">
-        <span>Jeringas desechables 1ml</span>
-        <span class="scheduled-delivery-card__product-qty">
-          100 {{ 'orders.scheduledDeliveries.card.units' | translate }}
-        </span>
-      </div>
-      <div class="scheduled-delivery-card__product-item">
-        <span>Alcohol antiséptico 70%</span>
-        <span class="scheduled-delivery-card__product-qty">
-          10 {{ 'orders.scheduledDeliveries.card.units' | translate }}
-        </span>
-      </div>
+      }
     </div>
   </div>
 </div>

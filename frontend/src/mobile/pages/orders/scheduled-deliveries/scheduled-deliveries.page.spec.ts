@@ -1,7 +1,11 @@
+import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
 import { TranslateService } from '@ngx-translate/core';
+import { OrderService } from '@mobile/services/order/order.service';
 import { ScheduledDeliveriesPage } from './scheduled-deliveries.page';
+
+jest.mock('@mobile/services/order/order.service');
 
 describe('ScheduledDeliveriesPage', () => {
   let component: ScheduledDeliveriesPage;
@@ -31,14 +35,20 @@ describe('ScheduledDeliveriesPage', () => {
       instant: jest.fn((key: string | string[]) => key),
     };
 
+    let ordersService: jest.Mocked<OrderService>;
+
     TestBed.configureTestingModule({
       providers: [
         ScheduledDeliveriesPage,
+        OrderService,
         { provide: LoadingController, useValue: mockLoadingController },
         { provide: ToastController, useValue: mockToastController },
         { provide: TranslateService, useValue: mockTranslateService },
       ],
     });
+    ordersService = TestBed.inject(OrderService) as jest.Mocked<OrderService>;
+    ordersService.getMyScheduledOrders.mockReturnValue(of([]));
+
     component = TestBed.inject(ScheduledDeliveriesPage);
   });
 
