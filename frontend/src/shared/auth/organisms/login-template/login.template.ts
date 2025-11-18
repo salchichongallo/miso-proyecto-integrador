@@ -5,12 +5,13 @@ import { IonImg, IonThumbnail, Platform } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { AppAuthenticatorComponent } from '../app-authenticator/app-authenticator.component';
+import { LanguageSwitcherComponent } from '../languge-switcher/language-switcher.component';
 
 @Component({
   selector: 'app-login-template',
   templateUrl: 'login.template.html',
   styleUrls: ['login.template.scss'],
-  imports: [IonImg, AppAuthenticatorComponent, IonThumbnail, TranslateModule],
+  imports: [IonImg, AppAuthenticatorComponent, IonThumbnail, TranslateModule, LanguageSwitcherComponent],
 })
 export class LoginTemplate implements OnInit, OnDestroy {
   private readonly router = inject(Router);
