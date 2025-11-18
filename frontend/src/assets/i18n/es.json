@@ -264,13 +264,17 @@
         "orderId": "Pedido",
         "value": "Valor",
         "status": {
-          "inTransit": "En tránsito",
-          "scheduled": "Programado",
-          "delivered": "Entregado"
+          "PENDING": "Pendiente",
+          "CONFIRMED": "Confirmado",
+          "PROCESSING": "En proceso",
+          "SHIPPED": "En tránsito",
+          "DELIVERED": "Entregado",
+          "CANCELLED": "Cancelado",
+          "RETURNED": "Devuelto"
         },
-        "vehicle": "Camión refrigerado",
         "driver": "Conductor",
         "productsIncluded": "Productos incluidos",
+        "unit": "unidad",
         "units": "unidades"
       }
     }

@@ -10,6 +10,8 @@ import { AuthService } from '@shared/auth/auth.service';
 import { TranslationService } from '@shared/services/translation';
 import { tokenInterceptor } from '@shared/interceptors';
 import { provideI18nModuleConfig } from '@shared/config';
+import esLocale from '@angular/common/locales/es-CO';
+import { registerLocaleData } from '@angular/common';
 
 console.log('📱 Starting Mobile Application');
 
@@ -25,5 +27,6 @@ bootstrapApplication(AppComponent, {
     provideI18nModuleConfig(),
     provideAppInitializer(() => inject(TranslationService).init()),
     provideAppInitializer(() => inject(AuthService).init()),
+    provideAppInitializer(() => registerLocaleData(esLocale)),
   ],
 }).catch((err) => console.error('Error starting mobile app:', err));

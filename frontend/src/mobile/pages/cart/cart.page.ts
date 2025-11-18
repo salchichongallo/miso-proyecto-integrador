@@ -167,6 +167,7 @@ export class CartPage {
           name: item.product.name,
           amount: item.quantity,
           id_warehouse: item.product.warehouse,
+          unit_price: item.product.unit_value,
         })),
       };
 

@@ -10,7 +10,7 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="wrapper">
     @for (order of orders(); track $index) {
-    <app-schedule-delivery-card />
+    <app-schedule-delivery-card [order]="order" />
     } @empty {
     <ion-card class="empty-state-card">
       <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
