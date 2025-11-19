@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Agregar al Carrito</ion-title>
+    <ion-title>{{ 'recommendations.modal.title' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cancel()">Cancelar</ion-button>
+      <ion-button (click)="cancel()">{{ 'recommendations.modal.cancel' | translate }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -11,48 +11,60 @@
   @if (product) {
     <div class="product-info">
       <h2>{{ product.name }}</h2>
-      <p class="product-price"><strong>Precio:</strong> {{ product.unit_value | currency }}</p>
-      <p class="product-stock"><strong>Disponible:</strong> {{ product.stock }} unidades</p>
-      <p class="product-stock"><strong>Almacenamiento:</strong> {{ product.storage_conditions }}</p>
+      <p class="product-price">
+        <strong>{{ 'recommendations.modal.productInfo.price' | translate }}</strong> {{ product.unit_value | currency }}
+      </p>
+      <p class="product-stock">
+        <strong>{{ 'recommendations.modal.productInfo.available' | translate }}</strong> {{ product.stock }}
+        {{ 'recommendations.modal.productInfo.units' | translate }}
+      </p>
+      <p class="product-stock">
+        <strong>{{ 'recommendations.modal.productInfo.storage' | translate }}</strong> {{ product.storage_conditions }}
+      </p>
     </div>
 
     <form [formGroup]="quantityForm" (ngSubmit)="confirm()">
       <ion-item>
-        <ion-label position="floating">Cantidad</ion-label>
+        <ion-label position="floating">{{ 'recommendations.modal.form.quantity.label' | translate }}</ion-label>
         <ion-input
           type="number"
           formControlName="quantity"
           [min]="1"
           [max]="maxQuantity"
-          placeholder="Ingrese la cantidad"
+          [placeholder]="'recommendations.modal.form.quantity.placeholder' | translate"
         ></ion-input>
       </ion-item>
 
       @if (quantityControl?.invalid && quantityControl?.touched) {
         <ion-text color="danger" class="error-message">
           @if (quantityControl?.hasError('required')) {
-            <p>La cantidad es requerida</p>
+            <p>{{ 'recommendations.modal.form.quantity.required' | translate }}</p>
           }
           @if (quantityControl?.hasError('min')) {
-            <p>La cantidad debe ser al menos 1</p>
+            <p>{{ 'recommendations.modal.form.quantity.min' | translate }}</p>
           }
           @if (quantityControl?.hasError('max')) {
-            <p>Solo hay {{ maxQuantity }} unidades disponibles</p>
+            <p>{{ 'recommendations.modal.form.quantity.max' | translate: { maxQuantity: maxQuantity } }}</p>
           }
         </ion-text>
       }
 
       <div class="subtotal">
         <ion-text>
-          <h3>Subtotal: {{ product.unit_value * (quantityControl?.value || 0) | currency }}</h3>
+          <h3>
+            {{ 'recommendations.modal.subtotal' | translate }}
+            {{ product.unit_value * (quantityControl?.value || 0) | currency }}
+          </h3>
         </ion-text>
       </div>
 
       <div class="actions">
         <ion-button expand="block" type="submit" [disabled]="quantityForm.invalid">
-          Agregar recomendación al carrito
+          {{ 'recommendations.modal.buttons.addToCart' | translate }}
         </ion-button>
-        <ion-button (click)="cancel()" expand="block" fill="outline">Cancelar</ion-button>
+        <ion-button (click)="cancel()" expand="block" fill="outline">{{
+          'recommendations.modal.buttons.cancel' | translate
+        }}</ion-button>
       </div>
     </form>
   }

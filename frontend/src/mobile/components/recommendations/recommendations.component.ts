@@ -2,9 +2,10 @@ import { addIcons } from 'ionicons';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { cashOutline, star } from 'ionicons/icons';
-import { IonIcon, ModalController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { catchError, firstValueFrom, map, of } from 'rxjs';
 import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { IonIcon, ModalController, ToastController } from '@ionic/angular/standalone';
 
 import { Product } from '@mobile/models/product.model';
 
@@ -16,7 +17,7 @@ import { AddToCartModalComponent } from './add-to-cart-modal/add-to-cart-modal.c
   selector: 'app-recommendations',
   templateUrl: './recommendations.component.html',
   styleUrls: ['./recommendations.component.scss'],
-  imports: [CurrencyPipe, IonIcon, RouterLink],
+  imports: [CurrencyPipe, IonIcon, RouterLink, TranslateModule],
 })
 export class RecommendationsComponent implements OnInit {
   @Input()

@@ -1,5 +1,5 @@
 <section>
-  <h3 class="title">Recomendaciones</h3>
+  <h3 class="title">{{ 'recommendations.title' | translate }}</h3>
 
   @if (recommendedProducts().length > 0) {
     <div class="product-list">
@@ -7,7 +7,7 @@
         <a (click)="onProductClick($event, product)" routerLink="/orders/product-detail" class="product">
           <ion-icon name="star" class="product__badge" />
           <span class="product__name">{{ product.name }}</span>
-          <span class="product__stock">{{ product.stock }} disponible</span>
+          <span class="product__stock">{{ product.stock }} {{ 'recommendations.available' | translate }}</span>
           <span class="product__unit-value"
             ><ion-icon name="cash-outline" class="product__icon" /> {{ product.unit_value | currency }}</span
           >
@@ -16,7 +16,9 @@
     </div>
   } @else {
     <div class="empty-state">
-      <p><i>No hay recomendaciones disponibles en este momento.</i></p>
+      <p>
+        <i>{{ 'recommendations.emptyMessage' | translate }}</i>
+      </p>
     </div>
   }
 </section>

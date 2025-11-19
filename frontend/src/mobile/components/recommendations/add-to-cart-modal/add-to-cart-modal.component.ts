@@ -14,6 +14,7 @@ import {
   IonText,
   ModalController,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { Product } from '@mobile/models/product.model';
 
@@ -34,6 +35,7 @@ import { Product } from '@mobile/models/product.model';
     IonLabel,
     IonInput,
     IonText,
+    TranslateModule,
   ],
 })
 export class AddToCartModalComponent {

@@ -509,5 +509,34 @@
     "visitCard": {
       "observations": "Observaciones:"
     }
+  },
+  "recommendations": {
+    "title": "Recomendaciones",
+    "emptyMessage": "No hay recomendaciones disponibles en este momento.",
+    "available": "disponible",
+    "modal": {
+      "title": "Agregar al Carrito",
+      "cancel": "Cancelar",
+      "productInfo": {
+        "price": "Precio:",
+        "available": "Disponible:",
+        "units": "unidades",
+        "storage": "Almacenamiento:"
+      },
+      "form": {
+        "quantity": {
+          "label": "Cantidad",
+          "placeholder": "Ingrese la cantidad",
+          "required": "La cantidad es requerida",
+          "min": "La cantidad debe ser al menos 1",
+          "max": "Solo hay {{maxQuantity}} unidades disponibles"
+        }
+      },
+      "subtotal": "Subtotal:",
+      "buttons": {
+        "addToCart": "Agregar recomendación al carrito",
+        "cancel": "Cancelar"
+      }
+    }
   }
 }
