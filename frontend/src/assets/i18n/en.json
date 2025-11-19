@@ -509,5 +509,34 @@
     "visitCard": {
       "observations": "Observations:"
     }
+  },
+  "recommendations": {
+    "title": "Recommendations",
+    "emptyMessage": "No recommendations available at this time.",
+    "available": "available",
+    "modal": {
+      "title": "Add to Cart",
+      "cancel": "Cancel",
+      "productInfo": {
+        "price": "Price:",
+        "available": "Available:",
+        "units": "units",
+        "storage": "Storage:"
+      },
+      "form": {
+        "quantity": {
+          "label": "Quantity",
+          "placeholder": "Enter quantity",
+          "required": "Quantity is required",
+          "min": "Quantity must be at least 1",
+          "max": "Only {{maxQuantity}} units available"
+        }
+      },
+      "subtotal": "Subtotal:",
+      "buttons": {
+        "addToCart": "Add recommendation to cart",
+        "cancel": "Cancel"
+      }
+    }
   }
 }
