@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Agregar al Carrito</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cancelar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (product) {
+    <div class="product-info">
+      <h2>{{ product.name }}</h2>
+      <p class="product-price"><strong>Precio:</strong> {{ product.unit_value | currency }}</p>
+      <p class="product-stock"><strong>Disponible:</strong> {{ product.stock }} unidades</p>
+      <p class="product-stock"><strong>Almacenamiento:</strong> {{ product.storage_conditions }}</p>
+    </div>
+
+    <form [formGroup]="quantityForm" (ngSubmit)="confirm()">
+      <ion-item>
+        <ion-label position="floating">Cantidad</ion-label>
+        <ion-input
+          type="number"
+          formControlName="quantity"
+          [min]="1"
+          [max]="maxQuantity"
+          placeholder="Ingrese la cantidad"
+        ></ion-input>
+      </ion-item>
+
+      @if (quantityControl?.invalid && quantityControl?.touched) {
+        <ion-text color="danger" class="error-message">
+          @if (quantityControl?.hasError('required')) {
+            <p>La cantidad es requerida</p>
+          }
+          @if (quantityControl?.hasError('min')) {
+            <p>La cantidad debe ser al menos 1</p>
+          }
+          @if (quantityControl?.hasError('max')) {
+            <p>Solo hay {{ maxQuantity }} unidades disponibles</p>
+          }
+        </ion-text>
+      }
+
+      <div class="subtotal">
+        <ion-text>
+          <h3>Subtotal: {{ product.unit_value * (quantityControl?.value || 0) | currency }}</h3>
+        </ion-text>
+      </div>
+
+      <div class="actions">
+        <ion-button expand="block" type="submit" [disabled]="quantityForm.invalid">
+          Agregar recomendación al carrito
+        </ion-button>
+        <ion-button (click)="cancel()" expand="block" fill="outline">Cancelar</ion-button>
+      </div>
+    </form>
+  }
+</ion-content>
