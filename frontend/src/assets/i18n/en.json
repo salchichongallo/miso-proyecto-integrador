@@ -487,5 +487,12 @@
         }
       }
     }
+  },
+  "consultVisits": {
+    "title": "Visiting Routes",
+    "empty": {
+      "title": "No results",
+      "message": "You have no visits scheduled for this day."
+    }
   }
 }

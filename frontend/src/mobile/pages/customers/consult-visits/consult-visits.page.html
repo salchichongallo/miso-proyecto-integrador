@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/customers"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'consultVisits.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="items">
+    <ion-card class="empty-state-card">
+      <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
+      <ion-card-title class="empty-state-card__title">{{ 'consultVisits.empty.title' | translate }}</ion-card-title>
+      <ion-card-content class="empty-state-card__content">
+        {{ 'consultVisits.empty.message' | translate }}</ion-card-content
+      >
+    </ion-card>
+  </div>
+</ion-content>

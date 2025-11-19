@@ -92,6 +92,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'customers/visits',
+        canActivate: [roleGuard.vendor],
+        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/customers/consult-visits/consult-visits.page').then((m) => m.ConsultVisitsPage),
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: '/tabs/customers',
