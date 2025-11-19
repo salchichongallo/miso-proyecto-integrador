@@ -18,6 +18,7 @@ import {
 } from '@ionic/angular/standalone';
 import { VisitsService, SearchResult } from '@mobile/services/visits';
 import { DateButtonComponent } from '@mobile/components/date-button/date-button.component';
+import { VisitCardItemComponent } from '@mobile/components/visit-card-item/visit-card-item.component';
 
 @Component({
   selector: 'app-consult-visits-page',
@@ -36,6 +37,7 @@ import { DateButtonComponent } from '@mobile/components/date-button/date-button.
     IonContent,
     TranslateModule,
     DateButtonComponent,
+    VisitCardItemComponent,
   ],
 })
 export class ConsultVisitsPage implements OnInit {

@@ -1,0 +1,28 @@
+<ion-card class="visit-card-item">
+  <ion-card-header class="visit-card-item__header">
+    <div class="visit-card-item__title-wrapper">
+      <ion-card-title class="visit-card-item__title">{{ position() }}. {{ visit().institution.name }}</ion-card-title>
+    </div>
+  </ion-card-header>
+  <ion-card-content class="visit-card-item__content">
+    <div class="visit-card-item__row">
+      <ion-icon name="time-outline" slot="icon" class="visit-card-item__icon"></ion-icon>
+      <span class="visit-card-item__text">{{ visit().visitedAt | localDate: 'h:mm a' }}</span>
+    </div>
+    <div class="visit-card-item__row">
+      <ion-icon name="person" slot="icon" class="visit-card-item__icon"></ion-icon>
+      <span class="visit-card-item__text">{{ visit().contactName }}</span>
+    </div>
+    <div class="visit-card-item__row">
+      <ion-icon name="location" slot="icon" class="visit-card-item__icon"></ion-icon>
+      <span class="visit-card-item__text">{{ countryLabel() }} - {{ visit().institution.location }}</span>
+    </div>
+  </ion-card-content>
+
+  <ion-card-content class="visit-card-item__content">
+    <div>
+      <p class="visit-card-item__row-observations">{{ 'consultVisits.visitCard.observations' | translate }}</p>
+      <p class="visit-card-item__text">{{ visit().observations }}</p>
+    </div>
+  </ion-card-content>
+</ion-card>

@@ -499,6 +499,9 @@
       "selectDate": {
         "label": "Select date"
       }
+    },
+    "visitCard": {
+      "observations": "Observations:"
     }
   }
 }

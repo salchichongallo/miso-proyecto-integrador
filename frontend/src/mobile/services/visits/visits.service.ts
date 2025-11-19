@@ -33,7 +33,10 @@ export class VisitsService {
       const targetDate = new Date(date).toISOString().split('T')[0];
       return visitDate === targetDate;
     });
-    return visitsOnDate;
+    const sortedByDate = visitsOnDate.sort((a, b) => {
+      return new Date(a.visit_datetime).getTime() - new Date(b.visit_datetime).getTime();
+    });
+    return sortedByDate;
   }
 
   private fetchAllVisits() {
@@ -55,6 +58,7 @@ export class VisitsService {
         observations: visit.observations,
         contactName: visit.contact_name,
         mediaItems: visit.bucket_data,
+        visitedAt: visit.visit_datetime,
         institution: {
           id: visit.client_id,
           name: customer?.name || 'N/A',

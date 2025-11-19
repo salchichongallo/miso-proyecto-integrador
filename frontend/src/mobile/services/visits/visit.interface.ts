@@ -21,6 +21,7 @@ export interface SearchResult {
 export interface VisitItem {
   visitId: string;
   institution: InstitutionItem;
+  visitedAt: string;
   observations: string;
   contactName: string;
   mediaItems: BucketItem[];

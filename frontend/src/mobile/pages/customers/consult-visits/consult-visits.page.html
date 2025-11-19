@@ -12,9 +12,7 @@
 
   <div class="items">
     @for (visit of result().visits; track visit.visitId) {
-    <li>
-      <p>{{ visit.visitId }} - {{ visit.contactName }}</p>
-    </li>
+    <app-visit-card-item [visit]="visit" [position]="$index + 1" />
     } @empty {
     <ion-card class="empty-state-card">
       <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
