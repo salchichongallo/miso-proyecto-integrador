@@ -26,6 +26,7 @@ import { CartService } from '@mobile/services/cart/cart.service';
 
 import { addIcons } from 'ionicons';
 import { location, cartOutline } from 'ionicons/icons';
+import { RecommendationsComponent } from '../../../components/recommendations/recommendations.component';
 
 @Component({
   selector: 'app-product-detail',
@@ -48,6 +49,7 @@ import { location, cartOutline } from 'ionicons/icons';
     IonButton,
     IonFooter,
     TranslateModule,
+    RecommendationsComponent,
   ],
 })
 export class ProductDetailPage implements OnInit {
@@ -67,6 +69,8 @@ export class ProductDetailPage implements OnInit {
     const navigation = history.state;
     if (navigation && navigation.product) {
       this.product = navigation.product;
+    } else {
+      this.router.navigate(['/orders/create-order-with-products']);
     }
   }
 

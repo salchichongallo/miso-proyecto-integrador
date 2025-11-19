@@ -1,0 +1,22 @@
+<section>
+  @if (recommendedProducts().length > 0) {
+    <h3 class="title">Recomendaciones</h3>
+  } @else {
+    <p>No hay recomendaciones disponibles en este momento.</p>
+  }
+
+  @if (recommendedProducts().length > 0) {
+    <div class="product-list">
+      @for (product of recommendedProducts(); track product.id) {
+        <a (click)="onProductClick($event, product)" routerLink="/orders/product-detail" class="product">
+          <ion-icon name="star" class="product__badge" />
+          <span class="product__name">{{ product.name }}</span>
+          <span class="product__stock">{{ product.stock }} disponible</span>
+          <span class="product__unit-value"
+            ><ion-icon name="cash-outline" class="product__icon" /> {{ product.unit_value | currency }}</span
+          >
+        </a>
+      }
+    </div>
+  }
+</section>
