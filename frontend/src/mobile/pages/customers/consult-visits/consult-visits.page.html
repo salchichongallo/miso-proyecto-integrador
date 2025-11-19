@@ -11,6 +11,11 @@
   <app-date-button (onChanged)="onChangeDate($event)" [label]="'consultVisits.form.selectDate.label' | translate" />
 
   <div class="items">
+    @for (visit of result().visits; track visit.visitId) {
+    <li>
+      <p>{{ visit.visitId }} - {{ visit.contactName }}</p>
+    </li>
+    } @empty {
     <ion-card class="empty-state-card">
       <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
       <ion-card-title class="empty-state-card__title">{{ 'consultVisits.empty.title' | translate }}</ion-card-title>
@@ -18,5 +23,6 @@
         {{ 'consultVisits.empty.message' | translate }}</ion-card-content
       >
     </ion-card>
+    }
   </div>
 </ion-content>

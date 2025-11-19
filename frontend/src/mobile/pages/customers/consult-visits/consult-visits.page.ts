@@ -1,7 +1,7 @@
 import { addIcons } from 'ionicons';
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { informationCircle, calendarNumber } from 'ionicons/icons';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   IonHeader,
   IonTitle,
@@ -13,7 +13,10 @@ import {
   IonIcon,
   IonCardTitle,
   IonCardContent,
+  LoadingController,
+  ToastController,
 } from '@ionic/angular/standalone';
+import { VisitsService, SearchResult } from '@mobile/services/visits';
 import { DateButtonComponent } from '@mobile/components/date-button/date-button.component';
 
 @Component({
@@ -35,14 +38,63 @@ import { DateButtonComponent } from '@mobile/components/date-button/date-button.
     DateButtonComponent,
   ],
 })
-export class ConsultVisitsPage {
-  protected selectedDate = signal<string | undefined>(new Date().toISOString());
+export class ConsultVisitsPage implements OnInit {
+  private readonly visitsService = inject(VisitsService);
+
+  readonly result = signal<SearchResult>({ total: 0, visits: [] });
+
+  readonly selectedDate = signal<string>(new Date().toISOString());
+
+  private readonly toast = inject(ToastController);
+  private readonly loader = inject(LoadingController);
+  private readonly translate = inject(TranslateService);
 
   constructor() {
     addIcons({ informationCircle, calendarNumber });
   }
 
-  onChangeDate(date: string) {
+  async ngOnInit() {
+    await this.loadVisits();
+  }
+
+  private async loadVisits() {
+    const loading = await this.showLoader();
+    try {
+      const result = await this.visitsService.search(this.selectedDate());
+      this.result.set(result);
+    } catch (error: any) {
+      console.error(error);
+      await this.showToastError(error);
+    } finally {
+      await loading.dismiss();
+    }
+  }
+
+  async onChangeDate(date: string) {
     this.selectedDate.set(date);
+    await this.loadVisits();
+  }
+
+  private async showLoader() {
+    const loading = await this.loader.create({
+      message: this.translate.instant('common.loading'),
+      keyboardClose: false,
+      backdropDismiss: false,
+    });
+    await loading.present();
+    return loading;
+  }
+
+  private async showToastError(error: unknown) {
+    await this.loader.dismiss();
+    const errorMessage = 'Error';
+    const fullMessage =
+      error && typeof error === 'object' && 'message' in error
+        ? `${errorMessage}. ${(error as { message: string }).message}`
+        : errorMessage;
+
+    return this.toast
+      .create({ message: fullMessage, duration: 7000, color: 'danger' })
+      .then((toast) => toast.present());
   }
 }

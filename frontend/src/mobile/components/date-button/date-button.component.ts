@@ -24,7 +24,9 @@ export class DateButtonComponent {
   }
 
   onChange(event: any) {
-    const isoDate = new Date(event.detail.value).toISOString();
-    this.onChanged.emit(isoDate);
+    if (event?.detail?.value) {
+      const isoDate = new Date(event.detail.value).toISOString();
+      this.onChanged.emit(isoDate);
+    }
   }
 }
