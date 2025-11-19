@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { addIcons } from 'ionicons';
-import { arrowForwardOutline, add, people } from 'ionicons/icons';
+import { arrowForwardOutline, add, people, trendingDown } from 'ionicons/icons';
 
 import {
   IonHeader,
@@ -37,6 +37,6 @@ import { HasRoleDirective } from '@shared/auth';
 })
 export class CustomersPage {
   constructor() {
-    addIcons({ arrowForwardOutline, add, people });
+    addIcons({ arrowForwardOutline, add, people, trendingDown });
   }
 }

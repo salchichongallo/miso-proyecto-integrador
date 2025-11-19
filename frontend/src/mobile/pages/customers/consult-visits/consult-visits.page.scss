@@ -1,0 +1,81 @@
+ion-searchbar {
+  --border-radius: 0.75rem;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.items {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+
+.empty-state-card {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+
+  &__icon {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  &__title {
+    text-align: center;
+    margin: 0;
+  }
+
+  &__content {
+    margin: 0;
+    text-align: center;
+  }
+}
+
+.brief {
+  margin-top: 1.5rem;
+  border: 1px solid var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+
+  &__title {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--ion-color-primary-shade);
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  &__items {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    padding-bottom: 0.5rem;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+  }
+
+  &__item-label {
+    font-size: 0.875rem;
+    margin: 0;
+    line-height: 1;
+  }
+
+  &__item-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+    color: var(--ion-color-primary);
+  }
+}

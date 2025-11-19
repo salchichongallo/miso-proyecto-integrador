@@ -10,7 +10,8 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "back": "Volver",
-    "processing": "Procesando..."
+    "processing": "Procesando...",
+    "done": "Listo"
   },
   "tabs": {
     "customers": "Clientes",
@@ -486,6 +487,27 @@
           "save": "Guardar"
         }
       }
+    }
+  },
+  "consultVisits": {
+    "title": "Rutas de visita",
+    "empty": {
+      "title": "Sin resultados",
+      "message": "No tiene visitas programadas para este día."
+    },
+    "form": {
+      "selectDate": {
+        "label": "Seleccionar fecha"
+      }
+    },
+    "brief": {
+      "title": "Resumen del día",
+      "visits": "Visitas",
+      "startedAt": "Hora de inicio",
+      "endedAt": "Hora de fin"
+    },
+    "visitCard": {
+      "observations": "Observaciones:"
     }
   }
 }

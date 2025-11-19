@@ -14,7 +14,7 @@ import { LocalDatePipe } from '@shared/pipes/local-date.pipe';
   imports: [IonIcon, NgClass, TranslateModule, CurrencyPipe, LocalDatePipe],
 })
 export class ScheduledDeliveryCardComponent {
-  readonly order = input.required<ScheduledOrder>();
+  order = input.required<ScheduledOrder>();
 
   readonly totalSum = computed(() => {
     return this.order().products.reduce((sum, product) => {

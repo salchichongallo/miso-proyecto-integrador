@@ -10,7 +10,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "done": "Done"
   },
   "tabs": {
     "customers": "Customers",
@@ -486,6 +487,27 @@
           "save": "Save"
         }
       }
+    }
+  },
+  "consultVisits": {
+    "title": "Visiting Routes",
+    "empty": {
+      "title": "No results",
+      "message": "You have no visits scheduled for this day."
+    },
+    "form": {
+      "selectDate": {
+        "label": "Select date"
+      }
+    },
+    "brief": {
+      "title": "Day Summary",
+      "visits": "Visits",
+      "startedAt": "Start time",
+      "endedAt": "End time"
+    },
+    "visitCard": {
+      "observations": "Observations:"
     }
   }
 }
