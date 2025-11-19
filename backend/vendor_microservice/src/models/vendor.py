@@ -1,7 +1,6 @@
 import os
 import logging
 import datetime
-from uuid import uuid4
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, ListAttribute, UTCDateTimeAttribute
 from marshmallow import Schema, fields, validate, ValidationError
