@@ -494,6 +494,11 @@
     "empty": {
       "title": "No results",
       "message": "You have no visits scheduled for this day."
+    },
+    "form": {
+      "selectDate": {
+        "label": "Select date"
+      }
     }
   }
 }

@@ -494,6 +494,11 @@
     "empty": {
       "title": "Sin resultados",
       "message": "No tiene visitas programadas para este día."
+    },
+    "form": {
+      "selectDate": {
+        "label": "Seleccionar fecha"
+      }
     }
   }
 }

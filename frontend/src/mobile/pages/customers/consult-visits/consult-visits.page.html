@@ -8,6 +8,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <app-date-button (onChanged)="onChangeDate($event)" [label]="'consultVisits.form.selectDate.label' | translate" />
+
   <div class="items">
     <ion-card class="empty-state-card">
       <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>

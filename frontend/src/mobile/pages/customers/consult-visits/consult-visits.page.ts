@@ -1,6 +1,6 @@
 import { addIcons } from 'ionicons';
-import { Component } from '@angular/core';
-import { informationCircle } from 'ionicons/icons';
+import { Component, signal } from '@angular/core';
+import { informationCircle, calendarNumber } from 'ionicons/icons';
 import { TranslateModule } from '@ngx-translate/core';
 import {
   IonHeader,
@@ -14,6 +14,7 @@ import {
   IonCardTitle,
   IonCardContent,
 } from '@ionic/angular/standalone';
+import { DateButtonComponent } from '@mobile/components/date-button/date-button.component';
 
 @Component({
   selector: 'app-consult-visits-page',
@@ -31,10 +32,17 @@ import {
     IonTitle,
     IonContent,
     TranslateModule,
+    DateButtonComponent,
   ],
 })
 export class ConsultVisitsPage {
+  protected selectedDate = signal<string | undefined>(new Date().toISOString());
+
   constructor() {
-    addIcons({ informationCircle });
+    addIcons({ informationCircle, calendarNumber });
+  }
+
+  onChangeDate(date: string) {
+    this.selectedDate.set(date);
   }
 }
