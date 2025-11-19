@@ -500,6 +500,12 @@
         "label": "Select date"
       }
     },
+    "brief": {
+      "title": "Day Summary",
+      "visits": "Visits",
+      "startedAt": "Start time",
+      "endedAt": "End time"
+    },
     "visitCard": {
       "observations": "Observations:"
     }

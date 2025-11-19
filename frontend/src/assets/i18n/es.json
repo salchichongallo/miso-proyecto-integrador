@@ -500,6 +500,12 @@
         "label": "Seleccionar fecha"
       }
     },
+    "brief": {
+      "title": "Resumen del día",
+      "visits": "Visitas",
+      "startedAt": "Hora de inicio",
+      "endedAt": "Hora de fin"
+    },
     "visitCard": {
       "observations": "Observaciones:"
     }

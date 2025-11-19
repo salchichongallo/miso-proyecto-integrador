@@ -1,5 +1,5 @@
 import { addIcons } from 'ionicons';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { informationCircle, calendarNumber } from 'ionicons/icons';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
@@ -19,6 +19,7 @@ import {
 import { VisitsService, SearchResult } from '@mobile/services/visits';
 import { DateButtonComponent } from '@mobile/components/date-button/date-button.component';
 import { VisitCardItemComponent } from '@mobile/components/visit-card-item/visit-card-item.component';
+import { LocalDatePipe } from '@shared/pipes/local-date.pipe';
 
 @Component({
   selector: 'app-consult-visits-page',
@@ -38,6 +39,7 @@ import { VisitCardItemComponent } from '@mobile/components/visit-card-item/visit
     TranslateModule,
     DateButtonComponent,
     VisitCardItemComponent,
+    LocalDatePipe,
   ],
 })
 export class ConsultVisitsPage implements OnInit {
@@ -50,6 +52,20 @@ export class ConsultVisitsPage implements OnInit {
   private readonly toast = inject(ToastController);
   private readonly loader = inject(LoadingController);
   private readonly translate = inject(TranslateService);
+
+  readonly brief = computed(() => {
+    const visits = this.result().visits;
+    if (visits.length === 0) {
+      return null;
+    }
+
+    const firstVisit = visits[0];
+    const lastVisit = visits[visits.length - 1];
+    return {
+      startedAt: firstVisit.visitedAt,
+      endedAt: lastVisit.visitedAt,
+    };
+  });
 
   constructor() {
     addIcons({ informationCircle, calendarNumber });

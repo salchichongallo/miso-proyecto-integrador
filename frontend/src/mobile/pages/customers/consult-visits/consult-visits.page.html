@@ -10,6 +10,32 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <app-date-button (onChanged)="onChangeDate($event)" [label]="'consultVisits.form.selectDate.label' | translate" />
 
+  <section class="brief">
+    <div class="brief__title">{{ 'consultVisits.brief.title' | translate }}</div>
+    <div class="brief__items">
+      <div class="brief__item">
+        <span class="brief__item-value">{{ result().total }}</span>
+        <span class="brief__item-label">{{ 'consultVisits.brief.visits' | translate }}</span>
+      </div>
+      <div class="brief__item">
+        @if (brief()) {
+        <span class="brief__item-value"> {{ brief()!.startedAt| localDate: 'h:mm a'}} </span>
+        } @else {
+        <span class="brief__item-value"> N/A </span>
+        }
+        <span class="brief__item-label">{{ 'consultVisits.brief.startedAt' | translate }}</span>
+      </div>
+      <div class="brief__item">
+        @if (brief()) {
+        <span class="brief__item-value"> {{ brief()!.endedAt| localDate: 'h:mm a'}} </span>
+        } @else {
+        <span class="brief__item-value"> N/A </span>
+        }
+        <span class="brief__item-label">{{ 'consultVisits.brief.endedAt' | translate }}</span>
+      </div>
+    </div>
+  </section>
+
   <div class="items">
     @for (visit of result().visits; track visit.visitId) {
     <app-visit-card-item [visit]="visit" [position]="$index + 1" />

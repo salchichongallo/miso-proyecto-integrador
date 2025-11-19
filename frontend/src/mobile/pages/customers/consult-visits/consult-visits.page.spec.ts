@@ -54,4 +54,24 @@ describe('ConsultVisitsPage', () => {
       expect(toastSpy).toHaveBeenCalled();
     });
   });
+
+  describe('brief', () => {
+    it('should return null if no visits', () => {
+      component.result.set({ total: 0, visits: [] });
+      expect(component.brief()).toBeNull();
+    });
+
+    it('should return correct brief if visits exist', () => {
+      const visits = [
+        { visitedAt: '2024-06-01T10:00:00Z' } as any,
+        { visitedAt: '2024-06-01T12:00:00Z' } as any,
+        { visitedAt: '2024-06-01T14:00:00Z' } as any,
+      ];
+      component.result.set({ total: 3, visits });
+      const brief = component.brief();
+      expect(brief).not.toBeNull();
+      expect(brief!.startedAt).toBe('2024-06-01T10:00:00Z');
+      expect(brief!.endedAt).toBe('2024-06-01T14:00:00Z');
+    });
+  });
 });
