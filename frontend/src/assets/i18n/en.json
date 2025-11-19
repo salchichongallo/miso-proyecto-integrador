@@ -10,7 +10,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "done": "Done"
   },
   "tabs": {
     "customers": "Customers",
