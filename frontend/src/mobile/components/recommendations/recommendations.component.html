@@ -1,9 +1,5 @@
 <section>
-  @if (recommendedProducts().length > 0) {
-    <h3 class="title">Recomendaciones</h3>
-  } @else {
-    <p>No hay recomendaciones disponibles en este momento.</p>
-  }
+  <h3 class="title">Recomendaciones</h3>
 
   @if (recommendedProducts().length > 0) {
     <div class="product-list">
@@ -17,6 +13,10 @@
           >
         </a>
       }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <p><i>No hay recomendaciones disponibles en este momento.</i></p>
     </div>
   }
 </section>
