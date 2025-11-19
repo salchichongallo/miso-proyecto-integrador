@@ -273,4 +273,18 @@ describe('TranslationService', () => {
       await expect(service.setLanguage('es')).resolves.not.toThrow();
     });
   });
+
+  describe('getLocale', () => {
+    it('should return correct locale for English', () => {
+      jest.spyOn(translateService, 'currentLang', 'get').mockReturnValue('en');
+      const locale = service.getLocale();
+      expect(locale).toBe('en-US');
+    });
+
+    it('should return correct locale for Spanish', () => {
+      jest.spyOn(translateService, 'currentLang', 'get').mockReturnValue('es');
+      const locale = service.getLocale();
+      expect(locale).toBe('es-CO');
+    });
+  });
 });

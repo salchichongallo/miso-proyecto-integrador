@@ -13,9 +13,8 @@ describe('LocalDatePipe', () => {
   let translationService: jest.Mocked<TranslationService>;
 
   beforeEach(() => {
-    // Arrange
     const translationServiceMock = {
-      getCurrentLanguage: jest.fn(),
+      getLocale: jest.fn(),
     } as any;
 
     TestBed.configureTestingModule({
@@ -26,64 +25,47 @@ describe('LocalDatePipe', () => {
     translationService = TestBed.inject(TranslationService) as jest.Mocked<TranslationService>;
   });
 
-  it('should create', () => {
-    // Assert
-    expect(pipe).toBeTruthy();
-  });
-
   describe('transform', () => {
     it('should return empty string when value is null or undefined', () => {
-      // Arrange
-      translationService.getCurrentLanguage.mockReturnValue('en');
+      translationService.getLocale.mockReturnValue('en-US');
 
-      // Act
       const resultNull = pipe.transform(null);
       const resultUndefined = pipe.transform(undefined);
 
-      // Assert
       expect(resultNull).toBe('');
       expect(resultUndefined).toBe('');
     });
 
     it('should format date with default format', () => {
-      // Arrange
-      translationService.getCurrentLanguage.mockReturnValue('en');
+      translationService.getLocale.mockReturnValue('en-US');
       const date = new Date('2023-12-25T10:30:00');
 
-      // Act
       const result = pipe.transform(date);
 
-      // Assert
       expect(result).toBeTruthy();
     });
 
     it('should format date with custom format', () => {
-      // Arrange
-      translationService.getCurrentLanguage.mockReturnValue('en');
+      translationService.getLocale.mockReturnValue('en-US');
       const date = new Date('2023-12-25T10:30:00');
 
-      // Act
       const result = pipe.transform(date, 'dd/MM/yyyy');
 
-      // Assert
       expect(result).toBeTruthy();
     });
 
     it('should use correct locale based on current language', () => {
-      // Arrange
       const date = new Date('2023-12-25T10:30:00');
 
-      // Act
-      translationService.getCurrentLanguage.mockReturnValue('en');
+      translationService.getLocale.mockReturnValue('en-US');
       const resultEn = pipe.transform(date);
 
-      translationService.getCurrentLanguage.mockReturnValue('es');
+      translationService.getLocale.mockReturnValue('es-CO');
       const resultEs = pipe.transform(date);
 
-      // Assert
       expect(resultEn).toBeTruthy();
       expect(resultEs).toBeTruthy();
-      expect(translationService.getCurrentLanguage).toHaveBeenCalled();
+      expect(translationService.getLocale).toHaveBeenCalled();
     });
   });
 });

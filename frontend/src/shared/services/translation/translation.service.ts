@@ -87,4 +87,13 @@ export class TranslationService {
     }
     return null;
   }
+
+  public getLocale() {
+    const lang = this.getCurrentLanguage();
+    const localeMap: Record<Language, string> = {
+      en: 'en-US',
+      es: 'es-CO',
+    };
+    return localeMap[lang];
+  }
 }
