@@ -56,7 +56,7 @@ class TestCreateUserIntegration:
 
         payload = {
             "email": "test@test.com",
-            "role": "seller"
+            "role": "vendor"
         }
 
         resp = app.post(
@@ -69,7 +69,7 @@ class TestCreateUserIntegration:
         body = resp.get_json()
 
         assert body["email"] == "test@test.com"
-        assert body["role"] == "seller"
+        assert body["role"] == "vendor"
         assert body["cognito_id"] == "generated-cognito-id-123"
         assert "message" in body  # este sí viene del comando correcto
 
@@ -105,7 +105,7 @@ class TestCreateUserIntegration:
 
         payload = {
             "email": "existing@test.com",
-            "role": "manager"
+            "role": "client"
         }
 
         resp = app.post(
