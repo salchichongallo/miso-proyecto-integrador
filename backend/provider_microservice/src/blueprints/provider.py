@@ -3,7 +3,6 @@ from ..commands.ping import PingCommand
 from ..commands.create_provider import CreateProvider
 from ..commands.view_all import GetAllProviders
 from ..commands.create_providers_bulk import CreateProvidersBulk
-from ..models.provider import NewProviderJsonSchema
 from ..errors.errors import ParamError, ApiError
 from flask_cognito import cognito_auth_required
 
@@ -16,22 +15,11 @@ def ping():
 
 # ----------------------------------------------------------
 @providers_blueprint.post("/")
-@cognito_auth_required
+# @cognito_auth_required
 def create_provider():
     try:
         json_data = request.get_json()
-        NewProviderJsonSchema.check(json_data)
-        payload = {
-            "name": json_data.get("name"),
-            "country": json_data.get("country"),
-            "nit": json_data.get("nit"),
-            "address": json_data.get("address"),
-            "email": json_data.get("email"),
-            "phone": json_data.get("phone"),
-        }
-
-        create_provider = CreateProvider(**payload).execute()
-
+        create_provider = CreateProvider(json_data).execute()
         return jsonify({
             "message": "Proveedor creado exitosamente",
             "provider": create_provider
@@ -50,7 +38,7 @@ def create_provider():
 
 
 @providers_blueprint.get("/")
-@cognito_auth_required
+# @cognito_auth_required
 def get_all_providers():
     try:
         providers = GetAllProviders().execute()
@@ -61,19 +49,19 @@ def get_all_providers():
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 
-@providers_blueprint.post("/bulk")
-@cognito_auth_required
-def bulk_upload_providers():
-    try:
-        if "file" not in request.files:
-            return jsonify({"error": "No se adjuntó ningún archivo"}), 400
+# @providers_blueprint.post("/bulk")
+# # @cognito_auth_required
+# def bulk_upload_providers():
+#     try:
+#         if "file" not in request.files:
+#             return jsonify({"error": "No se adjuntó ningún archivo"}), 400
 
-        file = request.files["file"]
-        command = CreateProvidersBulk(file.read(), file.filename)
-        result = command.execute()
-        return jsonify(result), 200
+#         file = request.files["file"]
+#         command = CreateProvidersBulk(file.read(), file.filename)
+#         result = command.execute()
+#         return jsonify(result), 200
 
-    except ApiError as e:
-        return jsonify({"error": str(e)}), 400
-    except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+#     except ApiError as e:
+#         return jsonify({"error": str(e)}), 400
+#     except Exception as e:
+#         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
