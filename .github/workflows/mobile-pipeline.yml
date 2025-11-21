@@ -20,6 +20,7 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
     environment: dev
     defaults:
       run:

@@ -67,7 +67,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: dev
     permissions:
@@ -115,7 +115,7 @@ jobs:
 
   e2e:
     needs: deploy
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
     timeout-minutes: 60
     environment: dev
     runs-on: ubuntu-latest
