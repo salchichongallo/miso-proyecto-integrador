@@ -9,7 +9,7 @@ def create_user(email: str) -> dict:
             f"{api_user_url}/",
             json={
                 "email": email,
-                "role": "vendor"
+                "role": "provider"
             }
         )
 

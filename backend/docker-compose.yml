@@ -129,6 +129,7 @@ services:
       - FLASK_ENV=development
       - APP_COGNITO_USER_POOL_ID=dummy-local-pool
       - GUNICORN_CMD_ARGS=--log-level info --reload
+      - USER_API_URL=http://192.168.1.83:3000 # TODO: Cambiar cuando el micro de users esté dockerizado
     ports:
       - "3003:3003"
     volumes:

@@ -53,7 +53,7 @@ class TestCreateUserBulkIntegration:
         payload = {
             "users": [
                 {"email": "a@test.com", "role": "admin"},
-                {"email": "b@test.com", "role": "seller"}
+                {"email": "b@test.com", "role": "vendor"}
             ]
         }
 
@@ -133,8 +133,8 @@ class TestCreateUserBulkIntegration:
 
         payload = {
             "users": [
-                {"email": "ok@test.com", "role": "seller"},
-                {"email": "exists@test.com", "role": "seller"}
+                {"email": "ok@test.com", "role": "vendor"},
+                {"email": "exists@test.com", "role": "vendor"}
             ]
         }
 

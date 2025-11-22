@@ -6,7 +6,7 @@ from ..errors.errors import ParamError, ApiError
 
 logger = logging.getLogger(__name__)
 
-ALLOWED_ROLES = {"admin", "manager", "client", "seller"}
+ALLOWED_ROLES = {"admin", "vendor", "client", "provider"}
 
 class CreateCognitoUser(BaseCommannd):
 

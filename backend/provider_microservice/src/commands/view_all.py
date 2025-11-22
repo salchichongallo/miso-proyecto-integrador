@@ -1,47 +1,25 @@
-import boto3
-from botocore.exceptions import ClientError
+import logging
 from .base_command import BaseCommannd
+from ..models.provider import ProviderModel
 from ..errors.errors import ApiError
-from ..models.db import REGION, DYNAMODB_ENDPOINT, TABLE_NAME
+
+logger = logging.getLogger(__name__)
 
 
 class GetAllProviders(BaseCommannd):
-    """Comando para obtener todos los proveedores registrados en el sistema."""
-
-    def __init__(self):
-        # 🧩 Conexión a DynamoDB (local o real según entorno)
-        if DYNAMODB_ENDPOINT:
-            self.dynamodb = boto3.resource(
-                "dynamodb",
-                region_name=REGION,
-                endpoint_url=DYNAMODB_ENDPOINT,
-                aws_access_key_id="dummy",
-                aws_secret_access_key="dummy"
-            )
-        else:
-            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-        self.table = self.dynamodb.Table(TABLE_NAME)
+    """
+    Comando para obtener todos los proveedores registrados
+    usando el modelo ProviderModel (PynamoDB).
+    """
 
     def execute(self):
-        """Ejecuta la obtención de todos los proveedores."""
-        return self.fetch_all()
-
-    def fetch_all(self):
-        """Obtiene todos los proveedores registrados (con manejo de paginación)."""
         try:
-            response = self.table.scan()
-            items = response.get("Items", [])
+            logger.info("Obteniendo todos los proveedores...")
 
-            # 🔁 Si hay más de 1MB de datos, continuar escaneando
-            while "LastEvaluatedKey" in response:
-                response = self.table.scan(ExclusiveStartKey=response["LastEvaluatedKey"])
-                items.extend(response.get("Items", []))
+            providers = ProviderModel.get_all()
 
-            # 🧾 Ordenar resultados por nombre
-            items.sort(key=lambda p: p.get("name", "").lower())
+            return providers
 
-            return items
-
-        except ClientError as e:
-            raise ApiError(f"Error al obtener la lista de proveedores: {e.response['Error']['Message']}")
+        except Exception as e:
+            logger.error(f"Error al obtener proveedores: {e}")
+            raise ApiError(f"Error al obtener la lista de proveedores: {str(e)}")
