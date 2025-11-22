@@ -15,7 +15,7 @@ def ping():
 
 # ----------------------------------------------------------
 @providers_blueprint.post("/")
-# @cognito_auth_required
+@cognito_auth_required
 def create_provider():
     try:
         json_data = request.get_json()
@@ -38,7 +38,7 @@ def create_provider():
 
 
 @providers_blueprint.get("/")
-# @cognito_auth_required
+@cognito_auth_required
 def get_all_providers():
     try:
         providers = GetAllProviders().execute()
@@ -49,19 +49,19 @@ def get_all_providers():
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
 
-# @providers_blueprint.post("/bulk")
-# # @cognito_auth_required
-# def bulk_upload_providers():
-#     try:
-#         if "file" not in request.files:
-#             return jsonify({"error": "No se adjuntó ningún archivo"}), 400
+@providers_blueprint.post("/bulk")
+@cognito_auth_required
+def bulk_upload_providers():
+    try:
+        if "file" not in request.files:
+            return jsonify({"error": "No se adjuntó ningún archivo"}), 400
 
-#         file = request.files["file"]
-#         command = CreateProvidersBulk(file.read(), file.filename)
-#         result = command.execute()
-#         return jsonify(result), 200
+        file = request.files["file"]
+        command = CreateProvidersBulk(file.read(), file.filename)
+        result = command.execute()
+        return jsonify(result), 200
 
-#     except ApiError as e:
-#         return jsonify({"error": str(e)}), 400
-#     except Exception as e:
-#         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+    except ApiError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500

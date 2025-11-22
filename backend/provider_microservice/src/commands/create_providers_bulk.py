@@ -1,155 +1,141 @@
-import boto3
 import io
-import uuid
-import re
+import hashlib
 import logging
 import pandas as pd
-import time
-from botocore.exceptions import ClientError
+
 from .base_command import BaseCommannd
-from ..errors.errors import ApiError
-from ..models.db import REGION, DYNAMODB_ENDPOINT, TABLE_NAME
+from ..models.provider import ProviderModel, NewProviderSchema
+from ..errors.errors import ParamError, ApiError
+from ..utils.user_requests import create_user
 
 logger = logging.getLogger(__name__)
 
 
 class CreateProvidersBulk(BaseCommannd):
-    """
-    Comando para registrar proveedores de forma masiva a partir de un archivo CSV o Excel.
-    Basado en la HU: MS-76 - Registro masivo de proveedores.
-    """
 
     def __init__(self, file_bytes, filename):
         self.file_bytes = file_bytes
         self.filename = filename
 
-        # 🔗 Conexión a DynamoDB
-        if DYNAMODB_ENDPOINT:
-            logger.info(f"🔗 Conectando a DynamoDB local en {DYNAMODB_ENDPOINT}")
-            self.dynamodb = boto3.resource(
-                "dynamodb",
-                region_name=REGION,
-                endpoint_url=DYNAMODB_ENDPOINT,
-                aws_access_key_id="dummy",
-                aws_secret_access_key="dummy"
-            )
-        else:
-            logger.info(f"🌍 Conectando a DynamoDB real en AWS región {REGION}")
-            self.dynamodb = boto3.resource("dynamodb", region_name=REGION)
-
-        self.table = self.dynamodb.Table(TABLE_NAME)
-
-    # ----------------------------------------------------------
     def execute(self):
-        """Ejecuta el proceso completo de carga masiva."""
-        start = time.time()
         try:
             df = self._read_file()
-            result = self._process(df)
-            result["tiempo_seg"] = round(time.time() - start, 2)
-            return result
+            return self._process(df)
+        except ParamError:
+            raise
         except Exception as e:
-            logger.error(f"❌ Error en carga masiva: {e}")
+            logger.error(f"Bulk upload error: {e}")
             raise ApiError(str(e))
 
-    # ----------------------------------------------------------
     def _read_file(self):
-        """Lee el archivo CSV o Excel usando Pandas."""
+        """Reads CSV or XLSX file and normalizes columns."""
         try:
             if self.filename.endswith(".csv"):
                 df = pd.read_csv(io.BytesIO(self.file_bytes))
             elif self.filename.endswith(".xlsx"):
                 df = pd.read_excel(io.BytesIO(self.file_bytes))
             else:
-                raise ApiError("Formato de archivo no soportado. Usa CSV o XLSX.")
+                raise ParamError("Unsupported format. Use CSV or XLSX.")
         except Exception as e:
-            raise ApiError(f"Error al leer el archivo: {e}")
+            raise ApiError(f"Error reading file: {e}")
 
-        expected = {"name", "country", "nit", "address", "email", "phone"}
-        missing = expected - set(df.columns.str.lower())
-        if missing:
-            raise ApiError(f"Faltan columnas obligatorias: {', '.join(missing)}")
-
-        # Normalizamos los nombres de columnas (por si vienen con mayúsculas)
         df.columns = df.columns.str.lower().str.strip()
 
-        # Convertir valores a string para evitar errores en validaciones
-        for col in ["nit", "phone"]:
-            df[col] = df[col].astype(str).fillna("")
+        expected = {"name", "country", "nit", "address", "email", "phone"}
+        missing = expected - set(df.columns)
+        if missing:
+            raise ParamError(f"Missing required columns: {', '.join(missing)}")
 
         return df
 
-    # ----------------------------------------------------------
     def _process(self, df: pd.DataFrame):
-        """Valida y guarda los proveedores en DynamoDB."""
-        valid_records = []
-        invalid_records = []
+        approved_records = []
+        rejected_records = []
 
-        for _, row in df.iterrows():
-            name = str(row.get("name", "")).strip()
-            country = str(row.get("country", "")).strip().upper()
-            nit = str(row.get("nit", "")).strip()
-            address = str(row.get("address", "")).strip()
-            email = str(row.get("email", "")).strip().lower()
-            phone = str(row.get("phone", "")).strip()
+        for idx, row in df.iterrows():
+            entry = {
+                "name": str(row.get("name", "")).strip(),
+                "country": str(row.get("country", "")).strip(),
+                "nit": str(row.get("nit", "")).strip(),
+                "address": str(row.get("address", "")).strip(),
+                "email": str(row.get("email", "")).strip().lower(),
+                "phone": str(row.get("phone", "")).strip(),
+            }
 
-            # Validaciones
-            if not all([name, country, nit, address, email, phone]):
-                invalid_records.append({**row.to_dict(), "error": "Campos obligatorios faltantes"})
-                continue
-
-            if not re.match(r"^\d{10}$", nit):
-                invalid_records.append({**row.to_dict(), "error": "NIT inválido (10 dígitos requeridos)"})
-                continue
-
-            if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", email):
-                invalid_records.append({**row.to_dict(), "error": "Email inválido"})
-                continue
-
-            if not re.match(r"^\d{10}$", phone):
-                invalid_records.append({**row.to_dict(), "error": "Teléfono inválido (10 dígitos requeridos)"})
-                continue
-
-            # Duplicados en DynamoDB
             try:
-                response = self.table.get_item(Key={"nit": nit})
-                if "Item" in response:
-                    invalid_records.append({**row.to_dict(), "error": "Duplicado (NIT ya existe)"})
-                    continue
-            except ClientError as e:
-                invalid_records.append({**row.to_dict(), "error": f"Error DynamoDB: {e}"})
-                continue
+                NewProviderSchema.check(entry)
 
-            # Si pasa todas las validaciones
-            valid_records.append({
-                "provider_id": str(uuid.uuid4()),
-                "nit": nit,
-                "name": name,
-                "country": country,
-                "address": address,
-                "email": email,
-                "phone": phone
-            })
+                if ProviderModel.find_by_email(entry["email"]):
+                    raise ParamError("Email already exists")
 
-        # Guardar válidos en lote
-        if valid_records:
-            with self.table.batch_writer() as batch:
-                for item in valid_records:
-                    batch.put_item(Item=item)
+                if ProviderModel.find(entry["nit"]):
+                    raise ParamError("NIT already exists")
+
+                user = create_user(email=entry["email"])
+                provider_id = user.get("cognito_id")
+
+                nit_encrypted = hashlib.sha256(entry["nit"].encode()).hexdigest()
+
+                ProviderModel.create(
+                    nit=entry["nit"],
+                    nit_encrypted=nit_encrypted,
+                    provider_id=provider_id,
+                    name=entry["name"],
+                    country=entry["country"],
+                    address=entry["address"],
+                    email=entry["email"],
+                    phone=entry["phone"],
+                )
+
+                approved_records.append({
+                    "index": idx,
+                    "provider_id": provider_id,
+                    "nit": entry["nit"],
+                    "name": entry["name"],
+                    "country": entry["country"],
+                    "address": entry["address"],
+                    "email": entry["email"],
+                    "phone": entry["phone"],
+                    "status": "created"
+                })
+
+            except ParamError as e:
+                rejected_records.append({
+                    "index": idx,
+                    "nit": entry["nit"],
+                    "name": entry["name"],
+                    "country": entry["country"],
+                    "address": entry["address"],
+                    "email": entry["email"],
+                    "phone": entry["phone"],
+                    "error": str(e)
+                })
+            except Exception as e:
+                rejected_records.append({
+                    "index": idx,
+                    "nit": entry["nit"],
+                    "name": entry["name"],
+                    "country": entry["country"],
+                    "address": entry["address"],
+                    "email": entry["email"],
+                    "phone": entry["phone"],
+                    "error": str(e)
+                })
 
         total = len(df)
-        success = len(valid_records)
-        rate = (success / total) * 100 if total > 0 else 0
+        success_count = len(approved_records)
+        success_rate = (success_count / total * 100) if total > 0 else 0
 
         return {
-            "total_registros": total,
-            "registros_exitosos": success,
-            "registros_rechazados": len(invalid_records),
-            "tasa_exito": f"{rate:.2f}%",
-            "rechazados": invalid_records,
-            "mensaje": (
-                "✅ Carga masiva exitosa."
-                if rate >= 95
-                else "⚠️ Carga parcial: menos del 95% de registros válidos."
+            "total_records": total,
+            "successful_records": success_count,
+            "rejected_records": len(rejected_records),
+            "success_rate": f"{success_rate:.2f}%",
+            "approved": approved_records,
+            "rejected": rejected_records,
+            "message": (
+                "Bulk upload successful."
+                if success_rate >= 95
+                else "Partial upload: less than 95% valid records."
             ),
         }
