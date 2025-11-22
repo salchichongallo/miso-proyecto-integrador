@@ -11,14 +11,10 @@ class TestCreateProductsBulkCommand:
     @patch("src.commands.create_products_bulk.ProductModel")
     def test_execute_carga_masiva_exitosa(self, mock_product_model):
         """✅ Carga masiva exitosa con productos válidos"""
-        # Mock del método find_existing_product para simular que no hay duplicados
         mock_product_model.find_existing_product.return_value = None
+        mock_instance = MagicMock()
+        mock_product_model.return_value = mock_instance
 
-        # Mock de las instancias de ProductModel para save()
-        mock_product_instance = MagicMock()
-        mock_product_model.return_value = mock_product_instance
-
-        # DataFrame con productos válidos
         df = pd.DataFrame([
             {
                 "provider_nit": "1234567890",
@@ -50,41 +46,32 @@ class TestCreateProductsBulkCommand:
             cmd = CreateProductsBulk(b"fake_bytes", "productos.csv")
             result = cmd.execute()
 
-        assert result["exitosos"] == 2
-        assert result["rechazados"] == 0
-        assert "Carga completada" in result["mensaje"]
+        assert result["successful_records"] == 2
+        assert result["rejected_records"] == 0
+        assert "completed" in result["message"].lower()
 
-        # Verificar que se llamó find_existing_product para cada producto
         assert mock_product_model.find_existing_product.call_count == 2
-
-        # Verificar que se crearon 2 instancias del modelo
         assert mock_product_model.call_count == 2
-
-        # Verificar que se llamó save() en cada instancia
-        assert mock_product_instance.save.call_count == 2
+        assert mock_instance.save.call_count == 2
 
     # ⚙️ Test: formato no soportado
     def test_read_file_formato_no_soportado(self):
-        """⚙️ Lanza ApiError si el formato no es CSV ni XLSX"""
         cmd = CreateProductsBulk(b"contenido", "productos.txt")
         with pytest.raises(ApiError, match="Formato no soportado"):
             cmd._read_file()
 
     # ⚙️ Test: faltan columnas obligatorias
     def test_read_file_faltan_columnas(self):
-        """⚙️ Lanza ApiError si faltan columnas requeridas"""
         data = "name,stock\nProducto,10"
         cmd = CreateProductsBulk(data.encode(), "productos.csv")
+
         with patch("pandas.read_csv", return_value=pd.DataFrame({"name": ["A"], "stock": [10]})):
             with pytest.raises(ApiError, match="Faltan columnas"):
                 cmd._read_file()
 
     # 🚫 Test: stock negativo
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_stock_negativo(self, mock_product_model):
-        """🚫 No debe aceptar stock negativo"""
-        # No necesitamos mock de tabla para esta validación
-
+    def test_process_stock_negativo(self, mock_model):
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Producto", "product_type": "Tipo",
             "stock": -5, "expiration_date": "2030-01-01", "temperature_required": 10,
@@ -94,15 +81,12 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert result["rechazados"] == 1
-        assert "Stock debe ser positivo" in result["rechazados_detalle"][0]["error"]
+        assert result["rejected_records"] == 1
+        assert "Stock debe ser positivo" in result["rejected"][0]["error"]
 
     # 🚫 Test: valor unitario inválido
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_unit_value_invalido(self, mock_product_model):
-        """🚫 Valor unitario debe ser mayor que 0"""
-        # No necesitamos mock para esta validación de lógica de negocio
-
+    def test_process_unit_value_invalido(self, mock_model):
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
             "stock": 5, "expiration_date": "2030-01-01", "temperature_required": 10,
@@ -112,15 +96,12 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert result["rechazados"] == 1
-        assert "Valor unitario debe ser mayor que 0" in result["rechazados_detalle"][0]["error"]
+        assert result["rejected_records"] == 1
+        assert "Valor unitario" in result["rejected"][0]["error"]
 
     # 🚫 Test: fecha inválida
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_fecha_invalida(self, mock_product_model):
-        """🚫 Fecha con formato incorrecto"""
-        # No necesitamos mock para esta validación
-
+    def test_process_fecha_invalida(self, mock_model):
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
             "stock": 5, "expiration_date": "31-12-2030", "temperature_required": 10,
@@ -130,15 +111,12 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert result["rechazados"] == 1
-        assert "Formato de fecha inválido" in result["rechazados_detalle"][0]["error"]
+        assert result["rejected_records"] == 1
+        assert "Formato de fecha inválido" in result["rejected"][0]["error"]
 
     # 🚫 Test: fecha vencida
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_fecha_vencida(self, mock_product_model):
-        """🚫 No debe aceptar fecha de vencimiento anterior"""
-        # No necesitamos mock para esta validación
-
+    def test_process_fecha_vencida(self, mock_model):
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
             "stock": 5, "expiration_date": "2020-01-01", "temperature_required": 10,
@@ -148,16 +126,14 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert result["rechazados"] == 1
-        assert "Fecha de vencimiento inválida" in result["rechazados_detalle"][0]["error"]
+        assert result["rejected_records"] == 1
+        assert "Fecha de vencimiento inválida" in result["rejected"][0]["error"]
 
-    # ⚠️ Test: duplicado existente en DynamoDB
+    # ⚠️ Test: duplicado existente en DB
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_duplicado_existente(self, mock_product_model):
-        """⚠️ Detecta duplicado existente en la base de datos"""
-        # Mock para simular que existe un producto duplicado
-        mock_existing_product = MagicMock()
-        mock_product_model.find_existing_product.return_value = mock_existing_product
+    def test_process_duplicado_existente(self, mock_model):
+        mock_existing = MagicMock()
+        mock_model.find_existing_product.return_value = mock_existing
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -168,22 +144,18 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert result["rechazados"] == 1
-        assert "Duplicado" in result["rechazados_detalle"][0]["error"]
+        assert result["rejected_records"] == 1
+        assert "Duplicado" in result["rejected"][0]["error"]
 
-        # Verificar que se llamó find_existing_product con warehouse y sku generado
-        # El sku se genera como uuid, así que solo verificamos que fue llamado
-        mock_product_model.find_existing_product.assert_called_once()
-        call_args = mock_product_model.find_existing_product.call_args[0]
-        assert call_args[0] == "1"  # warehouse por defecto
-        assert len(call_args[1]) == 32  # sku generado como uuid hex
+        mock_model.find_existing_product.assert_called_once()
+        call_args = mock_model.find_existing_product.call_args[0]
+        assert call_args[0] == "1"
+        assert len(call_args[1]) == 32
 
-    # ⚡ Test: error ProductModel
+    # ⚡ Test: error modelo
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_error_modelo(self, mock_product_model):
-        """⚡ Maneja error del modelo correctamente"""
-        # Mock para simular error al buscar duplicados
-        mock_product_model.find_existing_product.side_effect = Exception("Falla de red")
+    def test_process_error_modelo(self, mock_model):
+        mock_model.find_existing_product.side_effect = Exception("Falla de red")
 
         df = pd.DataFrame([{
             "provider_nit": "123", "name": "Prod", "product_type": "Tipo",
@@ -194,15 +166,13 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert result["rechazados"] == 1
-        assert "Error al verificar duplicados" in result["rechazados_detalle"][0]["error"]
+        assert result["rejected_records"] == 1
+        assert "Error al verificar duplicados" in result["rejected"][0]["error"]
 
-    # ✅ Test: carga parcial (<100%)
+    # ✅ Test: carga parcial
     @patch("src.commands.create_products_bulk.ProductModel")
-    def test_process_carga_parcial(self, mock_product_model):
-        """✅ Carga parcial con 1 producto válido y 1 rechazado"""
-        # Mock para simular que no hay duplicados
-        mock_product_model.find_existing_product.return_value = None
+    def test_process_carga_parcial(self, mock_model):
+        mock_model.find_existing_product.return_value = None
 
         df = pd.DataFrame([
             {
@@ -220,6 +190,6 @@ class TestCreateProductsBulkCommand:
         cmd = CreateProductsBulk(b"", "productos.csv")
         result = cmd._process(df)
 
-        assert "Carga parcial" in result["mensaje"]
-        assert result["rechazados"] == 1
-        assert result["exitosos"] == 1
+        assert result["rejected_records"] == 1
+        assert result["successful_records"] == 1
+        assert "partial" in result["message"].lower()
