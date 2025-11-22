@@ -149,11 +149,29 @@ class CreateProductsBulk(BaseCommannd):
         fail = len(invalid)
         rate = (success / total * 100) if total > 0 else 0
 
+        # Convertir cada producto válido a estructura aprobada
+        approved = [
+            {
+                "index": idx,
+                "sku": item.get("sku"),
+                "name": item.get("name"),
+                "provider_nit": item.get("provider_nit"),
+                "product_type": item.get("product_type"),
+                "batch": item.get("batch"),
+                "expiration_date": item.get("expiration_date"),
+                "unit_value": item.get("unit_value"),
+                "stock": item.get("stock"),
+                "status": "created"
+            }
+            for idx, item in enumerate(valid)
+        ]
+
         return {
-            "total_registros": total,
-            "exitosos": success,
-            "rechazados": fail,
-            "tasa_exito": f"{rate:.2f}%",
-            "rechazados_detalle": invalid,
-            "mensaje": "Carga completada" if fail == 0 else "Carga parcial",
+            "approved": approved,
+            "message": "Bulk upload completed." if fail == 0 else "Bulk upload partially completed.",
+            "rejected": invalid,
+            "rejected_records": fail,
+            "successful_records": success,
+            "total_records": total,
+            "success_rate": f"{rate:.2f}%"
         }
