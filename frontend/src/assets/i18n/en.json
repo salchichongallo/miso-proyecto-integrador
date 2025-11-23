@@ -551,5 +551,13 @@
     "submit": "Upload and process",
     "uploadSuccessMessage": "Suppliers uploaded successfully.",
     "errorUpload": "Error loading suppliers."
+  },
+  "productBulk": {
+    "title": "Product Bulk Upload",
+    "uploadText": "Click to select a file",
+    "allowedFormats": "Allowed format: CSV",
+    "submit": "Upload and process",
+    "uploadSuccessMessage": "Products uploaded successfully.",
+    "errorUpload": "Error loading products."
   }
 }

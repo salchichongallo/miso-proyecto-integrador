@@ -545,11 +545,19 @@
     }
   },
   "supplierBulk": {
-    "title": "Masivo proveedores",
+    "title": "Registro masivo de proveedores",
     "uploadText": "Haz clic para seleccionar un archivo",
     "allowedFormats": "Formato permitido: CSV",
     "submit": "Cargar y procesar",
     "uploadSuccessMessage": "Proveedores cargados exitosamente.",
     "errorUpload": "Error al cargar los proveedores."
+  },
+  "productBulk": {
+    "title": "Registro masivo de productos",
+    "uploadText": "Haz clic para seleccionar un archivo",
+    "allowedFormats": "Formato permitido: CSV",
+    "submit": "Cargar y procesar",
+    "uploadSuccessMessage": "Productos cargados exitosamente.",
+    "errorUpload": "Error al cargar los productos."
   }
 }

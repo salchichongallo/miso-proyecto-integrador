@@ -19,17 +19,19 @@ import { addIcons } from 'ionicons';
 import { cloudUploadOutline } from 'ionicons/icons';
 
 import { ProductService } from '@web/services/product/product.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-bulk-upload',
   templateUrl: './product-bulk-upload.page.html',
   styleUrls: ['./product-bulk-upload.page.scss'],
-  imports: [IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon],
+  imports: [IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, TranslateModule],
 })
 export class ProductBulkUploadPage {
   private readonly productService = inject(ProductService);
   private readonly loadingController = inject(LoadingController);
   private readonly toastController = inject(ToastController);
+  private readonly translate = inject(TranslateService);
 
   selectedFile: File | null = null;
   fileName = '';
@@ -69,11 +71,15 @@ export class ProductBulkUploadPage {
         next: () => {
           this.selectedFile = null;
           this.fileName = '';
-          this.showSuccessMessage('Productos cargados exitosamente.');
+          const message = this.translate.instant('productBulk.uploadSuccessMessage');
+          this.showSuccessMessage(message);
         },
         error: (httpError: HttpErrorResponse) => {
           const message =
-            httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al cargar los productos.';
+            httpError.error?.error ??
+            httpError.error?.message ??
+            httpError.message ??
+            this.translate.instant('productBulk.uploadErrorMessage');
           this.showErrorMessage(message);
         },
       });
