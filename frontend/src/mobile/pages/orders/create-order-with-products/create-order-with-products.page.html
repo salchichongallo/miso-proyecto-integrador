@@ -15,7 +15,7 @@
     type="text"
     [placeholder]="'orders.createPage.search.placeholder' | translate"
     [(ngModel)]="searchQuery"
-    (ionInput)="onSearchChange()"
+    (ionInput)="delayedSearchChange()"
     clearInput
     fill="outline"
     [disabled]="isLoading()"
@@ -23,52 +23,50 @@
 
   <!-- Loading State -->
   @if (isLoading()) {
-    <div class="loading-container">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>{{ 'orders.createPage.loading' | translate }}</p>
-    </div>
+  <div class="loading-container">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>{{ 'orders.createPage.loading' | translate }}</p>
+  </div>
   }
 
   <!-- Error State -->
   @else if (errorMessage()) {
-    <div class="error-container">
-      <ion-icon name="alert-circle-outline" color="danger" class="error-icon"></ion-icon>
-      <h3>{{ 'orders.createPage.error.title' | translate }}</h3>
-      <p>{{ errorMessage() }}</p>
-      <ion-button (click)="retryLoad()" fill="outline">
-        {{ 'orders.createPage.error.button' | translate }}
-      </ion-button>
-    </div>
+  <div class="error-container">
+    <ion-icon name="alert-circle-outline" color="danger" class="error-icon"></ion-icon>
+    <h3>{{ 'orders.createPage.error.title' | translate }}</h3>
+    <p>{{ errorMessage() }}</p>
+    <ion-button (click)="retryLoad()" fill="outline"> {{ 'orders.createPage.error.button' | translate }} </ion-button>
+  </div>
   }
 
   <!-- Empty State -->
   @else if (products().length === 0) {
-    <div class="empty-container">
-      <ion-icon name="search-outline" color="medium" class="empty-icon"></ion-icon>
-      <h3>{{ 'orders.createPage.empty.title' | translate }}</h3>
-      <p>{{ 'orders.createPage.empty.message' | translate }}</p>
-    </div>
+  <div class="empty-container">
+    <ion-icon name="search-outline" color="medium" class="empty-icon"></ion-icon>
+    <h3>{{ 'orders.createPage.empty.title' | translate }}</h3>
+    <p>{{ 'orders.createPage.empty.message' | translate }}</p>
+  </div>
   }
 
   <!-- Products List -->
   @else {
-    <section class="products-list">
-      @for (product of products(); track $index) {
-        <ion-item [button]="true" detail="false" class="product-item" (click)="viewProductDetail(product)">
-          <div class="unread-indicator-wrapper" slot="start">
-            <img src="/assets/icon/icons8-pills-48.png" alt="Producto" />
-          </div>
-          <ion-label>
-            <strong>{{ product.name }}</strong> <br />
-            <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
-          </ion-label>
-          <div class="metadata-end-wrapper" slot="end">
-            <ion-note color="medium">{{ 'orders.createPage.availability' | translate }}</ion-note> <br />
-            <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
-          </div>
-        </ion-item>
-      }
-    </section>
+  <section class="products-list">
+    @for (product of products(); track $index) {
+    <ion-item [button]="true" detail="false" class="product-item" (click)="viewProductDetail(product)">
+      <div class="unread-indicator-wrapper" slot="start">
+        <img src="/assets/icon/icons8-pills-48.png" alt="Producto" />
+      </div>
+      <ion-label>
+        <strong>{{ product.name }}</strong> <br />
+        <ion-note color="medium" class="ion-text-wrap">{{ product.product_type }}</ion-note>
+      </ion-label>
+      <div class="metadata-end-wrapper" slot="end">
+        <ion-note color="medium">{{ 'orders.createPage.availability' | translate }}</ion-note> <br />
+        <ion-note color="success"><p class="stock">{{ product.stock }}</p></ion-note>
+      </div>
+    </ion-item>
+    }
+  </section>
   }
 
   <div class="fab-wrapper" [class.fab-visible]="cartItemCount() > 0">
@@ -78,9 +76,9 @@
       </ion-fab-button>
     </ion-fab>
     @if (cartItemCount() > 0) {
-      <div class="fab-badge-wrapper">
-        <ion-badge color="danger">{{ cartItemCount() }}</ion-badge>
-      </div>
+    <div class="fab-badge-wrapper">
+      <ion-badge color="danger">{{ cartItemCount() }}</ion-badge>
+    </div>
     }
   </div>
 </ion-content>
