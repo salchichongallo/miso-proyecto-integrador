@@ -7,6 +7,7 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 import {
   IonHeader,
@@ -65,6 +66,7 @@ function positiveNumberValidator(control: AbstractControl): ValidationErrors | n
     IonSelect,
     IonSelectOption,
     IonInput,
+    TranslateModule,
   ],
 })
 export class AddProductModalComponent {

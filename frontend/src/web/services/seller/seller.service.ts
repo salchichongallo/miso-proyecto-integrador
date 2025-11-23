@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 
 import { SellerReport } from '../../pages/seller-report/interfaces/seller-report.interface';
 
 import { RegisterSellerRequest } from '@web/pages/seller-registration/interfaces/register-seller-request.interface';
 import { RegisterSellerResponse } from '@web/pages/seller-registration/interfaces/register-seller-response.interface';
-import { Vendor } from './interfaces/vendor.interface';
+import { Vendor, VendorResponse } from './interfaces/vendor.interface';
 import { HttpSellerReport } from './interfaces/seller-report.response';
 
 import { environment } from '@env/environment';
@@ -24,7 +24,14 @@ export class SellerService {
   }
 
   public getVendors(): Observable<Vendor[]> {
-    return this.http.get<Vendor[]>(this.baseUrl + '/');
+    return this.http.get<VendorResponse[]>(this.baseUrl + '/').pipe(
+      map((response) =>
+        response.map((vendor) => ({
+          ...vendor,
+          institutions: vendor.institutions.map((it) => it.name),
+        })),
+      ),
+    );
   }
 
   public async getReport(sellerId: string): Promise<SellerReport> {

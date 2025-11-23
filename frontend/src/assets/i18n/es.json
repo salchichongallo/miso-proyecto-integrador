@@ -559,5 +559,55 @@
     "submit": "Cargar y procesar",
     "uploadSuccessMessage": "Productos cargados exitosamente.",
     "errorUpload": "Error al cargar los productos."
+  },
+  "salesPlan": {
+    "title": "Crear plan de venta para vendedor",
+    "assignedVendor": "Vendedor asignado",
+    "assignedVendorPlaceholder": "Seleccione el vendedor",
+    "vendorRequired": "El vendedor es requerido",
+    "region": "Región",
+    "regionPlaceholder": "Seleccione una región",
+    "regionRequired": "La región es requerida",
+    "period": "Período",
+    "periodPlaceholder": "Seleccione el período",
+    "periodRequired": "El período es requerido",
+    "product": "Producto:",
+    "goal": "Meta:",
+    "units": "unidades",
+    "value": "Valor:",
+    "addProductButton": "AÑADIR PRODUCTO",
+    "reviewAndCreate": "REVISAR Y CREAR PLAN",
+    "table": {
+      "seller": "Vendedor",
+      "email": "Correo corporativo",
+      "institutions": "Instituciones"
+    },
+    "modalProduct": {
+      "title": "Añadir producto",
+      "product": {
+        "label": "Producto",
+        "placeholder": "Seleccione un producto",
+        "required": "El producto es requerido"
+      },
+      "goal": {
+        "label": "Meta (unidades)",
+        "placeholder": "Ingrese la meta en unidades",
+        "required": "La meta en unidades es requerida",
+        "positiveInteger": "Debe ser un número entero positivo"
+      },
+      "value": {
+        "label": "Valor",
+        "placeholder": "Ingrese el valor objetivo",
+        "required": "El valor es requerido",
+        "min": "El valor debe ser un número positivo"
+      },
+      "addButton": "Añadir"
+    },
+    "zeroSelectedProducts": "Debe agregar al menos un producto al plan de venta",
+    "alreadyAdded": "Este producto ya ha sido agregado al plan",
+    "genericVendorError": "Error al cargar los vendedores.",
+    "creatingPlan": "Creando plan de venta...",
+    "planCreated": "Plan de venta creado exitosamente.",
+    "genericError": "Error al crear el plan de venta."
   }
 }

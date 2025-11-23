@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular/standalone';
 import { of, throwError } from 'rxjs';
@@ -102,7 +102,7 @@ describe('SalesPlanCreationPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SalesPlanCreationPage],
+      imports: [SalesPlanCreationPage, TranslateModule.forRoot()],
       providers: [
         { provide: SalesPlanService, useValue: salesPlanServiceMock },
         { provide: SellerService, useValue: sellerServiceMock },
@@ -271,7 +271,7 @@ describe('SalesPlanCreationPage', () => {
       component.onSubmit();
 
       expect(toastController.create).toHaveBeenCalledWith({
-        message: 'Debe agregar al menos un producto al plan de venta',
+        message: expect.any(String),
         duration: 3000,
         position: 'top',
         color: 'danger',
@@ -411,7 +411,7 @@ describe('SalesPlanCreationPage', () => {
       component.addProduct(productData);
 
       expect(toastController.create).toHaveBeenCalledWith({
-        message: 'Este producto ya ha sido agregado al plan',
+        message: expect.any(String),
         duration: 3000,
         position: 'top',
         color: 'danger',
@@ -492,7 +492,7 @@ describe('SalesPlanCreationPage', () => {
       await fixture.whenStable();
 
       expect(loadingController.create).toHaveBeenCalledWith({
-        message: 'Creando plan de venta...',
+        message: expect.any(String),
       });
       expect(mockLoading.present).toHaveBeenCalled();
       expect(salesPlanService.createSalesPlan).toHaveBeenCalledWith({
@@ -510,7 +510,7 @@ describe('SalesPlanCreationPage', () => {
       });
       expect(loadingController.dismiss).toHaveBeenCalled();
       expect(toastController.create).toHaveBeenCalledWith({
-        message: 'Plan de venta creado exitosamente.',
+        message: expect.any(String),
         duration: 3000,
         position: 'top',
       });

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModalController } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AddProductModalComponent } from './add-product-modal.component';
 import { Product } from '@mobile/models/product.model';
@@ -60,7 +61,7 @@ describe('AddProductModalComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [AddProductModalComponent],
+      imports: [AddProductModalComponent, TranslateModule.forRoot()],
       providers: [{ provide: ModalController, useValue: modalControllerMock }],
     }).compileComponents();
 
