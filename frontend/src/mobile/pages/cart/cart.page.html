@@ -25,7 +25,16 @@
     </ion-button>
   </div>
   } @else {
-  <div class="cart-content ion-padding">
+  <form [formGroup]="checkoutForm" class="cart-content ion-padding">
+    <ion-item *ifHasRole="'vendor'">
+      <ion-label position="stacked"> {{ 'orders.cart.form.customer.label' | translate }} </ion-label>
+      <ion-select formControlName="id_client" [placeholder]="'orders.cart.form.customer.placeholder' | translate">
+        @for (customer of clientsList(); track customer.id) {
+        <ion-select-option [value]="customer.id">{{ customer.name }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
     <!-- Cart Items -->
     <ion-card>
       <ion-card-header>
@@ -99,7 +108,7 @@
         <ion-card-title>{{ 'orders.cart.sections.delivery' | translate }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <form [formGroup]="checkoutForm">
+        <div>
           <ion-input
             [label]="'orders.cart.form.country.label' | translate"
             labelPlacement="stacked"
@@ -147,7 +156,7 @@
             fill="outline"
             class="ion-margin-bottom"
           ></ion-input>
-        </form>
+        </div>
       </ion-card-content>
     </ion-card>
 
@@ -171,7 +180,7 @@
         </div>
       </ion-card-content>
     </ion-card>
-  </div>
+  </form>
   }
 </ion-content>
 

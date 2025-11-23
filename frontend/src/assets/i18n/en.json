@@ -172,6 +172,10 @@
         "summary": "Order summary"
       },
       "form": {
+        "customer": {
+          "label": "Client",
+          "placeholder": "Select a client"
+        },
         "country": {
           "label": "Country",
           "placeholder": "Select a country"

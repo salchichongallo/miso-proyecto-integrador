@@ -172,6 +172,10 @@
         "summary": "Resumen del pedido"
       },
       "form": {
+        "customer": {
+          "label": "Cliente",
+          "placeholder": "Seleccione un cliente"
+        },
         "country": {
           "label": "País",
           "placeholder": "Seleccione un país"
