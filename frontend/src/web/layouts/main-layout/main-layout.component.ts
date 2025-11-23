@@ -15,7 +15,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, logOutOutline, languageOutline } from 'ionicons/icons';
@@ -57,13 +57,13 @@ export class MainLayoutComponent implements OnInit {
 
   private readonly pageTitles: { [key: string]: string } = {
     '/home': 'MISO - MediSupply',
-    '/seller-registration': 'Registrar vendedor',
-    '/supplier-registration': 'Registrar proveedor',
-    '/supplier-bulk-upload': 'Registro masivo de proveedores',
-    '/product-registration': 'Registrar producto',
-    '/product-bulk-upload': 'Registro masivo de productos',
-    '/seller-report': 'Consulta de reportes e informes de los vendedores',
-    '/delivery-routes': 'Generación de rutas de entrega',
+    '/seller-registration': 'web.seller.registration.title',
+    '/supplier-registration': 'web.supplier.registration.title',
+    '/supplier-bulk-upload': 'supplierBulk.title',
+    '/product-registration': 'web.product.registration.title',
+    '/product-bulk-upload': 'productBulk.title',
+    '/seller-report': 'web.home.menu.sellerReport.title',
+    '/delivery-routes': 'web.home.menu.deliveryRoutes.title',
     '/style-demo': 'Demostración de estilos',
   };
 
@@ -72,6 +72,7 @@ export class MainLayoutComponent implements OnInit {
     private readonly location: Location,
     private readonly authService: AuthService,
     private readonly translationService: TranslationService,
+    private readonly translate: TranslateService,
   ) {
     addIcons({ arrowBackOutline, logOutOutline, languageOutline });
     this.currentLanguage = this.translationService.getCurrentLanguage();
@@ -84,6 +85,9 @@ export class MainLayoutComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.updatePageTitle(event.urlAfterRedirects);
       }
+    });
+    this.translate.onLangChange.subscribe(() => {
+      this.updatePageTitle(this.router.url);
     });
   }
 
@@ -103,7 +107,12 @@ export class MainLayoutComponent implements OnInit {
   }
 
   private updatePageTitle(url: string): void {
-    this.pageTitle = this.pageTitles[url] ?? 'MISO - MediSupply';
+    if (this.pageTitles[url]) {
+      this.pageTitle = this.translate.instant(this.pageTitles[url]);
+    } else {
+      this.pageTitle = 'MISO - MediSupply';
+    }
+
     this.showBackButton = url !== '/home';
   }
 }
