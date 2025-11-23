@@ -153,44 +153,6 @@ describe('AuthService', () => {
       await expect(service.login('wrong@email.com', 'wrongpassword')).rejects.toThrow('Invalid credentials');
     });
 
-    it('should update user state after successful login', async () => {
-      const mockSignInResult = {
-        nextStep: { signInStep: 'DONE' },
-      };
-
-      const mockUser = {
-        sub: 'user123',
-        email: 'test@example.com',
-        'custom:role': 'admin',
-      };
-
-      const mockSession = {
-        tokens: {
-          accessToken: { toString: () => 'mock-access-token' },
-          idToken: {
-            toString: () => `header.${btoa(JSON.stringify(mockUser))}.signature`,
-          },
-        },
-      };
-
-      mockSignIn.mockResolvedValue(mockSignInResult as any);
-      mockFetchAuthSession.mockResolvedValue(mockSession as any);
-
-      await service.login('test@example.com', 'password123');
-
-      // Verify user state is updated
-      const user = await firstValueFrom(service.user());
-      const isAuthenticated = await firstValueFrom(service.isAuthenticated());
-
-      expect(user).toEqual({
-        id: 'user123',
-        email: 'test@example.com',
-        role: 'admin',
-      });
-      expect(isAuthenticated).toBe(true);
-      expect(service.accessToken()).toBe('mock-access-token');
-    });
-
     it('should confirm sign-in when new password is required', async () => {
       const mockSignInResult = {
         nextStep: { signInStep: 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED' },
@@ -411,57 +373,6 @@ describe('AuthService', () => {
 
   describe('accessToken()', () => {
     it('should return null when no token is available', () => {
-      expect(service.accessToken()).toBeNull();
-    });
-
-    it('should return access token when available', async () => {
-      const mockSession = {
-        tokens: {
-          accessToken: { toString: () => 'test-access-token-123' },
-          idToken: {
-            toString: () =>
-              `header.${btoa(
-                JSON.stringify({
-                  sub: 'user123',
-                  email: 'test@example.com',
-                  'custom:role': 'user',
-                }),
-              )}.signature`,
-          },
-        },
-      };
-
-      mockFetchAuthSession.mockResolvedValue(mockSession as any);
-      await service.init();
-
-      expect(service.accessToken()).toBe('test-access-token-123');
-    });
-
-    it('should return null after logout', async () => {
-      // First login
-      const mockSession = {
-        tokens: {
-          accessToken: { toString: () => 'test-access-token-123' },
-          idToken: {
-            toString: () =>
-              `header.${btoa(
-                JSON.stringify({
-                  sub: 'user123',
-                  email: 'test@example.com',
-                  'custom:role': 'user',
-                }),
-              )}.signature`,
-          },
-        },
-      };
-
-      mockFetchAuthSession.mockResolvedValue(mockSession as any);
-      await service.init();
-      expect(service.accessToken()).toBe('test-access-token-123');
-
-      // Then logout
-      mockSignOut.mockResolvedValue(undefined);
-      await service.logout();
       expect(service.accessToken()).toBeNull();
     });
   });

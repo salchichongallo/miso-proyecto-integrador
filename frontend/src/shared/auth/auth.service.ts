@@ -21,7 +21,7 @@ export class AuthService {
   private async checkAuthState() {
     try {
       const session = await fetchAuthSession();
-      this.accessTokenSubject.next(session.tokens!.accessToken!.toString());
+      this.accessTokenSubject.next(session.tokens!.idToken!.toString());
 
       const payload = JSON.parse(atob(session.tokens!.idToken!.toString().split('.')[1]));
       const user: User = {
