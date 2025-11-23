@@ -362,6 +362,11 @@
         "buttons": {
           "cancel": "Cancelar",
           "submit": "Registrar vendedor"
+        },
+        "clientsModal": {
+          "title": "Agregar institución",
+          "cancelButton": "Cancelar",
+          "addButton": "Agregar"
         }
       }
     },

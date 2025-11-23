@@ -15,6 +15,7 @@ import {
   IonRadio,
   IonRadioGroup,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 import { CustomersService } from '@web/services/customers/customers.service';
 import { InstitutionalClient } from '@web/services/customers/institutional-client.interface';
 
@@ -35,6 +36,7 @@ import { InstitutionalClient } from '@web/services/customers/institutional-clien
     IonCol,
     IonRadio,
     IonRadioGroup,
+    TranslateModule,
   ],
   providers: [CustomersService],
 })

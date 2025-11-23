@@ -1,6 +1,7 @@
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { ModalController } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { CustomersService } from '@web/services/customers/customers.service';
 import { InstitutionalClient } from '@web/services/customers/institutional-client.interface';
@@ -25,6 +26,7 @@ describe('AddInstitutionModalComponent', () => {
         CustomersService,
         { provide: ModalController, useValue: modalControllerMock },
       ],
+      imports: [TranslateModule.forRoot()],
     });
 
     service = TestBed.inject(CustomersService) as jest.Mocked<CustomersService>;

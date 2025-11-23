@@ -362,6 +362,11 @@
         "buttons": {
           "cancel": "Cancel",
           "submit": "Register seller"
+        },
+        "clientsModal": {
+          "title": "Select institutions",
+          "cancelButton": "Cancel",
+          "addButton": "Add"
         }
       }
     },

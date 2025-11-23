@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Agregar institución</ion-title>
+    <ion-title>{{ 'web.seller.registration.clientsModal.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -20,12 +20,12 @@
       <ion-row>
         <ion-col size="6">
           <ion-button onkeypress="" expand="block" fill="outline" color="primary" type="button" (click)="onCancel()">
-            Cancelar
+            {{ 'web.seller.registration.clientsModal.cancelButton' | translate }}
           </ion-button>
         </ion-col>
         <ion-col size="6">
           <ion-button expand="block" color="primary" type="submit" [disabled]="!selectedInstitution()">
-            Agregar
+            {{ 'web.seller.registration.clientsModal.addButton' | translate }}
           </ion-button>
         </ion-col>
       </ion-row>
