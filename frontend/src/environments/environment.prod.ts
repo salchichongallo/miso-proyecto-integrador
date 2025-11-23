@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: '#{APP_API_URL}#',
+  baseUrl: '#{APP_WEB_BASE_URL}#',
   clientMicroserviceUrl: '#{APP_CLIENT_MICROSERVICE_URL}#',
   vendorMicroserviceUrl: '#{APP_VENDOR_MICROSERVICE_URL}#',
   providerMicroserviceUrl: '#{APP_PROVIDER_MICROSERVICE_URL}#',

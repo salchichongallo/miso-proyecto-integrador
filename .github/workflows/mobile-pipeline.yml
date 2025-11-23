@@ -94,6 +94,7 @@ jobs:
           APP_COGNITO_IDENTITY_POOL_ID: ${{ vars.APP_COGNITO_IDENTITY_POOL_ID }}
           APP_S3_MEDIA_BUCKET_NAME: ${{ vars.APP_S3_MEDIA_BUCKET_NAME }}
           APP_S3_MEDIA_REGION: ${{ vars.APP_S3_MEDIA_REGION }}
+          APP_WEB_BASE_URL: ${{ vars.APP_WEB_BASE_URL }}
 
       - name: Build Android App
         run: npm run build:android

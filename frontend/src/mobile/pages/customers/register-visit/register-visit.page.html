@@ -1,0 +1,143 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/customers" [text]="''"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'customers.visit.title' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Error State -->
+  @if (hasError) {
+  <div class="error-state">
+    <!-- Error Banner -->
+    <div class="error-banner">
+      <p class="error-title">{{ 'customers.visit.error.title' | translate }}</p>
+    </div>
+
+    <!-- Error Message -->
+    <p class="error-message">{{ 'customers.visit.error.message' | translate }}</p>
+
+    <!-- Retry Button -->
+    <ion-button expand="block" color="primary" class="retry-button" (click)="onRetry()">
+      {{ 'customers.visit.error.retry' | translate }}
+    </ion-button>
+  </div>
+  }
+
+  <!-- Form (hidden when there's an error) -->
+  @if (!hasError) {
+  <form [formGroup]="visitForm" (ngSubmit)="onSubmit()" class="visit-form">
+    <!-- Información del cliente -->
+    <div class="section">
+      <h2 class="section-title">{{ 'customers.visit.sections.clientInfo' | translate }}</h2>
+
+      <ion-item lines="none" class="select-item">
+        <ion-select
+          formControlName="institutionalClient"
+          [placeholder]="'customers.visit.form.institutionalClient.placeholder' | translate"
+          interface="popover"
+        >
+          @for (client of institutionalClients; track $index) {
+          <ion-select-option [value]="client.client_id"> {{ client.name }} </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none" class="select-item">
+        <ion-select
+          formControlName="contactPerson"
+          [placeholder]="'customers.visit.form.contactPerson.placeholder' | translate"
+          interface="popover"
+        >
+          @for (person of contactPersons; track $index) {
+          <ion-select-option [value]="person.name"> {{ person.name }} </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <!-- Detalles de la visita -->
+    <div class="section">
+      <h2 class="section-title">{{ 'customers.visit.sections.visitDetails' | translate }}</h2>
+
+      <div class="input-row">
+        <div class="input-wrapper">
+          <ion-item lines="none" class="date-time-item">
+            <ion-label position="stacked">{{ 'customers.visit.form.visitDate.label' | translate }}</ion-label>
+            <ion-input type="date" formControlName="visitDate" placeholder="dd/mm/aaaa"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="input-wrapper">
+          <ion-item lines="none" class="date-time-item">
+            <ion-label position="stacked">{{ 'customers.visit.form.visitTime.label' | translate }}</ion-label>
+            <ion-input type="time" formControlName="visitTime" placeholder="hh:mm"></ion-input>
+          </ion-item>
+        </div>
+      </div>
+
+      <ion-item lines="none" class="observations-item">
+        <ion-label position="stacked">{{ 'customers.visit.form.observations.label' | translate }}</ion-label>
+        <ion-input
+          type="text"
+          formControlName="observations"
+          [placeholder]="'customers.visit.form.observations.placeholder' | translate"
+        ></ion-input>
+      </ion-item>
+    </div>
+
+    <!-- Evidencia visual -->
+    <div class="section">
+      <h2 class="section-title">{{ 'customers.visit.sections.visualEvidence' | translate }}</h2>
+
+      <ion-button expand="block" fill="outline" class="upload-button" type="button" (click)="onLoadMedia()">
+        {{ 'customers.visit.form.loadMedia' | translate }} @if (selectedMediaFiles.length > 0) {
+        <span class="file-count-badge">({{ selectedMediaFiles.length }})</span>
+        }
+      </ion-button>
+
+      <!-- Selected Files List -->
+      @if (selectedMediaFiles.length > 0) {
+      <div class="selected-files-list">
+        @for (file of selectedMediaFiles; track $index) {
+        <div class="file-item">
+          <div class="file-preview">
+            <img [src]="file.s3Path" class="preview-image" />
+          </div>
+
+          <div class="file-info">
+            <p class="file-name">{{ file.name }}</p>
+          </div>
+
+          <ion-button fill="clear" color="danger" class="remove-button" (click)="removeMediaFile($index)">
+            <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+          </ion-button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Submit Button -->
+    <div class="submit-container">
+      <ion-button
+        expand="block"
+        type="submit"
+        color="primary"
+        class="submit-button"
+        [disabled]="isLoading || visitForm.invalid"
+      >
+        @if (isLoading) {
+        <ion-spinner name="crescent"></ion-spinner>
+        } @if (!isLoading) {
+        <span>{{ 'customers.visit.form.submit' | translate }}</span>
+        } @if (isLoading) {
+        <span>{{ 'common.processing' | translate }}</span>
+        }
+      </ion-button>
+    </div>
+  </form>
+  }
+</ion-content>

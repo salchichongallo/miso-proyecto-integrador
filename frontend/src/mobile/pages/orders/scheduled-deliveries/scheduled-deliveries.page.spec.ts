@@ -1,7 +1,7 @@
-import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
 import { TranslateService } from '@ngx-translate/core';
+import { of } from 'rxjs';
 import { OrderService } from '@mobile/services/order/order.service';
 import { ScheduledDeliveriesPage } from './scheduled-deliveries.page';
 

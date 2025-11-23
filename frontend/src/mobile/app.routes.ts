@@ -46,6 +46,16 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'customers/register-visit',
+        loadComponent: () =>
+          import('./pages/customers/register-visit/register-visit.page').then((m) => m.RegisterVisitPage),
+      },
+      {
+        path: 'customers/visit-confirmation',
+        loadComponent: () =>
+          import('./pages/customers/visit-confirmation/visit-confirmation.page').then((m) => m.VisitConfirmationPage),
+      },
+      {
         path: 'customers/my-clients',
         canActivate: [roleGuard.vendor],
         pathMatch: 'full',

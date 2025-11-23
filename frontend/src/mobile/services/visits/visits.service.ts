@@ -5,7 +5,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { CustomersService } from '../customers/customers.service';
 
-import { SearchResult, RawVisit, VisitItem } from './visit.interface';
+import { SearchResult, RawVisit, VisitItem, CreateVisitRequest } from './visit.interface';
 import { InstitutionalClientData } from '../../models';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +15,12 @@ export class VisitsService {
   private readonly baseUrl = environment.vendorMicroserviceUrl;
 
   private customersService = inject(CustomersService);
+
+  async create(visitData: CreateVisitRequest): Promise<RawVisit> {
+    const url = `${this.baseUrl}/visits/`;
+    const request = this.http.post<RawVisit>(url, visitData);
+    return firstValueFrom(request);
+  }
 
   async search(date: string): Promise<SearchResult> {
     const visits = await this.getVisitsFor(date);

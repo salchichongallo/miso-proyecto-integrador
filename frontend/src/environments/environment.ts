@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: process.env['APP_API_URL']!,
+  baseUrl: process.env['APP_WEB_BASE_URL']!,
   clientMicroserviceUrl: process.env['APP_CLIENT_MICROSERVICE_URL']!,
   vendorMicroserviceUrl: process.env['APP_VENDOR_MICROSERVICE_URL']!,
   providerMicroserviceUrl: process.env['APP_PROVIDER_MICROSERVICE_URL']!,

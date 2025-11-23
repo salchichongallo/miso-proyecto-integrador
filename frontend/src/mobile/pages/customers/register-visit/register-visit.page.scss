@@ -1,0 +1,318 @@
+// Gradient background matching Figma design
+ion-content {
+  --background: linear-gradient(
+    to right,
+    rgba(44, 86, 132, 0.024),
+    rgba(78, 153, 234, 0.075)
+  );
+  --padding-top: 40px;
+}
+
+.visit-form {
+  padding: 0;
+}
+
+.section {
+  margin-bottom: 40px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #383a3e;
+    margin: 0 0 20px 20px;
+    line-height: 1.2;
+  }
+}
+
+// Select items styling
+.select-item {
+  --background: white;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  --min-height: 56px;
+  margin: 0 20px 20px 20px;
+  border-radius: 0;
+  box-shadow: 0px 7px 0px 0px #ffffff, 0px 8px 0px 0px rgba(0, 0, 0, 0.25);
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  ion-select {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.87);
+    width: 100%;
+    padding: 12px 0;
+    letter-spacing: 0.15px;
+
+    &::part(placeholder) {
+      color: rgba(0, 0, 0, 0.87);
+      opacity: 1;
+    }
+  }
+}
+
+// Date and Time row
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin: 0 20px 20px 20px;
+
+  .input-wrapper {
+    flex: 1;
+    min-width: 0; // Prevents flex items from overflowing
+  }
+}
+
+.date-time-item {
+  --background: white;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  --min-height: 56px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+
+  ion-label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.87);
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+
+  ion-input {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.87);
+    letter-spacing: 0.15px;
+    --padding-top: 0;
+    --padding-bottom: 5px;
+    min-width: 0; // Prevents input overflow
+    max-width: 100%;
+
+    &::part(native) {
+      padding: 0;
+      min-width: 0;
+    }
+  }
+}
+
+// Observations item
+.observations-item {
+  --background: white;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 0;
+  --min-height: 49px;
+  margin: 0 20px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+
+  ion-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.87);
+    letter-spacing: 0.15px;
+    margin-bottom: 0;
+    padding-top: 15px;
+  }
+
+  ion-input {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #666666;
+    letter-spacing: 0.15px;
+    --padding-top: 0;
+    --padding-bottom: 0;
+  }
+}
+
+// Upload button (dashed border)
+.upload-button {
+  margin: 0 20px;
+  height: 40px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.84px;
+  --border-style: dashed;
+  --border-color: black;
+  --border-width: 1px;
+  --color: black;
+  --border-radius: 8px;
+  position: relative;
+
+  .file-count-badge {
+    margin-left: 8px;
+    font-weight: 600;
+  }
+}
+
+// Selected files list
+.selected-files-list {
+  margin: 20px;
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+    .file-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-right: 12px;
+      flex-shrink: 0;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .video-preview {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e0e0e0;
+
+        .video-icon {
+          font-size: 32px;
+          color: #666;
+        }
+      }
+    }
+
+    .file-info {
+      flex: 1;
+      min-width: 0;
+      margin-right: 8px;
+
+      .file-name {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #383a3e;
+        margin: 0 0 4px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .file-size {
+        font-family: 'Roboto', sans-serif;
+        font-size: 12px;
+        color: #666666;
+        margin: 0 0 2px 0;
+      }
+
+      .file-duration {
+        font-family: 'Roboto', sans-serif;
+        font-size: 12px;
+        color: #4e99ea;
+        margin: 0;
+      }
+    }
+
+    .remove-button {
+      --padding-start: 4px;
+      --padding-end: 4px;
+      margin: 0;
+      height: 40px;
+      width: 40px;
+
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+// Submit button container
+.submit-container {
+  margin: 40px 20px 20px 20px;
+}
+
+.submit-button {
+  height: 36px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.84px;
+  --border-radius: 4px;
+
+  ion-spinner {
+    margin-right: 8px;
+  }
+}
+
+// Error state styling
+.error-state {
+  padding-top: 51px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-banner {
+  background-color: rgba(235, 68, 90, 0.15);
+  border: 1px solid #cf3c4f;
+  border-radius: 8px;
+  width: 330px;
+  margin: 0 auto;
+}
+
+.error-title {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #52000b;
+  text-transform: uppercase;
+  letter-spacing: 0.84px;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+  line-height: 2.57;
+}
+
+.error-message {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #404040;
+  width: 291px;
+  margin: 60px auto 0;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.retry-button {
+  width: 335px;
+  height: 36px;
+  margin: 45px 20px 0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.84px;
+  --border-radius: 4px;
+}

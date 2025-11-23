@@ -17,6 +17,12 @@
       <ion-label>{{ 'customers.registerInstitutional' | translate }}</ion-label>
       <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
     </ion-item>
+
+    <ion-item *ifHasRole="'vendor'" button="true" [routerLink]="['/customers/register-visit']">
+      <ion-icon slot="start" name="calendar-outline"></ion-icon>
+      <ion-label>{{ 'customers.registerVisit' | translate }}</ion-label>
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-item>
     <ion-item *ifHasRole="'vendor'" button="true" [routerLink]="['/customers/my-clients']">
       <ion-icon slot="start" name="people"></ion-icon>
       <ion-label>Mis clientes</ion-label>

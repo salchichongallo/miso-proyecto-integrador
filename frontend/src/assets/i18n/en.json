@@ -42,6 +42,7 @@
   "customers": {
     "title": "Customers",
     "registerInstitutional": "Register institutional client",
+    "registerVisit": "Register client visit",
     "register": {
       "title": "Institutional Client Registration",
       "form": {
@@ -80,6 +81,62 @@
         "loading": "Registering institutional client...",
         "success": "Institutional client registered successfully.",
         "error": "Error registering institutional client. Please try again."
+      }
+    },
+    "visit": {
+      "title": "Register client visit",
+      "sections": {
+        "clientInfo": "Client information",
+        "visitDetails": "Visit details",
+        "visualEvidence": "Visual evidence"
+      },
+      "form": {
+        "institutionalClient": {
+          "placeholder": "Institutional client",
+          "required": "You must select an institutional client"
+        },
+        "contactPerson": {
+          "placeholder": "Contact person",
+          "required": "You must select a contact person"
+        },
+        "visitDate": {
+          "label": "Date",
+          "required": "Visit date is required"
+        },
+        "visitTime": {
+          "label": "Time",
+          "required": "Visit time is required"
+        },
+        "observations": {
+          "label": "Additional observations",
+          "placeholder": " "
+        },
+        "loadMedia": "Load multimedia",
+        "submit": "Register visit"
+      },
+      "error": {
+        "title": "Error registering visit",
+        "message": "An unexpected error occurred while registering the client visit, please try registering again.",
+        "retry": "Try again",
+        "generic": "Error registering visit"
+      },
+      "mediaUpload": {
+        "success": "{{count}} file(s) selected successfully",
+        "error": "Error selecting files. Please check permissions and try again.",
+        "permissionDenied": "Permission denied. You need to authorize gallery access to upload files."
+      },
+      "success": {
+        "title": "Visit registered",
+        "message": "Client visit has been registered successfully"
+      },
+      "confirmation": {
+        "successTitle": "Visit registered successfully",
+        "successMessage": "The information has been saved and is available for future reference.",
+        "summaryTitle": "Visit summary",
+        "client": "Client",
+        "contact": "Contact",
+        "dateTime": "Date and time",
+        "registerNewVisit": "Register new visit"
       }
     }
   },

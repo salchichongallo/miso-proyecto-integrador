@@ -11,7 +11,7 @@ module.exports = {
       functions: 70,
       lines: 70,
       statements: 70,
-    }
+    },
   },
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
@@ -28,7 +28,7 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|@ionic|@stencil|@capacitor|ionicons|nanoid)'],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|@angular|@ionic|@stencil|@capacitor|ionicons|nanoid|uuid)'],
   moduleFileExtensions: ['ts', 'html', 'js', 'json', 'mjs'],
   moduleNameMapper: {
     '^ionicons/(.*)$': '<rootDir>/node_modules/ionicons/$1',

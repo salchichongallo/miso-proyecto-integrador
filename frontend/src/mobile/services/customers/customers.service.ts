@@ -23,6 +23,10 @@ export class CustomersService {
     return this.http.post<CreateInstitutionalClientResponse>(`${this.baseUrl}/`, data);
   }
 
+  public getInstitutionalClients(): Observable<InstitutionalClientData[]> {
+    return this.http.get<InstitutionalClientData[]>(`${this.baseUrl}/`);
+  }
+
   public getAll() {
     const url = `${this.baseUrl}/`;
     return this.http.get<InstitutionalClientData[]>(url).pipe(
