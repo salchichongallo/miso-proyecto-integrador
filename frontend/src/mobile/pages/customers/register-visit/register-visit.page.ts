@@ -47,9 +47,9 @@ interface ClientVisit {
   observations: string;
 }
 
-interface MediaFileWithPath extends MediaFile {
+interface MediaFileWithPath {
   s3Path?: string;
-  uploading?: boolean;
+  name: string;
 }
 
 @Component({
@@ -134,15 +134,8 @@ export class RegisterVisitPage implements OnInit {
       return;
     }
 
-    // Check if any files are still uploading
-    const stillUploading = this.selectedMediaFiles.some((f) => f.uploading);
-    if (stillUploading) {
-      await this.showToast(this.translate.instant('customers.visit.error.filesUploading'), 'warning');
-      return;
-    }
-
     // Check if any files failed to upload
-    const failedUploads = this.selectedMediaFiles.filter((f) => !f.uploading && !f.s3Path);
+    const failedUploads = this.selectedMediaFiles.filter((f) => !f.s3Path);
     if (failedUploads.length > 0) {
       await this.showToast(this.translate.instant('customers.visit.error.uploadFailed'), 'danger');
       return;
@@ -188,9 +181,7 @@ export class RegisterVisitPage implements OnInit {
   protected async registerVisit(visitData: ClientVisit): Promise<void> {
     try {
       // Collect S3 paths from already uploaded files
-      const bucketData: string[] = this.selectedMediaFiles
-        .filter((f) => f.s3Path)
-        .map((f) => f.s3Path as string);
+      const bucketData: string[] = this.selectedMediaFiles.filter((f) => f.s3Path).map((f) => f.s3Path as string);
 
       // Combine date and time into ISO datetime
       const visitDateTime = this.combineDateTime(visitData.visitDate, visitData.visitTime);
@@ -213,17 +204,6 @@ export class RegisterVisitPage implements OnInit {
     }
   }
 
-  private async convertMediaFileToFile(mediaFile: MediaFile): Promise<File> {
-    try {
-      const response = await fetch(mediaFile.webPath);
-      const blob = await response.blob();
-      return new File([blob], mediaFile.name, { type: mediaFile.mimeType });
-    } catch (error) {
-      console.error('Error converting MediaFile to File:', error);
-      throw new Error('Failed to convert media file');
-    }
-  }
-
   private combineDateTime(date: string, time: string): string {
     // Combine date and time in ISO format
     return `${date}T${time}:00`;
@@ -231,47 +211,15 @@ export class RegisterVisitPage implements OnInit {
 
   async onLoadMedia(): Promise<void> {
     try {
-      const files = await this.mediaPickerService.pickMedia(true);
+      const media = await this.mediaPickerService.pickMedia2();
 
-      if (files.length > 0) {
-        // Add files to the list with uploading state
-        const filesWithPath: MediaFileWithPath[] = files.map((file) => ({
-          ...file,
-          uploading: true,
-        }));
-        this.selectedMediaFiles = [...this.selectedMediaFiles, ...filesWithPath];
-
-        // Upload each file to S3
-        for (let i = 0; i < filesWithPath.length; i++) {
-          try {
-            const mediaFile = filesWithPath[i];
-            const file = await this.convertMediaFileToFile(mediaFile);
-            const uploadResult = await this.mediaService.upload(file);
-
-            // Update the file in the array with the S3 path
-            const index = this.selectedMediaFiles.findIndex((f) => f === mediaFile);
-            if (index !== -1) {
-              this.selectedMediaFiles[index].s3Path = uploadResult.path;
-              this.selectedMediaFiles[index].uploading = false;
-            }
-          } catch (uploadError) {
-            console.error('Error uploading file:', uploadError);
-            // Mark as failed by removing uploading flag but no s3Path
-            const mediaFile = filesWithPath[i];
-            const index = this.selectedMediaFiles.findIndex((f) => f === mediaFile);
-            if (index !== -1) {
-              this.selectedMediaFiles[index].uploading = false;
-            }
-            await this.showToast(this.translate.instant('customers.visit.mediaUpload.uploadError'), 'danger');
-          }
-        }
-
-        await this.showToast(
-          this.translate.instant('customers.visit.mediaUpload.success', {
-            count: files.length,
-          }),
-          'success',
-        );
+      try {
+        const uploadResult = await this.mediaService.upload(media.file);
+        await this.showToast(this.translate.instant('customers.visit.mediaUpload.success', { count: 1 }), 'success');
+        this.selectedMediaFiles = [{ s3Path: uploadResult.fullUrl, name: uploadResult.name }];
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        await this.showToast(this.translate.instant('customers.visit.mediaUpload.uploadError'), 'danger');
       }
     } catch (error) {
       console.error('Error picking media:', error);

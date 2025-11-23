@@ -1,6 +1,8 @@
+import { v4 as uuid } from 'uuid';
 import { Injectable } from '@angular/core';
 import { uploadData } from 'aws-amplify/storage';
 import { MEDIA_BUCKET_ALIAS } from '../../constants/storage.constant';
+import { environment } from '../../../environments/environment';
 
 export interface UploadResult {
   /**
@@ -9,6 +11,8 @@ export interface UploadResult {
    * @example media/xxx-xxxx-filename.ext
    */
   path: string;
+  fullUrl: string;
+  name: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -21,10 +25,11 @@ export class MediaService {
       options: { bucket: MEDIA_BUCKET_ALIAS },
     });
     const item = await task.result;
-    return { path: item.path };
+    const fullUrl = `${environment.baseUrl}/${item.path}`;
+    return { path: item.path, fullUrl, name: file.name };
   }
 
   private generateFileName(file: File) {
-    return `${self.crypto.randomUUID()}-${file.name}`;
+    return `${uuid()}-${file.name}`;
   }
 }

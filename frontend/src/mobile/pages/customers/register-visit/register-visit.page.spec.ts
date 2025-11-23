@@ -8,6 +8,11 @@ import { of } from 'rxjs';
 import { RegisterVisitPage } from './register-visit.page';
 import { CustomersService } from '@mobile/services/customers/customers.service';
 import { MediaPickerService, MediaFile } from '@mobile/services/media-picker/media-picker.service';
+import { VisitsService } from '../../../services/visits';
+import { MediaService } from '../../../../shared/services/media/media.service';
+
+jest.mock('../../../services/visits');
+jest.mock('../../../../shared/services/media/media.service');
 
 describe('RegisterVisitPage', () => {
   let component: RegisterVisitPage;
@@ -17,6 +22,8 @@ describe('RegisterVisitPage', () => {
   let mockMediaPickerService: Partial<jest.Mocked<MediaPickerService>>;
   let mockToastController: Partial<jest.Mocked<ToastController>>;
   let mockTranslateService: Partial<jest.Mocked<TranslateService>>;
+  let mockVisitsService: any;
+  let mockMediaService: any;
 
   const mockMediaFile: MediaFile = {
     path: '/storage/emulated/0/DCIM/Camera/IMG_20240115_123456.jpg',
@@ -40,10 +47,19 @@ describe('RegisterVisitPage', () => {
 
     mockMediaPickerService = {
       pickMedia: jest.fn(),
+      pickMedia2: jest.fn(),
       isImage: jest.fn(),
       isVideo: jest.fn(),
       formatFileSize: jest.fn(),
       getFilePreview: jest.fn(),
+    };
+
+    mockVisitsService = {
+      create: jest.fn(),
+    };
+
+    mockMediaService = {
+      upload: jest.fn(),
     };
 
     const mockToast = {
@@ -66,6 +82,8 @@ describe('RegisterVisitPage', () => {
         { provide: MediaPickerService, useValue: mockMediaPickerService },
         { provide: ToastController, useValue: mockToastController },
         { provide: TranslateService, useValue: mockTranslateService },
+        { provide: VisitsService, useValue: mockVisitsService },
+        { provide: MediaService, useValue: mockMediaService },
       ],
     });
 
@@ -75,6 +93,8 @@ describe('RegisterVisitPage', () => {
     const mediaPickerService = TestBed.inject(MediaPickerService);
     const toastController = TestBed.inject(ToastController);
     const translateService = TestBed.inject(TranslateService);
+    const visitService = TestBed.inject(VisitsService);
+    const mediaService = TestBed.inject(MediaService);
 
     component = new RegisterVisitPage(
       mockFormBuilder,
@@ -83,6 +103,8 @@ describe('RegisterVisitPage', () => {
       mediaPickerService,
       toastController,
       translateService,
+      mediaService,
+      visitService,
     );
     component.ngOnInit();
   });
@@ -95,6 +117,7 @@ describe('RegisterVisitPage', () => {
     expect(component.visitForm).toBeDefined();
     expect(component.visitForm.get('institutionalClient')?.value).toBe('');
     expect(component.visitForm.get('contactPerson')?.value).toBe('');
+    expect(component.visitForm.get('contactPhone')?.value).toBe('');
     expect(component.visitForm.get('visitDate')?.value).toBe('');
     expect(component.visitForm.get('visitTime')?.value).toBe('');
     expect(component.visitForm.get('observations')?.value).toBe('');
@@ -140,8 +163,8 @@ describe('RegisterVisitPage', () => {
       visitTime: '10:30',
     });
 
-    // Mock Math.random to always fail
-    jest.spyOn(Math, 'random').mockReturnValue(0.8);
+    // Mock visits service to throw an error
+    mockVisitsService.create.mockRejectedValue(new Error('Network error'));
 
     await component.onSubmit();
 
@@ -149,55 +172,36 @@ describe('RegisterVisitPage', () => {
     expect(component.errorMessage).toBeTruthy();
   });
 
-  // TODO: Re-enable this test when backend integration is complete
-  // Currently, registerVisit always fails (shouldFail = true), so testing success path requires mocking protected methods
-  // which creates type issues. This will be fixed when real API integration is implemented.
-  it.skip('should navigate to confirmation page on successful registration', async () => {
-    component.institutionalClients = [
-      {
-        client_id: '1',
-        name: 'Hospital Test',
-        tax_id: '123',
-        country: 'CO',
-        level: 'III',
-        specialty: 'Test',
-        location: 'Test Location',
-        message: '',
-      },
-    ];
-
-    component.visitForm.patchValue({
-      institutionalClient: '1',
-      contactPerson: 'Dr. Test',
-      visitDate: '2024-01-15',
-      visitTime: '10:30',
-    });
-
-    // This test will be re-enabled when backend is integrated
-    // For now, it's skipped because shouldFail is hardcoded to true
-  });
-
   it('should select media files when onLoadMedia is called', async () => {
-    (mockMediaPickerService.pickMedia as jest.Mock).mockResolvedValue([mockMediaFile]);
+    const mockPickResult = {
+      file: new File(['test'], 'IMG_20240115_123456.jpg', { type: 'image/jpeg' }),
+      webPath: mockMediaFile.webPath,
+    };
+    (mockMediaPickerService.pickMedia2 as jest.Mock).mockResolvedValue(mockPickResult);
+    (mockMediaService.upload as jest.Mock).mockResolvedValue({
+      fullUrl: 's3://bucket/IMG_20240115_123456.jpg',
+      name: 'IMG_20240115_123456.jpg',
+    });
 
     await component.onLoadMedia();
 
-    expect(mockMediaPickerService.pickMedia).toHaveBeenCalledWith(true);
+    expect(mockMediaPickerService.pickMedia2).toHaveBeenCalled();
     expect(component.selectedMediaFiles).toHaveLength(1);
     expect(component.selectedMediaFiles[0].name).toBe('IMG_20240115_123456.jpg');
     expect(mockToastController.create).toHaveBeenCalled();
   });
 
   it('should not show toast when user cancels file picker', async () => {
-    (mockMediaPickerService.pickMedia as jest.Mock).mockResolvedValue([]);
+    (mockMediaPickerService.pickMedia2 as jest.Mock).mockRejectedValue(new Error('User cancelled'));
 
     await component.onLoadMedia();
 
     expect(component.selectedMediaFiles).toHaveLength(0);
+    expect(mockToastController.create).toHaveBeenCalled();
   });
 
   it('should handle error when picking media files', async () => {
-    (mockMediaPickerService.pickMedia as jest.Mock).mockRejectedValue(new Error('Permission denied'));
+    (mockMediaPickerService.pickMedia2 as jest.Mock).mockRejectedValue(new Error('Permission denied'));
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
     await component.onLoadMedia();
@@ -282,6 +286,7 @@ describe('RegisterVisitPage', () => {
     expect(component.visitForm.value).toEqual({
       institutionalClient: null,
       contactPerson: null,
+      contactPhone: null,
       visitDate: null,
       visitTime: null,
       observations: null,

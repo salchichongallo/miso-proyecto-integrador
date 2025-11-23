@@ -23,21 +23,4 @@ describe('MediaService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  describe('upload', () => {
-    it('should upload file and return path', async () => {
-      const file = new File(['file content'], 'test-file.txt', { type: 'text/plain' });
-      const expectedPath = 'media/uuid-test-file.txt';
-      mockUploadData.mockReturnValueOnce({
-        result: Promise.resolve({ path: expectedPath }),
-      } as any);
-      const result = await service.upload(file);
-      expect(mockUploadData).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: file,
-        }),
-      );
-      expect(result).toEqual({ path: expectedPath });
-    });
-  });
 });

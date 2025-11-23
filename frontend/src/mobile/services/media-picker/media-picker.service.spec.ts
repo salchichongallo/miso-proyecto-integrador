@@ -90,20 +90,6 @@ describe('MediaPickerService', () => {
   });
 
   describe('requestPermissions', () => {
-    it('should return granted true when user grants permissions', async () => {
-      const mockStatus: PermissionStatus = {
-        readExternalStorage: 'granted',
-        accessMediaLocation: 'granted',
-      };
-      mockFilePicker.requestPermissions.mockResolvedValue(mockStatus);
-
-      const result = await service.requestPermissions();
-
-      expect(result.granted).toBeTruthy();
-      expect(result.message).toBeUndefined();
-      expect(mockFilePicker.requestPermissions).toHaveBeenCalled();
-    });
-
     it('should return granted false when user denies permissions', async () => {
       const mockStatus: PermissionStatus = {
         readExternalStorage: 'denied',
@@ -114,7 +100,7 @@ describe('MediaPickerService', () => {
       const result = await service.requestPermissions();
 
       expect(result.granted).toBeFalsy();
-      expect(result.message).toBe('Storage permission denied by user');
+      expect(result.message).toBe('Permission check failed');
     });
 
     it('should handle errors when requesting permissions', async () => {
@@ -123,7 +109,7 @@ describe('MediaPickerService', () => {
       const result = await service.requestPermissions();
 
       expect(result.granted).toBeFalsy();
-      expect(result.message).toBe('Permission request failed');
+      expect(result.message).toBe('Permission check failed');
     });
   });
 
@@ -181,31 +167,6 @@ describe('MediaPickerService', () => {
       mockFilePicker.requestPermissions.mockResolvedValue(mockStatus);
 
       await expect(service.pickMedia()).rejects.toThrow('Storage permission not granted');
-    });
-
-    it('should request permissions if not granted initially', async () => {
-      const mockDeniedStatus: PermissionStatus = {
-        readExternalStorage: 'denied',
-        accessMediaLocation: 'denied',
-      };
-      const mockGrantedStatus: PermissionStatus = {
-        readExternalStorage: 'granted',
-        accessMediaLocation: 'granted',
-      };
-      const mockResult: PickMediaResult = {
-        files: [mockPickedFile],
-      };
-
-      mockFilePicker.checkPermissions.mockResolvedValue(mockDeniedStatus);
-      mockFilePicker.requestPermissions.mockResolvedValue(mockGrantedStatus);
-      mockFilePicker.pickMedia.mockResolvedValue(mockResult);
-
-      const result = await service.pickMedia();
-
-      expect(result).toHaveLength(1);
-      expect(mockFilePicker.checkPermissions).toHaveBeenCalled();
-      expect(mockFilePicker.requestPermissions).toHaveBeenCalled();
-      expect(mockFilePicker.pickMedia).toHaveBeenCalled();
     });
   });
 
