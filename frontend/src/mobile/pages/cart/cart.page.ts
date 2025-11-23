@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -36,6 +36,14 @@ import { trashOutline, removeCircleOutline, addCircleOutline, locationOutline } 
 import { CartService } from '@mobile/services/cart/cart.service';
 import { OrderService } from '@mobile/services/order/order.service';
 import { OrderRequest } from '@mobile/models/order.model';
+import { CustomersService } from '@mobile/services/customers/customers.service';
+import { firstValueFrom } from 'rxjs';
+import { HasRoleDirective } from '@shared/auth';
+
+type CustomerItem = {
+  id: string;
+  name: string;
+};
 
 @Component({
   selector: 'app-cart',
@@ -66,9 +74,10 @@ import { OrderRequest } from '@mobile/models/order.model';
     ReactiveFormsModule,
     RouterLink,
     TranslateModule,
+    HasRoleDirective,
   ],
 })
-export class CartPage {
+export class CartPage implements OnInit {
   public readonly cartItems = inject(CartService).items;
   public readonly cartTotal = inject(CartService).total;
   public readonly cartItemCount = inject(CartService).itemCount;
@@ -85,6 +94,10 @@ export class CartPage {
   public readonly checkoutForm: FormGroup;
   public readonly isSubmitting = signal(false);
 
+  private readonly customersService = inject(CustomersService);
+
+  public readonly clientsList = signal<CustomerItem[]>([]);
+
   constructor() {
     addIcons({ trashOutline, removeCircleOutline, addCircleOutline, locationOutline });
 
@@ -94,9 +107,19 @@ export class CartPage {
       address: ['', [Validators.required, Validators.minLength(10)]],
       priority: ['MEDIUM', [Validators.required]],
       date_estimated: ['', [Validators.required]],
-      id_client: ['CLIENT-123', [Validators.required]], // TODO: Get from auth service
-      id_vendor: ['VENDOR-456', [Validators.required]], // TODO: Get from auth service or selection
+      id_client: ['', []],
+      id_vendor: ['', []],
     });
+  }
+
+  async ngOnInit() {
+    await this.loadCustomers();
+  }
+
+  private async loadCustomers() {
+    const customers = await firstValueFrom(this.customersService.getAll());
+    const customerItems = customers.map((it) => ({ id: it.client_id, name: it.name }));
+    this.clientsList.set(customerItems);
   }
 
   public removeItem(sku: string, warehouse: string): void {

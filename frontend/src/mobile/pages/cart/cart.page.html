@@ -5,187 +5,192 @@
     </ion-buttons>
     <ion-title>{{ 'orders.cart.titleWithCount' | translate: {count: cartItemCount()} }}</ion-title>
     @if (cartItems().length > 0) {
-      <ion-buttons slot="end">
-        <ion-button (click)="clearCart()" color="danger">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="clearCart()" color="danger">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     }
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   @if (cartItems().length === 0) {
-    <div class="empty-cart">
-      <ion-icon name="cart-outline" class="empty-icon"></ion-icon>
-      <h2>{{ 'orders.cart.empty.title' | translate }}</h2>
-      <p>{{ 'orders.cart.empty.message' | translate }}</p>
-      <ion-button routerLink="/orders/create-order-with-products">
-        {{ 'orders.cart.empty.button' | translate }}
-      </ion-button>
-    </div>
+  <div class="empty-cart">
+    <ion-icon name="cart-outline" class="empty-icon"></ion-icon>
+    <h2>{{ 'orders.cart.empty.title' | translate }}</h2>
+    <p>{{ 'orders.cart.empty.message' | translate }}</p>
+    <ion-button routerLink="/orders/create-order-with-products">
+      {{ 'orders.cart.empty.button' | translate }}
+    </ion-button>
+  </div>
   } @else {
-    <div class="cart-content ion-padding">
-      <!-- Cart Items -->
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>{{ 'orders.cart.sections.products' | translate }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list>
-            @for (item of cartItems(); track item.product.sku + '-' + item.product.warehouse) {
-              <ion-item lines="full">
-                <div class="item-content">
-                  <div class="item-info">
-                    <ion-label>
-                      <h3>{{ item.product.name }}</h3>
-                      <p>{{ item.product.product_type }}</p>
-                      @if (item.product.warehouse_name) {
-                        <p class="warehouse">
-                          <ion-icon name="location-outline"></ion-icon>
-                          {{ item.product.warehouse_name }}
-                        </p>
-                      }
-                      <p class="price">${{ item.product.unit_value }} c/u</p>
-                    </ion-label>
-                  </div>
+  <form [formGroup]="checkoutForm" class="cart-content ion-padding">
+    <ion-item *ifHasRole="'vendor'">
+      <ion-label position="stacked"> {{ 'orders.cart.form.customer.label' | translate }} </ion-label>
+      <ion-select formControlName="id_client" [placeholder]="'orders.cart.form.customer.placeholder' | translate">
+        @for (customer of clientsList(); track customer.id) {
+        <ion-select-option [value]="customer.id">{{ customer.name }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
 
-                  <div class="item-actions">
-                    <div class="quantity-controls">
-                      <ion-button
-                        fill="clear"
-                        size="small"
-                        (click)="updateQuantity(item.product.sku, item.product.warehouse, -1)"
-                      >
-                        <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
-                      </ion-button>
+    <!-- Cart Items -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ 'orders.cart.sections.products' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          @for (item of cartItems(); track item.product.sku + '-' + item.product.warehouse) {
+          <ion-item lines="full">
+            <div class="item-content">
+              <div class="item-info">
+                <ion-label>
+                  <h3>{{ item.product.name }}</h3>
+                  <p>{{ item.product.product_type }}</p>
+                  @if (item.product.warehouse_name) {
+                  <p class="warehouse">
+                    <ion-icon name="location-outline"></ion-icon>
+                    {{ item.product.warehouse_name }}
+                  </p>
+                  }
+                  <p class="price">${{ item.product.unit_value }} c/u</p>
+                </ion-label>
+              </div>
 
-                      <span class="quantity">{{ item.quantity }}</span>
+              <div class="item-actions">
+                <div class="quantity-controls">
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    (click)="updateQuantity(item.product.sku, item.product.warehouse, -1)"
+                  >
+                    <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+                  </ion-button>
 
-                      <ion-button
-                        fill="clear"
-                        size="small"
-                        (click)="updateQuantity(item.product.sku, item.product.warehouse, 1)"
-                      >
-                        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-                      </ion-button>
-                    </div>
+                  <span class="quantity">{{ item.quantity }}</span>
 
-                    <div class="subtotal">
-                      <ion-text color="primary">
-                        <strong>${{ item.subtotal.toFixed(2) }}</strong>
-                      </ion-text>
-                    </div>
-
-                    <ion-button
-                      fill="clear"
-                      color="danger"
-                      size="small"
-                      (click)="removeItem(item.product.sku, item.product.warehouse)"
-                    >
-                      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-                    </ion-button>
-                  </div>
+                  <ion-button
+                    fill="clear"
+                    size="small"
+                    (click)="updateQuantity(item.product.sku, item.product.warehouse, 1)"
+                  >
+                    <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                  </ion-button>
                 </div>
-              </ion-item>
-            }
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
 
-      <!-- Checkout Form -->
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>{{ 'orders.cart.sections.delivery' | translate }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <form [formGroup]="checkoutForm">
-            <ion-input
-              [label]="'orders.cart.form.country.label' | translate"
-              labelPlacement="stacked"
-              formControlName="country"
-              [placeholder]="'orders.cart.form.country.placeholder' | translate"
-              fill="outline"
-              class="ion-margin-bottom"
-            ></ion-input>
+                <div class="subtotal">
+                  <ion-text color="primary">
+                    <strong>${{ item.subtotal.toFixed(2) }}</strong>
+                  </ion-text>
+                </div>
 
-            <ion-input
-              [label]="'orders.cart.form.city.label' | translate"
-              labelPlacement="stacked"
-              formControlName="city"
-              [placeholder]="'orders.cart.form.city.placeholder' | translate"
-              fill="outline"
-              class="ion-margin-bottom"
-            ></ion-input>
+                <ion-button
+                  fill="clear"
+                  color="danger"
+                  size="small"
+                  (click)="removeItem(item.product.sku, item.product.warehouse)"
+                >
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
 
-            <ion-input
-              [label]="'orders.cart.form.address.label' | translate"
-              labelPlacement="stacked"
-              formControlName="address"
-              [placeholder]="'orders.cart.form.address.placeholder' | translate"
-              fill="outline"
-              class="ion-margin-bottom"
-            ></ion-input>
+    <!-- Checkout Form -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ 'orders.cart.sections.delivery' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div>
+          <ion-input
+            [label]="'orders.cart.form.country.label' | translate"
+            labelPlacement="stacked"
+            formControlName="country"
+            [placeholder]="'orders.cart.form.country.placeholder' | translate"
+            fill="outline"
+            class="ion-margin-bottom"
+          ></ion-input>
 
-            <ion-select
-              [label]="'orders.cart.form.priority.label' | translate"
-              labelPlacement="stacked"
-              formControlName="priority"
-              fill="outline"
-              class="ion-margin-bottom"
-            >
-              <ion-select-option value="HIGH">{{ 'orders.cart.form.priority.high' | translate }}</ion-select-option>
-              <ion-select-option value="MEDIUM">{{ 'orders.cart.form.priority.medium' | translate }}</ion-select-option>
-              <ion-select-option value="LOW">{{ 'orders.cart.form.priority.low' | translate }}</ion-select-option>
-            </ion-select>
+          <ion-input
+            [label]="'orders.cart.form.city.label' | translate"
+            labelPlacement="stacked"
+            formControlName="city"
+            [placeholder]="'orders.cart.form.city.placeholder' | translate"
+            fill="outline"
+            class="ion-margin-bottom"
+          ></ion-input>
 
-            <ion-input
-              [label]="'orders.cart.form.estimatedDate.label' | translate"
-              labelPlacement="stacked"
-              formControlName="date_estimated"
-              type="date"
-              fill="outline"
-              class="ion-margin-bottom"
-            ></ion-input>
-          </form>
-        </ion-card-content>
-      </ion-card>
+          <ion-input
+            [label]="'orders.cart.form.address.label' | translate"
+            labelPlacement="stacked"
+            formControlName="address"
+            [placeholder]="'orders.cart.form.address.placeholder' | translate"
+            fill="outline"
+            class="ion-margin-bottom"
+          ></ion-input>
 
-      <!-- Order Summary -->
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>{{ 'orders.cart.sections.summary' | translate }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="summary-row">
-            <span>{{ 'orders.cart.summary.subtotal' | translate }}</span>
-            <span>${{ cartTotal().toFixed(2) }}</span>
-          </div>
-          <div class="summary-row">
-            <span>{{ 'orders.cart.summary.shipping' | translate }}</span>
-            <span>$0.00</span>
-          </div>
-          <div class="summary-row total">
-            <strong>{{ 'orders.cart.summary.total' | translate }}</strong>
-            <strong>${{ cartTotal().toFixed(2) }}</strong>
-          </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
+          <ion-select
+            [label]="'orders.cart.form.priority.label' | translate"
+            labelPlacement="stacked"
+            formControlName="priority"
+            fill="outline"
+            class="ion-margin-bottom"
+          >
+            <ion-select-option value="HIGH">{{ 'orders.cart.form.priority.high' | translate }}</ion-select-option>
+            <ion-select-option value="MEDIUM">{{ 'orders.cart.form.priority.medium' | translate }}</ion-select-option>
+            <ion-select-option value="LOW">{{ 'orders.cart.form.priority.low' | translate }}</ion-select-option>
+          </ion-select>
+
+          <ion-input
+            [label]="'orders.cart.form.estimatedDate.label' | translate"
+            labelPlacement="stacked"
+            formControlName="date_estimated"
+            type="date"
+            fill="outline"
+            class="ion-margin-bottom"
+          ></ion-input>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Order Summary -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{ 'orders.cart.sections.summary' | translate }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="summary-row">
+          <span>{{ 'orders.cart.summary.subtotal' | translate }}</span>
+          <span>${{ cartTotal().toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>{{ 'orders.cart.summary.shipping' | translate }}</span>
+          <span>$0.00</span>
+        </div>
+        <div class="summary-row total">
+          <strong>{{ 'orders.cart.summary.total' | translate }}</strong>
+          <strong>${{ cartTotal().toFixed(2) }}</strong>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </form>
   }
 </ion-content>
 
 @if (cartItems().length > 0) {
-  <ion-footer>
-    <ion-toolbar>
-      <ion-button
-        expand="block"
-        (click)="submitOrder()"
-        [disabled]="isSubmitting()"
-        class="submit-button"
-      >
-        {{ isSubmitting() ? ('orders.cart.buttons.processing' | translate) : ('orders.cart.buttons.confirm' | translate) }}
-      </ion-button>
-    </ion-toolbar>
-  </ion-footer>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" (click)="submitOrder()" [disabled]="isSubmitting()" class="submit-button">
+      {{ isSubmitting() ? ('orders.cart.buttons.processing' | translate) : ('orders.cart.buttons.confirm' | translate)
+      }}
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
 }

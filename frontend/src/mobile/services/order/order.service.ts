@@ -19,7 +19,7 @@ export class OrderService {
   }
 
   public getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}/`);
+    return this.http.get<Order[]>(`${this.baseUrl}/client`);
   }
 
   public getOrderById(orderId: string): Observable<Order> {

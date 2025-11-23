@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ComponentFixture } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
 import { InventoryFilterComponent } from './inventory-filter';
 import { SearchInventoryParams } from '../../pages/product-inventory/interfaces/search-inventory-params.interface';
 
@@ -14,7 +15,7 @@ describe('InventoryFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InventoryFilterComponent, ReactiveFormsModule],
+      imports: [InventoryFilterComponent, ReactiveFormsModule, TranslateModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InventoryFilterComponent);
@@ -179,7 +180,7 @@ describe('InventoryFilterComponent', () => {
       const header = fixture.debugElement.query(By.css('h2'));
 
       expect(icon).toBeTruthy();
-      expect(header.nativeElement.textContent.trim()).toBe('Filtros de búsqueda');
+      expect(header.nativeElement.textContent.trim()).toBe('productInventory.filter.title');
     });
 
     it('should have correct button text', () => {
@@ -187,8 +188,8 @@ describe('InventoryFilterComponent', () => {
       const submitButton = buttons.find((btn) => btn.nativeElement.getAttribute('type') === 'submit');
       const resetButton = buttons.find((btn) => btn.nativeElement.getAttribute('type') === 'reset');
 
-      expect(submitButton?.nativeElement.textContent.trim()).toBe('CONSULTAR INVENTARIO');
-      expect(resetButton?.nativeElement.textContent.trim()).toBe('LIMPIAR');
+      expect(submitButton?.nativeElement.textContent.trim()).toBe('productInventory.filter.submitButton');
+      expect(resetButton?.nativeElement.textContent.trim()).toBe('productInventory.filter.clearButton');
     });
   });
 

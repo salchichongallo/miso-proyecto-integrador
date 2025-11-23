@@ -6,15 +6,17 @@
       </ion-text>
       <div class="batch">
         <ion-text color="medium">
-          <p>Lote: {{product().batch}}</p>
+          <p>{{ 'productInventory.item.batch' | translate }} {{product().batch}}</p>
         </ion-text>
-        <span [ngClass]="['badge', `badge--status-${product().status}`]"> {{product().status}} </span>
+        <span [ngClass]="['badge', `badge--status-${product().status}`]">
+          {{ 'productInventory.item.status.' + product().status | translate }}
+        </span>
       </div>
     </div>
     <div class="stock">
       <p class="stock__quantity">{{product().stock}}</p>
       <ion-text color="medium">
-        <p class="stock__label">unidades</p>
+        <p class="stock__label">{{ 'productInventory.item.units' | translate }}</p>
       </ion-text>
     </div>
   </header>
@@ -23,16 +25,16 @@
   <div class="alert alert--warning">
     <div>
       <ion-icon name="alert-circle"></ion-icon>
-      <p>Próximo a vencer</p>
+      <p>{{ 'productInventory.item.alert.expiringSoon' | translate }}</p>
     </div>
-    <p>Este lote vence en menos de {{ remainingDays() }} días. Priorizar para despacho.</p>
+    <p>{{ 'productInventory.item.alert.message' | translate: { days: remainingDays() } }}</p>
   </div>
   }
 
   <div class="details">
     <ion-text color="medium" class="details__location">
       <ion-icon name="location"></ion-icon>
-      <span> Ubicación </span>
+      <span> {{ 'productInventory.item.location' | translate }} </span>
     </ion-text>
     <p class="details__name">{{ product().warehouse_name }}</p>
     <p class="details__address">{{ product().warehouse_address }}</p>
@@ -42,9 +44,9 @@
   <div class="details">
     <ion-text color="medium" class="details__location">
       <ion-icon name="calendar-number"></ion-icon>
-      <span> Vencimiento </span>
+      <span> {{ 'productInventory.item.expiration' | translate }} </span>
     </ion-text>
     <p class="details__name">{{ product().expiration_date }}</p>
-    <p class="details__city">{{ remainingDays() }} días restantes</p>
+    <p class="details__city">{{ 'productInventory.item.daysRemaining' | translate: { days: remainingDays() } }}</p>
   </div>
 </section>

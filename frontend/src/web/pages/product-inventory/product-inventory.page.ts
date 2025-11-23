@@ -13,6 +13,7 @@ import {
 
 import { addIcons } from 'ionicons';
 import { informationCircle } from 'ionicons/icons';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Product } from '@mobile/models/product.model';
 import { ProductService } from '@web/services/product/product.service';
@@ -34,6 +35,7 @@ import { SearchInventoryParams } from './interfaces/search-inventory-params.inte
     IonCard,
     ProductInventaryItem,
     InventoryFilterComponent,
+    TranslateModule,
   ],
   styleUrl: './product-inventory.page.scss',
 })
@@ -47,6 +49,8 @@ export class ProductInventoryPage implements OnInit, OnDestroy {
   private readonly loader = inject(LoadingController);
 
   private readonly toast = inject(ToastController);
+
+  private readonly translate = inject(TranslateService);
 
   private intervalId: any;
 
@@ -85,7 +89,7 @@ export class ProductInventoryPage implements OnInit, OnDestroy {
 
   private async showLoader() {
     const loading = await this.loader.create({
-      message: 'Cargando...',
+      message: this.translate.instant('common.loading'),
       keyboardClose: false,
       backdropDismiss: false,
     });
@@ -94,10 +98,9 @@ export class ProductInventoryPage implements OnInit, OnDestroy {
   }
 
   private async showToastError(error: any) {
+    const message = this.translate.instant('productInventory.loadingError', { error: error?.message });
     await this.loader.dismiss();
-    return this.toast
-      .create({ message: `Error al consultar productos. ${error?.message}`, duration: 7000, color: 'danger' })
-      .then((toast) => toast.present());
+    return this.toast.create({ message, duration: 7000, color: 'danger' }).then((toast) => toast.present());
   }
 
   async searchInventory(nextFilters: SearchInventoryParams) {

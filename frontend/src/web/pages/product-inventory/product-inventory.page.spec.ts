@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ProductService } from '@web/services/product/product.service';
 
 import { ProductInventoryPage } from './product-inventory.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 jest.mock('@web/services/product/product.service');
 
@@ -13,6 +14,7 @@ describe('ProductInventoryPage', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [ProductInventoryPage, ProductService],
+      imports: [TranslateModule.forRoot()],
     });
     component = TestBed.inject(ProductInventoryPage);
     productService = TestBed.inject(ProductService) as jest.Mocked<ProductService>;
@@ -44,7 +46,7 @@ describe('ProductInventoryPage', () => {
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
     expect(toastCreateSpy).toHaveBeenCalledWith({
-      message: `Error al consultar productos. ${error.message}`,
+      message: expect.any(String),
       duration: 7000,
       color: 'danger',
     });

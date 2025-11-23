@@ -9,34 +9,30 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   @if (isLoading()) {
-    <div class="loading-container">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>{{ 'orders.searchPage.loading' | translate }}</p>
-    </div>
-  } @else {
-      @for (order of orders; track $index) {
-        <ion-card>
-          <ion-card-header>
-            <div class="order-header">
-              <ion-card-title>{{ order.id }}</ion-card-title>
-              <ion-chip [color]="getStatusColor(order.order_status)">
-                {{ getStatusLabel(order.order_status) }}
-              </ion-chip>
-            </div>
-            <ion-card-subtitle>
-              {{ 'orders.searchPage.vendor' | translate }}: {{ order.id_vendor }} <br>
-              <span>{{ 'orders.searchPage.products' | translate: {count: order.products.length} }}</span>
-            </ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-      } @empty {
-        <ion-card class="empty-state-card">
-          <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
-          <ion-card-title class="empty-state-card__title">{{ 'orders.searchPage.empty.title' | translate }}</ion-card-title>
-          <ion-card-content class="empty-state-card__content">
-            {{ 'orders.searchPage.empty.message' | translate }}
-          </ion-card-content>
-        </ion-card>
-      }
-  }
+  <div class="loading-container">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>{{ 'orders.searchPage.loading' | translate }}</p>
+  </div>
+  } @else { @for (order of orders; track $index) {
+  <ion-card>
+    <ion-card-header>
+      <div class="order-header">
+        <ion-card-title>{{ order.id }}</ion-card-title>
+        <ion-chip [color]="getStatusColor(order.order_status)"> {{ getStatusLabel(order.order_status) }} </ion-chip>
+      </div>
+      <ion-card-subtitle>
+        {{ 'orders.searchPage.vendor' | translate }}: {{ order.id_vendor }} <br />
+        <span>{{ 'orders.searchPage.products' | translate: {count: order.products.length} }}</span>
+      </ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+  } @empty {
+  <ion-card class="empty-state-card">
+    <ion-icon class="empty-state-card__icon" name="information-circle" size="large"></ion-icon>
+    <ion-card-title class="empty-state-card__title">{{ 'orders.searchPage.empty.title' | translate }}</ion-card-title>
+    <ion-card-content class="empty-state-card__content">
+      {{ 'orders.searchPage.empty.message' | translate }}
+    </ion-card-content>
+  </ion-card>
+  } }
 </ion-content>

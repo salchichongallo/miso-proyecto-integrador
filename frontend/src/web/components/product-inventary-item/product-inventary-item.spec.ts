@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { ProductInventaryItem } from './product-inventary-item';
 
 describe('ProductInventaryItem', () => {
@@ -8,6 +9,7 @@ describe('ProductInventaryItem', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [ProductInventaryItem],
+      imports: [TranslateModule.forRoot()],
     });
     fixture = TestBed.createComponent(ProductInventaryItem);
     component = fixture.componentInstance;

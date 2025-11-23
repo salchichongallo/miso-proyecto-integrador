@@ -125,7 +125,7 @@ describe('OrderService', () => {
         expect(orders[1].id).toBe('order-002');
       });
 
-      const req = httpMock.expectOne(`${environment.ordersMicroserviceUrl}/`);
+      const req = httpMock.expectOne(`${environment.ordersMicroserviceUrl}/client`);
       expect(req.request.method).toBe('GET');
       req.flush(mockOrders);
     });
@@ -136,7 +136,7 @@ describe('OrderService', () => {
         expect(orders.length).toBe(0);
       });
 
-      const req = httpMock.expectOne(`${environment.ordersMicroserviceUrl}/`);
+      const req = httpMock.expectOne(`${environment.ordersMicroserviceUrl}/client`);
       req.flush([]);
     });
 
@@ -149,7 +149,7 @@ describe('OrderService', () => {
         },
       });
 
-      const req = httpMock.expectOne(`${environment.ordersMicroserviceUrl}/`);
+      const req = httpMock.expectOne(`${environment.ordersMicroserviceUrl}/client`);
       req.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
     });
   });

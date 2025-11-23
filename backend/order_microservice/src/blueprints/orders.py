@@ -23,9 +23,11 @@ def ping():
 @cognito_auth_required
 def create_order():
     try:
+        id_user = current_cognito_jwt.get("sub")
+        id_role = current_cognito_jwt.get("custom:role")
         json_data = request.get_json()
         NewOrderJsonSchema.check(json_data)
-        create_order_response = CreateOrder(json_data).execute()
+        create_order_response = CreateOrder(json_data, id_user, id_role).execute()
         return jsonify(create_order_response), 201
 
     except ParamError as e:

@@ -12,13 +12,23 @@ class CreateOrder(BaseCommannd):
     Crea una nueva orden en DynamoDB.
     """
 
-    def __init__(self, body: dict):
+    def __init__(self, body: dict, id_user: str, id_role: str):
         self.body = body
+        self.id_user = id_user
+        self.id_role = id_role
 
     def execute(self):
         """Crea la orden usando los datos ya validados."""
         try:
             logger.info("Creando nueva orden...")
+
+            if self.id_role == "client":
+                self.body["id_client"] = self.id_user
+                self.body["id_vendor"] = ""
+            elif self.id_role == "vendor":
+                self.body["id_vendor"] = self.id_user
+            else:
+                raise ApiError("Rol no autorizado para crear órdenes.")
 
             # Convertir la fecha si viene como objeto date
             if isinstance(self.body.get("date_estimated"), datetime.date):

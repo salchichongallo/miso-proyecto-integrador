@@ -65,6 +65,7 @@ export class MainLayoutComponent implements OnInit {
     '/seller-report': 'web.home.menu.sellerReport.title',
     '/delivery-routes': 'web.home.menu.deliveryRoutes.title',
     '/sales-plan-creation': 'salesPlan.title',
+    '/product-inventory': 'web.home.menu.inventory.title',
     '/style-demo': 'Demostración de estilos',
   };
 

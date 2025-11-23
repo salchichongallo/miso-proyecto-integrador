@@ -7,11 +7,11 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title>
-          <h1 class="title">Resultado de inventario ({{ products().length }})</h1>
+          <h1 class="title">{{ 'productInventory.title' | translate }} ({{ products().length }})</h1>
         </ion-card-title>
         <ion-card-subtitle>
           <ion-text color="medium">
-            <span class="subtitle"> Información actualizada en tiempo real </span>
+            <span class="subtitle">{{ 'productInventory.subtitle' | translate }}</span>
           </ion-text>
         </ion-card-subtitle>
       </ion-card-header>
@@ -25,8 +25,8 @@
         } @else {
         <div class="no-results">
           <ion-icon name="information-circle"></ion-icon>
-          <h3>Sin resultados</h3>
-          <p>Vuelve a intentar con otros filtros.</p>
+          <h3>{{ 'productInventory.empty.title' | translate }}</h3>
+          <p>{{ 'productInventory.empty.message' | translate }}</p>
         </div>
         }
       </ion-card-content>

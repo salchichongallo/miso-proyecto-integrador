@@ -19,7 +19,6 @@ import {
   IonFabButton,
   IonSpinner,
   IonButton,
-  IonText,
 } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -92,6 +91,18 @@ export class CreateOrderWithProductsPage implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  public delayedSearchChange = this.debounce(() => this.onSearchChange(), 350);
+
+  private debounce(func: () => void, wait: number): () => void {
+    let timeout: any;
+    return () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func();
+      }, wait);
+    };
   }
 
   public onSearchChange(): void {

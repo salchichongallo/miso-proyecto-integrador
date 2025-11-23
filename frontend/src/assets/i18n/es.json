@@ -229,6 +229,10 @@
         "summary": "Resumen del pedido"
       },
       "form": {
+        "customer": {
+          "label": "Cliente",
+          "placeholder": "Seleccione un cliente"
+        },
         "country": {
           "label": "País",
           "placeholder": "Seleccione un país"
@@ -666,5 +670,48 @@
     "creatingPlan": "Creando plan de venta...",
     "planCreated": "Plan de venta creado exitosamente.",
     "genericError": "Error al crear el plan de venta."
+  },
+  "productInventory": {
+    "title": "Resultado de inventario",
+    "subtitle": "Información actualizada en tiempo real",
+    "empty": {
+      "title": "Sin resultados",
+      "message": "Vuelve a intentar con otros filtros."
+    },
+    "loadingError": "Error al consultar productos. {{error}}",
+    "item": {
+      "batch": "Lote:",
+      "units": "unidades",
+      "alert": {
+        "expiringSoon": "Próximo a vencer",
+        "message": "Este lote vence en menos de {{ days }} días. Priorizar para despacho."
+      },
+      "location": "Ubicación",
+      "expiration": "Vencimiento",
+      "daysRemaining": "{{ days }} días restantes",
+      "status": {
+        "Disponible": "Disponible",
+        "Agotado": "Agotado",
+        "Vencido": "Vencido",
+        "Pendiente": "Pendiente"
+      }
+    },
+    "filter": {
+      "title": "Filtros de búsqueda",
+      "productName": {
+        "label": "Producto",
+        "placeholder": "Producto"
+      },
+      "batch": {
+        "label": "Lote",
+        "placeholder": "Lote"
+      },
+      "warehouseName": {
+        "label": "Bodega",
+        "placeholder": "Nombre de la Bodega"
+      },
+      "submitButton": "CONSULTAR INVENTARIO",
+      "clearButton": "LIMPIAR"
+    }
   }
 }
