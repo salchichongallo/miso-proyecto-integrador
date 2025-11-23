@@ -30,7 +30,9 @@ export class MediaPickerService {
   async checkPermissions(): Promise<PermissionStatus> {
     try {
       const status = await FilePicker.checkPermissions();
-      const granted = status.readExternalStorage === 'granted';
+      const readExternalStorage = status.readExternalStorage === 'granted';
+      const accessMediaLocation = status.accessMediaLocation === 'granted';
+      const granted = readExternalStorage || accessMediaLocation;
 
       return {
         granted,
@@ -49,18 +51,10 @@ export class MediaPickerService {
    */
   async requestPermissions(): Promise<PermissionStatus> {
     try {
-      const result = await FilePicker.requestPermissions();
-      const granted = result.readExternalStorage === 'granted';
-
-      return {
-        granted,
-        message: granted ? undefined : 'Storage permission denied by user',
-      };
+      await FilePicker.requestPermissions();
+      return this.checkPermissions();
     } catch (error) {
-      return {
-        granted: false,
-        message: error instanceof Error ? error.message : 'Error requesting permissions',
-      };
+      return this.checkPermissions();
     }
   }
 

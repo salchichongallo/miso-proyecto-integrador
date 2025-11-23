@@ -17,7 +17,7 @@ export class VisitsService {
   private customersService = inject(CustomersService);
 
   async create(visitData: CreateVisitRequest): Promise<RawVisit> {
-    const url = `${this.baseUrl}/visits`;
+    const url = `${this.baseUrl}/visits/`;
     const request = this.http.post<RawVisit>(url, visitData);
     return firstValueFrom(request);
   }
