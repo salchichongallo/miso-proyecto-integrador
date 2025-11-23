@@ -538,5 +538,13 @@
         "cancel": "Cancelar"
       }
     }
+  },
+  "supplierBulk": {
+    "title": "Masivo proveedores",
+    "uploadText": "Haz clic para seleccionar un archivo",
+    "allowedFormats": "Formato permitido: CSV",
+    "submit": "Cargar y procesar",
+    "uploadSuccessMessage": "Proveedores cargados exitosamente.",
+    "errorUpload": "Error al cargar los proveedores."
   }
 }

@@ -19,17 +19,19 @@ import { addIcons } from 'ionicons';
 import { cloudUploadOutline } from 'ionicons/icons';
 
 import { SupplierService } from '@web/services/supplier/supplier.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-supplier-bulk-upload',
   templateUrl: './supplier-bulk-upload.page.html',
   styleUrls: ['./supplier-bulk-upload.page.scss'],
-  imports: [IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon],
+  imports: [IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonIcon, TranslateModule],
 })
 export class SupplierBulkUploadPage {
   private readonly supplierService = inject(SupplierService);
   private readonly loadingController = inject(LoadingController);
   private readonly toastController = inject(ToastController);
+  private readonly translate = inject(TranslateService);
 
   selectedFile: File | null = null;
   fileName = '';
@@ -69,14 +71,15 @@ export class SupplierBulkUploadPage {
         next: () => {
           this.selectedFile = null;
           this.fileName = '';
-          this.showSuccessMessage('Proveedores cargados exitosamente.');
+          const message = this.translate.instant('supplierBulk.uploadSuccessMessage');
+          this.showSuccessMessage(message);
         },
         error: (httpError: HttpErrorResponse) => {
           const message =
             httpError.error?.error ??
             httpError.error?.message ??
             httpError.message ??
-            'Error al cargar los proveedores.';
+            this.translate.instant('supplierBulk.errorUpload');
           this.showErrorMessage(message);
         },
       });

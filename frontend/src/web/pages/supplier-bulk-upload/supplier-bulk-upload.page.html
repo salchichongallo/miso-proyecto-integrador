@@ -2,25 +2,17 @@
   <div class="page-container">
     <ion-card class="upload-card">
       <ion-card-header>
-        <ion-card-title>Masivo proveedores</ion-card-title>
+        <ion-card-title> {{ 'supplierBulk.title' | translate }} </ion-card-title>
       </ion-card-header>
 
       <ion-card-content>
         <div class="upload-area" (click)="onUploadClick()" onkeypress>
-          <input
-            type="file"
-            id="fileInput"
-            accept=".csv,.xlsx,.xls"
-            (change)="onFileSelected($event)"
-            style="display: none"
-          />
+          <input type="file" id="fileInput" accept=".csv" (change)="onFileSelected($event)" style="display: none" />
 
           <div class="upload-content">
             <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
-            <p class="upload-text">
-              {{ fileName || 'Haz clic para seleccionar un archivo' }}
-            </p>
-            <p class="upload-hint">Formatos permitidos: CSV, XLSX, XLS</p>
+            <p class="upload-text">{{ fileName || ('supplierBulk.uploadText' | translate) }}</p>
+            <p class="upload-hint">{{ 'supplierBulk.allowedFormats' | translate }}</p>
           </div>
         </div>
 
@@ -32,7 +24,7 @@
           [disabled]="!selectedFile"
           (click)="onProcessFile()"
         >
-          Cargar y procesar
+          {{ 'supplierBulk.submit' | translate }}
         </ion-button>
       </ion-card-content>
     </ion-card>

@@ -538,5 +538,13 @@
         "cancel": "Cancel"
       }
     }
+  },
+  "supplierBulk": {
+    "title": "Supplier Bulk Upload",
+    "uploadText": "Click to select a file",
+    "allowedFormats": "Allowed format: CSV",
+    "submit": "Upload and process",
+    "uploadSuccessMessage": "Suppliers uploaded successfully.",
+    "errorUpload": "Error loading suppliers."
   }
 }
