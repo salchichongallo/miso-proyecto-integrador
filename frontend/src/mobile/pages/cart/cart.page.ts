@@ -94,8 +94,8 @@ export class CartPage {
       address: ['', [Validators.required, Validators.minLength(10)]],
       priority: ['MEDIUM', [Validators.required]],
       date_estimated: ['', [Validators.required]],
-      id_client: ['CLIENT-123', [Validators.required]], // TODO: Get from auth service
-      id_vendor: ['VENDOR-456', [Validators.required]], // TODO: Get from auth service or selection
+      id_client: ['', [Validators.required]],
+      id_vendor: ['', [Validators.required]],
     });
   }
 
