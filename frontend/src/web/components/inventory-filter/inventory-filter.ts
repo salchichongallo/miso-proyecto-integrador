@@ -1,6 +1,7 @@
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { IonList, IonItem, IonButton, IonInput, IonIcon, IonCardContent, IonCard } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
 import { filter } from 'ionicons/icons';
@@ -11,7 +12,17 @@ import { SearchInventoryParams } from '../../pages/product-inventory/interfaces/
   selector: 'app-inventory-filter',
   templateUrl: './inventory-filter.ts.html',
   styleUrl: './inventory-filter.ts.scss',
-  imports: [ReactiveFormsModule, IonList, IonItem, IonButton, IonInput, IonIcon, IonCardContent, IonCard],
+  imports: [
+    ReactiveFormsModule,
+    IonList,
+    IonItem,
+    IonButton,
+    IonInput,
+    IonIcon,
+    IonCardContent,
+    IonCard,
+    TranslateModule,
+  ],
 })
 export class InventoryFilterComponent {
   protected readonly fb = inject(FormBuilder);

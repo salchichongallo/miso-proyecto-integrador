@@ -609,5 +609,48 @@
     "creatingPlan": "Creating sales plan...",
     "planCreated": "Sales plan created successfully.",
     "genericError": "Error creating sales plan."
+  },
+  "productInventory": {
+    "title": "Inventory Results",
+    "subtitle": "Real-time updated information",
+    "empty": {
+      "title": "No results",
+      "message": "Try again with different filters."
+    },
+    "loadingError": "Error loading products. {{error}}",
+    "item": {
+      "batch": "Batch:",
+      "units": "units",
+      "alert": {
+        "expiringSoon": "Expiring soon",
+        "message": "This batch expires in less than {{ days }} days. Prioritize for dispatch."
+      },
+      "location": "Location",
+      "expiration": "Expiration",
+      "daysRemaining": "{{ days }} days remaining",
+      "status": {
+        "Disponible": "Available",
+        "Agotado": "Out of Stock",
+        "Vencido": "Expired",
+        "Pendiente": "Pending"
+      }
+    },
+    "filter": {
+      "title": "Search Filters",
+      "productName": {
+        "label": "Product",
+        "placeholder": "Product"
+      },
+      "batch": {
+        "label": "Batch",
+        "placeholder": "Batch"
+      },
+      "warehouseName": {
+        "label": "Warehouse",
+        "placeholder": "Warehouse Name"
+      },
+      "submitButton": "QUERY INVENTORY",
+      "clearButton": "CLEAR"
+    }
   }
 }

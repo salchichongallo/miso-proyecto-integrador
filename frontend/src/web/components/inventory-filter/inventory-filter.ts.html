@@ -3,7 +3,7 @@
     <form [formGroup]="form" (ngSubmit)="submit()" (reset)="reset()">
       <div class="header">
         <ion-icon name="filter"></ion-icon>
-        <h2>Filtros de búsqueda</h2>
+        <h2>{{ 'productInventory.filter.title' | translate }}</h2>
       </div>
 
       <ion-list>
@@ -12,8 +12,8 @@
             formControlName="productName"
             type="text"
             id="productName"
-            label="Producto"
-            placeholder="Producto"
+            [label]="'productInventory.filter.productName.label' | translate"
+            [placeholder]="'productInventory.filter.productName.placeholder' | translate"
             name="productName"
             labelPlacement="floating"
           />
@@ -24,8 +24,8 @@
             formControlName="batch"
             type="text"
             id="batch"
-            label="Lote"
-            placeholder="Lote"
+            [label]="'productInventory.filter.batch.label' | translate"
+            [placeholder]="'productInventory.filter.batch.placeholder' | translate"
             name="batch"
             labelPlacement="floating"
           />
@@ -36,16 +36,18 @@
             formControlName="warehouseName"
             type="text"
             id="warehouseName"
-            label="Bodega"
-            placeholder="Nombre de la Bodega"
+            [label]="'productInventory.filter.warehouseName.label' | translate"
+            [placeholder]="'productInventory.filter.warehouseName.placeholder' | translate"
             name="warehouseName"
             labelPlacement="floating"
           />
         </ion-item>
       </ion-list>
       <div class="actions">
-        <ion-button type="submit" expand="full">CONSULTAR INVENTARIO</ion-button>
-        <ion-button type="reset" expand="full" fill="clear">LIMPIAR</ion-button>
+        <ion-button type="submit" expand="full">{{ 'productInventory.filter.submitButton' | translate }}</ion-button>
+        <ion-button type="reset" expand="full" fill="clear"
+          >{{ 'productInventory.filter.clearButton' | translate }}</ion-button
+        >
       </div>
     </form>
   </ion-card-content>

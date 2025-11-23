@@ -1,6 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { IonText, IonIcon } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { addIcons } from 'ionicons';
 import { location as locationIcon, calendarNumber, alertCircle } from 'ionicons/icons';
@@ -11,7 +12,7 @@ import { Product } from '@mobile/models/product.model';
   selector: 'app-product-inventary-item',
   templateUrl: './product-inventary-item.html',
   styleUrl: './product-inventary-item.scss',
-  imports: [IonIcon, IonText, NgClass],
+  imports: [IonIcon, IonText, NgClass, TranslateModule],
 })
 export class ProductInventaryItem {
   readonly product = input.required<Product>();
