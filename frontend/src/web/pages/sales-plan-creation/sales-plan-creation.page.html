@@ -4,7 +4,7 @@
       <ion-col size="12" size-lg="10" size-xl="10">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Crear plan de venta para vendedor</ion-card-title>
+            <ion-card-title>{{ 'salesPlan.title' | translate }}</ion-card-title>
           </ion-card-header>
 
           <ion-card-content>
@@ -13,76 +13,80 @@
                 <ion-col size="12" size-md="4">
                   <form [formGroup]="salesPlanForm" (ngSubmit)="onSubmit()">
                     <ion-item [class.ion-invalid]="vendorControl?.invalid && vendorControl?.touched">
-                      <ion-label position="stacked">Vendedor asignado</ion-label>
-                      <ion-select formControlName="vendor_id" placeholder="Seleccione el vendedor">
+                      <ion-label position="stacked"> {{ 'salesPlan.assignedVendor' | translate}} </ion-label>
+                      <ion-select
+                        formControlName="vendor_id"
+                        [placeholder]="'salesPlan.assignedVendorPlaceholder' | translate"
+                      >
                         @for (vendor of vendors; track vendor.vendor_id) {
-                          <ion-select-option [value]="vendor.vendor_id">{{ vendor.name }}</ion-select-option>
+                        <ion-select-option [value]="vendor.vendor_id">{{ vendor.name }}</ion-select-option>
                         }
                       </ion-select>
                     </ion-item>
                     @if (vendorControl?.invalid && vendorControl?.touched) {
-                      <div class="error-message">
-                        @if (vendorControl?.errors?.['required']) {
-                          <small>El vendedor es requerido</small>
-                        }
-                      </div>
+                    <div class="error-message">
+                      @if (vendorControl?.errors?.['required']) {
+                      <small>{{ 'salesPlan.vendorRequired' | translate }}</small>
+                      }
+                    </div>
                     }
 
                     <ion-item [class.ion-invalid]="regionControl?.invalid && regionControl?.touched">
-                      <ion-label position="stacked">Region</ion-label>
-                      <ion-select formControlName="region" placeholder="Seleccione la región">
+                      <ion-label position="stacked"> {{ 'salesPlan.region' | translate }} </ion-label>
+                      <ion-select formControlName="region" [placeholder]="'salesPlan.regionPlaceholder' | translate">
                         @for (region of regions; track region.value) {
-                          <ion-select-option [value]="region.value">{{ region.label }}</ion-select-option>
+                        <ion-select-option [value]="region.value">{{ region.label }}</ion-select-option>
                         }
                       </ion-select>
                     </ion-item>
                     @if (regionControl?.invalid && regionControl?.touched) {
-                      <div class="error-message">
-                        @if (regionControl?.errors?.['required']) {
-                          <small>La región es requerida</small>
-                        }
-                      </div>
+                    <div class="error-message">
+                      @if (regionControl?.errors?.['required']) {
+                      <small>{{ 'salesPlan.regionRequired' | translate }}</small>
+                      }
+                    </div>
                     }
 
                     <ion-item [class.ion-invalid]="periodControl?.invalid && periodControl?.touched">
-                      <ion-label position="stacked">Periodo</ion-label>
-                      <ion-select formControlName="period" placeholder="Seleccione el periodo">
+                      <ion-label position="stacked"> {{ 'salesPlan.period' | translate }} </ion-label>
+                      <ion-select formControlName="period" [placeholder]="'salesPlan.periodPlaceholder' | translate">
                         @for (period of periods; track period.value) {
-                          <ion-select-option [value]="period.value">{{ period.label }}</ion-select-option>
+                        <ion-select-option [value]="period.value">{{ period.label }}</ion-select-option>
                         }
                       </ion-select>
                     </ion-item>
                     @if (periodControl?.invalid && periodControl?.touched) {
-                      <div class="error-message">
-                        @if (periodControl?.errors?.['required']) {
-                          <small>El periodo es requerido</small>
-                        }
-                      </div>
+                    <div class="error-message">
+                      @if (periodControl?.errors?.['required']) {
+                      <small>{{ 'salesPlan.periodRequired' | translate }}</small>
+                      }
+                    </div>
                     }
 
                     <section class="products-section">
-                      @if (selectedProducts.length > 0) {
-                        @for (product of selectedProducts; track product.id) {
-                          <div class="product-card">
-                            <div class="product-header">
-                              <span class="product-name">Producto: {{ product.name }}</span>
-                              <ion-button
-                                onkeypress
-                                fill="clear"
-                                color="danger"
-                                size="small"
-                                (click)="removeProduct(product.id)"
-                              >
-                                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-                              </ion-button>
-                            </div>
-                            <div class="product-details">
-                              <small><strong>Meta:</strong> {{ product.target_units }} unidades</small>
-                              <small><strong>Valor:</strong> {{ product.target_value }}</small>
-                            </div>
-                          </div>
-                        }
-                      }
+                      @if (selectedProducts.length > 0) { @for (product of selectedProducts; track product.id) {
+                      <div class="product-card">
+                        <div class="product-header">
+                          <span class="product-name">{{ 'salesPlan.product' | translate }} {{ product.name }}</span>
+                          <ion-button
+                            onkeypress
+                            fill="clear"
+                            color="danger"
+                            size="small"
+                            (click)="removeProduct(product.id)"
+                          >
+                            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                          </ion-button>
+                        </div>
+                        <div class="product-details">
+                          <small
+                            ><strong>{{ 'salesPlan.goal' | translate }}</strong> {{ product.target_units }} {{
+                            'salesPlan.units' | translate }}</small
+                          >
+                          <small><strong>{{ 'salesPlan.value' | translate }}</strong> {{ product.target_value }}</small>
+                        </div>
+                      </div>
+                      } }
                     </section>
 
                     <ion-button
@@ -94,7 +98,7 @@
                       class="add-product-button"
                     >
                       <ion-icon slot="start" name="add"></ion-icon>
-                      AÑADIR PRODUCTO
+                      {{ 'salesPlan.addProductButton' | translate }}
                     </ion-button>
 
                     <ion-grid class="button-group">
@@ -106,7 +110,7 @@
                             type="submit"
                             [disabled]="salesPlanForm.invalid || selectedProducts.length === 0"
                           >
-                            REVISAR Y CREAR PLAN
+                            {{ 'salesPlan.reviewAndCreate' | translate }}
                           </ion-button>
                         </ion-col>
                       </ion-row>
@@ -119,20 +123,18 @@
                     <table class="sales-table">
                       <thead>
                         <tr>
-                          <th>Vendedor</th>
-                          <th>Correo corporativo</th>
-                          <th>Instituciones</th>
-                          <th>Acciones</th>
+                          <th>{{ 'salesPlan.table.seller' | translate }}</th>
+                          <th>{{ 'salesPlan.table.email' | translate }}</th>
+                          <th>{{ 'salesPlan.table.institutions' | translate }}</th>
                         </tr>
                       </thead>
                       <tbody>
-                        @for (vendor of vendors.slice(0, 6); track vendor.vendor_id) {
-                          <tr>
-                            <td>{{ vendor.name }}</td>
-                            <td>{{ vendor.email }}</td>
-                            <td>{{ vendor.institutions.join(', ') || 'N/A' }}</td>
-                            <td></td>
-                          </tr>
+                        @for (vendor of vendors; track vendor.vendor_id) {
+                        <tr>
+                          <td>{{ vendor.name }}</td>
+                          <td>{{ vendor.email }}</td>
+                          <td>{{ vendor.institutions.join(', ') || 'N/A' }}</td>
+                        </tr>
                         }
                       </tbody>
                     </table>

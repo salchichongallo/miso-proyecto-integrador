@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { firstValueFrom, Observable, of } from 'rxjs';
+import { firstValueFrom, map, Observable, of } from 'rxjs';
 
 import { environment } from '@env/environment';
 
@@ -10,6 +10,16 @@ import { RegisterProductResponse } from '@web/pages/product-registration/interfa
 import { SearchInventoryParams } from '@web/pages/product-inventory/interfaces/search-inventory-params.interface';
 
 import { Product } from '@mobile/models/product.model';
+
+type BulkProductResponse = {
+  approved: unknown[];
+  rejected: unknown[];
+  message: string;
+  rejected_records: number;
+  success_rate: string;
+  successful_records: number;
+  total_records: number;
+};
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +39,19 @@ export class ProductService {
   public createBulkProduct(file: File): Observable<object> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.baseUrl}/bulk`, formData);
+    return this.http.post<BulkProductResponse>(`${this.baseUrl}/bulk`, formData).pipe(
+      map((response) => {
+        const allCompleted = response.total_records === response.successful_records;
+        if (allCompleted) {
+          return response;
+        }
+        if (response.successful_records === 0) {
+          throw new Error('Error: No se pudo cargar ningún producto.');
+        }
+        const message = `Error: Se cargaron ${response.successful_records} de ${response.total_records} productos.`;
+        throw new Error(message);
+      }),
+    );
   }
 
   public async search(params: SearchInventoryParams) {

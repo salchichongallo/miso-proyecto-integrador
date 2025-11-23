@@ -10,7 +10,8 @@
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
-    "processing": "Processing..."
+    "processing": "Processing...",
+    "done": "Done"
   },
   "tabs": {
     "customers": "Customers",
@@ -321,13 +322,17 @@
         "orderId": "Order",
         "value": "Value",
         "status": {
-          "inTransit": "In transit",
-          "scheduled": "Scheduled",
-          "delivered": "Delivered"
+          "PENDING": "Pending",
+          "CONFIRMED": "Confirmed",
+          "PROCESSING": "Processing",
+          "SHIPPED": "In transit",
+          "DELIVERED": "Delivered",
+          "CANCELLED": "Cancelled",
+          "RETURNED": "Returned"
         },
-        "vehicle": "Refrigerated truck",
         "driver": "Driver",
         "productsIncluded": "Products included",
+        "unit": "unit",
         "units": "units"
       }
     }
@@ -342,6 +347,9 @@
       "toast": {
         "changed": "Language changed to {{language}}"
       }
+    },
+    "logout": {
+      "button": "Log Out"
     }
   },
   "web": {
@@ -411,6 +419,11 @@
         "buttons": {
           "cancel": "Cancel",
           "submit": "Register seller"
+        },
+        "clientsModal": {
+          "title": "Select institutions",
+          "cancelButton": "Cancel",
+          "addButton": "Add"
         }
       }
     },
@@ -537,5 +550,121 @@
         }
       }
     }
+  },
+  "consultVisits": {
+    "title": "Visiting Routes",
+    "empty": {
+      "title": "No results",
+      "message": "You have no visits scheduled for this day."
+    },
+    "form": {
+      "selectDate": {
+        "label": "Select date"
+      }
+    },
+    "brief": {
+      "title": "Day Summary",
+      "visits": "Visits",
+      "startedAt": "Start time",
+      "endedAt": "End time"
+    },
+    "visitCard": {
+      "observations": "Observations:"
+    }
+  },
+  "recommendations": {
+    "title": "Recommendations",
+    "emptyMessage": "No recommendations available at this time.",
+    "available": "available",
+    "modal": {
+      "title": "Add to Cart",
+      "cancel": "Cancel",
+      "productInfo": {
+        "price": "Price:",
+        "available": "Available:",
+        "units": "units",
+        "storage": "Storage:"
+      },
+      "form": {
+        "quantity": {
+          "label": "Quantity",
+          "placeholder": "Enter quantity",
+          "required": "Quantity is required",
+          "min": "Quantity must be at least 1",
+          "max": "Only {{maxQuantity}} units available"
+        }
+      },
+      "subtotal": "Subtotal:",
+      "buttons": {
+        "addToCart": "Add recommendation to cart",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "supplierBulk": {
+    "title": "Supplier Bulk Upload",
+    "uploadText": "Click to select a file",
+    "allowedFormats": "Allowed format: CSV",
+    "submit": "Upload and process",
+    "uploadSuccessMessage": "Suppliers uploaded successfully.",
+    "errorUpload": "Error loading suppliers."
+  },
+  "productBulk": {
+    "title": "Product Bulk Upload",
+    "uploadText": "Click to select a file",
+    "allowedFormats": "Allowed format: CSV",
+    "submit": "Upload and process",
+    "uploadSuccessMessage": "Products uploaded successfully.",
+    "errorUpload": "Error loading products."
+  },
+  "salesPlan": {
+    "title": "Create Sales Plan",
+    "assignedVendor": "Assigned Seller",
+    "assignedVendorPlaceholder": "Select a seller",
+    "vendorRequired": "Seller is required",
+    "region": "Region",
+    "regionPlaceholder": "Select a region",
+    "regionRequired": "Region is required",
+    "period": "Period",
+    "periodRequired": "Period is required",
+    "periodPlaceholder": "Select a period",
+    "product": "Product:",
+    "goal": "Goal:",
+    "units": "units",
+    "value": "Value:",
+    "addProductButton": "ADD PRODUCT",
+    "reviewAndCreate": "REVIEW AND CREATE PLAN",
+    "table": {
+      "seller": "Seller",
+      "email": "Corporate email",
+      "institutions": "Institutions"
+    },
+    "modalProduct": {
+      "title": "Add Product",
+      "product": {
+        "label": "Product",
+        "placeholder": "Select a product",
+        "required": "Product is required"
+      },
+      "goal": {
+        "label": "Goal (units)",
+        "placeholder": "Enter the goal in units",
+        "required": "Goal in units is required",
+        "positiveInteger": "Must be a positive integer"
+      },
+      "value": {
+        "label": "Value",
+        "placeholder": "Enter the target value",
+        "required": "Value is required",
+        "min": "Value must be a positive number"
+      },
+      "addButton": "Add"
+    },
+    "zeroSelectedProducts": "You must add at least one product to the sales plan",
+    "alreadyAdded": "This product has already been added to the plan",
+    "genericVendorError": "Error loading sellers.",
+    "creatingPlan": "Creating sales plan...",
+    "planCreated": "Sales plan created successfully.",
+    "genericError": "Error creating sales plan."
   }
 }

@@ -10,7 +10,8 @@
     "delete": "Eliminar",
     "edit": "Editar",
     "back": "Volver",
-    "processing": "Procesando..."
+    "processing": "Procesando...",
+    "done": "Listo"
   },
   "tabs": {
     "customers": "Clientes",
@@ -321,13 +322,17 @@
         "orderId": "Pedido",
         "value": "Valor",
         "status": {
-          "inTransit": "En tránsito",
-          "scheduled": "Programado",
-          "delivered": "Entregado"
+          "PENDING": "Pendiente",
+          "CONFIRMED": "Confirmado",
+          "PROCESSING": "En proceso",
+          "SHIPPED": "En tránsito",
+          "DELIVERED": "Entregado",
+          "CANCELLED": "Cancelado",
+          "RETURNED": "Devuelto"
         },
-        "vehicle": "Camión refrigerado",
         "driver": "Conductor",
         "productsIncluded": "Productos incluidos",
+        "unit": "unidad",
         "units": "unidades"
       }
     }
@@ -342,6 +347,9 @@
       "toast": {
         "changed": "Idioma cambiado a {{language}}"
       }
+    },
+    "logout": {
+      "button": "Cerrar sesión"
     }
   },
   "web": {
@@ -411,6 +419,11 @@
         "buttons": {
           "cancel": "Cancelar",
           "submit": "Registrar vendedor"
+        },
+        "clientsModal": {
+          "title": "Agregar institución",
+          "cancelButton": "Cancelar",
+          "addButton": "Agregar"
         }
       }
     },
@@ -537,5 +550,121 @@
         }
       }
     }
+  },
+  "consultVisits": {
+    "title": "Rutas de visita",
+    "empty": {
+      "title": "Sin resultados",
+      "message": "No tiene visitas programadas para este día."
+    },
+    "form": {
+      "selectDate": {
+        "label": "Seleccionar fecha"
+      }
+    },
+    "brief": {
+      "title": "Resumen del día",
+      "visits": "Visitas",
+      "startedAt": "Hora de inicio",
+      "endedAt": "Hora de fin"
+    },
+    "visitCard": {
+      "observations": "Observaciones:"
+    }
+  },
+  "recommendations": {
+    "title": "Recomendaciones",
+    "emptyMessage": "No hay recomendaciones disponibles en este momento.",
+    "available": "disponible",
+    "modal": {
+      "title": "Agregar al Carrito",
+      "cancel": "Cancelar",
+      "productInfo": {
+        "price": "Precio:",
+        "available": "Disponible:",
+        "units": "unidades",
+        "storage": "Almacenamiento:"
+      },
+      "form": {
+        "quantity": {
+          "label": "Cantidad",
+          "placeholder": "Ingrese la cantidad",
+          "required": "La cantidad es requerida",
+          "min": "La cantidad debe ser al menos 1",
+          "max": "Solo hay {{maxQuantity}} unidades disponibles"
+        }
+      },
+      "subtotal": "Subtotal:",
+      "buttons": {
+        "addToCart": "Agregar recomendación al carrito",
+        "cancel": "Cancelar"
+      }
+    }
+  },
+  "supplierBulk": {
+    "title": "Registro masivo de proveedores",
+    "uploadText": "Haz clic para seleccionar un archivo",
+    "allowedFormats": "Formato permitido: CSV",
+    "submit": "Cargar y procesar",
+    "uploadSuccessMessage": "Proveedores cargados exitosamente.",
+    "errorUpload": "Error al cargar los proveedores."
+  },
+  "productBulk": {
+    "title": "Registro masivo de productos",
+    "uploadText": "Haz clic para seleccionar un archivo",
+    "allowedFormats": "Formato permitido: CSV",
+    "submit": "Cargar y procesar",
+    "uploadSuccessMessage": "Productos cargados exitosamente.",
+    "errorUpload": "Error al cargar los productos."
+  },
+  "salesPlan": {
+    "title": "Crear plan de venta para vendedor",
+    "assignedVendor": "Vendedor asignado",
+    "assignedVendorPlaceholder": "Seleccione el vendedor",
+    "vendorRequired": "El vendedor es requerido",
+    "region": "Región",
+    "regionPlaceholder": "Seleccione una región",
+    "regionRequired": "La región es requerida",
+    "period": "Período",
+    "periodPlaceholder": "Seleccione el período",
+    "periodRequired": "El período es requerido",
+    "product": "Producto:",
+    "goal": "Meta:",
+    "units": "unidades",
+    "value": "Valor:",
+    "addProductButton": "AÑADIR PRODUCTO",
+    "reviewAndCreate": "REVISAR Y CREAR PLAN",
+    "table": {
+      "seller": "Vendedor",
+      "email": "Correo corporativo",
+      "institutions": "Instituciones"
+    },
+    "modalProduct": {
+      "title": "Añadir producto",
+      "product": {
+        "label": "Producto",
+        "placeholder": "Seleccione un producto",
+        "required": "El producto es requerido"
+      },
+      "goal": {
+        "label": "Meta (unidades)",
+        "placeholder": "Ingrese la meta en unidades",
+        "required": "La meta en unidades es requerida",
+        "positiveInteger": "Debe ser un número entero positivo"
+      },
+      "value": {
+        "label": "Valor",
+        "placeholder": "Ingrese el valor objetivo",
+        "required": "El valor es requerido",
+        "min": "El valor debe ser un número positivo"
+      },
+      "addButton": "Añadir"
+    },
+    "zeroSelectedProducts": "Debe agregar al menos un producto al plan de venta",
+    "alreadyAdded": "Este producto ya ha sido agregado al plan",
+    "genericVendorError": "Error al cargar los vendedores.",
+    "creatingPlan": "Creando plan de venta...",
+    "planCreated": "Plan de venta creado exitosamente.",
+    "genericError": "Error al crear el plan de venta."
   }
 }

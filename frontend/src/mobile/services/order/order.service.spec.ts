@@ -25,6 +25,7 @@ describe('OrderService', () => {
         name: 'Product 1',
         amount: 10,
         id_warehouse: 'warehouse-001',
+        unit_price: 0,
       },
     ],
   };
@@ -54,6 +55,7 @@ describe('OrderService', () => {
           name: 'Product 2',
           amount: 5,
           id_warehouse: 'warehouse-002',
+          unit_price: 0,
         },
       ],
       created_at: '2025-11-06T11:00:00.000Z',

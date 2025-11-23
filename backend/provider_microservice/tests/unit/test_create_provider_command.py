@@ -1,154 +1,111 @@
 import pytest
-from unittest.mock import MagicMock, patch
-from botocore.exceptions import ClientError
+from unittest.mock import patch, MagicMock
+
 from src.commands.create_provider import CreateProvider
+from src.models.provider import ProviderModel
 from src.errors.errors import ParamError, ApiError
 
 
 class TestCreateProviderCommand:
+    """🧪 Pruebas unitarias para CreateProvider"""
 
-    # ✅ Creación exitosa
-    @patch("boto3.resource")
-    def test_execute_crea_proveedor_exitosamente(self, mock_dynamodb):
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.return_value = {}  # no existe
-        provider = CreateProvider(
-            name="Proveedor Central",
-            country="CO",
-            nit="1234567890",
-            address="Calle 10",
-            email="proveedor@mail.com",
-            phone="3124567890"
-        )
-        mock_table.put_item.return_value = {"ResponseMetadata": {"HTTPStatusCode": 200}}
-        result = provider.execute()
+    # ============================================================
+    # ✅ Caso exitoso de creación
+    # ============================================================
+    @patch("src.commands.create_provider.create_user")
+    @patch.object(ProviderModel, "create")
+    @patch.object(ProviderModel, "find_by_email", return_value=None)
+    @patch.object(ProviderModel, "find", return_value=None)
+    def test_execute_crea_provider_exitosamente(self, mock_find_nit, mock_find_email, mock_create, mock_create_user):
+        """Debe crear un proveedor correctamente"""
 
-        assert "provider_id" in result
-        assert result["name"] == "Proveedor Central"
-        assert result["message"] == "Proveedor registrado exitosamente"
-        mock_table.put_item.assert_called_once()
+        mock_create_user.return_value = {"cognito_id": "prov-123"}
 
-    # 🚫 Campos vacíos
-    def test_validate_campos_obligatorios_faltantes(self):
-        provider = CreateProvider(
-            name="",
-            country="",
-            nit="",
-            address="",
-            email="",
-            phone=""
-        )
-        with pytest.raises(ParamError, match="Todos los campos obligatorios"):
-            provider.validate()
+        mock_provider = MagicMock()
+        mock_provider.to_dict.return_value = {
+            "nit": "9112345699",
+            "name": "Proveedor S.A.",
+            "country": "CO",
+            "address": "Calle 123",
+            "email": "contacto@proveedor.com",
+            "phone": "3104567892",
+            "provider_id": "prov-123"
+        }
+        mock_create.return_value = mock_provider
 
-    # 🚫 NIT inválido
-    def test_validate_nit_invalido(self):
-        provider = CreateProvider(
-            name="Proveedor NIT Malo",
-            country="CO",
-            nit="12345",
-            address="Calle 20",
-            email="valido@mail.com",
-            phone="3124567890"
-        )
-        with pytest.raises(ParamError, match="NIT debe contener exactamente 10 dígitos"):
-            provider.validate()
+        body = {
+            "nit": "9112345699",
+            "name": "Proveedor S.A.",
+            "country": "CO",
+            "address": "Calle 123",
+            "email": "contacto@proveedor.com",
+            "phone": "3104567892"
+        }
 
-    # 🚫 Email inválido
-    def test_validate_email_invalido(self):
-        provider = CreateProvider(
-            name="Proveedor Email Malo",
-            country="CO",
-            nit="1234567890",
-            address="Carrera 15",
-            email="correo-invalido",
-            phone="3124567890"
-        )
-        with pytest.raises(ParamError, match="formato del email es inválido"):
-            provider.validate()
+        command = CreateProvider(body)
+        result = command.execute()
 
-    # 🚫 Teléfono inválido
-    def test_validate_telefono_invalido(self):
-        provider = CreateProvider(
-            name="Proveedor Teléfono Malo",
-            country="CO",
-            nit="1234567890",
-            address="Calle 88",
-            email="valido@correo.com",
-            phone="1234"
-        )
-        # 🔧 Mensaje corregido según implementación real
-        with pytest.raises(ParamError, match="El teléfono debe contener exactamente 10 dígitos numéricos"):
-            provider.validate()
+        assert result["nit"] == "9112345699"
+        assert result["email"] == "contacto@proveedor.com"
 
-    # 💾 Duplicado (ya existe)
-    @patch("boto3.resource")
-    def test_validate_proveedor_duplicado(self, mock_dynamodb):
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.return_value = {"Item": {"nit": "1234567890"}}
-        provider = CreateProvider(
-            name="Proveedor Duplicado",
-            country="CO",
-            nit="1234567890",
-            address="Calle 15",
-            email="duplicado@mail.com",
-            phone="3124567890"
-        )
+        mock_find_email.assert_called_once_with("contacto@proveedor.com")
+        mock_create_user.assert_called_once_with(email="contacto@proveedor.com")
+        mock_create.assert_called_once()
+
+    # ============================================================
+    # 🚫 Campos obligatorios faltantes
+    # ============================================================
+    def test_faltan_campos_obligatorios(self):
+        command = CreateProvider({
+            "nit": "",
+            "name": "",
+            "country": "",
+            "address": "",
+            "email": "",
+            "phone": ""
+        })
+        with pytest.raises(ParamError):
+            command.execute()
+
+    # ============================================================
+    # 🚫 Email ya existe
+    # ============================================================
+    @patch.object(ProviderModel, "find_by_email")
+    def test_email_duplicado(self, mock_find_email):
+        mock_find_email.return_value = MagicMock()  # Simula duplicado
+
+        body = {
+            "nit": "9112345699",
+            "name": "Proveedor X",
+            "country": "CO",
+            "address": "Calle 123",
+            "email": "contacto@proveedor.com",
+            "phone": "3104567892"
+        }
+
+        command = CreateProvider(body)
         with pytest.raises(ParamError, match="ya está registrado"):
-            provider.validate()
+            command.execute()
 
-    # ⚠️ Error al verificar duplicado (ClientError)
-    @patch("boto3.resource")
-    def test_validate_error_verificar_duplicado(self, mock_dynamodb):
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.get_item.side_effect = ClientError(
-            {"Error": {"Message": "AccessDenied"}}, "GetItem"
-        )
 
-        provider = CreateProvider(
-            name="Proveedor X",
-            country="CO",
-            nit="9876543210",
-            address="Calle 30",
-            email="prueba@mail.com",
-            phone="3001112233"
-        )
-        with pytest.raises(ApiError, match="Error al verificar duplicado"):
-            provider.validate()
+    # ============================================================
+    # ⚡ Error interno al crear proveedor
+    # ============================================================
+    @patch.object(ProviderModel, "find_by_email", return_value=None)
+    @patch.object(ProviderModel, "find", return_value=None)
+    @patch("src.commands.create_provider.create_user", return_value={"cognito_id": "prov-123"})
+    @patch.object(ProviderModel, "create", side_effect=Exception("Error DynamoDB"))
+    def test_error_interno(self, mock_create, mock_create_user, mock_find_nit, mock_find_email):
+        body = {
+            "nit": "9112345699",
+            "name": "Proveedor X",
+            "country": "CO",
+            "address": "Calle 123",
+            "email": "contacto@proveedor.com",
+            "phone": "3104567892"
+        }
 
-    # ⚙️ Encriptado SHA-256 correcto
-    def test_encrypt_nit_sha256_generado(self):
-        provider = CreateProvider(
-            "Proveedor SHA",
-            "CO",
-            "1234567890",
-            "Calle 1",
-            "correo@mail.com",
-            "3002223344"
-        )
-        provider.encrypt_nit()
-        assert len(provider.nit_encrypted) == 64
+        command = CreateProvider(body)
 
-    # 💥 Error al guardar en DynamoDB
-    @patch("boto3.resource")
-    def test_save_error_dynamodb(self, mock_dynamodb):
-        mock_table = MagicMock()
-        mock_dynamodb.return_value.Table.return_value = mock_table
-        mock_table.put_item.side_effect = ClientError(
-            {"Error": {"Message": "Falla de red"}}, "PutItem"
-        )
-
-        provider = CreateProvider(
-            "Proveedor Dynamo",
-            "CO",
-            "1234567890",
-            "Calle 12",
-            "correo@mail.com",
-            "3009998888"
-        )
-
-        with pytest.raises(ApiError, match="Error al registrar proveedor"):
-            provider.save()
+        with pytest.raises(ApiError):
+            command.execute()

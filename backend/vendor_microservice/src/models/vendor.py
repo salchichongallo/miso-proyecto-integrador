@@ -1,30 +1,47 @@
 import os
+import logging
 import datetime
-from uuid import uuid4
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute, ListAttribute, UTCDateTimeAttribute
 from marshmallow import Schema, fields, validate, ValidationError
-from ..errors.errors import ParamError
+from ..errors.errors import EntityNotFoundError, ParamError
+
+
+logger = logging.getLogger(__name__)
+
+
+class InstitutionSchema(Schema):
+    client_id = fields.String()
+    country = fields.String()
+    level = fields.String()
+    location = fields.String()
+    name = fields.String()
+    specialty = fields.String()
+    tax_id = fields.String()
+    tax_id_encrypted = fields.String()
+    email = fields.String()
 
 
 class NewVendorJsonSchema(Schema):
     name = fields.String(
         required=True,
         validate=validate.Length(min=1, max=255),
-        error_messages={"required": "El campo 'name' es obligatorio."}
+        error_messages={"required": "El campo 'name' es obligatorio."},
     )
 
     email = fields.Email(
         required=True,
         validate=validate.Length(max=255),
-        error_messages={"required": "El campo 'email' es obligatorio."}
+        error_messages={"required": "El campo 'email' es obligatorio."},
     )
 
     institutions = fields.List(
-        fields.String(validate=validate.Length(min=1, max=255)),
+        fields.Nested(InstitutionSchema),
         required=True,
-        validate=validate.Length(min=1, max=30, error="Debe tener entre 1 y 30 instituciones."),
-        error_messages={"required": "El campo 'institutions' es obligatorio."}
+        validate=validate.Length(
+            min=1, max=30, error="Debe tener entre 1 y 30 instituciones."
+        ),
+        error_messages={"required": "El campo 'institutions' es obligatorio."},
     )
 
     @staticmethod
@@ -40,10 +57,13 @@ class VendorModel(Model):
     """
     Modelo PynamoDB para la tabla Vendors
     """
+
     class Meta:
         table_name = os.getenv("DYNAMODB_TABLE", "Vendors")
         region = os.getenv("AWS_REGION", "us-east-1")
-        host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
+        host = (
+            os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
+        )
         if os.getenv("APP_ENV") != "PROD":
             aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID", "dummy")
             aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY", "dummy")
@@ -72,6 +92,18 @@ class VendorModel(Model):
             return None
 
     @classmethod
+    def get_by_id(cls, vendor_id: str):
+        """Busca un vendedor por vendor_id (no es clave primaria)."""
+        try:
+            results = cls.scan(cls.vendor_id == vendor_id)
+            for vendor in results:
+                return vendor
+            return None
+        except Exception as e:
+            logger.error(f"Error retrieving vendor by ID: {str(e)}")
+            raise EntityNotFoundError("Vendor", vendor_id)
+
+    @classmethod
     def get_all(cls):
         """Retorna todos los vendedores."""
         try:
@@ -88,8 +120,9 @@ class VendorModel(Model):
             raise ParamError("El correo electrónico ya está registrado.")
 
         vendor = VendorModel(**kwargs)
-        vendor.vendor_id = str(uuid4())
-        vendor.created_at = vendor.updated_at = datetime.datetime.now(datetime.timezone.utc)
+        vendor.created_at = vendor.updated_at = datetime.datetime.now(
+            datetime.timezone.utc
+        )
         vendor.save()
         return vendor
 

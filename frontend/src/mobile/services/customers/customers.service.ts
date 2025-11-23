@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 
 import { environment } from '@env/environment';
 
@@ -26,5 +25,15 @@ export class CustomersService {
 
   public getInstitutionalClients(): Observable<InstitutionalClientData[]> {
     return this.http.get<InstitutionalClientData[]>(`${this.baseUrl}/`);
+  }
+
+  public getAll() {
+    const url = `${this.baseUrl}/`;
+    return this.http.get<InstitutionalClientData[]>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching clients:', error);
+        return of<InstitutionalClientData[]>([]);
+      }),
+    );
   }
 }

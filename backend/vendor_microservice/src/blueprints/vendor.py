@@ -1,10 +1,12 @@
 from flask import jsonify, Blueprint, request
+
 from ..commands.ping import PingCommand
 from ..commands.create_vendor import CreateVendor
 from ..commands.view_all import GetAllVendors
 from flask_cognito import cognito_auth_required
 from ..models.vendor import NewVendorJsonSchema
 from ..errors.errors import ParamError, ApiError
+from ..queries.get_vendor_clients import GetVendorClients
 
 
 vendors_blueprint = Blueprint("vendor", __name__)
@@ -43,3 +45,10 @@ def list_vendors():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@vendors_blueprint.get("/<vendor_id>/clients")
+@cognito_auth_required
+def get_clients(vendor_id):
+    clients = GetVendorClients(vendor_id).execute()
+    return jsonify(clients), 200

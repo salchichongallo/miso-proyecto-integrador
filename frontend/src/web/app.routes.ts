@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { roleGuard } from '@shared/auth';
 import { authGuard } from '@shared/guards/auth/auth.guard';
 import { loginGuard } from '@shared/guards/login/login.guard';
 
@@ -19,47 +20,56 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
       },
       {
+        canActivate: [roleGuard.admin],
         path: 'seller-registration',
         loadComponent: () =>
           import('./pages/seller-registration/seller-registration.page').then((m) => m.SellerRegistrationPage),
       },
       {
+        canActivate: [roleGuard.admin],
         path: 'supplier-registration',
         loadComponent: () =>
           import('./pages/supplier-registration/supplier-registration.page').then((m) => m.SupplierRegistrationPage),
       },
       {
+        canActivate: [roleGuard.admin],
         path: 'supplier-bulk-upload',
         loadComponent: () =>
           import('./pages/supplier-bulk-upload/supplier-bulk-upload.page').then((m) => m.SupplierBulkUploadPage),
       },
       {
+        canActivate: [roleGuard.provider],
         path: 'product-registration',
         loadComponent: () =>
           import('./pages/product-registration/product-registration.page').then((m) => m.ProductRegistrationPage),
       },
       {
+        canActivate: [roleGuard.provider],
         path: 'product-bulk-upload',
         loadComponent: () =>
           import('./pages/product-bulk-upload/product-bulk-upload.page').then((m) => m.ProductBulkUploadPage),
       },
       {
+        canActivate: [roleGuard.admin],
         path: 'sales-plan-creation',
         loadComponent: () =>
           import('./pages/sales-plan-creation/sales-plan-creation.page').then((m) => m.SalesPlanCreationPage),
       },
       {
+        canActivate: [roleGuard.provider],
         path: 'product-inventory',
         pathMatch: 'full',
         loadComponent: () =>
           import('./pages/product-inventory/product-inventory.page').then((m) => m.ProductInventoryPage),
       },
       {
+        canActivate: [roleGuard.admin],
         path: 'seller-report',
         pathMatch: 'full',
         loadComponent: () => import('./pages/seller-report/seller-report.page').then((m) => m.VendorReportPage),
       },
       {
+        canActivate: [roleGuard.admin],
         path: 'delivery-routes',
         pathMatch: 'full',
         loadComponent: () => import('./pages/delivery-routes/delivery-routes.page').then((m) => m.DeliveryRoutesPage),

@@ -22,9 +22,17 @@
     padding-right: 2rem;
   }
 
+  &__header-content {
+    flex: 1;
+    max-width: calc(100% - 112px);
+  }
+
   &__order-id {
     font-size: 1.15rem;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__amount {
@@ -119,6 +127,7 @@
 }
 
 .badge {
+  flex-shrink: 0;
   font-size: 0.8125rem;
   line-height: 1;
   min-height: 1.25rem;

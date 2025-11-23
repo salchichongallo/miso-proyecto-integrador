@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   IonHeader,
   IonToolbar,
@@ -7,57 +7,66 @@ import {
   IonButton,
   IonContent,
   IonItem,
-  IonLabel,
-  IonInput,
   IonGrid,
   IonRow,
   IonCol,
   ModalController,
+  IonList,
+  IonRadio,
+  IonRadioGroup,
 } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
+import { CustomersService } from '@web/services/customers/customers.service';
+import { InstitutionalClient } from '@web/services/customers/institutional-client.interface';
 
 @Component({
   selector: 'app-add-institution-modal',
   templateUrl: './add-institution-modal.component.html',
   styleUrls: ['./add-institution-modal.component.scss'],
   imports: [
-    ReactiveFormsModule,
+    IonList,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonButton,
     IonContent,
     IonItem,
-    IonLabel,
-    IonInput,
     IonGrid,
     IonRow,
     IonCol,
+    IonRadio,
+    IonRadioGroup,
+    TranslateModule,
   ],
+  providers: [CustomersService],
 })
 export class AddInstitutionModalComponent {
-  institutionForm: FormGroup;
+  readonly selectedInstitution = signal<InstitutionalClient | null>(null);
 
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly modalController: ModalController,
-  ) {
-    this.institutionForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
+  private readonly customersService = inject(CustomersService);
 
-  public get nameControl() {
-    return this.institutionForm.get('name');
-  }
+  readonly availableInstitutions = toSignal(this.customersService.getAll());
 
-  public onCancel(): void {
+  private readonly modalController = inject(ModalController);
+
+  public onCancel() {
     this.modalController.dismiss(null, 'cancel');
   }
 
-  public onAdd(): void {
-    if (this.institutionForm.valid) {
-      const institutionName = this.institutionForm.value.name;
-      this.modalController.dismiss(institutionName, 'confirm');
+  onSubmit(event: Event) {
+    event.preventDefault();
+    const institution = this.selectedInstitution();
+    if (institution) {
+      this.modalController.dismiss(institution, 'confirm');
     }
+  }
+
+  compareWith(item1: InstitutionalClient, item2: InstitutionalClient) {
+    return item1 && item2 ? item1.client_id === item2.client_id : item1 === item2;
+  }
+
+  onClientChange(event: Event) {
+    const target = event.target as HTMLIonRadioGroupElement;
+    this.selectedInstitution.set(target.value);
   }
 }

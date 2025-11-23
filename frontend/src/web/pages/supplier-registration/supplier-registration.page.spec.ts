@@ -1,12 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 import { of, throwError } from 'rxjs';
 
 import { SupplierRegistrationPage } from './supplier-registration.page';
 import { SupplierService } from '@web/services/supplier/supplier.service';
 import { RegisterSupplierResponse } from './interfaces/register-supplier-response.interface';
+
+class FakeLoader implements TranslateLoader {
+  getTranslation() {
+    return of({});
+  }
+}
 
 describe('SupplierRegistrationPage', () => {
   let component: SupplierRegistrationPage;
@@ -59,7 +66,12 @@ describe('SupplierRegistrationPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SupplierRegistrationPage],
+      imports: [
+        SupplierRegistrationPage,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: FakeLoader },
+        }),
+      ],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: SupplierService, useValue: mockSupplierService },

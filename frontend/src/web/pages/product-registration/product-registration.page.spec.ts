@@ -1,11 +1,18 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { ProductRegistrationPage } from './product-registration.page';
 import { ProductService } from '@web/services/product/product.service';
 import { RegisterProductResponse } from './interfaces/register-product-response.interface';
+
+class FakeLoader implements TranslateLoader {
+  getTranslation() {
+    return of({});
+  }
+}
 
 describe('ProductRegistrationPage', () => {
   let component: ProductRegistrationPage;
@@ -57,7 +64,12 @@ describe('ProductRegistrationPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [ProductRegistrationPage],
+      imports: [
+        ProductRegistrationPage,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: FakeLoader },
+        }),
+      ],
       providers: [
         { provide: Router, useValue: mockRouter },
         { provide: ProductService, useValue: mockProductService },

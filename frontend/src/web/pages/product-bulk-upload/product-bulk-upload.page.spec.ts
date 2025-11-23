@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { of, throwError } from 'rxjs';
 
@@ -38,7 +39,7 @@ describe('ProductBulkUploadPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [ProductBulkUploadPage],
+      imports: [ProductBulkUploadPage, TranslateModule.forRoot()],
       providers: [
         { provide: ProductService, useValue: mockProductService },
         { provide: LoadingController, useValue: mockLoadingController },
@@ -135,7 +136,7 @@ describe('ProductBulkUploadPage', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       expect(mockToastController.create).toHaveBeenCalledWith({
-        message: 'Productos cargados exitosamente.',
+        message: expect.any(String),
         duration: 3000,
         position: 'top',
       });

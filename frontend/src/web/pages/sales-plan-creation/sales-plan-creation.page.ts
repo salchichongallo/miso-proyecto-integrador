@@ -10,7 +10,6 @@ import {
   IonCardContent,
   IonItem,
   IonLabel,
-  IonInput,
   IonSelect,
   IonSelectOption,
   IonButton,
@@ -41,6 +40,7 @@ import { ProductFormItem } from './interfaces/product-form-item.interface';
 import { ProductTarget } from './interfaces/product-target.interface';
 
 import { AddProductModalComponent } from './components/add-product-modal/add-product-modal.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sales-plan-creation',
@@ -62,6 +62,7 @@ import { AddProductModalComponent } from './components/add-product-modal/add-pro
     IonRow,
     IonCol,
     IonIcon,
+    TranslateModule,
   ],
 })
 export class SalesPlanCreationPage implements OnInit {
@@ -97,6 +98,7 @@ export class SalesPlanCreationPage implements OnInit {
     private readonly productService: ProductService,
     private readonly loadingController: LoadingController,
     private readonly toastController: ToastController,
+    private readonly translate: TranslateService,
   ) {
     addIcons({ add, trashOutline });
     this.salesPlanForm = this.fb.group({
@@ -135,7 +137,7 @@ export class SalesPlanCreationPage implements OnInit {
     }
 
     if (this.selectedProducts.length === 0) {
-      this.showErrorMessage('Debe agregar al menos un producto al plan de venta');
+      this.showErrorMessage(this.translate.instant('salesPlan.zeroSelectedProducts'));
       return;
     }
 
@@ -163,7 +165,7 @@ export class SalesPlanCreationPage implements OnInit {
     const existingProduct = this.selectedProducts.find((p) => p.product_id === productData.product_id);
 
     if (existingProduct) {
-      this.showErrorMessage('Este producto ya ha sido agregado al plan');
+      this.showErrorMessage(this.translate.instant('salesPlan.alreadyAdded'));
       return;
     }
 
@@ -193,7 +195,10 @@ export class SalesPlanCreationPage implements OnInit {
       },
       error: (httpError: HttpErrorResponse) => {
         const message =
-          httpError.error?.error ?? httpError.error?.message ?? httpError.message ?? 'Error al cargar los vendedores.';
+          httpError.error?.error ??
+          httpError.error?.message ??
+          httpError.message ??
+          this.translate.instant('salesPlan.genericVendorError');
         this.showErrorMessage(message);
       },
     });
@@ -214,7 +219,7 @@ export class SalesPlanCreationPage implements OnInit {
 
   private async createSalesPlan(): Promise<void> {
     const loading = await this.loadingController.create({
-      message: 'Creando plan de venta...',
+      message: this.translate.instant('salesPlan.creatingPlan'),
     });
 
     loading.present();
@@ -242,14 +247,14 @@ export class SalesPlanCreationPage implements OnInit {
         next: () => {
           this.salesPlanForm.reset();
           this.selectedProducts = [];
-          this.showSuccessMessage('Plan de venta creado exitosamente.');
+          this.showSuccessMessage(this.translate.instant('salesPlan.planCreated'));
         },
         error: (httpError: HttpErrorResponse) => {
           const message =
             httpError.error?.error ??
             httpError.error?.message ??
             httpError.message ??
-            'Error al crear el plan de venta.';
+            this.translate.instant('salesPlan.genericError');
           this.showErrorMessage(message);
         },
       });

@@ -81,7 +81,7 @@ jobs:
           context: backend/provider_microservice
           file: backend/provider_microservice/Dockerfile
           platforms: linux/amd64
-          push: ${{ github.ref == 'refs/heads/develop' }}
+          push: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
           tags: ${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
           cache-from: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache
           cache-to: type=registry,ref=${{ steps.ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:buildcache,mode=max
@@ -99,6 +99,7 @@ jobs:
       APP_COGNITO_USER_POOL_ID: ${{ vars.APP_COGNITO_USER_POOL_ID }}
       AWS_REGION: ${{ vars.AWS_REGION }}
       DYNAMODB_TABLE: ${{ vars.DYNAMODB_PROVIDERS_TABLE }}
+      DYNAMODB_TABLE_PROVIDERS: ${{ vars.DYNAMODB_PROVIDERS_TABLE }}
 
     steps:
       - name: Checkout code

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { addIcons } from 'ionicons';
-import { arrowForwardOutline, add, calendarOutline } from 'ionicons/icons';
+import { arrowForwardOutline, add, calendarOutline, people, trendingDown } from 'ionicons/icons';
 
 import {
   IonHeader,
@@ -15,6 +15,7 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { HasRoleDirective } from '@shared/auth';
 
 @Component({
   selector: 'app-customers-page',
@@ -31,10 +32,11 @@ import { TranslateModule } from '@ngx-translate/core';
     IonTitle,
     IonContent,
     TranslateModule,
+    HasRoleDirective,
   ],
 })
 export class CustomersPage {
   constructor() {
-    addIcons({ arrowForwardOutline, add, calendarOutline });
+    addIcons({ arrowForwardOutline, add, calendarOutline, people, trendingDown });
   }
 }

@@ -15,6 +15,7 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { TranslateModule } from '@ngx-translate/core';
+import { HasRoleDirective } from '@shared/auth';
 
 @Component({
   selector: 'app-orders',
@@ -30,6 +31,7 @@ import { TranslateModule } from '@ngx-translate/core';
     IonTitle,
     IonHeader,
     TranslateModule,
+    HasRoleDirective,
   ],
 })
 export class OrdersPage {

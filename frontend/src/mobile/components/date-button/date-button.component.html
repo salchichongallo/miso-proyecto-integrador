@@ -1,0 +1,21 @@
+<div class="date-input">
+  <p class="date-input__label" aria-describedby="datetime-button">{{ label() }}</p>
+  <div class="date-input__picker">
+    <ion-datetime-button datetime="datetime" id="datetime-button" class="date-input__button" />
+    <ion-icon name="calendar-number" />
+  </div>
+</div>
+
+<ion-modal [keepContentsMounted]="true">
+  <ng-template>
+    <ion-datetime
+      (ionChange)="onChange($event)"
+      [showDefaultButtons]="true"
+      [locale]="translation.getLocale()"
+      presentation="date"
+      id="datetime"
+      [cancelText]="'common.cancel' | translate"
+      [doneText]="'common.done' | translate"
+    />
+  </ng-template>
+</ion-modal>

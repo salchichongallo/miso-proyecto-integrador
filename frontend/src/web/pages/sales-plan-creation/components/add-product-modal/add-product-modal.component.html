@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Añadir producto</ion-title>
+    <ion-title>{{ 'salesPlan.modalProduct.title' | translate }}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cancel()">Cancelar</ion-button>
+      <ion-button (click)="cancel()">{{ 'common.cancel' | translate }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -10,8 +10,8 @@
 <ion-content class="ion-padding">
   <form [formGroup]="productForm">
     <ion-item [class.ion-invalid]="productIdControl?.invalid && productIdControl?.touched">
-      <ion-label position="stacked">Producto</ion-label>
-      <ion-select formControlName="product_id" placeholder="Seleccione un producto">
+      <ion-label position="stacked">{{ 'salesPlan.modalProduct.product.label' | translate }}</ion-label>
+      <ion-select formControlName="product_id" [placeholder]="'salesPlan.modalProduct.product.placeholder' | translate">
         @for (product of products; track product.id) {
           <ion-select-option [value]="product.id">{{ product.name }}</ion-select-option>
         }
@@ -20,47 +20,47 @@
     @if (productIdControl?.invalid && productIdControl?.touched) {
       <div class="error-message">
         @if (productIdControl?.errors?.['required']) {
-          <small>El producto es requerido</small>
+          <small>{{ 'salesPlan.modalProduct.product.required' | translate }}</small>
         }
       </div>
     }
 
     <ion-item [class.ion-invalid]="targetUnitsControl?.invalid && targetUnitsControl?.touched">
-      <ion-label position="stacked">Meta (unidades)</ion-label>
+      <ion-label position="stacked">{{ 'salesPlan.modalProduct.goal.label' | translate }}</ion-label>
       <ion-input
         type="number"
         formControlName="target_units"
-        placeholder="Ingrese la meta en unidades"
+        [placeholder]="'salesPlan.modalProduct.goal.placeholder' | translate"
         [clearInput]="true"
       ></ion-input>
     </ion-item>
     @if (targetUnitsControl?.invalid && targetUnitsControl?.touched) {
       <div class="error-message">
         @if (targetUnitsControl?.errors?.['required']) {
-          <small>La meta en unidades es requerida</small>
+          <small>{{ 'salesPlan.modalProduct.goal.required' | translate }}</small>
         }
         @if (targetUnitsControl?.errors?.['positiveInteger']) {
-          <small>Debe ser un número entero positivo</small>
+          <small>{{ 'salesPlan.modalProduct.goal.positiveInteger' | translate }}</small>
         }
       </div>
     }
 
     <ion-item [class.ion-invalid]="targetValueControl?.invalid && targetValueControl?.touched">
-      <ion-label position="stacked">Valor</ion-label>
+      <ion-label position="stacked">{{ 'salesPlan.modalProduct.value.label' | translate }}</ion-label>
       <ion-input
         type="number"
         formControlName="target_value"
-        placeholder="Ingrese el valor objetivo"
+        [placeholder]="'salesPlan.modalProduct.value.placeholder' | translate"
         [clearInput]="true"
       ></ion-input>
     </ion-item>
     @if (targetValueControl?.invalid && targetValueControl?.touched) {
       <div class="error-message">
         @if (targetValueControl?.errors?.['required']) {
-          <small>El valor es requerido</small>
+          <small>{{ 'salesPlan.modalProduct.value.required' | translate }}</small>
         }
         @if (targetValueControl?.errors?.['positiveNumber']) {
-          <small>Debe ser un número positivo</small>
+          <small>{{ 'salesPlan.modalProduct.value.min' | translate }}</small>
         }
       </div>
     }
@@ -72,7 +72,7 @@
       [disabled]="productForm.invalid"
       class="confirm-button"
     >
-      Añadir
+      {{ 'salesPlan.modalProduct.addButton' | translate }}
     </ion-button>
   </form>
 </ion-content>

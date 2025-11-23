@@ -47,3 +47,9 @@ Object.defineProperty(window, 'matchMedia', {
   isPluginAvailable: () => false,
   Plugins: {},
 };
+
+Object.defineProperty(self, 'crypto', {
+  value: {
+    randomUUID: () => 'uuid-mock',
+  },
+});

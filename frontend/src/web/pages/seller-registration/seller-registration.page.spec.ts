@@ -1,13 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular/standalone';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { SellerRegistrationPage } from './seller-registration.page';
 import { SellerService } from '../../services/seller/seller.service';
 import { AddInstitutionModalComponent } from './components/add-institution-modal/add-institution-modal.component';
 import { RegisterSellerResponse } from './interfaces/register-seller-response.interface';
+
+class FakeLoader implements TranslateLoader {
+  getTranslation() {
+    return of({});
+  }
+}
 
 describe('SellerRegistrationPage', () => {
   let component: SellerRegistrationPage;
@@ -45,7 +51,12 @@ describe('SellerRegistrationPage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [SellerRegistrationPage],
+      imports: [
+        SellerRegistrationPage,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: FakeLoader },
+        }),
+      ],
       providers: [
         { provide: SellerService, useValue: sellerServiceMock },
         { provide: ModalController, useValue: modalControllerMock },
@@ -112,8 +123,26 @@ describe('SellerRegistrationPage', () => {
     it('should reset form and clear institutions', () => {
       component.sellerForm.patchValue({ name: 'John', email: 'john@test.com' });
       component.institutions = [
-        { id: '1', name: 'Institution 1' },
-        { id: '2', name: 'Institution 2' },
+        {
+          client_id: '1',
+          country: 'CO',
+          level: 'A',
+          location: 'Bogotá',
+          name: 'Inst 1',
+          specialty: 'Spec 1',
+          tax_id: '123',
+          tax_id_encrypted: 'enc123',
+        },
+        {
+          client_id: '2',
+          country: 'CO',
+          level: 'B',
+          location: 'Medellín',
+          name: 'Inst 2',
+          specialty: 'Spec 2',
+          tax_id: '456',
+          tax_id_encrypted: 'enc456',
+        },
       ];
 
       component.onCancel();
@@ -165,7 +194,16 @@ describe('SellerRegistrationPage', () => {
       const mockModal = {
         present: jest.fn().mockResolvedValue(undefined),
         onWillDismiss: jest.fn().mockResolvedValue({
-          data: 'New Institution',
+          data: {
+            client_id: '1',
+            country: 'CO',
+            level: 'A',
+            location: 'Bogotá',
+            name: 'New Institution',
+            specialty: 'Spec 1',
+            tax_id: '123',
+            tax_id_encrypted: 'enc123',
+          },
           role: 'confirm',
         }),
       };
@@ -199,28 +237,45 @@ describe('SellerRegistrationPage', () => {
     });
   });
 
-  describe('addInstitution', () => {
-    it('should add institution to the list', () => {
-      component.addInstitution('Test Institution');
-
-      expect(component.institutions.length).toBe(1);
-      expect(component.institutions[0].name).toBe('Test Institution');
-      expect(component.institutions[0].id).toBeDefined();
-    });
-  });
-
   describe('removeInstitution', () => {
     it('should remove institution from the list', () => {
       component.institutions = [
-        { id: '1', name: 'Institution 1' },
-        { id: '2', name: 'Institution 2' },
-        { id: '3', name: 'Institution 3' },
+        {
+          client_id: '1',
+          country: 'CO',
+          level: 'A',
+          location: 'Bogotá',
+          name: 'Inst 1',
+          specialty: 'Spec 1',
+          tax_id: '123',
+          tax_id_encrypted: 'enc123',
+        },
+        {
+          client_id: '2',
+          country: 'CO',
+          level: 'B',
+          location: 'Medellín',
+          name: 'Inst 2',
+          specialty: 'Spec 2',
+          tax_id: '456',
+          tax_id_encrypted: 'enc456',
+        },
+        {
+          client_id: '3',
+          country: 'CO',
+          level: 'C',
+          location: 'Cali',
+          name: 'Inst 3',
+          specialty: 'Spec 3',
+          tax_id: '789',
+          tax_id_encrypted: 'enc789',
+        },
       ];
 
       component.removeInstitution('2');
 
       expect(component.institutions.length).toBe(2);
-      expect(component.institutions.find((i) => i.id === '2')).toBeUndefined();
+      expect(component.institutions.find((i) => i.client_id === '2')).toBeUndefined();
     });
   });
 
@@ -230,7 +285,18 @@ describe('SellerRegistrationPage', () => {
         name: 'John Doe',
         email: 'john@test.com',
       });
-      component.institutions = [{ id: 'inst-1', name: 'Institution 1' }];
+      component.institutions = [
+        {
+          client_id: '1',
+          country: 'CO',
+          level: 'A',
+          location: 'Bogotá',
+          name: 'Inst 1',
+          specialty: 'Spec 1',
+          tax_id: '123',
+          tax_id_encrypted: 'enc123',
+        },
+      ];
     });
 
     it('should show loading, call service, and show success message', async () => {
@@ -240,7 +306,7 @@ describe('SellerRegistrationPage', () => {
           vendor_id: '123',
           name: 'John Doe',
           email: 'john@test.com',
-          institutions: ['inst-1'],
+          institutions: [],
         },
       };
 
@@ -257,7 +323,18 @@ describe('SellerRegistrationPage', () => {
       expect(sellerService.registerSeller).toHaveBeenCalledWith({
         name: 'John Doe',
         email: 'john@test.com',
-        institutions: ['inst-1'],
+        institutions: [
+          {
+            client_id: '1',
+            country: 'CO',
+            level: 'A',
+            location: 'Bogotá',
+            name: 'Inst 1',
+            specialty: 'Spec 1',
+            tax_id: '123',
+            tax_id_encrypted: 'enc123',
+          },
+        ],
       });
       expect(loadingController.dismiss).toHaveBeenCalled();
       expect(toastController.create).toHaveBeenCalledWith({

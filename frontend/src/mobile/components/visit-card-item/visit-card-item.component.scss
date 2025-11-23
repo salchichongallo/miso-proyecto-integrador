@@ -1,0 +1,59 @@
+.visit-card-item {
+  border-radius: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.visit-card-item__header {
+  padding: 0.5rem 0.625rem;
+}
+
+.visit-card-item__title-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visit-card-item__title {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.visit-card-item__subtitle {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+  color: #666666;
+}
+
+.visit-card-item__content {
+  padding: 0.5rem 0.625rem;
+  border-top: 1px solid #d3d3d3;
+}
+
+.visit-card-item__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.visit-card-item__row-observations {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #333333;
+}
+
+.visit-card-item__icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  color: #757575;
+  margin-right: 10px;
+}
+
+.visit-card-item__text {
+  font-size: 14px;
+  color: #757575;
+  margin: 0;
+}

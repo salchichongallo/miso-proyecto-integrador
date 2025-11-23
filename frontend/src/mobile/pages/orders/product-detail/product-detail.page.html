@@ -42,7 +42,9 @@
           <span class="location-name">{{ location.city }}, {{ location.country }}</span>
         </div>
         <div class="location-badges">
-          <ion-badge color="success">{{ 'orders.productDetail.labels.batch' | translate }}: {{ location.batch }}</ion-badge>
+          <ion-badge color="success"
+            >{{ 'orders.productDetail.labels.batch' | translate }}: {{ location.batch }}</ion-badge
+          >
           <ion-badge [color]="getPriorityColor(location.priority)">
             {{ 'orders.productDetail.priority.label' | translate }}: {{ getPriorityLabel(location.priority) }}
           </ion-badge>
@@ -146,6 +148,12 @@
       <ion-select-option value="25">25</ion-select-option>
       <ion-select-option value="50">50</ion-select-option>
     </ion-select>
+  </div>
+
+  <div class="recommendations-section">
+    @if (product) {
+    <app-recommendations [currentProduct]="product" />
+    }
   </div>
 </ion-content>
 

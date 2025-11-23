@@ -1,0 +1,21 @@
+.login-language {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  margin-left: -2rem;
+
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+    padding: 1rem 0.5rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    color: var(--text-secondary-color);
+  }
+}

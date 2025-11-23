@@ -7,6 +7,7 @@ from .models.db import init_db
 from flask_cognito import CognitoAuth
 from .blueprints.vendor import vendors_blueprint
 from .blueprints.sales_plan import sales_blueprint
+from .blueprints.visits import visits_blueprint
 from .errors.errors import ApiError
 
 # Cargar variables de entorno
@@ -27,6 +28,7 @@ app.config.update({
 })
 app.register_blueprint(vendors_blueprint)
 app.register_blueprint(sales_blueprint)
+app.register_blueprint(visits_blueprint)
 
 # Inicializar CognitoAuth
 cognito = CognitoAuth(app)

@@ -5,6 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '@shared/auth/auth.service';
 import { AppAuthenticatorComponent } from './app-authenticator.component';
+import { Role } from '../../user.interface';
 
 // Mock AWS Amplify
 jest.mock('aws-amplify/auth');
@@ -370,7 +371,7 @@ describe('AppAuthenticatorComponent', () => {
 
   describe('Integration with AuthService observables', () => {
     it('should work with authenticated user state', () => {
-      const mockUser = { id: '123', email: 'user@example.com', role: 'admin' };
+      const mockUser = { id: '123', email: 'user@example.com', role: Role.admin };
       authService.isAuthenticated.mockReturnValue(of(true));
       authService.user.mockReturnValue(of(mockUser));
 

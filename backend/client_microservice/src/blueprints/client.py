@@ -29,7 +29,7 @@ def create_client():
             "location": json.get("location"),
         }
         create_client = CreateClient(**payload).execute()
-        return jsonify({"mssg": "Client created successfully", "vendor": create_client}), 201
+        return jsonify({"mssg": "Client created successfully", "client": create_client}), 201
 
     except ParamError as e:
         return jsonify({"error": str(e)}), 400

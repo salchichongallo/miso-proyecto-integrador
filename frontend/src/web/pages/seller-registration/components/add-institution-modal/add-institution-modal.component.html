@@ -1,53 +1,31 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Agregar institución</ion-title>
+    <ion-title>{{ 'web.seller.registration.clientsModal.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="institutionForm" (ngSubmit)="onAdd()">
-    <ion-item [class.ion-invalid]="nameControl?.invalid && nameControl?.touched">
-      <ion-label position="stacked">Nombre de la institución</ion-label>
-      <ion-input
-        type="text"
-        formControlName="name"
-        placeholder="Ingrese el nombre de la institución"
-        [clearInput]="true"
-      ></ion-input>
-    </ion-item>
-    @if (nameControl?.invalid && nameControl?.touched) {
-      <div class="error-message">
-        @if (nameControl?.errors?.['required']) {
-          <small>El nombre de la institución es requerido</small>
+  <form (submit)="onSubmit($event)">
+    <ion-list>
+      <ion-radio-group [value]="selectedInstitution()" [compareWith]="compareWith" (ionChange)="onClientChange($event)">
+        @for (institution of availableInstitutions(); track institution.client_id) {
+          <ion-item>
+            <ion-radio [value]="institution">{{ institution.name }}</ion-radio>
+          </ion-item>
         }
-        @if (nameControl?.errors?.['minlength']) {
-          <small>El nombre debe tener al menos 3 caracteres</small>
-        }
-      </div>
-    }
+      </ion-radio-group>
+    </ion-list>
 
     <ion-grid class="button-group">
       <ion-row>
         <ion-col size="6">
-          <ion-button
-            onkeypress=""
-            expand="block"
-            fill="outline"
-            color="primary"
-            type="button"
-            (click)="onCancel()"
-          >
-            Cancelar
+          <ion-button onkeypress="" expand="block" fill="outline" color="primary" type="button" (click)="onCancel()">
+            {{ 'web.seller.registration.clientsModal.cancelButton' | translate }}
           </ion-button>
         </ion-col>
         <ion-col size="6">
-          <ion-button
-            expand="block"
-            color="primary"
-            type="submit"
-            [disabled]="institutionForm.invalid"
-          >
-            Agregar
+          <ion-button expand="block" color="primary" type="submit" [disabled]="!selectedInstitution()">
+            {{ 'web.seller.registration.clientsModal.addButton' | translate }}
           </ion-button>
         </ion-col>
       </ion-row>

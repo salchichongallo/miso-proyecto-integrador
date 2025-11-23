@@ -1,0 +1,53 @@
+.vendor-client-card {
+  border-radius: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.vendor-client-card__header {
+  padding: 0.5rem 0.625rem;
+}
+
+.vendor-client-card__title-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vendor-client-card__title {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+}
+
+.vendor-client-card__subtitle {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0;
+  color: #666666;
+}
+
+
+.vendor-client-card__content {
+  padding: 0.5rem 0.625rem;
+  border-top: 1px solid #d3d3d3;
+}
+
+.vendor-client-card__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.vendor-client-card__icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  color: #757575;
+  margin-right: 10px;
+}
+
+.vendor-client-card__text {
+  font-size: 14px;
+  color: #757575;
+}

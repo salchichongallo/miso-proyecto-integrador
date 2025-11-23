@@ -1,7 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { of } from 'rxjs';
 
 import { HomePage } from './home.page';
+
+class FakeLoader implements TranslateLoader {
+  getTranslation() {
+    return of({});
+  }
+}
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -14,8 +22,15 @@ describe('HomePage', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [HomePage],
-      providers: [{ provide: Router, useValue: mockRouter }],
+      imports: [
+        HomePage,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: FakeLoader },
+        }),
+      ],
+      providers: [
+        { provide: Router, useValue: mockRouter },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);

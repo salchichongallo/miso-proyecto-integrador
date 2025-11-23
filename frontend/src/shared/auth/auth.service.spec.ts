@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
-import { AuthService, User } from './auth.service';
+import { AuthService } from './auth.service';
+import { User } from './user.interface';
 
 // Mock AWS Amplify modules
 jest.mock('aws-amplify/auth', () => ({
@@ -589,6 +590,34 @@ describe('AuthService', () => {
         // Verify no additional auth state checks
         expect(mockFetchAuthSession.mock.calls.length).toBe(initialCallCount);
       }
+    });
+  });
+
+  describe('getUserId()', () => {
+    it('should return null when no user is set', () => {
+      expect(service.getUserId()).toBeNull();
+    });
+
+    it('should return user ID when user is set', async () => {
+      const mockUserPayload = {
+        sub: 'user789',
+        email: 'foo@bar.com',
+        'custom:role': 'user',
+      };
+
+      const mockSession = {
+        tokens: {
+          accessToken: { toString: () => 'token' },
+          idToken: {
+            toString: () => `header.${btoa(JSON.stringify(mockUserPayload))}.signature`,
+          },
+        },
+      };
+
+      mockFetchAuthSession.mockResolvedValue(mockSession as any);
+      await service.init();
+
+      expect(service.getUserId()).toBe('user789');
     });
   });
 });
