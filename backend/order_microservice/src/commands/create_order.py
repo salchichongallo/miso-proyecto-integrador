@@ -21,6 +21,8 @@ class CreateOrder(BaseCommannd):
         """Crea la orden usando los datos ya validados."""
         try:
             logger.info("Creando nueva orden...")
+            logger.info(f"Datos recibidos: {self.body}")
+            logger.info(f"ID de usuario: {self.id_user}, Rol: {self.id_role}")
 
             if self.id_role == "client":
                 self.body["id_client"] = self.id_user
