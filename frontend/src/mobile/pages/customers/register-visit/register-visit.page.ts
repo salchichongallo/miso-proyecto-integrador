@@ -34,10 +34,14 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomersService } from '@mobile/services/customers/customers.service';
 import { InstitutionalClientData } from '@mobile/models';
 import { MediaPickerService, MediaFile } from '@mobile/services/media-picker/media-picker.service';
+import { MediaService } from '@shared/services/media/media.service';
+import { VisitsService } from '@mobile/services/visits/visits.service';
+import { CreateVisitRequest } from '@mobile/services/visits/visit.interface';
 
 interface ClientVisit {
   institutionalClient: string;
   contactPerson: string;
+  contactPhone: string;
   visitDate: string;
   visitTime: string;
   observations: string;
@@ -84,6 +88,8 @@ export class RegisterVisitPage implements OnInit {
     private readonly mediaPickerService: MediaPickerService,
     private readonly toastController: ToastController,
     private readonly translate: TranslateService,
+    private readonly mediaService: MediaService,
+    private readonly visitsService: VisitsService,
   ) {
     addIcons({ arrowBack, calendarOutline, timeOutline, cloudUploadOutline, closeCircle, videocam, image });
   }
@@ -97,6 +103,7 @@ export class RegisterVisitPage implements OnInit {
     this.visitForm = this.fb.group({
       institutionalClient: ['', [Validators.required]],
       contactPerson: ['', [Validators.required]],
+      contactPhone: [''],
       visitDate: ['', [Validators.required]],
       visitTime: ['', [Validators.required]],
       observations: [''],
@@ -162,18 +169,54 @@ export class RegisterVisitPage implements OnInit {
   }
 
   protected async registerVisit(visitData: ClientVisit): Promise<void> {
-    // Simulate HTTP call that can fail
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Simulate random error for demonstration
-        const shouldFail = true;
-        if (shouldFail) {
-          reject(new Error('customers.visit.error.generic'));
-        } else {
-          resolve();
-        }
-      }, 1500);
-    });
+    try {
+      // Upload media files and collect bucket paths
+      const bucketData: string[] = [];
+
+      for (const mediaFile of visitData.mediaFiles || []) {
+        const file = await this.convertMediaFileToFile(mediaFile);
+        const uploadResult = await this.mediaService.upload(file);
+        bucketData.push(uploadResult.path);
+      }
+
+      // Combine date and time into ISO datetime
+      const visitDateTime = this.combineDateTime(visitData.visitDate, visitData.visitTime);
+
+      // Create visit request
+      const request: CreateVisitRequest = {
+        client_id: visitData.institutionalClient,
+        contact_name: visitData.contactPerson,
+        contact_phone: visitData.contactPhone ?? '',
+        visit_datetime: visitDateTime,
+        observations: visitData.observations ?? '',
+        bucket_data: bucketData,
+      };
+
+      // Send request to backend
+      await this.visitsService.create(request);
+    } catch (error) {
+      console.error('Error registering visit:', error);
+      throw new Error('customers.visit.error.generic');
+    }
+  }
+
+  private async convertMediaFileToFile(mediaFile: MediaFile): Promise<File> {
+    try {
+      // Fetch the file from the local path
+      const response = await fetch(mediaFile.webPath);
+      const blob = await response.blob();
+
+      // Create a File object from the blob
+      return new File([blob], mediaFile.name, { type: mediaFile.mimeType });
+    } catch (error) {
+      console.error('Error converting MediaFile to File:', error);
+      throw new Error('Failed to convert media file');
+    }
+  }
+
+  private combineDateTime(date: string, time: string): string {
+    // Combine date and time in ISO format
+    return `${date}T${time}:00`;
   }
 
   async onLoadMedia(): Promise<void> {

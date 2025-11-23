@@ -33,3 +33,12 @@ export interface InstitutionItem {
   country: string;
   location: string;
 }
+
+export interface CreateVisitRequest {
+  client_id: string;
+  contact_name: string;
+  contact_phone: string;
+  visit_datetime: string;
+  observations: string;
+  bucket_data: string[];
+}
