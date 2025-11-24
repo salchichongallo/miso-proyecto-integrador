@@ -20,16 +20,13 @@ class FakeJWT:
 
 @pytest.mark.usefixtures("client")
 class TestGetOrdersByClientIntegration:
-    """🧪 Test de integración para GET /client"""
-
-@pytest.mark.usefixtures("client")
-class TestGetOrdersByClientIntegration:
-    """🧪 Test de integración para GET /client"""
+    """🧪 Test de integración para GET /client/<client_id>"""
 
     @patch("src.blueprints.orders.current_cognito_jwt", new=FakeJWT(sub="CLIENT-123", role="client"))
     def test_create_and_get_orders_by_client(self, client):
-        """✅ Debe crear una orden y luego recuperarla usando el client_id del JWT"""
+        """✅ Debe crear una orden y luego recuperarla por client_id"""
 
+        # 1️⃣ Crear la orden
         payload = {
             "priority": "HIGH",
             "products": [
@@ -51,12 +48,11 @@ class TestGetOrdersByClientIntegration:
 
         logging.info("🧩 Create Order Response: %s", create_json)
 
-        # ✔️ Solo validamos el mensaje porque ya no se devuelve "order"
         assert create_response.status_code == 201
         assert "message" in create_json
 
-        # 2️⃣ Ahora sí obtenemos la orden desde el endpoint GET
-        get_response = client.get("/client")
+        # 2️⃣ Obtener órdenes usando la nueva ruta /client/<client_id>
+        get_response = client.get("/client/CLIENT-123")
         get_json = get_response.get_json()
 
         logging.info("📦 Get Orders by Client Response: %s", get_json)
@@ -64,16 +60,14 @@ class TestGetOrdersByClientIntegration:
         assert get_response.status_code == 200
         assert isinstance(get_json, list)
         assert len(get_json) >= 1
-
-        # ✔️ Verificamos que la orden devuelta tenga el cliente correcto
         assert any(order["id_client"] == "CLIENT-123" for order in get_json)
 
 
     @patch("src.blueprints.orders.current_cognito_jwt", new=FakeJWT(sub="CLIENT-NOEXISTE", role="client"))
     def test_get_orders_by_client_invalid_client(self, client):
-        """🚫 Si el JWT trae un client_id inexistente → lista vacía"""
+        """🚫 Si el cliente no existe, debe devolver lista vacía"""
 
-        response = client.get("/client")
+        response = client.get("/client/CLIENT-NOEXISTE")
         json_data = response.get_json()
 
         logging.info("🚫 Response invalid client: %s", json_data)

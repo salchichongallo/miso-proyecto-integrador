@@ -43,20 +43,20 @@ class TestGetOrderByIdIntegration:
         }
 
         create_response = client.post("/", json=create_payload)
-        body = create_response.get_json()
-        logging.info("Create Response: %s", body)
+        create_json = create_response.get_json()
+        logging.info("Create Response: %s", create_json)
 
         assert create_response.status_code == 201
 
-        # 2️⃣ Obtener el ID real desde GET /client
-        list_response = client.get("/client")
+        # 2️⃣ Obtener ID desde GET /client/<client_id>
+        list_response = client.get("/client/CLIENT-123")
         orders = list_response.get_json()
-        logging.info("Orders from GET /client: %s", orders)
+        logging.info("Orders from GET /client/<id>: %s", orders)
 
         assert len(orders) > 0
         order_id = orders[0]["id"]
 
-        # 3️⃣ Obtener la orden con "/<id>"
+        # 3️⃣ GET "/<id>"
         response = client.get(f"/{order_id}")
         result = response.get_json()
         logging.info("Get Response: %s", result)
@@ -69,8 +69,10 @@ class TestGetOrderByIdIntegration:
     @patch("src.blueprints.orders.current_cognito_jwt", new=FakeJWT(sub="CLIENT-X"))
     def test_get_order_not_found(self, client):
         """❌ Debe devolver 404 si la orden no existe"""
+
         response = client.get("/ORDER-NO-EXISTE")
         json_data = response.get_json()
+        logging.info("Response JSON (no encontrada): %s", json_data)
 
         assert response.status_code == 404
         assert "error" in json_data
@@ -79,10 +81,12 @@ class TestGetOrderByIdIntegration:
     @patch("src.commands.get_order_id.GetOrderById.execute")
     def test_get_order_api_error(self, mock_execute, client):
         """❌ 500 si el comando lanza ApiError"""
+
         mock_execute.side_effect = ApiError("Fallo interno en DynamoDB")
 
         response = client.get("/ORDER-FAIL")
         json_data = response.get_json()
+        logging.info("Response (ApiError): %s", json_data)
 
         assert response.status_code == 500
         assert "error" in json_data
@@ -92,10 +96,12 @@ class TestGetOrderByIdIntegration:
     @patch("src.commands.get_order_id.GetOrderById.execute")
     def test_get_order_unexpected_exception(self, mock_execute, client):
         """❌ 500 si ocurre una excepción inesperada"""
+
         mock_execute.side_effect = Exception("Error no controlado")
 
         response = client.get("/ORDER-CRASH")
         json_data = response.get_json()
+        logging.info("Response (Exception): %s", json_data)
 
         assert response.status_code == 500
         assert "error" in json_data

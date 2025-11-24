@@ -71,11 +71,10 @@ def get_order_by_id(order_id):
 
 
 
-@orders_blueprint.get("/client")
+@orders_blueprint.get("/client/<client_id>")
 @cognito_auth_required
-def get_orders_by_client():
+def get_orders_by_client(client_id):
     try:
-        client_id = current_cognito_jwt.get("sub")
         result = GetOrdersByClient(client_id).execute()
         return jsonify(result), 200
 
