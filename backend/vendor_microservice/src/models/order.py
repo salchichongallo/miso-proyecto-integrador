@@ -58,7 +58,7 @@ class OrderModel(Model):
     Modelo PynamoDB para la tabla Orders
     """
     class Meta:
-        table_name = os.getenv("DYNAMODB_TABLE", "Orders")
+        table_name = os.getenv("DYNAMODB_ORDERS_TABLE", "Orders")
         region = os.getenv("AWS_REGION", "us-east-1")
         host = os.getenv("DYNAMODB_ENDPOINT") if os.getenv("DYNAMODB_ENDPOINT") else None
         if os.getenv("APP_ENV") != "PROD":
