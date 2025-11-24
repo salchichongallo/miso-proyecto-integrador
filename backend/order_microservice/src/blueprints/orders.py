@@ -73,7 +73,7 @@ def get_order_by_id(order_id):
 @cognito_auth_required
 def get_orders_by_client_query():
     try:
-        client_id = request.args.get("client_id", "").strip()
+        client_id = current_cognito_jwt.get("sub")
         result = GetOrdersByClient(client_id).execute()
         return jsonify(result), 200
 
