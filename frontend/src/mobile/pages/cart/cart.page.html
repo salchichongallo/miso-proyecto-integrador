@@ -26,14 +26,19 @@
   </div>
   } @else {
   <form [formGroup]="checkoutForm" class="cart-content ion-padding">
-    <ion-item *ifHasRole="'vendor'">
-      <ion-label position="stacked"> {{ 'orders.cart.form.customer.label' | translate }} </ion-label>
-      <ion-select formControlName="id_client" [placeholder]="'orders.cart.form.customer.placeholder' | translate">
-        @for (customer of clientsList(); track customer.id) {
-        <ion-select-option [value]="customer.id">{{ customer.name }}</ion-select-option>
-        }
-      </ion-select>
-    </ion-item>
+    <ion-select
+      *ifHasRole="'vendor'"
+      [label]="'orders.cart.form.customer.label' | translate"
+      [placeholder]="'orders.cart.form.customer.placeholder' | translate"
+      labelPlacement="stacked"
+      formControlName="id_client"
+      fill="outline"
+      class="ion-margin-bottom"
+    >
+      @for (customer of clientsList(); track customer.id) {
+      <ion-select-option [value]="customer.id">{{ customer.name }}</ion-select-option>
+      }
+    </ion-select>
 
     <!-- Cart Items -->
     <ion-card>

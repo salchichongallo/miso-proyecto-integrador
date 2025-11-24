@@ -21,7 +21,7 @@ export class AuthService {
   private async checkAuthState() {
     try {
       const session = await fetchAuthSession();
-      this.accessTokenSubject.next(session.tokens!.accessToken!.toString());
+      this.accessTokenSubject.next(session.tokens!.idToken!.toString());
 
       const payload = JSON.parse(atob(session.tokens!.idToken!.toString().split('.')[1]));
       const user: User = {
@@ -86,5 +86,10 @@ export class AuthService {
   getUserId() {
     const user = this.userSubject.value;
     return user ? user.id : null;
+  }
+
+  hasRole(role: string) {
+    const user = this.userSubject.value;
+    return user?.role === role;
   }
 }

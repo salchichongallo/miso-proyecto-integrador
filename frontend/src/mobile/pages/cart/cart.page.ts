@@ -38,7 +38,7 @@ import { OrderService } from '@mobile/services/order/order.service';
 import { OrderRequest } from '@mobile/models/order.model';
 import { CustomersService } from '@mobile/services/customers/customers.service';
 import { firstValueFrom } from 'rxjs';
-import { HasRoleDirective } from '@shared/auth';
+import { AuthService, HasRoleDirective, Role } from '@shared/auth';
 
 type CustomerItem = {
   id: string;
@@ -98,6 +98,8 @@ export class CartPage implements OnInit {
 
   public readonly clientsList = signal<CustomerItem[]>([]);
 
+  private readonly authService = inject(AuthService);
+
   constructor() {
     addIcons({ trashOutline, removeCircleOutline, addCircleOutline, locationOutline });
 
@@ -107,7 +109,7 @@ export class CartPage implements OnInit {
       address: ['', [Validators.required, Validators.minLength(10)]],
       priority: ['MEDIUM', [Validators.required]],
       date_estimated: ['', [Validators.required]],
-      id_client: ['', []],
+      id_client: ['', this.authService.hasRole(Role.vendor) ? [Validators.required] : []],
       id_vendor: ['', []],
     });
   }
@@ -231,5 +233,9 @@ export class CartPage implements OnInit {
     });
 
     await toast.present();
+  }
+
+  get idClientControl() {
+    return this.checkoutForm.get('id_client');
   }
 }
