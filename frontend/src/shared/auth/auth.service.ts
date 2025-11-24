@@ -87,4 +87,9 @@ export class AuthService {
     const user = this.userSubject.value;
     return user ? user.id : null;
   }
+
+  hasRole(role: string) {
+    const user = this.userSubject.value;
+    return user?.role === role;
+  }
 }
