@@ -85,3 +85,20 @@ def get_orders_by_client(client_id):
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+    
+
+@orders_blueprint.get("/client")
+@cognito_auth_required
+def get_orders_by_client_query():
+    try:
+        client_id = request.args.get("client_id", "").strip()
+        result = GetOrdersByClient(client_id).execute()
+        return jsonify(result), 200
+
+    except ParamError as e:
+        return jsonify({"error": str(e)}), 404
+    except ApiError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
